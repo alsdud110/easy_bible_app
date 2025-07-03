@@ -7,13 +7,13 @@ import 'chapter_selector.dart';
 import 'verse_selector.dart';
 import 'verse_list_view.dart';
 
-class EasyBibleScreen extends StatefulWidget {
-  const EasyBibleScreen({super.key});
+class BibleHomeScreen extends StatefulWidget {
+  const BibleHomeScreen({super.key});
   @override
-  State<EasyBibleScreen> createState() => _EasyBibleScreenState();
+  State<BibleHomeScreen> createState() => _BibleHomeScreenState();
 }
 
-class _EasyBibleScreenState extends State<EasyBibleScreen> {
+class _BibleHomeScreenState extends State<BibleHomeScreen> {
   int step = 0; // 0:책, 1:장, 2:절, 3:장전체(절선택)
   int selectedBook = -1;
   int selectedChapter = -1;

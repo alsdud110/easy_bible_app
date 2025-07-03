@@ -1,6 +1,7 @@
+import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
-import 'screens/easyBible/easy_bible_screen.dart';
+import 'screens/bible/bible_home_screen.dart';
 import 'theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -70,8 +71,11 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) {
         WidgetBuilder builder;
         switch (settings.name) {
+          case '/bible':
+            builder = (context) => const BibleHomeScreen();
+            break;
           case '/easyBible':
-            builder = (context) => const EasyBibleScreen();
+            builder = (context) => const EasyBibleHomeScreen();
             break;
           // 추가 route는 여기에서 처리
           default:

@@ -1,4 +1,6 @@
-import 'package:easy_bible_app/screens/easyBible/easy_bible_screen.dart';
+import 'package:easy_bible_app/screens/bible/bible_home_screen.dart';
+import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
+import 'package:easy_bible_app/screens/todayVerseCard/today_verse_card.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bible_app/widgets/profile_card.dart';
 import '../widgets/custom_drawer.dart';
@@ -38,7 +40,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool _planExpanded = false;
 
   final List<_MenuItem> menuItems = [
-    _MenuItem('어성경 바이블', Icons.book_online_rounded, const EasyBibleScreen(),
+    _MenuItem('전체 성경', Icons.church_rounded, const BibleHomeScreen(),
+        Colors.blueAccent, '/bible'),
+    _MenuItem('어성경 바이블', Icons.book_online_rounded, const EasyBibleHomeScreen(),
         Colors.blueAccent, '/easyBible'),
     _MenuItem('성경일독(플랜)', Icons.calendar_month_outlined,
         const SizedBox.shrink(), Colors.deepPurple, '/plan'),
@@ -144,14 +148,36 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        itemCount: menuItems.length, // +1 for profile
-        separatorBuilder: (_, i) =>
-            i == 0 ? const SizedBox(height: 28) : const SizedBox(height: 20),
+        itemCount: menuItems.length + 1, // 오늘의 구절 카드 포함!
+        separatorBuilder: (_, i) => i == menuItems.length - 1
+            ? const SizedBox(height: 28)
+            : const SizedBox(height: 20),
         itemBuilder: (context, i) {
-          final item = menuItems[i];
+          if (i < menuItems.length) {
+            final item = menuItems[i];
 
-          // 성경일독(플랜)만 확장형
-          if (item.title == '성경일독(플랜)') {
+            if (item.title == '성경일독(플랜)') {
+              return AnimatedBuilder(
+                animation: _controllers[i],
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: _opacityAnimations[i].value,
+                    child: SlideTransition(
+                      position: _offsetAnimations[i],
+                      child: child,
+                    ),
+                  );
+                },
+                child: PlanExpansionCard(
+                  expanded: _planExpanded,
+                  onTap: () {
+                    setState(() => _planExpanded = !_planExpanded);
+                  },
+                  onPlanTap: _goPlan,
+                ),
+              );
+            }
+
             return AnimatedBuilder(
               animation: _controllers[i],
               builder: (context, child) {
@@ -163,36 +189,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 );
               },
-              child: PlanExpansionCard(
-                expanded: _planExpanded,
+              child: RequestCard(
+                title: item.title,
+                iconData: item.icon,
                 onTap: () {
-                  setState(() => _planExpanded = !_planExpanded);
+                  Navigator.of(context).pushNamed(item.route);
                 },
-                onPlanTap: _goPlan,
               ),
             );
+          } else {
+            // 맨 마지막: 오늘의 구절 카드
+            return const TodayVerseCard();
           }
-
-          // 어성경 등 나머지 메뉴
-          return AnimatedBuilder(
-            animation: _controllers[i],
-            builder: (context, child) {
-              return Opacity(
-                opacity: _opacityAnimations[i].value,
-                child: SlideTransition(
-                  position: _offsetAnimations[i],
-                  child: child,
-                ),
-              );
-            },
-            child: RequestCard(
-              title: item.title,
-              iconData: item.icon,
-              onTap: () {
-                Navigator.of(context).pushNamed(item.route);
-              },
-            ),
-          );
         },
       ),
     );
