@@ -1,0 +1,417 @@
+class BibleData {
+  final String name; // 약칭 (ex: 창)
+  final String fullName; // 한글 전체이름 (ex: 창세기)
+  final String eng; // 영문명
+  final int chapters; // 장 수
+  final bool isOldTestament; // 구약 여부
+
+  const BibleData({
+    required this.name,
+    required this.fullName,
+    required this.eng,
+    required this.chapters,
+    required this.isOldTestament,
+  });
+}
+
+const bibleBooks = [
+  // ---- 구약 39권 ----
+  BibleData(
+      name: '창',
+      fullName: '창세기',
+      eng: 'Genesis',
+      chapters: 50,
+      isOldTestament: true),
+  BibleData(
+      name: '출',
+      fullName: '출애굽기',
+      eng: 'Exodus',
+      chapters: 40,
+      isOldTestament: true),
+  BibleData(
+      name: '레',
+      fullName: '레위기',
+      eng: 'Leviticus',
+      chapters: 27,
+      isOldTestament: true),
+  BibleData(
+      name: '민',
+      fullName: '민수기',
+      eng: 'Numbers',
+      chapters: 36,
+      isOldTestament: true),
+  BibleData(
+      name: '신',
+      fullName: '신명기',
+      eng: 'Deuteronomy',
+      chapters: 34,
+      isOldTestament: true),
+  BibleData(
+      name: '수',
+      fullName: '여호수아',
+      eng: 'Joshua',
+      chapters: 24,
+      isOldTestament: true),
+  BibleData(
+      name: '삿',
+      fullName: '사사기',
+      eng: 'Judges',
+      chapters: 21,
+      isOldTestament: true),
+  BibleData(
+      name: '룻',
+      fullName: '룻기',
+      eng: 'Ruth',
+      chapters: 4,
+      isOldTestament: true),
+  BibleData(
+      name: '삼상',
+      fullName: '사무엘상',
+      eng: '1 Samuel',
+      chapters: 31,
+      isOldTestament: true),
+  BibleData(
+      name: '삼하',
+      fullName: '사무엘하',
+      eng: '2 Samuel',
+      chapters: 24,
+      isOldTestament: true),
+  BibleData(
+      name: '왕상',
+      fullName: '열왕기상',
+      eng: '1 Kings',
+      chapters: 22,
+      isOldTestament: true),
+  BibleData(
+      name: '왕하',
+      fullName: '열왕기하',
+      eng: '2 Kings',
+      chapters: 25,
+      isOldTestament: true),
+  BibleData(
+      name: '대상',
+      fullName: '역대상',
+      eng: '1 Chronicles',
+      chapters: 29,
+      isOldTestament: true),
+  BibleData(
+      name: '대하',
+      fullName: '역대하',
+      eng: '2 Chronicles',
+      chapters: 36,
+      isOldTestament: true),
+  BibleData(
+      name: '스',
+      fullName: '에스라',
+      eng: 'Ezra',
+      chapters: 10,
+      isOldTestament: true),
+  BibleData(
+      name: '느',
+      fullName: '느헤미야',
+      eng: 'Nehemiah',
+      chapters: 13,
+      isOldTestament: true),
+  BibleData(
+      name: '에',
+      fullName: '에스더',
+      eng: 'Esther',
+      chapters: 10,
+      isOldTestament: true),
+  BibleData(
+      name: '욥',
+      fullName: '욥기',
+      eng: 'Job',
+      chapters: 42,
+      isOldTestament: true),
+  BibleData(
+      name: '시',
+      fullName: '시편',
+      eng: 'Psalms',
+      chapters: 150,
+      isOldTestament: true),
+  BibleData(
+      name: '잠',
+      fullName: '잠언',
+      eng: 'Proverbs',
+      chapters: 31,
+      isOldTestament: true),
+  BibleData(
+      name: '전',
+      fullName: '전도서',
+      eng: 'Ecclesiastes',
+      chapters: 12,
+      isOldTestament: true),
+  BibleData(
+      name: '아',
+      fullName: '아가',
+      eng: 'Song of Solomon',
+      chapters: 8,
+      isOldTestament: true),
+  BibleData(
+      name: '사',
+      fullName: '이사야',
+      eng: 'Isaiah',
+      chapters: 66,
+      isOldTestament: true),
+  BibleData(
+      name: '렘',
+      fullName: '예레미야',
+      eng: 'Jeremiah',
+      chapters: 52,
+      isOldTestament: true),
+  BibleData(
+      name: '애',
+      fullName: '예레미야애가',
+      eng: 'Lamentations',
+      chapters: 5,
+      isOldTestament: true),
+  BibleData(
+      name: '겔',
+      fullName: '에스겔',
+      eng: 'Ezekiel',
+      chapters: 48,
+      isOldTestament: true),
+  BibleData(
+      name: '단',
+      fullName: '다니엘',
+      eng: 'Daniel',
+      chapters: 12,
+      isOldTestament: true),
+  BibleData(
+      name: '호',
+      fullName: '호세아',
+      eng: 'Hosea',
+      chapters: 14,
+      isOldTestament: true),
+  BibleData(
+      name: '욜',
+      fullName: '요엘',
+      eng: 'Joel',
+      chapters: 3,
+      isOldTestament: true),
+  BibleData(
+      name: '암',
+      fullName: '아모스',
+      eng: 'Amos',
+      chapters: 9,
+      isOldTestament: true),
+  BibleData(
+      name: '옵',
+      fullName: '오바댜',
+      eng: 'Obadiah',
+      chapters: 1,
+      isOldTestament: true),
+  BibleData(
+      name: '욘',
+      fullName: '요나',
+      eng: 'Jonah',
+      chapters: 4,
+      isOldTestament: true),
+  BibleData(
+      name: '미',
+      fullName: '미가',
+      eng: 'Micah',
+      chapters: 7,
+      isOldTestament: true),
+  BibleData(
+      name: '나',
+      fullName: '나훔',
+      eng: 'Nahum',
+      chapters: 3,
+      isOldTestament: true),
+  BibleData(
+      name: '합',
+      fullName: '하박국',
+      eng: 'Habakkuk',
+      chapters: 3,
+      isOldTestament: true),
+  BibleData(
+      name: '습',
+      fullName: '스바냐',
+      eng: 'Zephaniah',
+      chapters: 3,
+      isOldTestament: true),
+  BibleData(
+      name: '학',
+      fullName: '학개',
+      eng: 'Haggai',
+      chapters: 2,
+      isOldTestament: true),
+  BibleData(
+      name: '슥',
+      fullName: '스가랴',
+      eng: 'Zechariah',
+      chapters: 14,
+      isOldTestament: true),
+  BibleData(
+      name: '말',
+      fullName: '말라기',
+      eng: 'Malachi',
+      chapters: 4,
+      isOldTestament: true),
+
+  // ---- 신약 27권 ----
+  BibleData(
+      name: '마',
+      fullName: '마태복음',
+      eng: 'Matthew',
+      chapters: 28,
+      isOldTestament: false),
+  BibleData(
+      name: '막',
+      fullName: '마가복음',
+      eng: 'Mark',
+      chapters: 16,
+      isOldTestament: false),
+  BibleData(
+      name: '눅',
+      fullName: '누가복음',
+      eng: 'Luke',
+      chapters: 24,
+      isOldTestament: false),
+  BibleData(
+      name: '요',
+      fullName: '요한복음',
+      eng: 'John',
+      chapters: 21,
+      isOldTestament: false),
+  BibleData(
+      name: '행',
+      fullName: '사도행전',
+      eng: 'Acts',
+      chapters: 28,
+      isOldTestament: false),
+  BibleData(
+      name: '롬',
+      fullName: '로마서',
+      eng: 'Romans',
+      chapters: 16,
+      isOldTestament: false),
+  BibleData(
+      name: '고전',
+      fullName: '고린도전서',
+      eng: '1 Corinthians',
+      chapters: 16,
+      isOldTestament: false),
+  BibleData(
+      name: '고후',
+      fullName: '고린도후서',
+      eng: '2 Corinthians',
+      chapters: 13,
+      isOldTestament: false),
+  BibleData(
+      name: '갈',
+      fullName: '갈라디아서',
+      eng: 'Galatians',
+      chapters: 6,
+      isOldTestament: false),
+  BibleData(
+      name: '엡',
+      fullName: '에베소서',
+      eng: 'Ephesians',
+      chapters: 6,
+      isOldTestament: false),
+  BibleData(
+      name: '빌',
+      fullName: '빌립보서',
+      eng: 'Philippians',
+      chapters: 4,
+      isOldTestament: false),
+  BibleData(
+      name: '골',
+      fullName: '골로새서',
+      eng: 'Colossians',
+      chapters: 4,
+      isOldTestament: false),
+  BibleData(
+      name: '살전',
+      fullName: '데살로니가전서',
+      eng: '1 Thessalonians',
+      chapters: 5,
+      isOldTestament: false),
+  BibleData(
+      name: '살후',
+      fullName: '데살로니가후서',
+      eng: '2 Thessalonians',
+      chapters: 3,
+      isOldTestament: false),
+  BibleData(
+      name: '딤전',
+      fullName: '디모데전서',
+      eng: '1 Timothy',
+      chapters: 6,
+      isOldTestament: false),
+  BibleData(
+      name: '딤후',
+      fullName: '디모데후서',
+      eng: '2 Timothy',
+      chapters: 4,
+      isOldTestament: false),
+  BibleData(
+      name: '딛',
+      fullName: '디도서',
+      eng: 'Titus',
+      chapters: 3,
+      isOldTestament: false),
+  BibleData(
+      name: '몬',
+      fullName: '빌레몬서',
+      eng: 'Philemon',
+      chapters: 1,
+      isOldTestament: false),
+  BibleData(
+      name: '히',
+      fullName: '히브리서',
+      eng: 'Hebrews',
+      chapters: 13,
+      isOldTestament: false),
+  BibleData(
+      name: '약',
+      fullName: '야고보서',
+      eng: 'James',
+      chapters: 5,
+      isOldTestament: false),
+  BibleData(
+      name: '벧전',
+      fullName: '베드로전서',
+      eng: '1 Peter',
+      chapters: 5,
+      isOldTestament: false),
+  BibleData(
+      name: '벧후',
+      fullName: '베드로후서',
+      eng: '2 Peter',
+      chapters: 3,
+      isOldTestament: false),
+  BibleData(
+      name: '요일',
+      fullName: '요한1서',
+      eng: '1 John',
+      chapters: 5,
+      isOldTestament: false),
+  BibleData(
+      name: '요이',
+      fullName: '요한2서',
+      eng: '2 John',
+      chapters: 1,
+      isOldTestament: false),
+  BibleData(
+      name: '요삼',
+      fullName: '요한3서',
+      eng: '3 John',
+      chapters: 1,
+      isOldTestament: false),
+  BibleData(
+      name: '유',
+      fullName: '유다서',
+      eng: 'Jude',
+      chapters: 1,
+      isOldTestament: false),
+  BibleData(
+      name: '계',
+      fullName: '요한계시록',
+      eng: 'Revelation',
+      chapters: 22,
+      isOldTestament: false),
+];
