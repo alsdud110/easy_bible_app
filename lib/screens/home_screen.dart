@@ -172,7 +172,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   onTap: () {
                     setState(() => _planExpanded = !_planExpanded);
                   },
-                  onPlanTap: _goPlan,
+                  onPlanTap: (context, planType) {
+                    Widget page;
+                    if (planType == 60) {
+                      page = const Day60Screen();
+                    } else if (planType == 120) {
+                      page = const Day120Screen();
+                    } else {
+                      page = const Day180Screen();
+                    }
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        pageBuilder: (_, __, ___) => page,
+                        transitionsBuilder: (_, animation, __, child) =>
+                            FadeTransition(opacity: animation, child: child),
+                      ),
+                    );
+                  },
                 ),
               );
             }

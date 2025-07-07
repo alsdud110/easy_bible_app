@@ -78,14 +78,16 @@ class Day60Screen extends StatelessWidget {
                     endCh,
                   );
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PlanVerseListView(
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 200),
+                      pageBuilder: (_, __, ___) => PlanVerseListView(
                         title: '$dayLabel  $rangeLabel',
                         verses: verses,
                         onBack: () => Navigator.pop(context),
                       ),
+                      transitionsBuilder: (_, animation, __, child) =>
+                          FadeTransition(opacity: animation, child: child),
                     ),
                   );
                 },

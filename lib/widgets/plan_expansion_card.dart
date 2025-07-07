@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PlanExpansionCard extends StatefulWidget {
   final bool expanded;
   final VoidCallback onTap;
-  final void Function(int planType) onPlanTap;
+  final void Function(BuildContext context, int planType) onPlanTap;
 
   const PlanExpansionCard({
     super.key,
@@ -16,17 +16,46 @@ class PlanExpansionCard extends StatefulWidget {
   State<PlanExpansionCard> createState() => _PlanExpansionCardState();
 }
 
-class _PlanExpansionCardState extends State<PlanExpansionCard> {
+class _PlanExpansionCardState extends State<PlanExpansionCard>
+    with TickerProviderStateMixin {
+  late final AnimationController _boxFadeCtrl;
+  late final Animation<double> _boxFadeAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _boxFadeCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 230),
+    );
+    _boxFadeAnim = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _boxFadeCtrl, curve: Curves.easeIn));
+    if (widget.expanded) _boxFadeCtrl.value = 1;
+  }
+
+  @override
+  void didUpdateWidget(covariant PlanExpansionCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.expanded && !oldWidget.expanded) {
+      _boxFadeCtrl.forward(from: 0);
+    } else if (!widget.expanded && oldWidget.expanded) {
+      _boxFadeCtrl.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _boxFadeCtrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.ease,
+    return Container(
       decoration: BoxDecoration(
-        // "우드" 감성: gradient는 거의 투명하게!
         gradient: LinearGradient(
           colors: [
             cs.surface.withOpacity(0.32),
@@ -44,7 +73,6 @@ class _PlanExpansionCardState extends State<PlanExpansionCard> {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         children: [
           InkWell(
@@ -73,21 +101,28 @@ class _PlanExpansionCardState extends State<PlanExpansionCard> {
                       ),
                     ),
                   ),
-                  Icon(
-                    widget.expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: cs.onSurface.withOpacity(0.33),
+                  AnimatedRotation(
+                    turns: widget.expanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.ease,
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: cs.onSurface.withOpacity(0.33),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 340),
-            curve: Curves.easeInOutCubic,
-            child: widget.expanded
-                ? _buildPlans(context)
+          // Fade + 펼침
+          SizeTransition(
+            sizeFactor: _boxFadeAnim,
+            axisAlignment: -1,
+            child: (widget.expanded)
+                ? FadeTransition(
+                    opacity: _boxFadeAnim,
+                    child: _buildPlans(context),
+                  )
                 : const SizedBox.shrink(),
           ),
         ],
@@ -98,90 +133,61 @@ class _PlanExpansionCardState extends State<PlanExpansionCard> {
   Widget _buildPlans(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final titles = ["DAY60 플랜", "DAY120 플랜", "DAY180 플랜"];
+    final values = [60, 120, 180];
     return Column(
-      children: [
-        _fadeInBtn(
-          context,
-          "DAY60 플랜",
-          cs.primary, // 테두리(동일)
-          cs.surface, // 배경
-          cs.primary, // 진한 텍스트
-          () => widget.onPlanTap(60),
-          delay: 0,
-        ),
-        _fadeInBtn(
-          context,
-          "DAY120 플랜",
-          cs.primary, // 테두리(동일)
-          cs.surface, // 배경
-          cs.primary, // 진한 텍스트
-          () => widget.onPlanTap(120),
-          delay: 70,
-        ),
-        _fadeInBtn(
-          context,
-          "DAY180 플랜",
-          cs.primary, // 테두리(동일)
-          cs.surface, // 배경
-          cs.primary, // 진한 텍스트
-          () => widget.onPlanTap(180),
-          delay: 140,
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-
-  Widget _fadeInBtn(
-    BuildContext context,
-    String title,
-    Color borderColor,
-    Color bgColor,
-    Color textColor,
-    VoidCallback onTap, {
-    int delay = 0,
-  }) {
-    final theme = Theme.of(context);
-    return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 0, end: widget.expanded ? 1 : 0),
-      duration: Duration(milliseconds: 220 + delay),
-      curve: Curves.easeIn,
-      builder: (context, value, child) => Opacity(
-        opacity: value,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: bgColor,
-                foregroundColor: textColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(
-                    color: borderColor.withOpacity(0.14),
-                    width: 1.2,
+      children: List.generate(titles.length, (i) {
+        return TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: widget.expanded ? 1 : 0),
+          duration: Duration(milliseconds: 160 + i * 80),
+          curve: Curves.easeIn,
+          builder: (context, value, child) {
+            return Opacity(
+              opacity: value,
+              child: Transform.scale(
+                scale: 0.97 + value * 0.03,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 4.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: cs.surface,
+                        foregroundColor: cs.primary,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: cs.primary.withOpacity(0.16),
+                            width: 1.2,
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        textStyle: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                      onPressed: () => widget.onPlanTap(context, values[i]),
+                      child: Text(
+                        titles[i],
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: cs.primary,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                textStyle: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                ),
               ),
-              onPressed: onTap,
-              child: Text(
-                title,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: textColor,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+            );
+          },
+        );
+      })
+        ..add(const SizedBox(height: 10)),
     );
   }
 }
