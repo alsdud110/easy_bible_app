@@ -84,6 +84,20 @@ Map<String, String> extractVersesInRange(
     return bookIdx * 1000000 + chapter * 1000 + verse;
   }
 
+  // 1. endBook, endCh의 마지막 절 찾기
+  int maxVerse = 0;
+  for (final k in bibleData.keys) {
+    final m = RegExp(r'^([가-힣]+)(\d+):(\d+)$').firstMatch(k);
+    if (m == null) continue;
+    final book = m.group(1)!;
+    final ch = int.parse(m.group(2)!);
+    final verse = int.parse(m.group(3)!);
+
+    if (book == endBook && ch == endCh && verse > maxVerse) {
+      maxVerse = verse;
+    }
+  }
+
   final sortedKeys = bibleData.keys.toList()
     ..sort((a, b) => keyToOrder(a).compareTo(keyToOrder(b)));
 
@@ -95,27 +109,16 @@ Map<String, String> extractVersesInRange(
     if (m == null) continue;
     final book = m.group(1)!;
     final ch = int.parse(m.group(2)!);
+    final verse = int.parse(m.group(3)!);
 
     // inRange 시작
     if (!inRange && book == startBook && ch == startCh) inRange = true;
 
     if (inRange) result[k] = bibleData[k]!;
 
-    // 끝점이면 그 장의 마지막 절까지 다 넣고, 끝냄!
-    if (inRange && book == endBook && ch == endCh) {
-      // 다음 장 나오면 break
-      continue;
-    }
-    if (inRange && book == endBook && ch > endCh) break;
-    if (inRange && books.indexOf(book) > books.indexOf(endBook)) break;
+    // 끝점 도달 시 종료 (마지막 절까지 딱)
+    if (book == endBook && ch == endCh && verse == maxVerse) break;
   }
-
-  // 디버깅: 추출된 결과 직접 확인
-  print('======== EXTRACT DEBUG START ========');
-  for (var k in result.keys) {
-    print('$k → ${result[k]}');
-  }
-  print('======== EXTRACT DEBUG END ========');
 
   return result;
 }
