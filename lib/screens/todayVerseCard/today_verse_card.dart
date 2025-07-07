@@ -450,21 +450,19 @@ class _SheenPainter extends CustomPainter {
     canvas.clipRRect(rrect);
 
     // 왼쪽 위~중앙, 중앙~오른쪽 아래로 구간 나누기
-    double cx, cy, radius, strength;
+    double cx, cy, radius;
     if (progress < 0.5) {
       // 0~0.5: 점점 중앙으로 오고 커짐/밝아짐
       final p = progress / 0.7; // 0~1
       cx = lerpDouble(0.0, width / 2, p)!;
       cy = lerpDouble(0.0, height / 2, p)!;
       radius = lerpDouble(width * 0.70, width * 0.92, p)!;
-      strength = lerpDouble(0.22, 0.44, p)!; // 더 밝게
     } else {
       // 0.5~1.0: 중앙~오른쪽 아래로 가며 점점 사라짐
       final p = (progress - 0.5) / 0.5; // 0~1
       cx = lerpDouble(width / 2, width, p)!;
       cy = lerpDouble(height / 2, height, p)!;
       radius = lerpDouble(width * 0.70, width * 0.92, p)!;
-      strength = lerpDouble(0.44, 0.07, p)!; // 점점 희미하게
     }
 
     final gradient = RadialGradient(

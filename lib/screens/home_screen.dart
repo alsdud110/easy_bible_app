@@ -2,7 +2,6 @@ import 'package:easy_bible_app/screens/bible/bible_home_screen.dart';
 import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:easy_bible_app/screens/todayVerseCard/today_verse_card.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_bible_app/widgets/profile_card.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/request_card.dart';
 import '../widgets/plan_expansion_card.dart';

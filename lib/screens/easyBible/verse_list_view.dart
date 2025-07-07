@@ -97,7 +97,6 @@ class _VerseListViewState extends State<VerseListView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     final verseNums = widget.verses.keys.toList()..sort();
     return Scaffold(
       appBar: AppBar(
