@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../utils/pretty_range_label.dart';
+import 'package:marquee/marquee.dart';
 
 class PlanVerseListView extends StatefulWidget {
   final String title;
@@ -28,7 +30,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     _selectedVerseKey = keys.isNotEmpty ? keys.first : "";
 
     _scrollController.addListener(() {
-      // 일정 스크롤 이상이면 버튼 보여줌
       const threshold = 350.0;
       if (_scrollController.offset > threshold && !_showFAB) {
         setState(() {
@@ -68,51 +69,80 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   }
 
   void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeOut,
-    );
+    // ⭐️ 수정: 완전히 끝까지 부드럽게 이동!
+    // WidgetsBinding.ensureInitialized() 필요 없음
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final verseKeys = widget.verses.keys.toList();
+    final titleArr = widget.title.split('  ');
+    final dayTitle = titleArr.isNotEmpty ? titleArr[0] : '';
+    final rangeTitle = titleArr.length > 1 ? titleArr[1] : '';
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // "DAY2" → "DAY 2" 자동 변환
-            Text(
-              widget.title
-                  .replaceFirstMapped(
-                    RegExp(r'(DAY)(\d+)'),
-                    (m) => '${m.group(1)} ${m.group(2)}',
-                  )
-                  .split('  ')[0],
-              style: theme.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              widget.title.split('  ').length > 1
-                  ? widget.title.split('  ')[1]
-                  : "",
-              style: theme.textTheme.bodyMedium,
-            ),
-          ],
-        ),
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        elevation: theme.appBarTheme.elevation ?? 0,
+        scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         leading: BackButton(
           onPressed: widget.onBack,
           color: theme.appBarTheme.iconTheme?.color,
         ),
-        backgroundColor: theme.appBarTheme.backgroundColor,
-        elevation: theme.appBarTheme.elevation ?? 0,
-        scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
-        centerTitle: theme.appBarTheme.centerTitle ?? true,
+        actions: const [SizedBox(width: 48)], // (actions랑 leading width 맞추기!)
+        centerTitle: true,
+        titleSpacing: 0,
+        title: SizedBox(
+          height: 46,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // DAY N
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    dayTitle,
+                    style: theme.textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w800),
+                  ),
+                ),
+              ),
+              // 아래 줄 (rangeTitle 마퀴)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                  height: 22,
+                  child: (rangeTitle.length < 23)
+                      ? Center(
+                          child: Text(
+                            fullNameRangeLabel(rangeTitle),
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        )
+                      : Marquee(
+                          text: fullNameRangeLabel(rangeTitle),
+                          style: theme.textTheme.bodyMedium,
+                          velocity: 24.0,
+                          blankSpace: 40,
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: Stack(
         children: [

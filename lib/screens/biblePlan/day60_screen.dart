@@ -2,28 +2,8 @@ import 'package:flutter/material.dart';
 import '../../models/bible_60.dart';
 import '../../models/bible_json_loader.dart';
 import '../../utils/extract_verses.dart';
-import '../../models/const//book_full_name.dart';
+import '../../utils/pretty_range_label.dart';
 import 'plan_verse_list_view.dart';
-
-String prettyRange(String start, String end) {
-  final startMatch = RegExp(r'^([가-힣]+)\s*(\d+)$').firstMatch(start);
-  final endMatch = RegExp(r'^([가-힣]+)\s*(\d+)$').firstMatch(end);
-
-  if (startMatch == null || endMatch == null) return '$start ~ $end';
-
-  final startBook = startMatch.group(1)!;
-  final startCh = startMatch.group(2)!;
-  final endBook = endMatch.group(1)!;
-  final endCh = endMatch.group(2)!;
-
-  final startFull = bookFullName[startBook] ?? startBook;
-  final endFull = bookFullName[endBook] ?? endBook;
-
-  if (startBook == endBook) {
-    return '$startFull $startCh장 ~ $endCh장';
-  }
-  return '$startFull $startCh장 ~ $endFull $endCh장';
-}
 
 class Day60Screen extends StatelessWidget {
   const Day60Screen({super.key});
@@ -33,15 +13,13 @@ class Day60Screen extends StatelessWidget {
     return FutureBuilder<Map<String, String>>(
       future: loadBibleJson(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState != ConnectionState.done) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+              body: Center(child: CircularProgressIndicator()));
         }
-        if (snapshot.hasError) {
+        if (!snapshot.hasData) {
           return const Scaffold(
-            body: Center(child: Text('성경 데이터를 불러오지 못했습니다.')),
-          );
+              body: Center(child: Text('성경 데이터를 불러오지 못했습니다.')));
         }
         final bibleData = snapshot.data!;
         return Scaffold(
@@ -50,40 +28,42 @@ class Day60Screen extends StatelessWidget {
             itemCount: bible60.length,
             separatorBuilder: (_, __) => const Divider(height: 1, thickness: 1),
             itemBuilder: (_, idx) {
-              final day = bible60[idx];
+              final dayRanges = bible60[idx];
               final dayNum = idx + 1;
-              final start = day['start']!;
-              final end = day['end']!;
-              final dayLabel = 'DAY$dayNum';
-              final rangeLabel = prettyRange(start, end);
+              final dayLabel = 'DAY $dayNum';
+              final rangeLabel = dayRanges.join(', ');
+              print(rangeLabel);
+
               return ListTile(
-                title: Text('$dayLabel  $rangeLabel'),
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      dayLabel,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        prettyRangeLabel(rangeLabel),
+                        style: const TextStyle(fontSize: 15),
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
                 onTap: () {
-                  final startMatch =
-                      RegExp(r'^([가-힣]+)\s*(\d+)$').firstMatch(start);
-                  final endMatch =
-                      RegExp(r'^([가-힣]+)\s*(\d+)$').firstMatch(end);
-                  if (startMatch == null || endMatch == null) return;
-                  final startBook = startMatch.group(1)!;
-                  final startCh = int.parse(startMatch.group(2)!);
-                  final endBook = endMatch.group(1)!;
-                  final endCh = int.parse(endMatch.group(2)!);
-
-                  final verses = extractVersesInRange(
-                    bibleData,
-                    startBook,
-                    startCh,
-                    endBook,
-                    endCh,
-                  );
-
+                  final entries = extractVersesForDay(bibleData, dayRanges);
                   Navigator.of(context).push(
                     PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 200),
+                      transitionDuration: const Duration(milliseconds: 300),
                       pageBuilder: (_, __, ___) => PlanVerseListView(
                         title: '$dayLabel  $rangeLabel',
-                        verses: verses,
+                        verses: Map<String, String>.fromEntries(entries),
                         onBack: () => Navigator.pop(context),
                       ),
                       transitionsBuilder: (_, animation, __, child) =>
