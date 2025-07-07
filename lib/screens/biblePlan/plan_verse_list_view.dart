@@ -19,13 +19,27 @@ class PlanVerseListView extends StatefulWidget {
 class _PlanVerseListViewState extends State<PlanVerseListView> {
   final _scrollController = ScrollController();
   late String _selectedVerseKey;
+  bool _showFAB = false;
 
   @override
   void initState() {
     super.initState();
     final keys = widget.verses.keys.toList();
     _selectedVerseKey = keys.isNotEmpty ? keys.first : "";
-    // 자동 스크롤 완전 제거!
+
+    _scrollController.addListener(() {
+      // 일정 스크롤 이상이면 버튼 보여줌
+      const threshold = 350.0;
+      if (_scrollController.offset > threshold && !_showFAB) {
+        setState(() {
+          _showFAB = true;
+        });
+      } else if (_scrollController.offset <= threshold && _showFAB) {
+        setState(() {
+          _showFAB = false;
+        });
+      }
+    });
   }
 
   @override
@@ -36,8 +50,29 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
       setState(() {
         _selectedVerseKey = keys.isNotEmpty ? keys.first : "";
       });
-      // 자동 스크롤 완전 제거!
     }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -79,49 +114,114 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         centerTitle: theme.appBarTheme.centerTitle ?? true,
       ),
-      body: ListView.builder(
-        controller: _scrollController,
-        itemCount: verseKeys.length,
-        itemBuilder: (context, idx) {
-          final key = verseKeys[idx];
-          final text = widget.verses[key] ?? '';
-          final isSelected = key == _selectedVerseKey;
+      body: Stack(
+        children: [
+          ListView.builder(
+            controller: _scrollController,
+            itemCount: verseKeys.length,
+            itemBuilder: (context, idx) {
+              final key = verseKeys[idx];
+              final text = widget.verses[key] ?? '';
+              final isSelected = key == _selectedVerseKey;
 
-          // "창1:1" => "창 1:1"으로 보기 쉽게
-          final prettyKey = _prettyVerseKey(key);
+              final prettyKey = _prettyVerseKey(key);
 
-          return Container(
-            color: isSelected ? Colors.yellow.shade100 : null,
-            child: ListTile(
-              onTap: () {
-                setState(() {
-                  _selectedVerseKey = key;
-                });
-              },
-              leading: Text(
-                prettyKey,
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  fontSize: isSelected ? 17 : 13,
-                  color:
-                      isSelected ? Theme.of(context).colorScheme.primary : null,
-                ),
+              return _superLightTile(
+                verse: prettyKey,
+                text: text,
+                selected: isSelected,
+                onTap: () {
+                  setState(() {
+                    _selectedVerseKey = key;
+                  });
+                },
+              );
+            },
+          ),
+          // 스크롤 끝/시작 이동 버튼 (요즘 스타일!)
+          Positioned(
+            right: 18,
+            bottom: 22,
+            child: AnimatedOpacity(
+              opacity: _showFAB ? 1 : 0,
+              duration: const Duration(milliseconds: 220),
+              child: Column(
+                children: [
+                  FloatingActionButton.small(
+                    heroTag: "scrollToTop",
+                    onPressed: _scrollToTop,
+                    backgroundColor: Colors.grey.shade100,
+                    foregroundColor: theme.colorScheme.primary,
+                    elevation: 1.8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.arrow_upward_rounded, size: 23),
+                  ),
+                  const SizedBox(height: 14),
+                  FloatingActionButton.small(
+                    heroTag: "scrollToBottom",
+                    onPressed: _scrollToBottom,
+                    backgroundColor: Colors.grey.shade100,
+                    foregroundColor: theme.colorScheme.primary,
+                    elevation: 1.8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.arrow_downward_rounded, size: 23),
+                  ),
+                ],
               ),
-              title: Text(
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 초경량 커스텀 verse tile
+  Widget _superLightTile({
+    required String verse,
+    required String text,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        color: selected ? Colors.yellow.shade100 : null,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              verse,
+              style: TextStyle(
+                fontWeight: selected ? FontWeight.bold : FontWeight.w600,
+                fontSize: selected ? 17 : 13,
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.textTheme.bodyLarge?.color,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
                 text,
                 style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  fontSize: isSelected ? 17 : 15,
-                  color:
-                      isSelected ? Theme.of(context).colorScheme.primary : null,
+                  fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                  fontSize: selected ? 17 : 15,
+                  color: selected
+                      ? theme.colorScheme.primary
+                      : theme.textTheme.bodyMedium?.color,
                 ),
+                softWrap: true,
               ),
-              dense: true,
-              selected: isSelected,
-              selectedTileColor: Colors.yellow.shade50,
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
