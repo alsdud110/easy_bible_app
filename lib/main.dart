@@ -9,6 +9,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 /// 모든 스크롤의 바운스/Glow(쭉쭉) 완전 제거
 class NoBounceScrollBehavior extends ScrollBehavior {
   @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child; // 모든 Glow/바운스 효과 제거!
+  }
+
+  @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
     return const ClampingScrollPhysics();
   }

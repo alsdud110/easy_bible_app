@@ -47,7 +47,29 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // "DAY2" → "DAY 2" 자동 변환
+            Text(
+              widget.title
+                  .replaceFirstMapped(
+                    RegExp(r'(DAY)(\d+)'),
+                    (m) => '${m.group(1)} ${m.group(2)}',
+                  )
+                  .split('  ')[0],
+              style: theme.textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              widget.title.split('  ').length > 1
+                  ? widget.title.split('  ')[1]
+                  : "",
+              style: theme.textTheme.bodyMedium,
+            ),
+          ],
+        ),
         leading: BackButton(
           onPressed: widget.onBack,
           color: theme.appBarTheme.iconTheme?.color,
@@ -60,7 +82,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
       body: ListView.builder(
         controller: _scrollController,
         itemCount: verseKeys.length,
-        physics: const ClampingScrollPhysics(),
         itemBuilder: (context, idx) {
           final key = verseKeys[idx];
           final text = widget.verses[key] ?? '';

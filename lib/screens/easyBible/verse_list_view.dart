@@ -116,7 +116,6 @@ class _VerseListViewState extends State<VerseListView> {
       body: ListView.builder(
         controller: _scrollController,
         itemCount: verseNums.length,
-        physics: const ClampingScrollPhysics(), // ← 탄성효과 제거!
         itemBuilder: (context, idx) {
           final verseNum = verseNums[idx];
           final text = widget.verses[verseNum] ?? '';
