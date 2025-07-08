@@ -100,6 +100,12 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         verses: verses,
         selectedVerse: selectedVerse + 1,
         onBack: () => setState(() => step = 2),
+        onChapterChanged: (newChapter) {
+          setState(() {
+            selectedChapter = newChapter - 1; // 0-based index
+            step = 3;
+          });
+        },
       );
     }
     return const SizedBox.shrink();

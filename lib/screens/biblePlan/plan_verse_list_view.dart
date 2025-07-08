@@ -152,6 +152,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
         children: [
           ListView.builder(
             controller: _scrollController,
+            padding: const EdgeInsets.only(bottom: 76),
             itemCount: verseKeys.length,
             itemBuilder: (context, idx) {
               final key = verseKeys[idx];
@@ -171,9 +172,10 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               );
             },
           ),
+          // Scroll Up/Down FABs (위로, 아래로)
           Positioned(
             right: 18,
-            bottom: 22 + 66, // 버튼 높이만큼 위로!
+            bottom: 94, // 버튼 높이만큼 위로!
             child: AnimatedOpacity(
               opacity: _showFAB ? 1 : 0,
               duration: const Duration(milliseconds: 220),
@@ -206,66 +208,64 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               ),
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
-          child: Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
+          // ====== 하단 DAY 이동 버튼 ======
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 이전 DAY
+                ElevatedButton.icon(
                   onPressed: widget.hasPrevDay ? widget.onPrevDay : null,
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 19),
-                  label: const Text("이전 DAY",
-                      style: TextStyle(fontWeight: FontWeight.w600)),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 13),
-                    textStyle: const TextStyle(fontSize: 15),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+                  label: const Text(
+                    '이전 DAY',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: Colors.white,
+                    elevation: 1.5,
+                    shadowColor: Colors.black12,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(13),
+                      borderRadius: BorderRadius.circular(17),
                     ),
-                    foregroundColor: widget.hasPrevDay
-                        ? theme.colorScheme.primary
-                        : Colors.grey,
-                    side: BorderSide(
-                      color: widget.hasPrevDay
-                          ? theme.colorScheme.primary
-                          : Colors.grey.shade300,
-                      width: 1.1,
-                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                    textStyle: const TextStyle(fontSize: 15),
+                    disabledForegroundColor: Colors.grey.shade400,
+                    disabledBackgroundColor: Colors.grey.shade100,
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: OutlinedButton.icon(
+                // 다음 DAY
+                ElevatedButton.icon(
                   onPressed: widget.hasNextDay ? widget.onNextDay : null,
-                  icon: const Icon(Icons.arrow_forward_ios_rounded, size: 19),
-                  label: const Text("다음 DAY",
-                      style: TextStyle(fontWeight: FontWeight.w600)),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 13),
-                    textStyle: const TextStyle(fontSize: 15),
+                  icon: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
+                  label: const Text(
+                    '다음 DAY',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: Colors.white,
+                    elevation: 3.5,
+                    shadowColor: Colors.black12,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(13),
+                      borderRadius: BorderRadius.circular(17),
                     ),
-                    foregroundColor: widget.hasNextDay
-                        ? theme.colorScheme.primary
-                        : Colors.grey,
-                    side: BorderSide(
-                      color: widget.hasNextDay
-                          ? theme.colorScheme.primary
-                          : Colors.grey.shade300,
-                      width: 1.1,
-                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                    textStyle: const TextStyle(fontSize: 15),
+                    disabledForegroundColor: Colors.grey.shade400,
+                    disabledBackgroundColor: Colors.grey.shade100,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

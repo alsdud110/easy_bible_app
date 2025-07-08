@@ -7,6 +7,7 @@ class VerseListView extends StatefulWidget {
   final Map<int, String> verses; // {1: "...", 2: "..."}
   final int selectedVerse;
   final VoidCallback onBack;
+  final void Function(int newChapter)? onChapterChanged;
 
   const VerseListView({
     super.key,
@@ -15,6 +16,7 @@ class VerseListView extends StatefulWidget {
     required this.verses,
     required this.selectedVerse,
     required this.onBack,
+    this.onChapterChanged,
   });
 
   @override
@@ -85,9 +87,23 @@ class _VerseListViewState extends State<VerseListView> {
   @override
   void didUpdateWidget(covariant VerseListView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // selectedVerse가 외부에서 바뀔 때만 중앙으로!
+
+    // "장"이 바뀐 경우에만 1절로 초기화
+    if (widget.chapter != oldWidget.chapter) {
+      setState(() {
+        _selectedVerse = 1;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToSelected(center: true);
+      });
+      return; // 절도 동시에 바뀌면 장을 우선시(중복 호출 방지)
+    }
+
+    // "selectedVerse"만 바뀌면, 그 절로
     if (widget.selectedVerse != oldWidget.selectedVerse) {
-      _selectedVerse = widget.selectedVerse;
+      setState(() {
+        _selectedVerse = widget.selectedVerse;
+      });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _scrollToSelected(center: true);
       });
@@ -98,6 +114,11 @@ class _VerseListViewState extends State<VerseListView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final verseNums = widget.verses.keys.toList()..sort();
+
+    // "장" 범위 제한(예시: 1~마지막 장)
+    const minChapter = 1;
+    final maxChapter = widget.book.chapters; // BibleData 클래스에 정의돼 있다고 가정
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -113,48 +134,114 @@ class _VerseListViewState extends State<VerseListView> {
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         centerTitle: theme.appBarTheme.centerTitle ?? true,
       ),
-      body: ListView.builder(
-        controller: _scrollController,
-        itemCount: verseNums.length,
-        physics: const ClampingScrollPhysics(), // ← 탄성효과 제거!
-        itemBuilder: (context, idx) {
-          final verseNum = verseNums[idx];
-          final text = widget.verses[verseNum] ?? '';
-          final isSelected = verseNum == _selectedVerse;
-          return Container(
-            key: idx == 0 ? _itemKey : null,
-            color: isSelected ? Colors.yellow.shade100 : null,
-            child: ListTile(
-              onTap: () {
-                setState(() {
-                  _selectedVerse = verseNum;
-                  // 누를 때는 중앙으로 스크롤 안함! (초기 진입/절 변경만)
-                });
-              },
-              leading: Text(
-                '$verseNum',
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  fontSize: isSelected ? 19 : 15,
-                  color:
-                      isSelected ? Theme.of(context).colorScheme.primary : null,
+      body: Stack(
+        children: [
+          ListView.builder(
+            controller: _scrollController,
+            itemCount: verseNums.length,
+            physics: const ClampingScrollPhysics(),
+            itemBuilder: (context, idx) {
+              final verseNum = verseNums[idx];
+              final text = widget.verses[verseNum] ?? '';
+              final isSelected = verseNum == _selectedVerse;
+              return Container(
+                key: idx == 0 ? _itemKey : null,
+                color: isSelected ? Colors.yellow.shade100 : null,
+                child: ListTile(
+                  onTap: () {
+                    setState(() {
+                      _selectedVerse = verseNum;
+                    });
+                  },
+                  leading: Text(
+                    '$verseNum',
+                    style: TextStyle(
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w600,
+                      fontSize: isSelected ? 19 : 15,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                  ),
+                  title: Text(
+                    text,
+                    style: TextStyle(
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontSize: isSelected ? 18 : 15,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                  ),
+                  dense: true,
+                  selected: isSelected,
+                  selectedTileColor: Colors.yellow.shade50,
                 ),
-              ),
-              title: Text(
-                text,
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  fontSize: isSelected ? 18 : 15,
-                  color:
-                      isSelected ? Theme.of(context).colorScheme.primary : null,
+              );
+            },
+          ),
+          // ⬇️ 하단 네비게이션 버튼
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 이전 장
+                ElevatedButton.icon(
+                  onPressed: widget.chapter > minChapter
+                      ? () {
+                          if (widget.onChapterChanged != null) {
+                            widget.onChapterChanged!(widget.chapter - 1);
+                          }
+                        }
+                      : null,
+                  icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                  label: const Text('이전 장',
+                      style: TextStyle(fontWeight: FontWeight.w700)),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: Colors.white,
+                    elevation: 1.5,
+                    shadowColor: Colors.black12,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                  ),
                 ),
-              ),
-              dense: true,
-              selected: isSelected,
-              selectedTileColor: Colors.yellow.shade50,
+                // 다음 장
+                ElevatedButton.icon(
+                  onPressed: widget.chapter < maxChapter
+                      ? () {
+                          if (widget.onChapterChanged != null) {
+                            widget.onChapterChanged!(widget.chapter + 1);
+                          }
+                        }
+                      : null,
+                  icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                  label: const Text('다음 장',
+                      style: TextStyle(fontWeight: FontWeight.w700)),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: Colors.white,
+                    elevation: 1.5,
+                    shadowColor: Colors.black12,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
