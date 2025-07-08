@@ -3,7 +3,6 @@ import '../../models/bible_120.dart';
 import '../../models/bible_json_loader.dart';
 import '../../utils/extract_verses.dart';
 import '../../utils/pretty_range_label.dart';
-
 import 'plan_verse_list_view.dart';
 
 class Day120Screen extends StatelessWidget {
@@ -33,7 +32,6 @@ class Day120Screen extends StatelessWidget {
               final dayNum = idx + 1;
               final dayLabel = 'DAY $dayNum';
               final rangeLabel = dayRanges.join(', ');
-              print(rangeLabel);
 
               return ListTile(
                 title: Row(
@@ -58,19 +56,7 @@ class Day120Screen extends StatelessWidget {
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
                 onTap: () {
-                  final entries = extractVersesForDay(bibleData, dayRanges);
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 300),
-                      pageBuilder: (_, __, ___) => PlanVerseListView(
-                        title: '$dayLabel  $rangeLabel',
-                        verses: Map<String, String>.fromEntries(entries),
-                        onBack: () => Navigator.pop(context),
-                      ),
-                      transitionsBuilder: (_, animation, __, child) =>
-                          FadeTransition(opacity: animation, child: child),
-                    ),
-                  );
+                  _openPlanVerse(context, bibleData, idx);
                 },
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
@@ -79,6 +65,46 @@ class Day120Screen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  // DAY120용 VerseView 오픈 함수 (이전/다음 DAY 연동)
+  void _openPlanVerse(
+      BuildContext context, Map<String, String> bibleData, int idx) {
+    final dayRanges = bible120[idx];
+    final dayNum = idx + 1;
+    final dayLabel = 'DAY $dayNum';
+    final rangeLabel = dayRanges.join(', ');
+
+    final entries = extractVersesForDay(bibleData, dayRanges);
+
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (_, __, ___) => PlanVerseListView(
+          title: '$dayLabel  $rangeLabel',
+          verses: Map<String, String>.fromEntries(entries),
+          onBack: () => Navigator.pop(context),
+
+          // 이전/다음 DAY 지원
+          hasPrevDay: idx > 0,
+          hasNextDay: idx < bible120.length - 1,
+          onPrevDay: idx > 0
+              ? () {
+                  Navigator.pop(context);
+                  _openPlanVerse(context, bibleData, idx - 1);
+                }
+              : null,
+          onNextDay: idx < bible120.length - 1
+              ? () {
+                  Navigator.pop(context);
+                  _openPlanVerse(context, bibleData, idx + 1);
+                }
+              : null,
+        ),
+        transitionsBuilder: (_, animation, __, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
     );
   }
 }

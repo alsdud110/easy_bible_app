@@ -4,14 +4,22 @@ import 'package:marquee/marquee.dart';
 
 class PlanVerseListView extends StatefulWidget {
   final String title;
-  final Map<String, String> verses; // ex: "창1:1": "...", "창1:2": "...", ...
+  final Map<String, String> verses;
   final VoidCallback onBack;
+  final VoidCallback? onPrevDay;
+  final VoidCallback? onNextDay;
+  final bool hasPrevDay;
+  final bool hasNextDay;
 
   const PlanVerseListView({
     super.key,
     required this.title,
     required this.verses,
     required this.onBack,
+    this.onPrevDay,
+    this.onNextDay,
+    this.hasPrevDay = false,
+    this.hasNextDay = false,
   });
 
   @override
@@ -69,8 +77,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   }
 
   void _scrollToBottom() {
-    // ⭐️ 수정: 완전히 끝까지 부드럽게 이동!
-    // WidgetsBinding.ensureInitialized() 필요 없음
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -97,7 +103,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
           onPressed: widget.onBack,
           color: theme.appBarTheme.iconTheme?.color,
         ),
-        actions: const [SizedBox(width: 48)], // (actions랑 leading width 맞추기!)
+        actions: const [SizedBox(width: 48)],
         centerTitle: true,
         titleSpacing: 0,
         title: SizedBox(
@@ -105,7 +111,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // DAY N
               Positioned(
                 top: 0,
                 left: 0,
@@ -118,7 +123,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                   ),
                 ),
               ),
-              // 아래 줄 (rangeTitle 마퀴)
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -153,7 +157,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               final key = verseKeys[idx];
               final text = widget.verses[key] ?? '';
               final isSelected = key == _selectedVerseKey;
-
               final prettyKey = _prettyVerseKey(key);
 
               return _superLightTile(
@@ -168,10 +171,9 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               );
             },
           ),
-          // 스크롤 끝/시작 이동 버튼 (요즘 스타일!)
           Positioned(
             right: 18,
-            bottom: 22,
+            bottom: 22 + 66, // 버튼 높이만큼 위로!
             child: AnimatedOpacity(
               opacity: _showFAB ? 1 : 0,
               duration: const Duration(milliseconds: 220),
@@ -206,10 +208,68 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
           ),
         ],
       ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: widget.hasPrevDay ? widget.onPrevDay : null,
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 19),
+                  label: const Text("이전 DAY",
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    textStyle: const TextStyle(fontSize: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    foregroundColor: widget.hasPrevDay
+                        ? theme.colorScheme.primary
+                        : Colors.grey,
+                    side: BorderSide(
+                      color: widget.hasPrevDay
+                          ? theme.colorScheme.primary
+                          : Colors.grey.shade300,
+                      width: 1.1,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: widget.hasNextDay ? widget.onNextDay : null,
+                  icon: const Icon(Icons.arrow_forward_ios_rounded, size: 19),
+                  label: const Text("다음 DAY",
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    textStyle: const TextStyle(fontSize: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    foregroundColor: widget.hasNextDay
+                        ? theme.colorScheme.primary
+                        : Colors.grey,
+                    side: BorderSide(
+                      color: widget.hasNextDay
+                          ? theme.colorScheme.primary
+                          : Colors.grey.shade300,
+                      width: 1.1,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  /// 초경량 커스텀 verse tile
   Widget _superLightTile({
     required String verse,
     required String text,
@@ -257,7 +317,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   }
 
   String _prettyVerseKey(String key) {
-    // ex: 창1:1 → 창 1:1
     final match = RegExp(r'^([가-힣]+)(\d+):(\d+)$').firstMatch(key);
     if (match == null) return key;
     final book = match.group(1)!;
