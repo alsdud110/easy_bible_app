@@ -197,19 +197,19 @@ List<MapEntry<String, String>> extractVersesForDay(
     result.addAll(entries);
   }
   // ★ 여기가 핵심: 반드시 "책-장-절" 기준으로 오름차순 정렬!
-  result.sort((a, b) {
-    getOrder(String key) {
-      final m = RegExp(r'^([가-힣]+)(\d+):(\d+)$').firstMatch(key);
-      if (m == null) return 999999999;
-      final book = m.group(1)!;
-      final chapter = int.parse(m.group(2)!);
-      final verse = int.parse(m.group(3)!);
-      final bookIdx = books.indexOf(book);
-      return bookIdx * 1000000 + chapter * 1000 + verse;
-    }
+  // result.sort((a, b) {
+  //   getOrder(String key) {
+  //     final m = RegExp(r'^([가-힣]+)(\d+):(\d+)$').firstMatch(key);
+  //     if (m == null) return 999999999;
+  //     final book = m.group(1)!;
+  //     final chapter = int.parse(m.group(2)!);
+  //     final verse = int.parse(m.group(3)!);
+  //     final bookIdx = books.indexOf(book);
+  //     return bookIdx * 1000000 + chapter * 1000 + verse;
+  //   }
 
-    return getOrder(a.key).compareTo(getOrder(b.key));
-  });
+  //   return getOrder(a.key).compareTo(getOrder(b.key));
+  // });
   return result;
 }
 
@@ -221,6 +221,12 @@ List<MapEntry<String, String>> _extractSingleRangeEntries(
 
   String clean =
       range.replaceAll(' ', '').replaceAll('–', '~').replaceAll('-', '~');
+
+  final mFix = RegExp(r'^([가-힣]+)(\d+):(\d+)~(\d+)$').firstMatch(clean);
+  if (mFix != null) {
+    clean =
+        '${mFix.group(1)}${mFix.group(2)}:${mFix.group(3)}~${mFix.group(2)}:${mFix.group(4)}';
+  }
 
   // cross-book: ex) 삼상18~삼하3장
   final crossBookMatch =

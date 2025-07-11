@@ -4,6 +4,12 @@ String prettyRangeLabel(String input) {
   input = input.replaceAll(RegExp(r'[\-–~]'), '~');
   input = input.replaceAll(' ', '');
 
+  // 여기 추가!
+  input = input.replaceAllMapped(
+    RegExp(r'(\d+):(\d+)'),
+    (m) => '${m.group(1)}장 ${m.group(2)}절',
+  );
+
   // 1. 두 책명 범위 ex: "시119~잠9장"
   final crossBook = RegExp(r'^([가-힣]+)(\d+)~([가-힣]+)(\d+)[장편]$');
   final crossBookMatch = crossBook.firstMatch(input);
