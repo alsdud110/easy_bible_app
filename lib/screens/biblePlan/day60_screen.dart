@@ -67,43 +67,43 @@ class Day60Screen extends StatelessWidget {
       },
     );
   }
-}
 
-// "하나의 DAY 보기" 공통 함수
-void _openPlanVerse(
-    BuildContext context, Map<String, String> bibleData, int idx) {
-  final dayRanges = bible60[idx];
-  final dayNum = idx + 1;
-  final dayLabel = 'DAY $dayNum';
-  final rangeLabel = dayRanges.join(', ');
+  // "하나의 DAY 보기" 공통 함수
+  void _openPlanVerse(
+      BuildContext context, Map<String, String> bibleData, int idx) {
+    final dayRanges = bible60[idx];
+    final dayNum = idx + 1;
+    final dayLabel = 'DAY $dayNum';
+    final rangeLabel = dayRanges.join(', ');
 
-  final entries = extractVersesForDay(bibleData, dayRanges);
-  Navigator.of(context).push(
-    PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (_, __, ___) => PlanVerseListView(
-        title: '$dayLabel  $rangeLabel',
-        verses: Map<String, String>.fromEntries(entries),
-        onBack: () => Navigator.pop(context),
+    final entries = extractVersesForDay(bibleData, dayRanges);
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (_, __, ___) => PlanVerseListView(
+          title: '$dayLabel  $rangeLabel',
+          verses: Map<String, String>.fromEntries(entries),
+          onBack: () => Navigator.pop(context),
 
-        // === 이전/다음 DAY 이동 기능 추가 ===
-        hasPrevDay: idx > 0,
-        hasNextDay: idx < bible60.length - 1,
-        onPrevDay: idx > 0
-            ? () {
-                Navigator.pop(context);
-                _openPlanVerse(context, bibleData, idx - 1);
-              }
-            : null,
-        onNextDay: idx < bible60.length - 1
-            ? () {
-                Navigator.pop(context);
-                _openPlanVerse(context, bibleData, idx + 1);
-              }
-            : null,
+          // === 이전/다음 DAY 이동 기능 추가 ===
+          hasPrevDay: idx > 0,
+          hasNextDay: idx < bible60.length - 1,
+          onPrevDay: idx > 0
+              ? () {
+                  Navigator.pop(context);
+                  _openPlanVerse(context, bibleData, idx - 1);
+                }
+              : null,
+          onNextDay: idx < bible60.length - 1
+              ? () {
+                  Navigator.pop(context);
+                  _openPlanVerse(context, bibleData, idx + 1);
+                }
+              : null,
+        ),
+        transitionsBuilder: (_, animation, __, child) =>
+            FadeTransition(opacity: animation, child: child),
       ),
-      transitionsBuilder: (_, animation, __, child) =>
-          FadeTransition(opacity: animation, child: child),
-    ),
-  );
+    );
+  }
 }
