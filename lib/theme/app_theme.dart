@@ -10,7 +10,7 @@ final ThemeData appTheme = ThemeData(
     brightness: Brightness.light,
     primary: LightColors.primary,
     onPrimary: LightColors.onPrimary,
-    secondary: LightColors.secondary,
+    secondary: LightColors.accent,
     onSecondary: LightColors.onSecondary,
     background: LightColors.background,
     onBackground: LightColors.onBackground,
@@ -114,11 +114,11 @@ final ThemeData appTheme = ThemeData(
     contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: LightColors.secondary, width: 1),
+      borderSide: BorderSide(color: LightColors.accent, width: 1),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: LightColors.secondary, width: 1),
+      borderSide: BorderSide(color: LightColors.accent, width: 1),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -285,15 +285,15 @@ final ThemeData appThemeDark = ThemeData(
     contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: DarkColors.primary, width: 1),
+      borderSide: BorderSide(color: DarkColors.accent, width: 1),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: DarkColors.primary, width: 1),
+      borderSide: BorderSide(color: DarkColors.accent, width: 1),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: DarkColors.onSurface, width: 2),
+      borderSide: BorderSide(color: DarkColors.primary, width: 2),
     ),
     hintStyle: TextStyle(
       color: DarkColors.bodySmall,
