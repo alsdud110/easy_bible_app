@@ -23,25 +23,23 @@ class RequestCard extends StatelessWidget {
       duration: const Duration(milliseconds: 220),
       curve: Curves.easeOut,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            cs.background.withOpacity(0.15),
-            cs.surface.withOpacity(0.97),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        // 그라데이션 제거하고 단색으로!
+        color: cs.surface,
         borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: cs.primary.withOpacity(0.15),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: cs.surface.withOpacity(0.10),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
+            color: cs.primary.withOpacity(0.08),
+            offset: const Offset(0, 4),
+            blurRadius: 12,
           ),
         ],
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
         onTap: onTap,
         child: Container(
           height: height,
@@ -51,7 +49,7 @@ class RequestCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 25,
-                backgroundColor: cs.surface.withOpacity(0.13),
+                backgroundColor: cs.primary.withOpacity(0.12),
                 child: Icon(iconData, color: cs.primary, size: 32),
               ),
               const SizedBox(width: 24),

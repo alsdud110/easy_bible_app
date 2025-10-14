@@ -56,27 +56,24 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
 
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            cs.surface.withOpacity(0.32),
-            cs.surface.withOpacity(0.64),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: cs.surface,
         borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: cs.primary.withOpacity(0.15),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: cs.primary.withOpacity(0.10),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
+            color: cs.primary.withOpacity(0.08),
+            offset: const Offset(0, 4),
+            blurRadius: 12,
           ),
         ],
       ),
       child: Column(
         children: [
           InkWell(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
             onTap: widget.onTap,
             child: Container(
               height: 98,

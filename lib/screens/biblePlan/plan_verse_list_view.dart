@@ -281,7 +281,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        color: selected ? theme.colorScheme.secondary : null,
+        // 연한 primary 색상으로 변경!
+        color: selected ? theme.colorScheme.primary.withOpacity(0.08) : null,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

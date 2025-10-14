@@ -1,5 +1,11 @@
-import 'package:easy_bible_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+
+// 각 스크린 import 추가
+import '../../screens/bible/bible_home_screen.dart'; // 전체 성경
+import '../../screens/home_screen.dart'; // 어성경 바이블(홈)
+import '../../screens/biblePlan/day60_screen.dart';
+import '../../screens/biblePlan/day120_screen.dart';
+import '../../screens/biblePlan/day180_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback? onThemeToggle;
@@ -10,21 +16,42 @@ class CustomDrawer extends StatelessWidget {
     this.isDark = false,
   });
 
-  void _fadePushAndRemove(BuildContext context, Widget screen) {
-    Navigator.of(context).pushAndRemoveUntil(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => screen,
-        transitionDuration: const Duration(milliseconds: 170),
-        reverseTransitionDuration: const Duration(milliseconds: 120),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-      ),
-      (route) => false,
-    );
+  void _navigateToScreen(BuildContext context, Widget screen) {
+    Navigator.of(context).pop(); // Drawer 먼저 닫기
+
+    // 현재 화면이 HomeScreen인지 확인
+    if (screen is HomeScreen) {
+      // 이미 홈이면 모든 라우트 제거하고 홈으로
+      Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => screen,
+          transitionDuration: const Duration(milliseconds: 170),
+          reverseTransitionDuration: const Duration(milliseconds: 120),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+        (route) => false,
+      );
+    } else {
+      // 홈이 아니면 일반 push (뒤로가기 가능)
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => screen,
+          transitionDuration: const Duration(milliseconds: 170),
+          reverseTransitionDuration: const Duration(milliseconds: 120),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    }
   }
 
   @override
@@ -36,7 +63,7 @@ class CustomDrawer extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(left: Radius.circular(28)),
       ),
-      backgroundColor: cs.background,
+      backgroundColor: cs.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -100,27 +127,41 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+
+          // 메뉴: 전체 성경
           _DrawerButton(
-            icon: Icons.access_time_rounded,
+            icon: Icons.menu_book_rounded,
+            label: '전체 성경',
+            color: cs.primary,
+            onTap: () => _navigateToScreen(
+                context,
+                BibleHomeScreen(
+                  onThemeToggle: onThemeToggle,
+                  isDark: isDark,
+                )),
+          ),
+          // 메뉴: 어성경 바이블(홈)
+          _DrawerButton(
+            icon: Icons.home_rounded,
             label: '어성경 바이블',
             color: cs.primary,
-            onTap: () => _fadePushAndRemove(context, const HomeScreen()),
+            onTap: () => _navigateToScreen(
+                context,
+                HomeScreen(
+                  onThemeToggle: onThemeToggle,
+                  isDark: isDark,
+                )),
           ),
-          _DrawerButton(
-            icon: Icons.flight_takeoff_rounded,
-            label: '성경일독(플랜)',
+
+          // 성경일독(플랜) - 펼침/접기
+          _PlanExpansionMenu(
             color: cs.secondary,
-            onTap: () => _fadePushAndRemove(context, const HomeScreen()),
+            navigateToScreen: (screen) => _navigateToScreen(context, screen),
           ),
-          _DrawerButton(
-            icon: Icons.person_outline_rounded,
-            label: '마이페이지',
-            color: cs.secondary,
-            onTap: () => _fadePushAndRemove(context, const HomeScreen()),
-          ),
+
           const Spacer(),
 
-          // ----- 테마 토글 스위치 추가 -----
+          // ----- 테마 토글 스위치 -----
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
             child: Row(
@@ -151,7 +192,6 @@ class CustomDrawer extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Divider(
@@ -221,6 +261,116 @@ class _DrawerButton extends StatelessWidget {
         hoverColor: color.withOpacity(0.10),
         splashColor: color.withOpacity(0.16),
       ),
+    );
+  }
+}
+
+// 숫자 뱃지 버튼
+class _DrawerNumberButton extends StatelessWidget {
+  final String number;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _DrawerNumberButton({
+    required this.number,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(left: 0, right: 0, bottom: 4),
+      child: ListTile(
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.13),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              number,
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ),
+        title: Text(
+          label,
+          style:
+              theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        hoverColor: color.withOpacity(0.10),
+        splashColor: color.withOpacity(0.16),
+      ),
+    );
+  }
+}
+
+// 펼침 메뉴: 성경일독(플랜)
+class _PlanExpansionMenu extends StatefulWidget {
+  final Color color;
+  final void Function(Widget screen) navigateToScreen;
+  const _PlanExpansionMenu({
+    required this.color,
+    required this.navigateToScreen,
+  });
+
+  @override
+  State<_PlanExpansionMenu> createState() => _PlanExpansionMenuState();
+}
+
+class _PlanExpansionMenuState extends State<_PlanExpansionMenu> {
+  bool expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _DrawerButton(
+          icon: Icons.flight_takeoff_rounded,
+          label: '성경일독(플랜)',
+          color: widget.color,
+          onTap: () => setState(() => expanded = !expanded),
+        ),
+        if (expanded)
+          Padding(
+            padding: const EdgeInsets.only(left: 34, right: 18),
+            child: Column(
+              children: [
+                _DrawerNumberButton(
+                  number: '60',
+                  label: 'DAY60 플랜',
+                  color: widget.color,
+                  onTap: () => widget.navigateToScreen(const Day60Screen()),
+                ),
+                _DrawerNumberButton(
+                  number: '120',
+                  label: 'DAY120 플랜',
+                  color: widget.color,
+                  onTap: () => widget.navigateToScreen(const Day120Screen()),
+                ),
+                _DrawerNumberButton(
+                  number: '180',
+                  label: 'DAY180 플랜',
+                  color: widget.color,
+                  onTap: () => widget.navigateToScreen(const Day180Screen()),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

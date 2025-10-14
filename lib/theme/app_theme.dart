@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
+import 'colors.dart'; // 추가!
 
 final ThemeData appTheme = ThemeData(
   useMaterial3: true,
@@ -10,10 +10,8 @@ final ThemeData appTheme = ThemeData(
     brightness: Brightness.light,
     primary: LightColors.primary,
     onPrimary: LightColors.onPrimary,
-    secondary: LightColors.accent,
+    secondary: LightColors.secondary,
     onSecondary: LightColors.onSecondary,
-    background: LightColors.background,
-    onBackground: LightColors.onBackground,
     surface: LightColors.surface,
     onSurface: LightColors.onSurface,
     error: CommonColors.error,
@@ -21,36 +19,42 @@ final ThemeData appTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
-      fontSize: 34,
-      fontWeight: FontWeight.bold,
-      letterSpacing: -1,
+      fontSize: 36,
+      fontWeight: FontWeight.w800,
+      letterSpacing: -1.5,
       color: LightColors.display,
+      height: 1.2,
     ),
     headlineLarge: TextStyle(
-      fontSize: 26,
-      fontWeight: FontWeight.bold,
+      fontSize: 28,
+      fontWeight: FontWeight.w700,
+      letterSpacing: -0.5,
       color: LightColors.headline,
+      height: 1.3,
     ),
     headlineMedium: TextStyle(
-      fontSize: 22,
+      fontSize: 24,
       fontWeight: FontWeight.w700,
       color: LightColors.headline,
+      height: 1.3,
     ),
     headlineSmall: TextStyle(
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: FontWeight.w600,
       color: LightColors.onSurface,
     ),
     bodyLarge: TextStyle(
-      fontSize: 16,
+      fontSize: 17,
       fontWeight: FontWeight.w500,
       color: LightColors.body,
-      height: 1.5,
+      height: 1.6,
+      letterSpacing: 0.1,
     ),
     bodyMedium: TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w400,
       color: LightColors.bodyMedium,
+      height: 1.5,
     ),
     bodySmall: TextStyle(
       fontSize: 13,
@@ -60,7 +64,7 @@ final ThemeData appTheme = ThemeData(
     labelLarge: TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w600,
-      letterSpacing: 0.1,
+      letterSpacing: 0.3,
       color: LightColors.label,
     ),
     labelMedium: TextStyle(
@@ -77,59 +81,59 @@ final ThemeData appTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     backgroundColor: LightColors.appBar,
     scrolledUnderElevation: 0,
+    elevation: 0,
     titleTextStyle: TextStyle(
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w700,
       fontSize: 20,
       color: LightColors.onBackground,
-      letterSpacing: -0.5,
+      letterSpacing: -0.3,
     ),
     iconTheme: IconThemeData(color: LightColors.primary),
     actionsIconTheme: IconThemeData(color: LightColors.primary),
     centerTitle: true,
     shadowColor: Colors.transparent,
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     elevation: 0,
     color: LightColors.surface,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20),
-      side: const BorderSide(color: LightColors.cardBorder, width: 1.2),
     ),
     margin: const EdgeInsets.all(12),
-    shadowColor: Colors.black12,
-    surfaceTintColor: LightColors.cardSurfaceTint,
+    shadowColor: LightColors.primary.withOpacity(0.08),
+    surfaceTintColor: Colors.transparent,
   ),
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: LightColors.fabFill,
     foregroundColor: Colors.white,
-    elevation: 1,
+    elevation: 4,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
+      borderRadius: BorderRadius.circular(16),
     ),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
+  inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: LightColors.inputFill,
-    contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: LightColors.accent, width: 1),
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: LightColors.divider, width: 1.5),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: LightColors.accent, width: 1),
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: LightColors.divider, width: 1.5),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: LightColors.primary, width: 2),
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: LightColors.primary, width: 2),
     ),
-    hintStyle: TextStyle(
+    hintStyle: const TextStyle(
       color: LightColors.bodySmall,
       fontSize: 15,
       fontWeight: FontWeight.w400,
     ),
-    labelStyle: TextStyle(
+    labelStyle: const TextStyle(
       color: LightColors.primary,
       fontWeight: FontWeight.w500,
     ),
@@ -138,21 +142,25 @@ final ThemeData appTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: LightColors.primary,
       foregroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       textStyle: const TextStyle(
-          fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: -0.5),
+        fontWeight: FontWeight.w700,
+        fontSize: 16,
+        letterSpacing: 0.2,
+      ),
       elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      shadowColor: LightColors.primary.withOpacity(0.3),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     ),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       foregroundColor: LightColors.primary,
       backgroundColor: Colors.transparent,
-      side: const BorderSide(color: LightColors.primary, width: 1.2),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      side: const BorderSide(color: LightColors.primary, width: 1.5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     ),
   ),
   dividerTheme: const DividerThemeData(
@@ -162,11 +170,11 @@ final ThemeData appTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: LightColors.appBar,
-    elevation: 8,
+    elevation: 0,
     selectedItemColor: LightColors.primary,
-    unselectedItemColor: LightColors.secondary,
-    selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+    unselectedItemColor: LightColors.bodySmall,
+    selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
     type: BottomNavigationBarType.fixed,
     showUnselectedLabels: true,
   ),
@@ -182,8 +190,6 @@ final ThemeData appThemeDark = ThemeData(
     onPrimary: DarkColors.onPrimary,
     secondary: DarkColors.secondary,
     onSecondary: DarkColors.onSecondary,
-    background: DarkColors.background,
-    onBackground: DarkColors.onBackground,
     surface: DarkColors.surface,
     onSurface: DarkColors.onSurface,
     error: CommonColors.error,
@@ -191,36 +197,42 @@ final ThemeData appThemeDark = ThemeData(
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
-      fontSize: 34,
-      fontWeight: FontWeight.bold,
-      letterSpacing: -1,
+      fontSize: 36,
+      fontWeight: FontWeight.w800,
+      letterSpacing: -1.5,
       color: DarkColors.display,
+      height: 1.2,
     ),
     headlineLarge: TextStyle(
-      fontSize: 26,
-      fontWeight: FontWeight.bold,
+      fontSize: 28,
+      fontWeight: FontWeight.w700,
+      letterSpacing: -0.5,
       color: DarkColors.headline,
+      height: 1.3,
     ),
     headlineMedium: TextStyle(
-      fontSize: 22,
+      fontSize: 24,
       fontWeight: FontWeight.w700,
       color: DarkColors.headline,
+      height: 1.3,
     ),
     headlineSmall: TextStyle(
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: FontWeight.w600,
       color: DarkColors.display,
     ),
     bodyLarge: TextStyle(
-      fontSize: 16,
+      fontSize: 17,
       fontWeight: FontWeight.w500,
       color: DarkColors.body,
-      height: 1.5,
+      height: 1.6,
+      letterSpacing: 0.1,
     ),
     bodyMedium: TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w400,
       color: DarkColors.bodyMedium,
+      height: 1.5,
     ),
     bodySmall: TextStyle(
       fontSize: 13,
@@ -230,7 +242,7 @@ final ThemeData appThemeDark = ThemeData(
     labelLarge: TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w600,
-      letterSpacing: 0.1,
+      letterSpacing: 0.3,
       color: DarkColors.label,
     ),
     labelMedium: TextStyle(
@@ -253,54 +265,53 @@ final ThemeData appThemeDark = ThemeData(
       fontWeight: FontWeight.w700,
       fontSize: 20,
       color: DarkColors.onSurface,
-      letterSpacing: -0.5,
+      letterSpacing: -0.3,
     ),
     iconTheme: IconThemeData(color: DarkColors.primary),
     actionsIconTheme: IconThemeData(color: DarkColors.primary),
     centerTitle: true,
     shadowColor: Colors.transparent,
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     elevation: 0,
     color: DarkColors.surface,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20),
-      side: const BorderSide(color: DarkColors.cardBorder, width: 1.2),
     ),
     margin: const EdgeInsets.all(12),
-    shadowColor: Colors.black45,
-    surfaceTintColor: DarkColors.cardSurfaceTint,
+    shadowColor: DarkColors.primary.withOpacity(0.1),
+    surfaceTintColor: Colors.transparent,
   ),
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: DarkColors.fabFill,
-    foregroundColor: Colors.black,
-    elevation: 1,
+    foregroundColor: DarkColors.onPrimary,
+    elevation: 4,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
+      borderRadius: BorderRadius.circular(16),
     ),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
+  inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: DarkColors.inputFill,
-    contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: DarkColors.accent, width: 1),
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: DarkColors.divider, width: 1.5),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: DarkColors.accent, width: 1),
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: DarkColors.divider, width: 1.5),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      borderSide: BorderSide(color: DarkColors.primary, width: 2),
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: DarkColors.primary, width: 2),
     ),
-    hintStyle: TextStyle(
+    hintStyle: const TextStyle(
       color: DarkColors.bodySmall,
       fontSize: 15,
       fontWeight: FontWeight.w400,
     ),
-    labelStyle: TextStyle(
+    labelStyle: const TextStyle(
       color: DarkColors.primary,
       fontWeight: FontWeight.w500,
     ),
@@ -308,22 +319,26 @@ final ThemeData appThemeDark = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: DarkColors.primary,
-      foregroundColor: Colors.black,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      foregroundColor: DarkColors.onPrimary,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       textStyle: const TextStyle(
-          fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: -0.5),
+        fontWeight: FontWeight.w700,
+        fontSize: 16,
+        letterSpacing: 0.2,
+      ),
       elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      shadowColor: DarkColors.primary.withOpacity(0.4),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     ),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       foregroundColor: DarkColors.primary,
       backgroundColor: Colors.transparent,
-      side: const BorderSide(color: DarkColors.primary, width: 1.2),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      side: const BorderSide(color: DarkColors.primary, width: 1.5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     ),
   ),
   dividerTheme: const DividerThemeData(
@@ -333,11 +348,11 @@ final ThemeData appThemeDark = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: DarkColors.appBar,
-    elevation: 8,
+    elevation: 0,
     selectedItemColor: DarkColors.primary,
-    unselectedItemColor: DarkColors.secondary,
-    selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+    unselectedItemColor: DarkColors.bodySmall,
+    selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
     type: BottomNavigationBarType.fixed,
     showUnselectedLabels: true,
   ),

@@ -19,6 +19,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   late AnimationController _fadeCtrl;
   late Animation<double> _fadeAnim;
   late AnimationController _sizeCtrl;
+  late AnimationController _shineCtrl; // 여기로 옮김!
 
   @override
   void initState() {
@@ -33,6 +34,10 @@ class _TodayVerseCardState extends State<TodayVerseCard>
       duration: const Duration(milliseconds: 320),
       value: 1.0,
     );
+    _shineCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2), // 4초 → 2초로 더 빠르게!
+    )..repeat();
     _loadTodayVerse();
   }
 
@@ -159,7 +164,6 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                         child: ElevatedButton(
                           onPressed: () async {
                             Navigator.of(context).pop();
-                            // Fade out → 내용 변경 → Fade in
                             await _fadeCtrl.reverse();
                             final prefs = await SharedPreferences.getInstance();
                             final today = DateTime.now();
@@ -215,6 +219,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   void dispose() {
     _fadeCtrl.dispose();
     _sizeCtrl.dispose();
+    _shineCtrl.dispose();
     super.dispose();
   }
 
@@ -223,43 +228,69 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    // 각 상태별로 min/max height를 맞춤 (ex: 뽑기와 구절 보여줄 때 크기가 달라도 부드럽게)
     return FadeTransition(
       opacity: _fadeAnim,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         alignment: Alignment.topCenter,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          elevation: 0,
-          margin: const EdgeInsets.symmetric(vertical: 16),
-          color: cs.surface,
-          child: Stack(
-            children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 350),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeInCubic,
-                child: verse == null
-                    ? _TodayVerseEmptyCard(onTap: _pickVerse)
-                    : _TodayVerseShowCard(ref: ref, verse: verse),
+        child: Stack(
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
               ),
-              if (verse != null)
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: IconButton(
-                    icon: Icon(Icons.refresh_rounded, color: cs.primary),
-                    tooltip: '오늘의 구절 다시 뽑기',
-                    onPressed: _resetVerse,
-                    splashRadius: 22,
+              elevation: 0,
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              color: cs.surface,
+              child: Stack(
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 350),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    child: verse == null
+                        ? _TodayVerseEmptyCard(onTap: _pickVerse)
+                        : _TodayVerseShowCard(ref: ref, verse: verse),
+                  ),
+                  if (verse != null)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: IconButton(
+                        icon: Icon(Icons.refresh_rounded, color: cs.primary),
+                        tooltip: '오늘의 구절 다시 뽑기',
+                        onPressed: _resetVerse,
+                        splashRadius: 22,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            // 빛 효과 - Card 위에 오버레이
+            if (verse != null)
+              Positioned.fill(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: IgnorePointer(
+                      child: AnimatedBuilder(
+                        animation: _shineCtrl,
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: _SimpleGlowPainter(
+                              progress: _shineCtrl.value,
+                              primaryColor: cs.primary, // primary 색상 전달
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
@@ -328,68 +359,23 @@ class _TodayVerseEmptyCard extends StatelessWidget {
 }
 
 // 오늘의 구절 보여주는 카드
-class _TodayVerseShowCard extends StatefulWidget {
+class _TodayVerseShowCard extends StatelessWidget {
   final String? ref;
   final String? verse;
   const _TodayVerseShowCard({this.ref, this.verse});
 
   @override
-  State<_TodayVerseShowCard> createState() => _TodayVerseShowCardState();
-}
-
-class _TodayVerseShowCardState extends State<_TodayVerseShowCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _shineCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _shineCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _shineCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    return AnimatedBuilder(
-      animation: _shineCtrl,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: _SheenPainter(progress: _shineCtrl.value),
-          child: child, // ← 반드시 child 써줘야 구절 내용 나옴!
-        );
-      },
-      // child 부분에 카드 내용 전부 넣기
-      child: Container(
-        key: const ValueKey("verse"),
-        width: double.infinity,
+    return Container(
+      key: const ValueKey("verse"),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: cs.surface,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 18),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              cs.primary.withOpacity(0.035),
-              cs.surface.withOpacity(0.99)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: cs.primary.withOpacity(0.03),
-              blurRadius: 9,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -400,7 +386,7 @@ class _TodayVerseShowCardState extends State<_TodayVerseShowCard>
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Text(
-                widget.ref ?? "",
+                ref ?? "",
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
@@ -409,7 +395,7 @@ class _TodayVerseShowCardState extends State<_TodayVerseShowCard>
             ),
             const SizedBox(height: 13),
             Text(
-              widget.verse ?? "",
+              verse ?? "",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 17,
@@ -433,63 +419,51 @@ class _TodayVerseShowCardState extends State<_TodayVerseShowCard>
   }
 }
 
-// 1. 사선 빛나는 효과 Painter 추가
-class _SheenPainter extends CustomPainter {
+// 은은한 빛 효과 Painter
+class _SimpleGlowPainter extends CustomPainter {
   final double progress;
-  _SheenPainter({required this.progress});
+  final Color primaryColor;
+
+  _SimpleGlowPainter({
+    required this.progress,
+    required this.primaryColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final width = size.width;
-    final height = size.height;
-    final rect = Rect.fromLTWH(0, 0, width, height);
+    // 진행도에 따라 위치 변경 (더 빠르게 움직이게)
+    final offset = size.width * 1.5 * progress - size.width * 0.4;
 
-    final borderRadius = BorderRadius.circular(20);
-    final rrect = borderRadius.toRRect(rect);
-    canvas.save();
-    canvas.clipRRect(rrect);
-
-    // 왼쪽 위~중앙, 중앙~오른쪽 아래로 구간 나누기
-    double cx, cy, radius;
-    if (progress < 0.5) {
-      // 0~0.5: 점점 중앙으로 오고 커짐/밝아짐
-      final p = progress / 0.7; // 0~1
-      cx = lerpDouble(0.0, width / 2, p)!;
-      cy = lerpDouble(0.0, height / 2, p)!;
-      radius = lerpDouble(width * 0.70, width * 0.92, p)!;
-    } else {
-      // 0.5~1.0: 중앙~오른쪽 아래로 가며 점점 사라짐
-      final p = (progress - 0.5) / 0.5; // 0~1
-      cx = lerpDouble(width / 2, width, p)!;
-      cy = lerpDouble(height / 2, height, p)!;
-      radius = lerpDouble(width * 0.70, width * 0.92, p)!;
-    }
-
-    final gradient = RadialGradient(
-      center: Alignment((cx / width) * 2 - 1, (cy / height) * 2 - 1),
-      radius: radius / width,
+    // primary 색상으로 빛 효과 (더 촘촘하게)
+    final gradient = LinearGradient(
       colors: [
-        Colors.white.withOpacity(0.4),
-        Colors.white.withOpacity(0.2),
+        Colors.transparent,
+        primaryColor.withOpacity(0.03),
+        primaryColor.withOpacity(0.06),
+        primaryColor.withOpacity(0.12),
+        primaryColor.withOpacity(0.13),
+        primaryColor.withOpacity(0.12),
+        primaryColor.withOpacity(0.06),
+        primaryColor.withOpacity(0.03),
         Colors.transparent,
       ],
-      stops: const [0.0, 0.57, 1.0],
+      stops: const [0.0, 0.1, 0.2, 0.35, 0.4, 0.5, 0.65, 0.8, 1.0],
     );
 
     final paint = Paint()
-      ..shader = gradient
-          .createShader(Rect.fromCircle(center: Offset(cx, cy), radius: radius))
-      ..blendMode = BlendMode.lighten;
+      ..shader = gradient.createShader(
+        Rect.fromLTWH(offset - 100, 0, 200, size.height),
+      )
+      ..blendMode = BlendMode.srcOver;
 
-    canvas.drawRect(rect, paint);
-
-    canvas.restore();
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      paint,
+    );
   }
 
   @override
-  bool shouldRepaint(covariant _SheenPainter oldDelegate) =>
-      oldDelegate.progress != progress;
+  bool shouldRepaint(covariant _SimpleGlowPainter oldDelegate) =>
+      oldDelegate.progress != progress ||
+      oldDelegate.primaryColor != primaryColor;
 }
-
-// lerpDouble은 dart:ui 또는 math에 없으면 직접 구현
-double? lerpDouble(num a, num b, double t) => a * (1.0 - t) + b * t;

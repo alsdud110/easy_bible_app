@@ -34,7 +34,15 @@ void pushModernTransition(BuildContext context, Widget page) {
 class BookSelector extends StatefulWidget {
   final List<BibleData> books;
   final void Function(int idx) onSelect;
-  const BookSelector({required this.books, required this.onSelect, super.key});
+  final VoidCallback? onThemeToggle; // 이 부분 추가!
+  final bool isDark; // 이 부분 추가!
+
+  const BookSelector(
+      {required this.books,
+      required this.onSelect,
+      this.onThemeToggle, // 이 부분 추가!
+      this.isDark = false, // 이 부분 추가!
+      super.key});
 
   @override
   State<BookSelector> createState() => _BookSelectorState();
@@ -59,17 +67,15 @@ class _BookSelectorState extends State<BookSelector> {
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         iconTheme: theme.appBarTheme.iconTheme,
         actionsIconTheme: theme.appBarTheme.actionsIconTheme,
-        actions: [
-          Row(
-            children: [
-              _modeBtn(
-                  '그리드', isGrid, () => setState(() => isGrid = true), theme),
-              _modeBtn(
-                  '목록', !isGrid, () => setState(() => isGrid = false), theme),
-              const SizedBox(width: 12),
-            ],
-          ),
-        ],
+        // ✅ 추가된 부분
+        leading: IconButton(
+          icon: const Icon(Icons.home_rounded),
+          tooltip: '홈으로',
+          onPressed: () {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            // 또는 필요하면 _reset() 호출 등으로 초기화 가능
+          },
+        ),
       ),
       body: ListView(
         children: [

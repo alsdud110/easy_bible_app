@@ -8,7 +8,15 @@ import 'verse_selector.dart';
 import 'verse_list_view.dart';
 
 class BibleHomeScreen extends StatefulWidget {
-  const BibleHomeScreen({super.key});
+  final VoidCallback? onThemeToggle;
+  final bool isDark;
+
+  const BibleHomeScreen({
+    super.key,
+    this.onThemeToggle,
+    this.isDark = false,
+  });
+
   @override
   State<BibleHomeScreen> createState() => _BibleHomeScreenState();
 }
@@ -61,6 +69,8 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
             step = 1;
           });
         },
+        onThemeToggle: widget.onThemeToggle,
+        isDark: widget.isDark,
       );
     } else if (step == 1) {
       final book = bibleBookList[selectedBook];
