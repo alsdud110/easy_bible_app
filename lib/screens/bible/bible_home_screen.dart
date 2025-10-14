@@ -74,11 +74,15 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
 
   Widget _buildStepScreen() {
     if (isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        key: ValueKey('loading'), // ✅ key 추가
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (step == 0) {
       return BookSelector(
+        key: const ValueKey('book'), // ✅ key 추가
         books: bibleBookList,
         onSelect: (idx) {
           setState(() {
@@ -92,6 +96,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     } else if (step == 1) {
       final book = bibleBookList[selectedBook];
       return ChapterSelector(
+        key: ValueKey('chapter-$selectedBook'), // ✅ key 추가
         book: book,
         onSelect: (chapter) {
           setState(() {
@@ -106,6 +111,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
       final chapterNum = selectedChapter + 1;
       final verseCount = bibleMap[book.name]?[chapterNum]?.length ?? 0;
       return VerseSelector(
+        key: ValueKey('verse-$selectedBook-$selectedChapter'), // ✅ key 추가
         bookFullName: book.fullName,
         chapter: chapterNum,
         verseCount: verseCount,
@@ -116,13 +122,15 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
           });
         },
         onBack: () => setState(() => step = 1),
-        onGoHome: _reset, // ✅ 추가
+        onGoHome: _reset,
       );
     } else if (step == 3) {
       final book = bibleBookList[selectedBook];
       final chapterNum = selectedChapter + 1;
       final verses = bibleMap[book.name]?[chapterNum] ?? {};
       return VerseListView(
+        key: ValueKey(
+            'list-$selectedBook-$selectedChapter-$selectedVerse'), // ✅ key 추가
         book: book,
         chapter: chapterNum,
         verses: verses,
@@ -131,13 +139,13 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         onChapterChanged: (newChapter) {
           setState(() {
             selectedChapter = newChapter - 1;
+            selectedVerse = 0; // ✅ 1절로 초기화 (0-based index이므로 0)
             step = 3;
           });
         },
-        // ✅ 추가: Breadcrumb 네비게이션 콜백
         onGoToChapterSelector: _goToChapterSelector,
         onGoToVerseSelector: _goToVerseSelector,
-        onGoHome: _reset, // ✅ 추가
+        onGoHome: _reset,
       );
     }
     return const SizedBox.shrink();
@@ -145,13 +153,21 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
-      transitionBuilder: (child, animation) => FadeTransition(
-        opacity: animation,
-        child: child,
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200), // ✅ 시간 단축
+        switchInCurve: Curves.easeInOut, // ✅ 커브 추가
+        switchOutCurve: Curves.easeInOut, // ✅ 커브 추가
+        transitionBuilder: (child, animation) {
+          // ✅ FadeTransition만 사용 (깜빡임 최소화)
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        child: _buildStepScreen(),
       ),
-      child: _buildStepScreen(),
     );
   }
 }
