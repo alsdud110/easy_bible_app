@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="easy_bible_app"
+        android:label="어? 성경이 읽어지네!"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
