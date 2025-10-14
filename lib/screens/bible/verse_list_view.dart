@@ -126,10 +126,13 @@ class _VerseListViewState extends State<VerseListView> {
     const minChapter = 1;
     final maxChapter = widget.book.chapters;
 
+    // ✅ 화면 너비 가져오기
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.book.fullName} ${widget.chapter}장', // ✅ AppBar는 fullName 유지
+          '${widget.book.fullName} ${widget.chapter}장',
           style: theme.appBarTheme.titleTextStyle,
         ),
         leading: BackButton(
@@ -147,19 +150,19 @@ class _VerseListViewState extends State<VerseListView> {
             items: [
               BreadcrumbItem(
                 label: '홈',
-                onTap: widget.onGoHome, // ✅ 이미 올바름 - onGoHome 사용
+                onTap: widget.onGoHome,
               ),
               BreadcrumbItem(
-                label: widget.book.fullName, // ✅ Breadcrumb는 짧은 이름 사용
-                onTap: widget.onGoToChapterSelector, // ✅ 콜백 사용
+                label: widget.book.fullName,
+                onTap: widget.onGoToChapterSelector,
               ),
               BreadcrumbItem(
                 label: '${widget.chapter}장',
-                onTap: widget.onGoToVerseSelector, // ✅ 콜백 사용
+                onTap: widget.onGoToVerseSelector,
               ),
               BreadcrumbItem(
                 label: '$_selectedVerse절',
-                onTap: () {}, // 현재 페이지
+                onTap: () {},
                 isActive: true,
               ),
             ],
@@ -171,15 +174,14 @@ class _VerseListViewState extends State<VerseListView> {
                   controller: _scrollController,
                   itemCount: verseNums.length,
                   physics: const ClampingScrollPhysics(),
+                  padding: const EdgeInsets.only(bottom: 80), // ✅ 하단 여백
                   itemBuilder: (context, idx) {
                     final verseNum = verseNums[idx];
                     final text = widget.verses[verseNum] ?? '';
                     final isSelected = verseNum == _selectedVerse;
                     return Container(
                       key: idx == 0 ? _itemKey : null,
-                      color: isSelected
-                          ? cs.primary.withOpacity(0.15) // ✅ 테마에 맞는 배경색
-                          : null,
+                      color: isSelected ? cs.primary.withOpacity(0.15) : null,
                       child: ListTile(
                         onTap: () {
                           setState(() {
@@ -192,9 +194,7 @@ class _VerseListViewState extends State<VerseListView> {
                             fontWeight:
                                 isSelected ? FontWeight.bold : FontWeight.w600,
                             fontSize: isSelected ? 19 : 15,
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
+                            color: isSelected ? cs.primary : cs.onSurface,
                           ),
                         ),
                         title: Text(
@@ -204,9 +204,7 @@ class _VerseListViewState extends State<VerseListView> {
                                 ? FontWeight.bold
                                 : FontWeight.normal,
                             fontSize: isSelected ? 18 : 15,
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
+                            color: isSelected ? cs.primary : cs.onSurface,
                           ),
                         ),
                         dense: true,
@@ -216,60 +214,66 @@ class _VerseListViewState extends State<VerseListView> {
                     );
                   },
                 ),
-                // 하단 네비게이션 버튼
+                // ⬇️ 하단 네비게이션 버튼 (FAB 공간 확보)
                 Positioned(
-                  left: 0,
-                  right: 0,
+                  left: 12,
+                  right: 88, // ✅ FAB 공간 확보 (56 + 16 + 16)
                   bottom: 12,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // 이전 장
-                      ElevatedButton.icon(
-                        onPressed: widget.chapter > minChapter
-                            ? () {
-                                if (widget.onChapterChanged != null) {
-                                  widget.onChapterChanged!(widget.chapter - 1);
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: widget.chapter > minChapter
+                              ? () {
+                                  if (widget.onChapterChanged != null) {
+                                    widget
+                                        .onChapterChanged!(widget.chapter - 1);
+                                  }
                                 }
-                              }
-                            : null,
-                        icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                        label: const Text('이전 장',
-                            style: TextStyle(fontWeight: FontWeight.w700)),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: theme.colorScheme.primary,
-                          backgroundColor: Colors.white,
-                          elevation: 1.5,
-                          shadowColor: Colors.black12,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17),
+                              : null,
+                          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                          label: const Text('이전 장',
+                              style: TextStyle(fontWeight: FontWeight.w700)),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: theme.colorScheme.primary,
+                            backgroundColor: Colors.white,
+                            elevation: 1.5,
+                            shadowColor: Colors.black12,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 10),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 10),
                         ),
                       ),
+                      const SizedBox(width: 12),
                       // 다음 장
-                      ElevatedButton.icon(
-                        onPressed: widget.chapter < maxChapter
-                            ? () {
-                                if (widget.onChapterChanged != null) {
-                                  widget.onChapterChanged!(widget.chapter + 1);
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: widget.chapter < maxChapter
+                              ? () {
+                                  if (widget.onChapterChanged != null) {
+                                    widget
+                                        .onChapterChanged!(widget.chapter + 1);
+                                  }
                                 }
-                              }
-                            : null,
-                        icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                        label: const Text('다음 장',
-                            style: TextStyle(fontWeight: FontWeight.w700)),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: theme.colorScheme.primary,
-                          backgroundColor: Colors.white,
-                          elevation: 1.5,
-                          shadowColor: Colors.black12,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17),
+                              : null,
+                          icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                          label: const Text('다음 장',
+                              style: TextStyle(fontWeight: FontWeight.w700)),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: theme.colorScheme.primary,
+                            backgroundColor: Colors.white,
+                            elevation: 1.5,
+                            shadowColor: Colors.black12,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 10),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 10),
                         ),
                       ),
                     ],
@@ -281,7 +285,7 @@ class _VerseListViewState extends State<VerseListView> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: widget.onGoHome, // ✅ onGoHome 사용 (책 선택으로)
+        onPressed: widget.onGoHome,
         tooltip: '책 선택으로',
         backgroundColor: cs.primary,
         foregroundColor: cs.onPrimary,
