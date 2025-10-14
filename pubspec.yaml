@@ -24,12 +24,45 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0  # ✅ 추가
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  
+  # 안드로이드 adaptive icon (선택사항)
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"
+
+flutter_native_splash:
+  # 라이트 모드
+  color: "#FAF9F6"  # LightColors.background
+  image: assets/splash/splash_icon.png
+  
+  # 다크 모드
+  color_dark: "#121212"  # DarkColors.background
+  image_dark: assets/splash/splash_icon.png
+  
+  # Android 12+ 지원
+  android_12:
+    color: "#FAF9F6"
+    image: assets/splash/splash_icon.png
+    color_dark: "#121212"
+    image_dark: assets/splash/splash_icon.png
+  
+  # 플랫폼 설정
+  android: true
+  ios: true
+  web: false
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/bible.json
+    - assets/icon/app_icon.png
 
   fonts:
     - family: Pretendard
