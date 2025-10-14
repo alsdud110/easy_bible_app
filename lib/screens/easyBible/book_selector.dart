@@ -138,7 +138,7 @@ class _BookSelectorState extends State<BookSelector> {
 
 class _SectionTitle extends StatelessWidget {
   final String title;
-  const _SectionTitle({required this.title, super.key});
+  const _SectionTitle({required this.title});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -179,7 +179,6 @@ class _BookGrid extends StatelessWidget {
     required this.books,
     required this.onSelect,
     required this.offset,
-    super.key,
   });
 
   @override
@@ -229,7 +228,6 @@ class _BookList extends StatelessWidget {
     required this.books,
     required this.onSelect,
     required this.offset,
-    super.key,
   });
 
   @override

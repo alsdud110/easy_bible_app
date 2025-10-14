@@ -95,18 +95,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _goPlan(int planType) {
-    Widget page;
-    if (planType == 60) {
-      page = const Day60Screen();
-    } else if (planType == 120)
-      page = const Day120Screen();
-    else
-      page = const Day180Screen();
-
-    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

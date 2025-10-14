@@ -111,40 +111,13 @@ class _BookSelectorState extends State<BookSelector> {
       ),
     );
   }
-
-  Widget _modeBtn(
-      String text, bool selected, VoidCallback onTap, ThemeData theme) {
-    final cs = theme.colorScheme;
-    return GestureDetector(
-      onTap: selected ? null : onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        margin: const EdgeInsets.symmetric(horizontal: 2),
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
-        decoration: BoxDecoration(
-          color: selected ? cs.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-              color: selected ? cs.primary : cs.secondary.withOpacity(0.65),
-              width: 1.1),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: selected ? cs.onPrimary : cs.primary,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _SectionTitle extends StatelessWidget {
   final String title;
-  const _SectionTitle({required this.title, super.key});
+  const _SectionTitle({
+    required this.title,
+  });
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -185,7 +158,6 @@ class _BookGrid extends StatelessWidget {
     required this.books,
     required this.onSelect,
     required this.offset,
-    super.key,
   });
 
   @override
@@ -235,7 +207,6 @@ class _BookList extends StatelessWidget {
     required this.books,
     required this.onSelect,
     required this.offset,
-    super.key,
   });
 
   @override
