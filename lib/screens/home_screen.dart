@@ -10,8 +10,8 @@ import 'biblePlan/day120_screen.dart';
 import 'biblePlan/day180_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final VoidCallback? onThemeToggle; // 추가!
-  final bool isDark; // 추가!
+  final VoidCallback? onThemeToggle;
+  final bool isDark;
   const HomeScreen({
     super.key,
     this.onThemeToggle,
@@ -28,7 +28,16 @@ class _MenuItem {
   final Widget screen;
   final Color color;
   final String route;
-  _MenuItem(this.title, this.icon, this.screen, this.color, this.route);
+  final bool isComingSoon; // ✅ 추가
+
+  _MenuItem(
+    this.title,
+    this.icon,
+    this.screen,
+    this.color,
+    this.route, {
+    this.isComingSoon = false, // ✅ 추가
+  });
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
@@ -41,8 +50,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final List<_MenuItem> menuItems = [
     _MenuItem('전체 성경', Icons.church_rounded, const BibleHomeScreen(),
         Colors.blueAccent, '/bible'),
-    _MenuItem('어성경 바이블', Icons.book_online_rounded, const EasyBibleHomeScreen(),
-        Colors.blueAccent, '/easyBible'),
+    _MenuItem(
+      '어성경 바이블',
+      Icons.book_online_rounded,
+      const EasyBibleHomeScreen(),
+      Colors.blueAccent,
+      '/easyBible',
+      isComingSoon: true, // ✅ 준비 중 표시
+    ),
     _MenuItem('성경일독(플랜)', Icons.calendar_month_outlined,
         const SizedBox.shrink(), Colors.deepPurple, '/plan'),
   ];
@@ -95,6 +110,53 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  // ✅ 준비 중 알림 함수 추가
+  void _showComingSoonDialog(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: cs.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.construction_rounded, color: cs.primary),
+            const SizedBox(width: 12),
+            Text(
+              '준비 중',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: cs.onSurface,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          '해당 메뉴는 준비 중입니다!',
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: cs.onSurface,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              '확인',
+              style: TextStyle(
+                color: cs.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -116,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             theme.appBarTheme.titleTextStyle?.color ?? Colors.black,
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         title: Text(
-          '어! 성경이 읽혀지네',
+          '어! 성경이 읽어지네',
           style: theme.appBarTheme.titleTextStyle,
         ),
         actions: [
@@ -135,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        itemCount: menuItems.length + 1, // 오늘의 구절 카드 포함!
+        itemCount: menuItems.length + 1,
         separatorBuilder: (_, i) => i == menuItems.length - 1
             ? const SizedBox(height: 28)
             : const SizedBox(height: 20),
@@ -197,12 +259,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 title: item.title,
                 iconData: item.icon,
                 onTap: () {
-                  Navigator.of(context).pushNamed(item.route);
+                  // ✅ 준비 중인 메뉴는 알림 표시
+                  if (item.isComingSoon) {
+                    _showComingSoonDialog(context);
+                  } else {
+                    Navigator.of(context).pushNamed(item.route);
+                  }
                 },
               ),
             );
           } else {
-            // 맨 마지막: 오늘의 구절 카드
             return const TodayVerseCard();
           }
         },

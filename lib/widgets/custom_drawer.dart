@@ -54,6 +54,55 @@ class CustomDrawer extends StatelessWidget {
     }
   }
 
+  // ✅ 준비 중 알림 함수 추가
+  void _showComingSoonDialog(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    Navigator.of(context).pop(); // Drawer 먼저 닫기
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: cs.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.construction_rounded, color: cs.primary),
+            const SizedBox(width: 12),
+            Text(
+              '준비 중',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: cs.onSurface,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          '해당 메뉴는 준비 중입니다!',
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: cs.onSurface,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              '확인',
+              style: TextStyle(
+                color: cs.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -140,17 +189,12 @@ class CustomDrawer extends StatelessWidget {
                   isDark: isDark,
                 )),
           ),
-          // 메뉴: 어성경 바이블(홈)
+          // 메뉴: 어성경 바이블(홈) - ✅ 준비 중 알림으로 변경
           _DrawerButton(
             icon: Icons.home_rounded,
             label: '어성경 바이블',
             color: cs.primary,
-            onTap: () => _navigateToScreen(
-                context,
-                HomeScreen(
-                  onThemeToggle: onThemeToggle,
-                  isDark: isDark,
-                )),
+            onTap: () => _showComingSoonDialog(context), // ✅ 변경
           ),
 
           // 성경일독(플랜) - 펼침/접기
