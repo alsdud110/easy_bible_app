@@ -126,9 +126,6 @@ class _VerseListViewState extends State<VerseListView> {
     const minChapter = 1;
     final maxChapter = widget.book.chapters;
 
-    // ✅ 화면 너비 가져오기
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(

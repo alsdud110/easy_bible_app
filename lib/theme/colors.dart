@@ -21,7 +21,7 @@ class LightColors {
   static const accent = Color(0xFFEC4899); // 핑크 포인트
 
   // 회색 톤 - 부드러운 그레이
-  static const divider = Color(0xFFE5E7EB);
+  static const divider = Color(0xFFF3F4F6); // ✅ 더 은은하게 (E5E7EB → F3F4F6)
   static const card = Color(0xFFFFFFFF);
 
   static const onPrimary = Colors.white;
@@ -58,7 +58,7 @@ class DarkColors {
   static const accent = Color(0xFFF472B6); // 네온 핑크
 
   // 회색 톤 - 블루 틴트 제거
-  static const divider = Color(0xFF2C2C2C);
+  static const divider = Color(0xFF252525); // ✅ 더 은은하게 (2C2C2C → 252525)
   static const card = Color(0xFF1A1A1A);
 
   static const onPrimary = Color(0xFF121212);

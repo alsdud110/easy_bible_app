@@ -89,12 +89,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme; // ✅ ColorScheme 가져오기
     final verseKeys = widget.verses.keys.toList();
     final titleArr = widget.title.split('  ');
     final dayTitle = titleArr.isNotEmpty ? titleArr[0] : '';
     final rangeTitle = titleArr.length > 1 ? titleArr[1] : '';
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor, // ✅ 테마 적용
       appBar: AppBar(
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: theme.appBarTheme.elevation ?? 0,
@@ -118,8 +120,10 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                 child: Center(
                   child: Text(
                     dayTitle,
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w800),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: cs.onSurface, // ✅ 테마 적용
+                    ),
                   ),
                 ),
               ),
@@ -133,12 +137,16 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                       ? Center(
                           child: Text(
                             fullNameRangeLabel(rangeTitle),
-                            style: theme.textTheme.bodyMedium,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: cs.onSurface, // ✅ 테마 적용
+                            ),
                           ),
                         )
                       : Marquee(
                           text: fullNameRangeLabel(rangeTitle),
-                          style: theme.textTheme.bodyMedium,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: cs.onSurface, // ✅ 테마 적용
+                          ),
                           velocity: 24.0,
                           blankSpace: 40,
                         ),
@@ -175,7 +183,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
           // Scroll Up/Down FABs (위로, 아래로)
           Positioned(
             right: 18,
-            bottom: 94, // 버튼 높이만큼 위로!
+            bottom: 94,
             child: AnimatedOpacity(
               opacity: _showFAB ? 1 : 0,
               duration: const Duration(milliseconds: 220),
@@ -184,8 +192,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                   FloatingActionButton.small(
                     heroTag: "scrollToTop",
                     onPressed: _scrollToTop,
-                    backgroundColor: Colors.grey.shade100,
-                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: cs.surface, // ✅ 테마 적용
+                    foregroundColor: cs.primary, // ✅ 테마 적용
                     elevation: 1.8,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -196,8 +204,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                   FloatingActionButton.small(
                     heroTag: "scrollToBottom",
                     onPressed: _scrollToBottom,
-                    backgroundColor: Colors.grey.shade100,
-                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: cs.surface, // ✅ 테마 적용
+                    foregroundColor: cs.primary, // ✅ 테마 적용
                     elevation: 1.8,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -217,49 +225,59 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 // 이전 DAY
-                ElevatedButton.icon(
-                  onPressed: widget.hasPrevDay ? widget.onPrevDay : null,
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
-                  label: const Text(
-                    '이전 DAY',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: theme.colorScheme.primary,
-                    backgroundColor: Colors.white,
-                    elevation: 1.5,
-                    shadowColor: Colors.black12,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17),
+                Flexible(
+                  child: ElevatedButton.icon(
+                    onPressed: widget.hasPrevDay ? widget.onPrevDay : null,
+                    icon:
+                        const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+                    label: const Text(
+                      '이전 DAY',
+                      style: TextStyle(fontWeight: FontWeight.w700),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 10),
-                    textStyle: const TextStyle(fontSize: 15),
-                    disabledForegroundColor: Colors.grey.shade400,
-                    disabledBackgroundColor: Colors.grey.shade100,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: cs.primary, // ✅ 테마 적용
+                      backgroundColor: cs.surface, // ✅ 테마 적용
+                      elevation: 1.5,
+                      shadowColor: Colors.black12,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(17),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 10),
+                      textStyle: const TextStyle(fontSize: 15),
+                      disabledForegroundColor:
+                          cs.onSurface.withOpacity(0.38), // ✅ 테마 적용
+                      disabledBackgroundColor:
+                          cs.surface.withOpacity(0.5), // ✅ 테마 적용
+                    ),
                   ),
                 ),
+                const SizedBox(width: 12),
                 // 다음 DAY
-                ElevatedButton.icon(
-                  onPressed: widget.hasNextDay ? widget.onNextDay : null,
-                  icon: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
-                  label: const Text(
-                    '다음 DAY',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: theme.colorScheme.primary,
-                    backgroundColor: Colors.white,
-                    elevation: 3.5,
-                    shadowColor: Colors.black12,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17),
+                Flexible(
+                  child: ElevatedButton.icon(
+                    onPressed: widget.hasNextDay ? widget.onNextDay : null,
+                    icon: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
+                    label: const Text(
+                      '다음 DAY',
+                      style: TextStyle(fontWeight: FontWeight.w700),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 10),
-                    textStyle: const TextStyle(fontSize: 15),
-                    disabledForegroundColor: Colors.grey.shade400,
-                    disabledBackgroundColor: Colors.grey.shade100,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: cs.primary, // ✅ 테마 적용
+                      backgroundColor: cs.surface, // ✅ 테마 적용
+                      elevation: 1.5,
+                      shadowColor: Colors.black12,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(17),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 10),
+                      textStyle: const TextStyle(fontSize: 15),
+                      disabledForegroundColor:
+                          cs.onSurface.withOpacity(0.38), // ✅ 테마 적용
+                      disabledBackgroundColor:
+                          cs.surface.withOpacity(0.5), // ✅ 테마 적용
+                    ),
                   ),
                 ),
               ],
@@ -277,12 +295,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme; // ✅ ColorScheme 가져오기
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        // 연한 primary 색상으로 변경!
-        color: selected ? theme.colorScheme.primary.withOpacity(0.08) : null,
+        color: selected
+            ? cs.primary.withOpacity(0.15)
+            : null, // ✅ 테마 적용 (투명도 약간 증가)
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,8 +313,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                 fontWeight: selected ? FontWeight.bold : FontWeight.w600,
                 fontSize: selected ? 17 : 13,
                 color: selected
-                    ? theme.colorScheme.primary
-                    : theme.textTheme.bodyLarge?.color,
+                    ? cs.primary // ✅ 테마 적용
+                    : cs.onSurface, // ✅ 테마 적용
               ),
             ),
             const SizedBox(width: 10),
@@ -305,8 +325,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                   fontWeight: selected ? FontWeight.bold : FontWeight.normal,
                   fontSize: selected ? 17 : 15,
                   color: selected
-                      ? theme.colorScheme.primary
-                      : theme.textTheme.bodyMedium?.color,
+                      ? cs.primary // ✅ 테마 적용
+                      : cs.onSurface, // ✅ 테마 적용
                 ),
                 softWrap: true,
               ),
