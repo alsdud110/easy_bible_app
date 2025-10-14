@@ -22,7 +22,7 @@ class BibleHomeScreen extends StatefulWidget {
 }
 
 class _BibleHomeScreenState extends State<BibleHomeScreen> {
-  int step = 0; // 0:책, 1:장, 2:절, 3:장전체(절선택)
+  int step = 0;
   int selectedBook = -1;
   int selectedChapter = -1;
   int selectedVerse = -1;
@@ -39,7 +39,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
   }
 
   Future<void> _initBible() async {
-    bibleBookList = bibleBooks; // models/bible_data.dart에서 import
+    bibleBookList = bibleBooks;
     bibleMap = await loadBibleByStructure();
     setState(() {
       isLoading = false;
@@ -51,6 +51,23 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
       step = 0;
       selectedBook = -1;
       selectedChapter = -1;
+      selectedVerse = -1;
+    });
+  }
+
+  // ✅ 추가: ChapterSelector로 이동
+  void _goToChapterSelector() {
+    setState(() {
+      step = 1;
+      selectedChapter = -1;
+      selectedVerse = -1;
+    });
+  }
+
+  // ✅ 추가: VerseSelector로 이동
+  void _goToVerseSelector() {
+    setState(() {
+      step = 2;
       selectedVerse = -1;
     });
   }
@@ -99,6 +116,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
           });
         },
         onBack: () => setState(() => step = 1),
+        onGoHome: _reset, // ✅ 추가
       );
     } else if (step == 3) {
       final book = bibleBookList[selectedBook];
@@ -112,10 +130,14 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         onBack: () => setState(() => step = 2),
         onChapterChanged: (newChapter) {
           setState(() {
-            selectedChapter = newChapter - 1; // 0-based index
+            selectedChapter = newChapter - 1;
             step = 3;
           });
         },
+        // ✅ 추가: Breadcrumb 네비게이션 콜백
+        onGoToChapterSelector: _goToChapterSelector,
+        onGoToVerseSelector: _goToVerseSelector,
+        onGoHome: _reset, // ✅ 추가
       );
     }
     return const SizedBox.shrink();

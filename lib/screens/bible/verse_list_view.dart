@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
+import '../../widgets/breadcrumb_bar.dart'; // ✅ 추가
 
 class VerseListView extends StatefulWidget {
   final BibleData book;
@@ -8,6 +9,9 @@ class VerseListView extends StatefulWidget {
   final int selectedVerse;
   final VoidCallback onBack;
   final void Function(int newChapter)? onChapterChanged;
+  final VoidCallback? onGoToChapterSelector; // ✅ 추가
+  final VoidCallback? onGoToVerseSelector; // ✅ 추가
+  final VoidCallback? onGoHome; // ✅ 추가
 
   const VerseListView({
     super.key,
@@ -17,6 +21,9 @@ class VerseListView extends StatefulWidget {
     required this.selectedVerse,
     required this.onBack,
     this.onChapterChanged,
+    this.onGoToChapterSelector, // ✅ 추가
+    this.onGoToVerseSelector, // ✅ 추가
+    this.onGoHome, // ✅ 추가
   });
 
   @override
@@ -113,16 +120,16 @@ class _VerseListViewState extends State<VerseListView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     final verseNums = widget.verses.keys.toList()..sort();
 
-    // "장" 범위 제한(예시: 1~마지막 장)
     const minChapter = 1;
-    final maxChapter = widget.book.chapters; // BibleData 클래스에 정의돼 있다고 가정
+    final maxChapter = widget.book.chapters;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.book.fullName} ${widget.chapter}장',
+          '${widget.book.fullName} ${widget.chapter}장', // ✅ AppBar는 fullName 유지
           style: theme.appBarTheme.titleTextStyle,
         ),
         leading: BackButton(
@@ -134,114 +141,151 @@ class _VerseListViewState extends State<VerseListView> {
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         centerTitle: theme.appBarTheme.centerTitle ?? true,
       ),
-      body: Stack(
+      body: Column(
         children: [
-          ListView.builder(
-            controller: _scrollController,
-            itemCount: verseNums.length,
-            physics: const ClampingScrollPhysics(),
-            itemBuilder: (context, idx) {
-              final verseNum = verseNums[idx];
-              final text = widget.verses[verseNum] ?? '';
-              final isSelected = verseNum == _selectedVerse;
-              return Container(
-                key: idx == 0 ? _itemKey : null,
-                color: isSelected ? Colors.yellow.shade100 : null,
-                child: ListTile(
-                  onTap: () {
-                    setState(() {
-                      _selectedVerse = verseNum;
-                    });
-                  },
-                  leading: Text(
-                    '$verseNum',
-                    style: TextStyle(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.w600,
-                      fontSize: isSelected ? 19 : 15,
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                    ),
-                  ),
-                  title: Text(
-                    text,
-                    style: TextStyle(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                      fontSize: isSelected ? 18 : 15,
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                    ),
-                  ),
-                  dense: true,
-                  selected: isSelected,
-                  selectedTileColor: Colors.yellow.shade50,
-                ),
-              );
-            },
+          BreadcrumbBar(
+            items: [
+              BreadcrumbItem(
+                label: '홈',
+                onTap: widget.onGoHome, // ✅ 이미 올바름 - onGoHome 사용
+              ),
+              BreadcrumbItem(
+                label: widget.book.fullName, // ✅ Breadcrumb는 짧은 이름 사용
+                onTap: widget.onGoToChapterSelector, // ✅ 콜백 사용
+              ),
+              BreadcrumbItem(
+                label: '${widget.chapter}장',
+                onTap: widget.onGoToVerseSelector, // ✅ 콜백 사용
+              ),
+              BreadcrumbItem(
+                label: '$_selectedVerse절',
+                onTap: () {}, // 현재 페이지
+                isActive: true,
+              ),
+            ],
           ),
-          // ⬇️ 하단 네비게이션 버튼
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 12,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Expanded(
+            child: Stack(
               children: [
-                // 이전 장
-                ElevatedButton.icon(
-                  onPressed: widget.chapter > minChapter
-                      ? () {
-                          if (widget.onChapterChanged != null) {
-                            widget.onChapterChanged!(widget.chapter - 1);
-                          }
-                        }
-                      : null,
-                  icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                  label: const Text('이전 장',
-                      style: TextStyle(fontWeight: FontWeight.w700)),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: theme.colorScheme.primary,
-                    backgroundColor: Colors.white,
-                    elevation: 1.5,
-                    shadowColor: Colors.black12,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 10),
-                  ),
+                ListView.builder(
+                  controller: _scrollController,
+                  itemCount: verseNums.length,
+                  physics: const ClampingScrollPhysics(),
+                  itemBuilder: (context, idx) {
+                    final verseNum = verseNums[idx];
+                    final text = widget.verses[verseNum] ?? '';
+                    final isSelected = verseNum == _selectedVerse;
+                    return Container(
+                      key: idx == 0 ? _itemKey : null,
+                      color: isSelected ? Colors.yellow.shade100 : null,
+                      child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            _selectedVerse = verseNum;
+                          });
+                        },
+                        leading: Text(
+                          '$verseNum',
+                          style: TextStyle(
+                            fontWeight:
+                                isSelected ? FontWeight.bold : FontWeight.w600,
+                            fontSize: isSelected ? 19 : 15,
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                        ),
+                        title: Text(
+                          text,
+                          style: TextStyle(
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            fontSize: isSelected ? 18 : 15,
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                        ),
+                        dense: true,
+                        selected: isSelected,
+                        selectedTileColor: Colors.yellow.shade50,
+                      ),
+                    );
+                  },
                 ),
-                // 다음 장
-                ElevatedButton.icon(
-                  onPressed: widget.chapter < maxChapter
-                      ? () {
-                          if (widget.onChapterChanged != null) {
-                            widget.onChapterChanged!(widget.chapter + 1);
-                          }
-                        }
-                      : null,
-                  icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                  label: const Text('다음 장',
-                      style: TextStyle(fontWeight: FontWeight.w700)),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: theme.colorScheme.primary,
-                    backgroundColor: Colors.white,
-                    elevation: 1.5,
-                    shadowColor: Colors.black12,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 10),
+                // 하단 네비게이션 버튼
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 12,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // 이전 장
+                      ElevatedButton.icon(
+                        onPressed: widget.chapter > minChapter
+                            ? () {
+                                if (widget.onChapterChanged != null) {
+                                  widget.onChapterChanged!(widget.chapter - 1);
+                                }
+                              }
+                            : null,
+                        icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                        label: const Text('이전 장',
+                            style: TextStyle(fontWeight: FontWeight.w700)),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: theme.colorScheme.primary,
+                          backgroundColor: Colors.white,
+                          elevation: 1.5,
+                          shadowColor: Colors.black12,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(17),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 10),
+                        ),
+                      ),
+                      // 다음 장
+                      ElevatedButton.icon(
+                        onPressed: widget.chapter < maxChapter
+                            ? () {
+                                if (widget.onChapterChanged != null) {
+                                  widget.onChapterChanged!(widget.chapter + 1);
+                                }
+                              }
+                            : null,
+                        icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                        label: const Text('다음 장',
+                            style: TextStyle(fontWeight: FontWeight.w700)),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: theme.colorScheme.primary,
+                          backgroundColor: Colors.white,
+                          elevation: 1.5,
+                          shadowColor: Colors.black12,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(17),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 10),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        },
+        tooltip: '책 선택으로',
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
+        child: const Icon(Icons.menu_book),
       ),
     );
   }
