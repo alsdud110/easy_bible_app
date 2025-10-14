@@ -281,9 +281,7 @@ class _VerseListViewState extends State<VerseListView> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        },
+        onPressed: widget.onGoHome, // ✅ onGoHome 사용 (책 선택으로)
         tooltip: '책 선택으로',
         backgroundColor: cs.primary,
         foregroundColor: cs.onPrimary,
