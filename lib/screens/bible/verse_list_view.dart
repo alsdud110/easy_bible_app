@@ -177,7 +177,9 @@ class _VerseListViewState extends State<VerseListView> {
                     final isSelected = verseNum == _selectedVerse;
                     return Container(
                       key: idx == 0 ? _itemKey : null,
-                      color: isSelected ? Colors.yellow.shade100 : null,
+                      color: isSelected
+                          ? cs.primary.withOpacity(0.15) // ✅ 테마에 맞는 배경색
+                          : null,
                       child: ListTile(
                         onTap: () {
                           setState(() {
@@ -209,7 +211,7 @@ class _VerseListViewState extends State<VerseListView> {
                         ),
                         dense: true,
                         selected: isSelected,
-                        selectedTileColor: Colors.yellow.shade50,
+                        selectedTileColor: cs.primary.withOpacity(0.08),
                       ),
                     );
                   },
