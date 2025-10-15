@@ -147,7 +147,17 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                 icon: const Icon(Icons.close),
                 onPressed: _exitDeleteMode,
               )
-            : null,
+            : IconButton(
+                icon: const Icon(Icons.home),
+                onPressed: () {
+                  // ✅ 홈으로 이동 (모든 라우트 제거)
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/',
+                    (route) => false,
+                  );
+                },
+                tooltip: '홈으로',
+              ),
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: theme.appBarTheme.elevation ?? 0,
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
