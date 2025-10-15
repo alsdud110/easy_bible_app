@@ -72,31 +72,80 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     });
   }
 
+  // ✅ 검색에서 장으로 이동 (절 선택 화면으로)
+  void _navigateToChapter(int bookIdx, int chapter) {
+    setState(() {
+      selectedBook = bookIdx;
+      selectedChapter = chapter - 1; // 0-based index
+      selectedVerse = -1;
+      step = 2; // VerseSelector로
+    });
+  }
+
+  void _navigateDirectlyToVerse(int bookIdx, int chapter, int verse) {
+    final book = bibleBookList[bookIdx];
+    final verses = bibleMap[book.name]?[chapter] ?? {};
+
+    if (verses.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${book.fullName} $chapter장을 불러올 수 없습니다'),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    // 절 범위 체크
+    if (verse < 1 || verse > verses.length) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${book.fullName} $chapter장은 ${verses.length}절까지 있습니다'),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      selectedBook = bookIdx;
+      selectedChapter = chapter - 1; // 0-based index
+      selectedVerse = verse - 1; // 0-based index
+      step = 3;
+    });
+  }
+
   Widget _buildStepScreen() {
     if (isLoading) {
       return const Scaffold(
-        key: ValueKey('loading'), // ✅ key 추가
+        key: ValueKey('loading'),
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
     if (step == 0) {
       return BookSelector(
-        key: const ValueKey('book'), // ✅ key 추가
+        key: const ValueKey('book'),
         books: bibleBookList,
         onSelect: (idx) {
           setState(() {
             selectedBook = idx;
-            step = 1;
+            step = 1; // ChapterSelector로
           });
         },
+        // ✅ 검색에서 직접 절로 이동하는 콜백
+        onDirectNavigate: _navigateDirectlyToVerse,
+        // ✅ 검색에서 장으로 이동하는 콜백 (절 선택 화면으로)
+        onChapterNavigate: _navigateToChapter,
         onThemeToggle: widget.onThemeToggle,
         isDark: widget.isDark,
       );
     } else if (step == 1) {
       final book = bibleBookList[selectedBook];
       return ChapterSelector(
-        key: ValueKey('chapter-$selectedBook'), // ✅ key 추가
+        key: ValueKey('chapter-$selectedBook'),
         book: book,
         onSelect: (chapter) {
           setState(() {
@@ -111,7 +160,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
       final chapterNum = selectedChapter + 1;
       final verseCount = bibleMap[book.name]?[chapterNum]?.length ?? 0;
       return VerseSelector(
-        key: ValueKey('verse-$selectedBook-$selectedChapter'), // ✅ key 추가
+        key: ValueKey('verse-$selectedBook-$selectedChapter'),
         bookFullName: book.fullName,
         chapter: chapterNum,
         verseCount: verseCount,
@@ -129,8 +178,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
       final chapterNum = selectedChapter + 1;
       final verses = bibleMap[book.name]?[chapterNum] ?? {};
       return VerseListView(
-        key: ValueKey(
-            'list-$selectedBook-$selectedChapter-$selectedVerse'), // ✅ key 추가
+        key: ValueKey('list-$selectedBook-$selectedChapter-$selectedVerse'),
         book: book,
         chapter: chapterNum,
         verses: verses,
@@ -139,7 +187,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         onChapterChanged: (newChapter) {
           setState(() {
             selectedChapter = newChapter - 1;
-            selectedVerse = 0; // ✅ 1절로 초기화 (0-based index이므로 0)
+            selectedVerse = 0; // 1절로 초기화 (0-based index이므로 0)
             step = 3;
           });
         },
@@ -156,11 +204,10 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200), // ✅ 시간 단축
-        switchInCurve: Curves.easeInOut, // ✅ 커브 추가
-        switchOutCurve: Curves.easeInOut, // ✅ 커브 추가
+        duration: const Duration(milliseconds: 200),
+        switchInCurve: Curves.easeInOut,
+        switchOutCurve: Curves.easeInOut,
         transitionBuilder: (child, animation) {
-          // ✅ FadeTransition만 사용 (깜빡임 최소화)
           return FadeTransition(
             opacity: animation,
             child: child,

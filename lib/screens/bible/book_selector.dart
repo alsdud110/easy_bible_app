@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
 
-// (ChapterSelector 등 필요한 import 추가)
-
 void pushModernTransition(BuildContext context, Widget page) {
   Navigator.of(context).push(
     PageRouteBuilder(
@@ -34,15 +32,20 @@ void pushModernTransition(BuildContext context, Widget page) {
 class BookSelector extends StatefulWidget {
   final List<BibleData> books;
   final void Function(int idx) onSelect;
-  final VoidCallback? onThemeToggle; // 이 부분 추가!
-  final bool isDark; // 이 부분 추가!
+  final void Function(int bookIdx, int chapter, int verse)? onDirectNavigate;
+  final void Function(int bookIdx, int chapter)? onChapterNavigate; // ✅ 추가
+  final VoidCallback? onThemeToggle;
+  final bool isDark;
 
-  const BookSelector(
-      {required this.books,
-      required this.onSelect,
-      this.onThemeToggle, // 이 부분 추가!
-      this.isDark = false, // 이 부분 추가!
-      super.key});
+  const BookSelector({
+    required this.books,
+    required this.onSelect,
+    this.onDirectNavigate,
+    this.onChapterNavigate, // ✅ 추가
+    this.onThemeToggle,
+    this.isDark = false,
+    super.key,
+  });
 
   @override
   State<BookSelector> createState() => _BookSelectorState();
@@ -50,12 +53,323 @@ class BookSelector extends StatefulWidget {
 
 class _BookSelectorState extends State<BookSelector> {
   bool isGrid = true;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // ✅ 검색 필터링 (실시간 필터링 시에는 장:절 형식 무시)
+  List<BibleData> _filterBooks(List<BibleData> books) {
+    if (_searchQuery.isEmpty) return books;
+
+    // ✅ "창 1:1" 또는 "창 6" 같은 형식이면 필터링하지 않고 전체 반환
+    final versePattern = RegExp(r'(.+?)\s*(\d+):(\d+)');
+    final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
+    if (versePattern.hasMatch(_searchQuery) ||
+        chapterPattern.hasMatch(_searchQuery)) {
+      return books; // 장:절 또는 장 형식이면 전체 목록 유지
+    }
+
+    return books.where((book) {
+      final nameMatch = book.name.contains(_searchQuery) ||
+          book.fullName.contains(_searchQuery);
+      return nameMatch;
+    }).toList();
+  }
+
+  // ✅ 검색어 처리 메인 함수
+  void _handleSearch(String query) async {
+    if (query.isEmpty) return;
+
+    // 패턴 1: "창 1:3" 또는 "창세기 1:3" (장:절 형식)
+    final versePattern = RegExp(r'(.+?)\s*(\d+):(\d+)');
+    final verseMatch = versePattern.firstMatch(query);
+
+    // 패턴 2: "창 6" 또는 "창세기 6" (장만 있는 형식)
+    final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
+    final chapterMatch = chapterPattern.firstMatch(query);
+
+    if (verseMatch != null) {
+      // "책 장:절" 형식 처리
+      final bookName = verseMatch.group(1)!.trim();
+      final chapter = int.tryParse(verseMatch.group(2)!) ?? 1;
+      final verse = int.tryParse(verseMatch.group(3)!) ?? 1;
+      _handleVerseSearch(bookName, chapter, verse);
+    } else if (chapterMatch != null) {
+      // ✅ "책 장" 형식 처리 (절 선택 화면으로)
+      final bookName = chapterMatch.group(1)!.trim();
+      final chapter = int.tryParse(chapterMatch.group(2)!) ?? 1;
+      _handleChapterSearch(bookName, chapter);
+    } else {
+      // "장:절" 형식이 아니면 책 이름만 검색
+      final bookIndex = widget.books.indexWhere(
+        (b) => b.name == query || b.fullName == query,
+      );
+      if (bookIndex != -1) {
+        widget.onSelect(bookIndex);
+      }
+    }
+  }
+
+  // ✅ "책 장:절" 형식 처리
+  void _handleVerseSearch(String bookName, int chapter, int verse) {
+    final matchedBooks = widget.books
+        .where(
+          (b) => b.name.contains(bookName) || b.fullName.contains(bookName),
+        )
+        .toList();
+
+    if (matchedBooks.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('해당 성경책을 찾을 수 없습니다'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (matchedBooks.length > 1) {
+      final booksWithChapter = matchedBooks
+          .where(
+            (b) => b.chapters >= chapter,
+          )
+          .toList();
+
+      if (booksWithChapter.isEmpty) {
+        _showBookSelectionDialogForVerse(matchedBooks, chapter, verse);
+      } else if (booksWithChapter.length == 1) {
+        final book = booksWithChapter.first;
+        final bookIndex = widget.books.indexOf(book);
+        _navigateToVerse(bookIndex, book, chapter, verse);
+      } else {
+        _showBookSelectionDialogForVerse(booksWithChapter, chapter, verse);
+      }
+    } else {
+      final book = matchedBooks.first;
+      final bookIndex = widget.books.indexOf(book);
+      _navigateToVerse(bookIndex, book, chapter, verse);
+    }
+  }
+
+  // ✅ "책 장" 형식 처리 (절 선택 화면으로)
+  void _handleChapterSearch(String bookName, int chapter) {
+    final matchedBooks = widget.books
+        .where(
+          (b) => b.name.contains(bookName) || b.fullName.contains(bookName),
+        )
+        .toList();
+
+    if (matchedBooks.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('해당 성경책을 찾을 수 없습니다'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (matchedBooks.length > 1) {
+      final booksWithChapter = matchedBooks
+          .where(
+            (b) => b.chapters >= chapter,
+          )
+          .toList();
+
+      if (booksWithChapter.isEmpty) {
+        _showBookSelectionDialogForChapter(matchedBooks, chapter);
+      } else if (booksWithChapter.length == 1) {
+        final book = booksWithChapter.first;
+        final bookIndex = widget.books.indexOf(book);
+        _navigateToChapter(bookIndex, book, chapter);
+      } else {
+        _showBookSelectionDialogForChapter(booksWithChapter, chapter);
+      }
+    } else {
+      final book = matchedBooks.first;
+      final bookIndex = widget.books.indexOf(book);
+      _navigateToChapter(bookIndex, book, chapter);
+    }
+  }
+
+  // ✅ 절 선택을 위한 다이얼로그
+  void _showBookSelectionDialogForVerse(
+    List<BibleData> books,
+    int chapter,
+    int verse,
+  ) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('성경책을 선택하세요'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: books.map((book) {
+            final hasChapter = book.chapters >= chapter;
+            return ListTile(
+              title: Text(
+                book.fullName,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color:
+                      hasChapter ? cs.onSurface : cs.onSurface.withOpacity(0.4),
+                ),
+              ),
+              subtitle: Text(
+                hasChapter
+                    ? '총 ${book.chapters}장'
+                    : '총 ${book.chapters}장 ($chapter장 없음)',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: hasChapter
+                      ? cs.onSurface.withOpacity(0.6)
+                      : cs.error.withOpacity(0.6),
+                ),
+              ),
+              enabled: hasChapter,
+              onTap: hasChapter
+                  ? () {
+                      Navigator.pop(context);
+                      final bookIndex = widget.books.indexOf(book);
+                      _navigateToVerse(bookIndex, book, chapter, verse);
+                    }
+                  : null,
+            );
+          }).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ✅ 장 선택을 위한 다이얼로그
+  void _showBookSelectionDialogForChapter(
+    List<BibleData> books,
+    int chapter,
+  ) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('성경책을 선택하세요'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: books.map((book) {
+            final hasChapter = book.chapters >= chapter;
+            return ListTile(
+              title: Text(
+                book.fullName,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color:
+                      hasChapter ? cs.onSurface : cs.onSurface.withOpacity(0.4),
+                ),
+              ),
+              subtitle: Text(
+                hasChapter
+                    ? '총 ${book.chapters}장'
+                    : '총 ${book.chapters}장 ($chapter장 없음)',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: hasChapter
+                      ? cs.onSurface.withOpacity(0.6)
+                      : cs.error.withOpacity(0.6),
+                ),
+              ),
+              enabled: hasChapter,
+              onTap: hasChapter
+                  ? () {
+                      Navigator.pop(context);
+                      final bookIndex = widget.books.indexOf(book);
+                      _navigateToChapter(bookIndex, book, chapter);
+                    }
+                  : null,
+            );
+          }).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ✅ 절로 네비게이션 (VerseListView로)
+  void _navigateToVerse(int bookIndex, BibleData book, int chapter, int verse) {
+    if (chapter < 1 || chapter > book.chapters) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${book.fullName}은(는) ${book.chapters}장까지 있습니다'),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (widget.onDirectNavigate != null) {
+      widget.onDirectNavigate!(bookIndex, chapter, verse);
+    } else {
+      widget.onSelect(bookIndex);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${book.fullName} $chapter장 $verse절로 이동'),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  // ✅ 장으로 네비게이션 (VerseSelector로)
+  void _navigateToChapter(int bookIndex, BibleData book, int chapter) {
+    if (chapter < 1 || chapter > book.chapters) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${book.fullName}은(는) ${book.chapters}장까지 있습니다'),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (widget.onChapterNavigate != null) {
+      widget.onChapterNavigate!(bookIndex, chapter);
+    } else {
+      widget.onSelect(bookIndex);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final oldBooks = widget.books.where((b) => b.isOldTestament).toList();
-    final newBooks = widget.books.where((b) => !b.isOldTestament).toList();
+    final oldBooks = _filterBooks(
+      widget.books.where((b) => b.isOldTestament).toList(),
+    );
+    final newBooks = _filterBooks(
+      widget.books.where((b) => !b.isOldTestament).toList(),
+    );
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -67,46 +381,182 @@ class _BookSelectorState extends State<BookSelector> {
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         iconTheme: theme.appBarTheme.iconTheme,
         actionsIconTheme: theme.appBarTheme.actionsIconTheme,
-        // ✅ 추가된 부분
         leading: IconButton(
           icon: const Icon(Icons.home_rounded),
           tooltip: '홈으로',
           onPressed: () {
             Navigator.of(context).popUntil((route) => route.isFirst);
-            // 또는 필요하면 _reset() 호출 등으로 초기화 가능
           },
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
-          const _SectionTitle(title: '구약'),
-          isGrid
-              ? _BookGrid(
-                  books: oldBooks,
-                  onSelect: (idx) {
-                    widget.onSelect(idx); // 기존 콜백 사용
-                  },
-                  offset: 0,
-                )
-              : _BookList(
-                  books: oldBooks,
-                  onSelect: (idx) {
-                    widget.onSelect(idx);
-                  },
-                  offset: 0,
+          // ✅ 검색 바
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+            height: MediaQuery.of(context).size.height * 0.065,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+              border: Border(
+                bottom: BorderSide(
+                  color: theme.colorScheme.outline.withOpacity(0.2),
+                  width: 1,
                 ),
-          const _SectionTitle(title: '신약'),
-          isGrid
-              ? _BookGrid(
-                  books: newBooks,
-                  onSelect: (idx) => widget.onSelect(idx + oldBooks.length),
-                  offset: 0,
-                )
-              : _BookList(
-                  books: newBooks,
-                  onSelect: (idx) => widget.onSelect(idx + oldBooks.length),
-                  offset: 0,
+              ),
+            ),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16',
+                hintStyle: TextStyle(
+                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  fontSize: 15,
                 ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: theme.colorScheme.primary,
+                ),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // ✅ 엔터(검색) 버튼
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward,
+                              color: theme.colorScheme.primary,
+                            ),
+                            onPressed: () =>
+                                _handleSearch(_searchController.text),
+                            tooltip: '검색',
+                          ),
+                          // Clear 버튼
+                          IconButton(
+                            icon: Icon(
+                              Icons.clear,
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.5),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _searchController.clear();
+                                _searchQuery = '';
+                              });
+                            },
+                          ),
+                        ],
+                      )
+                    : null,
+                filled: true,
+                fillColor: theme.colorScheme.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: theme.colorScheme.outline.withOpacity(0.3),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: theme.colorScheme.outline.withOpacity(0.3),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: theme.colorScheme.primary,
+                    width: 2,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+
+                // ✅ "장:절" 형식이면 자동으로 검색 실행
+                if (value.isNotEmpty && RegExp(r'\d+:\d+').hasMatch(value)) {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    if (_searchController.text == value) {
+                      _handleSearch(value);
+                    }
+                  });
+                }
+              },
+              onSubmitted: _handleSearch,
+            ),
+          ),
+
+          // ✅ 검색 결과 또는 전체 목록
+          Expanded(
+            child: _searchQuery.isNotEmpty &&
+                    oldBooks.isEmpty &&
+                    newBooks.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          size: 64,
+                          color: theme.colorScheme.onSurface.withOpacity(0.3),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          '검색 결과가 없습니다',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '다른 검색어를 시도해보세요',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView(
+                    children: [
+                      if (oldBooks.isNotEmpty) ...[
+                        const _SectionTitle(title: '구약'),
+                        isGrid
+                            ? _BookGrid(
+                                books: oldBooks,
+                                allBooks: widget.books,
+                                onSelect: widget.onSelect,
+                              )
+                            : _BookList(
+                                books: oldBooks,
+                                allBooks: widget.books,
+                                onSelect: widget.onSelect,
+                              ),
+                      ],
+                      if (newBooks.isNotEmpty) ...[
+                        const _SectionTitle(title: '신약'),
+                        isGrid
+                            ? _BookGrid(
+                                books: newBooks,
+                                allBooks: widget.books,
+                                onSelect: widget.onSelect,
+                              )
+                            : _BookList(
+                                books: newBooks,
+                                allBooks: widget.books,
+                                onSelect: widget.onSelect,
+                              ),
+                      ],
+                    ],
+                  ),
+          ),
         ],
       ),
     );
@@ -152,12 +602,13 @@ class _SectionTitle extends StatelessWidget {
 
 class _BookGrid extends StatelessWidget {
   final List<BibleData> books;
+  final List<BibleData> allBooks;
   final void Function(int idx) onSelect;
-  final int offset;
+
   const _BookGrid({
     required this.books,
+    required this.allBooks,
     required this.onSelect,
-    required this.offset,
   });
 
   @override
@@ -174,39 +625,44 @@ class _BookGrid extends StatelessWidget {
         childAspectRatio: 1.45,
       ),
       itemCount: books.length,
-      itemBuilder: (context, i) => GestureDetector(
-        onTap: () => onSelect(i + offset),
-        child: Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-                color: theme.colorScheme.secondary.withOpacity(0.32)),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            books[i].name,
-            style: theme.textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              fontSize: 14.5,
-              color: theme.colorScheme.primary,
-              letterSpacing: 0.2,
+      itemBuilder: (context, i) {
+        final book = books[i];
+        final originalIndex = allBooks.indexOf(book);
+        return GestureDetector(
+          onTap: () => onSelect(originalIndex),
+          child: Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: theme.colorScheme.secondary.withOpacity(0.32)),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              book.name,
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 14.5,
+                color: theme.colorScheme.primary,
+                letterSpacing: 0.2,
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
 class _BookList extends StatelessWidget {
   final List<BibleData> books;
+  final List<BibleData> allBooks;
   final void Function(int idx) onSelect;
-  final int offset;
+
   const _BookList({
     required this.books,
+    required this.allBooks,
     required this.onSelect,
-    required this.offset,
   });
 
   @override
@@ -218,22 +674,28 @@ class _BookList extends StatelessWidget {
       itemCount: books.length,
       separatorBuilder: (_, __) =>
           Divider(height: 1, color: theme.dividerColor, thickness: 1.0),
-      itemBuilder: (context, i) => ListTile(
-        onTap: () => onSelect(i + offset),
-        title: Text(
-          books[i].fullName,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-            letterSpacing: 0.2,
+      itemBuilder: (context, i) {
+        final book = books[i];
+        final originalIndex = allBooks.indexOf(book);
+        return ListTile(
+          onTap: () => onSelect(originalIndex),
+          title: Text(
+            book.fullName,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              letterSpacing: 0.2,
+            ),
           ),
-        ),
-        trailing: Icon(Icons.chevron_right,
-            size: 20, color: theme.colorScheme.primary),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
-        tileColor: theme.colorScheme.surface,
-      ),
+          trailing: Icon(Icons.chevron_right,
+              size: 20, color: theme.colorScheme.primary),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
+          tileColor: theme.colorScheme.surface,
+        );
+      },
     );
   }
 }
