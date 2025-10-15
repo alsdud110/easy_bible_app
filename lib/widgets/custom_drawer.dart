@@ -6,6 +6,7 @@ import '../../screens/home_screen.dart'; // 어성경 바이블(홈)
 import '../../screens/biblePlan/day60_screen.dart';
 import '../../screens/biblePlan/day120_screen.dart';
 import '../../screens/biblePlan/day180_screen.dart';
+import '../../screens/favorite/favorite_list_screen.dart'; // ✅ 추가
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback? onThemeToggle;
@@ -116,7 +117,7 @@ class CustomDrawer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // ✅ 심플한 헤더
           SafeArea(
             top: false,
             bottom: false,
@@ -133,43 +134,25 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 46.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 50.0, horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 20),
-                    CircleAvatar(
-                      backgroundColor: cs.surface,
-                      radius: 32,
-                      child: Icon(Icons.person,
-                          size: 38, color: cs.primary.withOpacity(0.72)),
+                    Icon(
+                      Icons.menu_book_rounded,
+                      size: 48,
+                      color: Colors.white.withOpacity(0.95),
                     ),
-                    const SizedBox(width: 18),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '황민영',
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '20210701',
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 16),
+                    Text(
+                      '어! 성경이 읽어지네',
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
                       ),
                     ),
-                    const SizedBox(width: 16),
                   ],
                 ),
               ),
@@ -189,18 +172,26 @@ class CustomDrawer extends StatelessWidget {
                   isDark: isDark,
                 )),
           ),
-          // 메뉴: 어성경 바이블(홈) - ✅ 준비 중 알림으로 변경
+          // 메뉴: 어성경 바이블(홈)
           _DrawerButton(
             icon: Icons.home_rounded,
             label: '어성경 바이블',
             color: cs.primary,
-            onTap: () => _showComingSoonDialog(context), // ✅ 변경
+            onTap: () => _showComingSoonDialog(context),
           ),
 
           // 성경일독(플랜) - 펼침/접기
           _PlanExpansionMenu(
             color: cs.secondary,
             navigateToScreen: (screen) => _navigateToScreen(context, screen),
+          ),
+
+          // ✅ 좋아하는 성경 구절
+          _DrawerButton(
+            icon: Icons.star_rounded,
+            label: '좋아하는 성경 구절',
+            color: Colors.amber.shade700,
+            onTap: () => _navigateToScreen(context, const FavoriteListScreen()),
           ),
 
           const Spacer(),
@@ -234,34 +225,6 @@ class CustomDrawer extends StatelessWidget {
                   inactiveTrackColor: cs.secondary.withOpacity(0.44),
                 ),
               ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Divider(
-              thickness: 1.1,
-              height: 1,
-              color: theme.dividerColor,
-              indent: 0,
-              endIndent: 0,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.0, right: 8),
-            child: ListTile(
-              leading: Icon(Icons.logout, color: Colors.red[400]),
-              title: Text(
-                '로그아웃',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: cs.onSurface.withOpacity(0.52),
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             ),
           ),
           const SizedBox(height: 12),
