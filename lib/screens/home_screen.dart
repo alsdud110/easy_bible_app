@@ -1,6 +1,7 @@
 import 'package:easy_bible_app/screens/bible/bible_home_screen.dart';
 import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:easy_bible_app/screens/todayVerseCard/today_verse_card.dart';
+import 'package:easy_bible_app/screens/favorite/favorite_list_screen.dart'; // ✅ 추가
 import 'package:flutter/material.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/request_card.dart';
@@ -28,7 +29,7 @@ class _MenuItem {
   final Widget screen;
   final Color color;
   final String route;
-  final bool isComingSoon; // ✅ 추가
+  final bool isComingSoon;
 
   _MenuItem(
     this.title,
@@ -36,7 +37,7 @@ class _MenuItem {
     this.screen,
     this.color,
     this.route, {
-    this.isComingSoon = false, // ✅ 추가
+    this.isComingSoon = false,
   });
 }
 
@@ -56,10 +57,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       const EasyBibleHomeScreen(),
       Colors.blueAccent,
       '/easyBible',
-      isComingSoon: true, // ✅ 준비 중 표시
+      isComingSoon: true,
     ),
     _MenuItem('성경일독(플랜)', Icons.calendar_month_outlined,
         const SizedBox.shrink(), Colors.deepPurple, '/plan'),
+    // ✅ 즐겨찾기 메뉴 추가
+    _MenuItem(
+      '좋아하는 성경 구절',
+      Icons.star_rounded,
+      const FavoriteListScreen(),
+      Colors.amber,
+      '/favorites',
+    ),
   ];
 
   @override
@@ -110,7 +119,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  // ✅ 준비 중 알림 함수 추가
   void _showComingSoonDialog(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -259,9 +267,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 title: item.title,
                 iconData: item.icon,
                 onTap: () {
-                  // ✅ 준비 중인 메뉴는 알림 표시
                   if (item.isComingSoon) {
                     _showComingSoonDialog(context);
+                  } else if (item.route == '/favorites') {
+                    // ✅ 즐겨찾기 페이지로 직접 이동
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FavoriteListScreen(),
+                      ),
+                    );
                   } else {
                     Navigator.of(context).pushNamed(item.route);
                   }

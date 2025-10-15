@@ -1,8 +1,10 @@
 import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
 import 'theme/app_theme.dart';
+import 'providers/favorite_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -22,9 +24,22 @@ class NoBounceScrollBehavior extends ScrollBehavior {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ FavoriteProvider 초기화 및 데이터 로드
+  final favoriteProvider = FavoriteProvider();
+  await favoriteProvider.loadFavorites();
+
+  // 테마 설정 로드
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;
-  runApp(MyApp(initDark: isDark));
+
+  runApp(
+    // ✅ Provider로 앱 감싸기
+    ChangeNotifierProvider.value(
+      value: favoriteProvider,
+      child: MyApp(initDark: isDark),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
