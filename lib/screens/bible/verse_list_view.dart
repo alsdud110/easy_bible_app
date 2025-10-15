@@ -16,7 +16,6 @@ class VerseListView extends StatefulWidget {
   final VoidCallback? onGoToChapterSelector;
   final VoidCallback? onGoToVerseSelector;
   final VoidCallback? onGoHome;
-  // ✅ onAddFavorite 콜백 제거 (Provider 사용)
 
   const VerseListView({
     super.key,
@@ -42,7 +41,6 @@ class _VerseListViewState extends State<VerseListView> {
   double? itemHeight;
   late int _selectedVerse;
 
-  // ✅ 범위 선택 관련 상태
   int? _rangeStart;
   int? _rangeEnd;
   bool _isSelectionMode = false;
@@ -51,11 +49,42 @@ class _VerseListViewState extends State<VerseListView> {
   void initState() {
     super.initState();
     _selectedVerse = widget.selectedVerse;
+
+    // ✅ 한 번만 정확하게 이동
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(milliseconds: 60));
+      await Future.delayed(const Duration(milliseconds: 1));
       _measureItemHeight();
-      _scrollToSelected(center: true);
+      _scrollToSelectedOnce();
     });
+  }
+
+  // ✅ 한 번만 스크롤 (깜빡임 없이)
+  void _scrollToSelectedOnce() {
+    if (!_scrollController.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToSelectedOnce();
+      });
+      return;
+    }
+
+    final verseNums = widget.verses.keys.toList()..sort();
+    final selectedIdx = verseNums.indexOf(_selectedVerse);
+    if (selectedIdx == -1) return;
+
+    final RenderBox? listBox = context.findRenderObject() as RenderBox?;
+    final double viewportHeight = listBox?.size.height ?? 600;
+    final int totalVerses = verseNums.length;
+    final double maxOffset = _scrollController.position.maxScrollExtent;
+
+    final double ratio = selectedIdx / totalVerses;
+    final double estimatedPosition = (maxOffset + viewportHeight) * ratio;
+    double targetOffset = estimatedPosition - (viewportHeight * 0.3);
+
+    if (targetOffset < 0) targetOffset = 0;
+    if (targetOffset > maxOffset) targetOffset = maxOffset;
+
+    // ✅ 즉시 이동 (한 번만)
+    _scrollController.jumpTo(targetOffset);
   }
 
   void _measureItemHeight() {
@@ -69,41 +98,15 @@ class _VerseListViewState extends State<VerseListView> {
     }
   }
 
-  void _scrollToSelected({bool center = false}) async {
-    final verseNums = widget.verses.keys.toList()..sort();
-    final selectedIdx = verseNums.indexOf(_selectedVerse);
-    if (selectedIdx == -1 || itemHeight == null) return;
-
-    if (!_scrollController.hasClients ||
-        _scrollController.position.maxScrollExtent == 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToSelected(center: center);
-      });
-      return;
-    }
-
-    final RenderBox? listBox = context.findRenderObject() as RenderBox?;
-    final double listHeight = listBox?.size.height ?? 600;
-    final int halfCount = (listHeight / (itemHeight ?? 30) / 2).floor();
-    final double centerOffset =
-        (selectedIdx * itemHeight!) - ((center ? halfCount : 0) * itemHeight!);
-
-    double targetOffset = centerOffset < 0 ? 0 : centerOffset;
-    final max = _scrollController.position.maxScrollExtent;
-    if (targetOffset > max) targetOffset = max;
-
-    await _scrollController.animateTo(
-      targetOffset,
-      duration: const Duration(milliseconds: 380),
-      curve: Curves.easeInOutCubic,
-    );
+  void _scrollToSelected() async {
+    // ✅ didUpdateWidget에서 호출될 때만 사용
+    await Future.delayed(const Duration(milliseconds: 100));
+    _scrollToSelectedOnce();
   }
 
-  // ✅ 범위 선택 핸들러
   void _handleVerseLongPress(int verseNum) {
     setState(() {
-      // 기존 선택 초기화하고 새로운 범위 선택 시작
-      _selectedVerse = verseNum; // ✅ 기존 단일 선택 초기화
+      _selectedVerse = verseNum;
       _isSelectionMode = true;
       _rangeStart = verseNum;
       _rangeEnd = verseNum;
@@ -112,29 +115,23 @@ class _VerseListViewState extends State<VerseListView> {
 
   void _handleVerseTap(int verseNum) {
     if (_isSelectionMode) {
-      // 선택 모드일 때는 범위 끝 설정
       setState(() {
         _rangeEnd = verseNum;
       });
     } else {
-      // 일반 모드일 때는 기존처럼 동작
       setState(() {
         _selectedVerse = verseNum;
       });
     }
   }
 
-  // ✅ 선택된 범위의 절 번호들 반환
   List<int> _getSelectedVerseRange() {
     if (_rangeStart == null || _rangeEnd == null) return [];
-
     final start = _rangeStart! < _rangeEnd! ? _rangeStart! : _rangeEnd!;
     final end = _rangeStart! > _rangeEnd! ? _rangeStart! : _rangeEnd!;
-
     return List.generate(end - start + 1, (i) => start + i);
   }
 
-  // ✅ 선택된 구절들의 텍스트 조합
   String _getSelectedVersesText() {
     final selectedVerses = _getSelectedVerseRange();
     return selectedVerses
@@ -142,11 +139,9 @@ class _VerseListViewState extends State<VerseListView> {
         .join('\n');
   }
 
-  // ✅ 참조 문자열 생성
   String _getVerseReference() {
     final selectedVerses = _getSelectedVerseRange();
     if (selectedVerses.isEmpty) return '';
-
     if (selectedVerses.length == 1) {
       return '${widget.book.fullName} ${widget.chapter}:${selectedVerses.first}';
     } else {
@@ -154,14 +149,11 @@ class _VerseListViewState extends State<VerseListView> {
     }
   }
 
-  // ✅ 복사 기능
   void _copyToClipboard() {
     final reference = _getVerseReference();
     final text = _getSelectedVersesText();
     final fullText = '$reference\n\n$text';
-
     Clipboard.setData(ClipboardData(text: fullText));
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$reference 복사됨'),
@@ -169,15 +161,12 @@ class _VerseListViewState extends State<VerseListView> {
         behavior: SnackBarBehavior.floating,
       ),
     );
-
     _exitSelectionMode();
   }
 
-  // ✅ 즐겨찾기 추가
   void _addToFavorites() async {
     final favoriteProvider = context.read<FavoriteProvider>();
     final selectedVerses = _getSelectedVerseRange();
-
     if (selectedVerses.isEmpty) return;
 
     final favorite = FavoriteVerse(
@@ -191,7 +180,6 @@ class _VerseListViewState extends State<VerseListView> {
     );
 
     await favoriteProvider.addFavorite(favorite);
-
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -201,11 +189,9 @@ class _VerseListViewState extends State<VerseListView> {
         behavior: SnackBarBehavior.floating,
       ),
     );
-
     _exitSelectionMode();
   }
 
-  // ✅ 선택 모드 종료
   void _exitSelectionMode() {
     setState(() {
       _isSelectionMode = false;
@@ -214,13 +200,10 @@ class _VerseListViewState extends State<VerseListView> {
     });
   }
 
-  // ✅ 해당 절이 선택 범위에 포함되는지 확인
   bool _isVerseInRange(int verseNum) {
     if (_rangeStart == null || _rangeEnd == null) return false;
-
     final start = _rangeStart! < _rangeEnd! ? _rangeStart! : _rangeEnd!;
     final end = _rangeStart! > _rangeEnd! ? _rangeStart! : _rangeEnd!;
-
     return verseNum >= start && verseNum <= end;
   }
 
@@ -231,10 +214,10 @@ class _VerseListViewState extends State<VerseListView> {
     if (widget.chapter != oldWidget.chapter) {
       setState(() {
         _selectedVerse = 1;
-        _exitSelectionMode(); // ✅ 장이 바뀌면 선택 모드 해제
+        _exitSelectionMode();
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToSelected(center: true);
+        _scrollToSelected();
       });
       return;
     }
@@ -244,7 +227,7 @@ class _VerseListViewState extends State<VerseListView> {
         _selectedVerse = widget.selectedVerse;
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToSelected(center: true);
+        _scrollToSelected();
       });
     }
   }
@@ -254,7 +237,7 @@ class _VerseListViewState extends State<VerseListView> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final verseNums = widget.verses.keys.toList()..sort();
-    final favoriteProvider = context.watch<FavoriteProvider>(); // ✅ Provider 감시
+    final favoriteProvider = context.watch<FavoriteProvider>();
 
     const minChapter = 1;
     final maxChapter = widget.book.chapters;
@@ -338,7 +321,7 @@ class _VerseListViewState extends State<VerseListView> {
                       widget.book.fullName,
                       widget.chapter,
                       verseNum,
-                    ); // ✅ 즐겨찾기 여부 확인
+                    );
 
                     return Container(
                       key: idx == 0 ? _itemKey : null,
@@ -363,10 +346,9 @@ class _VerseListViewState extends State<VerseListView> {
                                     : cs.onSurface,
                               ),
                             ),
-                            // ✅ 절 번호 우측 상단에 작은 별표
                             if (isFavorited)
                               Positioned(
-                                top: -6,
+                                top: -4,
                                 right: -10,
                                 child: Icon(
                                   Icons.star,
