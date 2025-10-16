@@ -7,6 +7,7 @@ import '../../screens/biblePlan/day60_screen.dart';
 import '../../screens/biblePlan/day120_screen.dart';
 import '../../screens/biblePlan/day180_screen.dart';
 import '../../screens/favorite/favorite_list_screen.dart'; // ✅ 추가
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback? onThemeToggle;
@@ -117,7 +118,7 @@ class CustomDrawer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ✅ 심플한 헤더
+          // ✅ 심플한 헤더 - 중앙 정렬
           SafeArea(
             top: false,
             bottom: false,
@@ -126,31 +127,43 @@ class CustomDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    cs.primary.withOpacity(0.92),
-                    cs.primary.withOpacity(0.78)
+                    cs.primary.withOpacity(0.88),
+                    cs.surface.withOpacity(0.98),
+                    cs.primary.withOpacity(0.68),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 50.0, horizontal: 24),
+                padding: const EdgeInsets.only(
+                  top: 20.0,
+                  bottom: 10.0,
+                  left: 24,
+                  right: 24,
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center, // ✅ 중앙 정렬
+                  mainAxisAlignment: MainAxisAlignment.center, // ✅ 세로 중앙 정렬
                   children: [
-                    Icon(
-                      Icons.menu_book_rounded,
-                      size: 48,
-                      color: Colors.white.withOpacity(0.95),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final imageSize =
+                            (constraints.maxWidth * 0.9).clamp(100.0, 200.0);
+
+                        return Image.asset(
+                          'assets/icon/bible_icon.png',
+                          width: imageSize,
+                          height: imageSize,
+                        );
+                      },
                     ),
-                    const SizedBox(height: 16),
                     Text(
-                      '어? 성경이 읽어지네',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                      'All in Bible',
+                      style: GoogleFonts.dancingScript(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 28,
                       ),
                     ),
                   ],

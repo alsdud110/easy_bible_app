@@ -9,6 +9,7 @@ import '../widgets/plan_expansion_card.dart';
 import 'biblePlan/day60_screen.dart';
 import 'biblePlan/day120_screen.dart';
 import 'biblePlan/day180_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback? onThemeToggle;
@@ -186,8 +187,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             theme.appBarTheme.titleTextStyle?.color ?? Colors.black,
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         title: Text(
-          '어? 성경이 읽어지네',
-          style: theme.appBarTheme.titleTextStyle,
+          'All in Bible',
+          style: GoogleFonts.dancingScript(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w800,
+            fontSize: 28,
+          ),
         ),
         actions: [
           Builder(

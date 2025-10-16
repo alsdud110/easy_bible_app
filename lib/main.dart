@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '어? 성경이 읽어지네',
+      title: 'All in Bible',
       debugShowCheckedModeBanner: false,
       theme: appTheme,
       darkTheme: appThemeDark,

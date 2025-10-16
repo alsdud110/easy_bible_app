@@ -20,13 +20,14 @@ dependencies:
   marquee: ^2.3.0
   fading_edge_scrollview: ^4.1.1
   google_mobile_ads: ^5.0.0
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.13.1
-  flutter_native_splash: ^2.4.0  # ✅ 추가
+  flutter_native_splash: ^2.4.3  # ✅ 추가
 
 flutter_launcher_icons:
   android: true
@@ -52,6 +53,7 @@ flutter_native_splash:
     image: assets/splash/splash_icon.png
     color_dark: "#121212"
     image_dark: assets/splash/splash_icon.png
+    fullscreen: true  # 이거 꼭 추가
   
   # 플랫폼 설정
   android: true
@@ -64,6 +66,7 @@ flutter:
   assets:
     - assets/bible.json
     - assets/icon/app_icon.png
+    - assets/icon/bible_icon.png
 
   fonts:
     - family: Pretendard
