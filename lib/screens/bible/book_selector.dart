@@ -66,7 +66,7 @@ class _BookSelectorState extends State<BookSelector> {
   List<BibleData> _filterBooks(List<BibleData> books) {
     if (_searchQuery.isEmpty) return books;
 
-    final versePattern = RegExp(r'(.+?)\s*(\d+):(\d+)');
+    final versePattern = RegExp(r'(.+?)\s*(\d+)[\s:]+(\d+)'); // ✅ 수정
     final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
     if (versePattern.hasMatch(_searchQuery) ||
         chapterPattern.hasMatch(_searchQuery)) {
@@ -83,7 +83,8 @@ class _BookSelectorState extends State<BookSelector> {
   void _handleSearch(String query) async {
     if (query.isEmpty) return;
 
-    final versePattern = RegExp(r'(.+?)\s*(\d+):(\d+)');
+    // ✅ 공백 또는 콜론으로 절 구분 가능
+    final versePattern = RegExp(r'(.+?)\s*(\d+)[\s:]+(\d+)');
     final verseMatch = versePattern.firstMatch(query);
 
     final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
@@ -202,40 +203,48 @@ class _BookSelectorState extends State<BookSelector> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('성경책을 선택하세요'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: books.map((book) {
-            final hasChapter = book.chapters >= chapter;
-            return ListTile(
-              title: Text(
-                book.fullName,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color:
-                      hasChapter ? cs.onSurface : cs.onSurface.withOpacity(0.4),
-                ),
-              ),
-              subtitle: Text(
-                hasChapter
-                    ? '총 ${book.chapters}장'
-                    : '총 ${book.chapters}장 ($chapter장 없음)',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: hasChapter
-                      ? cs.onSurface.withOpacity(0.6)
-                      : cs.error.withOpacity(0.6),
-                ),
-              ),
-              enabled: hasChapter,
-              onTap: hasChapter
-                  ? () {
-                      Navigator.pop(context);
-                      final bookIndex = widget.books.indexOf(book);
-                      _navigateToVerse(bookIndex, book, chapter, verse);
-                    }
-                  : null,
-            );
-          }).toList(),
+        content: SizedBox(
+          // ✅ 크기 제한
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            // ✅ 스크롤 가능하게
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: books.map((book) {
+                final hasChapter = book.chapters >= chapter;
+                return ListTile(
+                  title: Text(
+                    book.fullName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: hasChapter
+                          ? cs.onSurface
+                          : cs.onSurface.withOpacity(0.4),
+                    ),
+                  ),
+                  subtitle: Text(
+                    hasChapter
+                        ? '총 ${book.chapters}장'
+                        : '총 ${book.chapters}장 ($chapter장 없음)',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: hasChapter
+                          ? cs.onSurface.withOpacity(0.6)
+                          : cs.error.withOpacity(0.6),
+                    ),
+                  ),
+                  enabled: hasChapter,
+                  onTap: hasChapter
+                      ? () {
+                          Navigator.pop(context);
+                          final bookIndex = widget.books.indexOf(book);
+                          _navigateToVerse(bookIndex, book, chapter, verse);
+                        }
+                      : null,
+                );
+              }).toList(),
+            ),
+          ),
         ),
         actions: [
           TextButton(
@@ -258,40 +267,48 @@ class _BookSelectorState extends State<BookSelector> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('성경책을 선택하세요'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: books.map((book) {
-            final hasChapter = book.chapters >= chapter;
-            return ListTile(
-              title: Text(
-                book.fullName,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color:
-                      hasChapter ? cs.onSurface : cs.onSurface.withOpacity(0.4),
-                ),
-              ),
-              subtitle: Text(
-                hasChapter
-                    ? '총 ${book.chapters}장'
-                    : '총 ${book.chapters}장 ($chapter장 없음)',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: hasChapter
-                      ? cs.onSurface.withOpacity(0.6)
-                      : cs.error.withOpacity(0.6),
-                ),
-              ),
-              enabled: hasChapter,
-              onTap: hasChapter
-                  ? () {
-                      Navigator.pop(context);
-                      final bookIndex = widget.books.indexOf(book);
-                      _navigateToChapter(bookIndex, book, chapter);
-                    }
-                  : null,
-            );
-          }).toList(),
+        content: SizedBox(
+          // ✅ 크기 제한
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            // ✅ 스크롤 가능하게
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: books.map((book) {
+                final hasChapter = book.chapters >= chapter;
+                return ListTile(
+                  title: Text(
+                    book.fullName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: hasChapter
+                          ? cs.onSurface
+                          : cs.onSurface.withOpacity(0.4),
+                    ),
+                  ),
+                  subtitle: Text(
+                    hasChapter
+                        ? '총 ${book.chapters}장'
+                        : '총 ${book.chapters}장 ($chapter장 없음)',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: hasChapter
+                          ? cs.onSurface.withOpacity(0.6)
+                          : cs.error.withOpacity(0.6),
+                    ),
+                  ),
+                  enabled: hasChapter,
+                  onTap: hasChapter
+                      ? () {
+                          Navigator.pop(context);
+                          final bookIndex = widget.books.indexOf(book);
+                          _navigateToChapter(bookIndex, book, chapter);
+                        }
+                      : null,
+                );
+              }).toList(),
+            ),
+          ),
         ),
         actions: [
           TextButton(
@@ -394,7 +411,7 @@ class _BookSelectorState extends State<BookSelector> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16',
+                hintText: '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16',
                 hintStyle: TextStyle(
                   color: theme.colorScheme.onSurface.withOpacity(0.5),
                   fontSize: 15,
@@ -462,14 +479,7 @@ class _BookSelectorState extends State<BookSelector> {
                 setState(() {
                   _searchQuery = value;
                 });
-
-                if (value.isNotEmpty && RegExp(r'\d+:\d+').hasMatch(value)) {
-                  Future.delayed(const Duration(milliseconds: 300), () {
-                    if (_searchController.text == value) {
-                      _handleSearch(value);
-                    }
-                  });
-                }
+                // ✅ 자동 검색 제거 - 필터링만 작동
               },
               onSubmitted: _handleSearch,
             ),
