@@ -48,7 +48,6 @@ class FavoriteProvider with ChangeNotifier {
 
   // 북마크 추가
   Future<void> addFavorite(FavoriteVerse favorite) async {
-    // 중복 체크 (같은 범위가 이미 있으면 추가 안 함)
     final exists = _favorites.any((fav) => fav.key == favorite.key);
     if (exists) {
       debugPrint('이미 북마크에 존재합니다: ${favorite.reference}');
@@ -56,7 +55,7 @@ class FavoriteProvider with ChangeNotifier {
     }
 
     _favorites.add(favorite);
-    _favorites.sort((a, b) => b.createdAt.compareTo(a.createdAt)); // 최신순 정렬
+    _favorites.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     notifyListeners();
     await _saveFavorites();
   }
@@ -64,6 +63,62 @@ class FavoriteProvider with ChangeNotifier {
   // 북마크 제거
   Future<void> removeFavorite(String key) async {
     _favorites.removeWhere((fav) => fav.key == key);
+    notifyListeners();
+    await _saveFavorites();
+  }
+
+  // ✅ 메모 추가
+  Future<void> addMemo(String favoriteKey, String content) async {
+    final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
+    if (index == -1) return;
+
+    final memo = Memo(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      content: content,
+      createdAt: DateTime.now(),
+    );
+
+    final updatedMemos = [..._favorites[index].memos, memo];
+    _favorites[index] = _favorites[index].copyWith(memos: updatedMemos);
+
+    notifyListeners();
+    await _saveFavorites();
+  }
+
+  // ✅ 메모 수정
+  Future<void> updateMemo(
+      String favoriteKey, String memoId, String newContent) async {
+    final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
+    if (index == -1) return;
+
+    final memos = _favorites[index].memos;
+    final memoIndex = memos.indexWhere((m) => m.id == memoId);
+    if (memoIndex == -1) return;
+
+    final updatedMemo = memos[memoIndex].copyWith(
+      content: newContent,
+      updatedAt: DateTime.now(),
+    );
+
+    final updatedMemos = [...memos];
+    updatedMemos[memoIndex] = updatedMemo;
+
+    _favorites[index] = _favorites[index].copyWith(memos: updatedMemos);
+
+    notifyListeners();
+    await _saveFavorites();
+  }
+
+  // ✅ 메모 삭제
+  Future<void> deleteMemo(String favoriteKey, String memoId) async {
+    final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
+    if (index == -1) return;
+
+    final updatedMemos =
+        _favorites[index].memos.where((m) => m.id != memoId).toList();
+
+    _favorites[index] = _favorites[index].copyWith(memos: updatedMemos);
+
     notifyListeners();
     await _saveFavorites();
   }
@@ -88,6 +143,15 @@ class FavoriteProvider with ChangeNotifier {
     return _favorites
         .where((fav) => fav.bookName == bookName && fav.chapter == chapter)
         .toList();
+  }
+
+  // 특정 키의 북마크 가져오기
+  FavoriteVerse? getFavoriteByKey(String key) {
+    try {
+      return _favorites.firstWhere((fav) => fav.key == key);
+    } catch (e) {
+      return null;
+    }
   }
 
   // 전체 삭제

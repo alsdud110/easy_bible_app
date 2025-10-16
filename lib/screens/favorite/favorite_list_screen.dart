@@ -19,7 +19,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
     return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
   }
 
-  // ✅ 삭제 모드 진입
   void _enterDeleteMode() {
     setState(() {
       _isDeleteMode = true;
@@ -27,7 +26,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
     });
   }
 
-  // ✅ 삭제 모드 종료
   void _exitDeleteMode() {
     setState(() {
       _isDeleteMode = false;
@@ -35,7 +33,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
     });
   }
 
-  // ✅ 전체 선택/해제
   void _toggleSelectAll(int totalCount) {
     setState(() {
       if (_selectedKeys.length == totalCount) {
@@ -48,7 +45,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
     });
   }
 
-  // ✅ 선택된 항목 삭제
   Future<void> _deleteSelected() async {
     if (_selectedKeys.isEmpty) return;
 
@@ -92,7 +88,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
     }
   }
 
-  // ✅ 전체 삭제
   Future<void> _deleteAll() async {
     final confirm = await showDialog<bool>(
       context: context,
@@ -150,7 +145,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
             : IconButton(
                 icon: const Icon(Icons.home),
                 onPressed: () {
-                  // ✅ 홈으로 이동 (모든 라우트 제거)
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     '/',
                     (route) => false,
@@ -164,7 +158,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
         centerTitle: theme.appBarTheme.centerTitle ?? true,
         actions: _isDeleteMode
             ? [
-                // 삭제 모드일 때: 전체 선택, 삭제 버튼
                 IconButton(
                   icon: Icon(
                     _selectedKeys.length == favorites.length
@@ -181,7 +174,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                 ),
               ]
             : [
-                // 일반 모드일 때: 선택 삭제, 전체 삭제 버튼
                 if (favorites.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.delete_outline),
@@ -235,6 +227,8 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
               itemBuilder: (context, index) {
                 final favorite = favorites[index];
                 final isSelected = _selectedKeys.contains(favorite.key);
+                // ✅ memos 리스트로 변경
+                final hasMemos = favorite.memos.isNotEmpty;
 
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(
@@ -254,10 +248,47 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                             });
                           },
                         )
-                      : Icon(
-                          Icons.star,
-                          color: Colors.amber[700],
-                          size: 28,
+                      : Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber[700],
+                              size: 28,
+                            ),
+                            // ✅ 메모 개수 뱃지
+                            if (hasMemos)
+                              Positioned(
+                                right: -4,
+                                bottom: -4,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: cs.primary,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: cs.surface,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 18,
+                                    minHeight: 18,
+                                  ),
+                                  child: Text(
+                                    favorite.memos.length > 9
+                                        ? '9+'
+                                        : '${favorite.memos.length}',
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      color: cs.onPrimary,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                   title: Text(
                     favorite.reference,
@@ -282,6 +313,39 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      // ✅ 메모 개수 표시
+                      if (hasMemos) ...[
+                        const SizedBox(height: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: cs.primaryContainer.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.comment,
+                                size: 14,
+                                color: cs.primary,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '메모 ${favorite.memos.length}개',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: cs.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 6),
                       Text(
                         _formatDateTime(favorite.createdAt),
@@ -300,7 +364,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                         ),
                   onTap: () {
                     if (_isDeleteMode) {
-                      // 삭제 모드일 때는 체크박스 토글
                       setState(() {
                         if (isSelected) {
                           _selectedKeys.remove(favorite.key);
@@ -309,7 +372,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                         }
                       });
                     } else {
-                      // 일반 모드일 때는 상세 페이지로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
