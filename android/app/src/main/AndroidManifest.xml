@@ -3,6 +3,12 @@
         android:label="어? 성경이 읽어지네!"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7446781962805745~7819078635"
+            />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

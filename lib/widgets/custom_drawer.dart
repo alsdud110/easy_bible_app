@@ -146,7 +146,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      '어! 성경이 읽어지네',
+                      '어? 성경이 읽어지네',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

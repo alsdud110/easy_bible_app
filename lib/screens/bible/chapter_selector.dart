@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
 import '../../widgets/breadcrumb_bar.dart'; // ✅ 추가
+import '../../widgets/banner_ad_widget.dart';
 
 class ChapterSelector extends StatelessWidget {
   final BibleData book;
@@ -88,6 +89,7 @@ class ChapterSelector extends StatelessWidget {
               ),
             ),
           ),
+          const BannerAdWidget(),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
+import '../../widgets/banner_ad_widget.dart'; // ✅ 배너 광고 import
 
 void pushModernTransition(BuildContext context, Widget page) {
   Navigator.of(context).push(
@@ -33,7 +34,7 @@ class BookSelector extends StatefulWidget {
   final List<BibleData> books;
   final void Function(int idx) onSelect;
   final void Function(int bookIdx, int chapter, int verse)? onDirectNavigate;
-  final void Function(int bookIdx, int chapter)? onChapterNavigate; // ✅ 추가
+  final void Function(int bookIdx, int chapter)? onChapterNavigate;
   final VoidCallback? onThemeToggle;
   final bool isDark;
 
@@ -41,7 +42,7 @@ class BookSelector extends StatefulWidget {
     required this.books,
     required this.onSelect,
     this.onDirectNavigate,
-    this.onChapterNavigate, // ✅ 추가
+    this.onChapterNavigate,
     this.onThemeToggle,
     this.isDark = false,
     super.key,
@@ -62,16 +63,14 @@ class _BookSelectorState extends State<BookSelector> {
     super.dispose();
   }
 
-  // ✅ 검색 필터링 (실시간 필터링 시에는 장:절 형식 무시)
   List<BibleData> _filterBooks(List<BibleData> books) {
     if (_searchQuery.isEmpty) return books;
 
-    // ✅ "창 1:1" 또는 "창 6" 같은 형식이면 필터링하지 않고 전체 반환
     final versePattern = RegExp(r'(.+?)\s*(\d+):(\d+)');
     final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
     if (versePattern.hasMatch(_searchQuery) ||
         chapterPattern.hasMatch(_searchQuery)) {
-      return books; // 장:절 또는 장 형식이면 전체 목록 유지
+      return books;
     }
 
     return books.where((book) {
@@ -81,31 +80,25 @@ class _BookSelectorState extends State<BookSelector> {
     }).toList();
   }
 
-  // ✅ 검색어 처리 메인 함수
   void _handleSearch(String query) async {
     if (query.isEmpty) return;
 
-    // 패턴 1: "창 1:3" 또는 "창세기 1:3" (장:절 형식)
     final versePattern = RegExp(r'(.+?)\s*(\d+):(\d+)');
     final verseMatch = versePattern.firstMatch(query);
 
-    // 패턴 2: "창 6" 또는 "창세기 6" (장만 있는 형식)
     final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
     final chapterMatch = chapterPattern.firstMatch(query);
 
     if (verseMatch != null) {
-      // "책 장:절" 형식 처리
       final bookName = verseMatch.group(1)!.trim();
       final chapter = int.tryParse(verseMatch.group(2)!) ?? 1;
       final verse = int.tryParse(verseMatch.group(3)!) ?? 1;
       _handleVerseSearch(bookName, chapter, verse);
     } else if (chapterMatch != null) {
-      // ✅ "책 장" 형식 처리 (절 선택 화면으로)
       final bookName = chapterMatch.group(1)!.trim();
       final chapter = int.tryParse(chapterMatch.group(2)!) ?? 1;
       _handleChapterSearch(bookName, chapter);
     } else {
-      // "장:절" 형식이 아니면 책 이름만 검색
       final bookIndex = widget.books.indexWhere(
         (b) => b.name == query || b.fullName == query,
       );
@@ -115,7 +108,6 @@ class _BookSelectorState extends State<BookSelector> {
     }
   }
 
-  // ✅ "책 장:절" 형식 처리
   void _handleVerseSearch(String bookName, int chapter, int verse) {
     final matchedBooks = widget.books
         .where(
@@ -157,7 +149,6 @@ class _BookSelectorState extends State<BookSelector> {
     }
   }
 
-  // ✅ "책 장" 형식 처리 (절 선택 화면으로)
   void _handleChapterSearch(String bookName, int chapter) {
     final matchedBooks = widget.books
         .where(
@@ -199,7 +190,6 @@ class _BookSelectorState extends State<BookSelector> {
     }
   }
 
-  // ✅ 절 선택을 위한 다이얼로그
   void _showBookSelectionDialogForVerse(
     List<BibleData> books,
     int chapter,
@@ -257,7 +247,6 @@ class _BookSelectorState extends State<BookSelector> {
     );
   }
 
-  // ✅ 장 선택을 위한 다이얼로그
   void _showBookSelectionDialogForChapter(
     List<BibleData> books,
     int chapter,
@@ -314,7 +303,6 @@ class _BookSelectorState extends State<BookSelector> {
     );
   }
 
-  // ✅ 절로 네비게이션 (VerseListView로)
   void _navigateToVerse(int bookIndex, BibleData book, int chapter, int verse) {
     if (chapter < 1 || chapter > book.chapters) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -341,7 +329,6 @@ class _BookSelectorState extends State<BookSelector> {
     }
   }
 
-  // ✅ 장으로 네비게이션 (VerseSelector로)
   void _navigateToChapter(int bookIndex, BibleData book, int chapter) {
     if (chapter < 1 || chapter > book.chapters) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -391,7 +378,7 @@ class _BookSelectorState extends State<BookSelector> {
       ),
       body: Column(
         children: [
-          // ✅ 검색 바
+          // 검색 바
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
             height: MediaQuery.of(context).size.height * 0.065,
@@ -420,7 +407,6 @@ class _BookSelectorState extends State<BookSelector> {
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // ✅ 엔터(검색) 버튼
                           IconButton(
                             icon: Icon(
                               Icons.arrow_forward,
@@ -430,7 +416,6 @@ class _BookSelectorState extends State<BookSelector> {
                                 _handleSearch(_searchController.text),
                             tooltip: '검색',
                           ),
-                          // Clear 버튼
                           IconButton(
                             icon: Icon(
                               Icons.clear,
@@ -478,7 +463,6 @@ class _BookSelectorState extends State<BookSelector> {
                   _searchQuery = value;
                 });
 
-                // ✅ "장:절" 형식이면 자동으로 검색 실행
                 if (value.isNotEmpty && RegExp(r'\d+:\d+').hasMatch(value)) {
                   Future.delayed(const Duration(milliseconds: 300), () {
                     if (_searchController.text == value) {
@@ -491,7 +475,7 @@ class _BookSelectorState extends State<BookSelector> {
             ),
           ),
 
-          // ✅ 검색 결과 또는 전체 목록
+          // 검색 결과 또는 전체 목록
           Expanded(
             child: _searchQuery.isNotEmpty &&
                     oldBooks.isEmpty &&
@@ -557,6 +541,9 @@ class _BookSelectorState extends State<BookSelector> {
                     ],
                   ),
           ),
+
+          // ✅ 하단 배너 광고
+          const BannerAdWidget(),
         ],
       ),
     );

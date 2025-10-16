@@ -1,6 +1,7 @@
 import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart'; // ✅ 추가
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
 import 'theme/app_theme.dart';
@@ -25,7 +26,10 @@ class NoBounceScrollBehavior extends ScrollBehavior {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ FavoriteProvider 초기화 및 데이터 로드
+  // ✅ AdMob 초기화
+  await MobileAds.instance.initialize();
+
+  // FavoriteProvider 초기화 및 데이터 로드
   final favoriteProvider = FavoriteProvider();
   await favoriteProvider.loadFavorites();
 
@@ -34,7 +38,7 @@ void main() async {
   final isDark = prefs.getBool('isDarkTheme') ?? false;
 
   runApp(
-    // ✅ Provider로 앱 감싸기
+    // Provider로 앱 감싸기
     ChangeNotifierProvider.value(
       value: favoriteProvider,
       child: MyApp(initDark: isDark),
@@ -71,7 +75,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '어! 성경이 읽어지네',
+      title: '어? 성경이 읽어지네',
       debugShowCheckedModeBanner: false,
       theme: appTheme,
       darkTheme: appThemeDark,

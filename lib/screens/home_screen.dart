@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             theme.appBarTheme.titleTextStyle?.color ?? Colors.black,
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         title: Text(
-          '어! 성경이 읽어지네',
+          '어? 성경이 읽어지네',
           style: theme.appBarTheme.titleTextStyle,
         ),
         actions: [
