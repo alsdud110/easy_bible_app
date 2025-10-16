@@ -27,7 +27,7 @@ class FavoriteProvider with ChangeNotifier {
       _isLoaded = true;
       notifyListeners();
     } catch (e) {
-      debugPrint('즐겨찾기 로드 실패: $e');
+      debugPrint('북마크 로드 실패: $e');
       _favorites = [];
       _isLoaded = true;
     }
@@ -42,16 +42,16 @@ class FavoriteProvider with ChangeNotifier {
       );
       await prefs.setString(_storageKey, jsonString);
     } catch (e) {
-      debugPrint('즐겨찾기 저장 실패: $e');
+      debugPrint('북마크 저장 실패: $e');
     }
   }
 
-  // 즐겨찾기 추가
+  // 북마크 추가
   Future<void> addFavorite(FavoriteVerse favorite) async {
     // 중복 체크 (같은 범위가 이미 있으면 추가 안 함)
     final exists = _favorites.any((fav) => fav.key == favorite.key);
     if (exists) {
-      debugPrint('이미 즐겨찾기에 존재합니다: ${favorite.reference}');
+      debugPrint('이미 북마크에 존재합니다: ${favorite.reference}');
       return;
     }
 
@@ -61,19 +61,19 @@ class FavoriteProvider with ChangeNotifier {
     await _saveFavorites();
   }
 
-  // 즐겨찾기 제거
+  // 북마크 제거
   Future<void> removeFavorite(String key) async {
     _favorites.removeWhere((fav) => fav.key == key);
     notifyListeners();
     await _saveFavorites();
   }
 
-  // 특정 절이 즐겨찾기인지 확인
+  // 특정 절이 북마크인지 확인
   bool isVerseFavorited(String bookName, int chapter, int verse) {
     return _favorites.any((fav) => fav.containsVerse(bookName, chapter, verse));
   }
 
-  // 특정 범위가 즐겨찾기인지 확인
+  // 특정 범위가 북마크인지 확인
   bool isRangeFavorited(
       String bookName, int chapter, int startVerse, int endVerse) {
     return _favorites.any((fav) =>
@@ -83,7 +83,7 @@ class FavoriteProvider with ChangeNotifier {
         fav.endVerse == endVerse);
   }
 
-  // 특정 책/장의 모든 즐겨찾기 가져오기
+  // 특정 책/장의 모든 북마크 가져오기
   List<FavoriteVerse> getFavoritesForChapter(String bookName, int chapter) {
     return _favorites
         .where((fav) => fav.bookName == bookName && fav.chapter == chapter)

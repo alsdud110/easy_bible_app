@@ -67,8 +67,8 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('즐겨찾기 삭제'),
-        content: Text('${widget.favorite.reference}\n즐겨찾기를 삭제하시겠습니까?'),
+        title: const Text('북마크 삭제'),
+        content: Text('${widget.favorite.reference}\n북마크를 삭제하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -134,7 +134,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
       ),
       body: Column(
         children: [
-          // ✅ 즐겨찾기 정보 바 (BreadcrumbBar 스타일과 유사)
+          // ✅ 북마크 정보 바 (BreadcrumbBar 스타일과 유사)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -160,7 +160,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '즐겨찾기',
+                        '북마크',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -216,7 +216,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                                   color: cs.onSurface,
                                 ),
                               ),
-                              // ✅ 모든 절에 별표 표시 (즐겨찾기된 구절이므로)
+                              // ✅ 모든 절에 별표 표시 (북마크된 구절이므로)
                               Positioned(
                                 top: -6,
                                 right: -10,

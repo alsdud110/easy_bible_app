@@ -184,7 +184,7 @@ class _VerseListViewState extends State<VerseListView> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${_getVerseReference()} 즐겨찾기에 추가됨'),
+        content: Text('${_getVerseReference()} 북마크에 추가됨'),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
       ),
@@ -270,7 +270,7 @@ class _VerseListViewState extends State<VerseListView> {
                 IconButton(
                   icon: const Icon(Icons.star_border),
                   onPressed: _addToFavorites,
-                  tooltip: '즐겨찾기',
+                  tooltip: '북마크',
                 ),
               ]
             : null,

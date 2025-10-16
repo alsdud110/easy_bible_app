@@ -38,7 +38,7 @@ class FavoriteVerse {
         createdAt: DateTime.parse(json['createdAt']),
       );
 
-  // 특정 절이 즐겨찾기 범위에 포함되는지 확인
+  // 특정 절이 북마크 범위에 포함되는지 확인
   bool containsVerse(String bookName, int chapter, int verse) {
     return this.bookName == bookName &&
         this.chapter == chapter &&

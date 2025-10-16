@@ -62,10 +62,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ),
     _MenuItem('성경일독(플랜)', Icons.calendar_month_outlined,
         const SizedBox.shrink(), Colors.deepPurple, '/plan'),
-    // ✅ 즐겨찾기 메뉴 추가
+    // ✅ 북마크 메뉴 추가
     _MenuItem(
-      '좋아하는 성경 구절',
-      Icons.star_rounded,
+      '북마크',
+      Icons.bookmark_added_rounded,
       const FavoriteListScreen(),
       Colors.amber,
       '/favorites',
@@ -275,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   if (item.isComingSoon) {
                     _showComingSoonDialog(context);
                   } else if (item.route == '/favorites') {
-                    // ✅ 즐겨찾기 페이지로 직접 이동
+                    // ✅ 북마크 페이지로 직접 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(

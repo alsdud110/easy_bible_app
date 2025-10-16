@@ -56,7 +56,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('선택 항목 삭제'),
-        content: Text('${_selectedKeys.length}개의 즐겨찾기를 삭제하시겠습니까?'),
+        content: Text('${_selectedKeys.length}개의 북마크를 삭제하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -98,7 +98,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('전체 삭제'),
-        content: const Text('모든 즐겨찾기를 삭제하시겠습니까?'),
+        content: const Text('모든 북마크를 삭제하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -120,7 +120,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('모든 즐겨찾기가 삭제되었습니다'),
+            content: Text('모든 북마크가 삭제되었습니다'),
             duration: Duration(seconds: 2),
             behavior: SnackBarBehavior.floating,
           ),
@@ -139,7 +139,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _isDeleteMode ? '${_selectedKeys.length}개 선택됨' : '즐겨찾기',
+          _isDeleteMode ? '${_selectedKeys.length}개 선택됨' : '북마크',
           style: theme.appBarTheme.titleTextStyle,
         ),
         leading: _isDeleteMode
@@ -219,7 +219,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    '구절을 길게 눌러 즐겨찾기에 추가해보세요',
+                    '구절을 길게 눌러 북마크에 추가해보세요',
                     style: TextStyle(
                       fontSize: 14,
                       color: cs.onSurface.withOpacity(0.4),
