@@ -14,18 +14,29 @@ class Memo {
   Map<String, dynamic> toJson() => {
         'id': id,
         'content': content,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
+        'createdAt': createdAt.millisecondsSinceEpoch, // ✅ 타임스탬프로 저장
+        'updatedAt': updatedAt?.millisecondsSinceEpoch, // ✅ 타임스탬프로 저장
       };
 
-  factory Memo.fromJson(Map<String, dynamic> json) => Memo(
-        id: json['id'] as String,
-        content: json['content'] as String,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: json['updatedAt'] != null
-            ? DateTime.parse(json['updatedAt'] as String)
-            : null,
-      );
+  factory Memo.fromJson(Map<String, dynamic> json) {
+    // ✅ int와 String 둘 다 처리
+    DateTime parseDateTime(dynamic value) {
+      if (value is int) {
+        return DateTime.fromMillisecondsSinceEpoch(value);
+      } else if (value is String) {
+        return DateTime.parse(value);
+      }
+      return DateTime.now();
+    }
+
+    return Memo(
+      id: json['id'] as String,
+      content: json['content'] as String,
+      createdAt: parseDateTime(json['createdAt']),
+      updatedAt:
+          json['updatedAt'] != null ? parseDateTime(json['updatedAt']) : null,
+    );
+  }
 
   Memo copyWith({
     String? id,
@@ -71,23 +82,35 @@ class FavoriteVerse {
         'endVerse': endVerse,
         'reference': reference,
         'text': text,
-        'createdAt': createdAt.toIso8601String(),
+        'createdAt': createdAt.millisecondsSinceEpoch, // ✅ 타임스탬프로 저장
         'memos': memos.map((m) => m.toJson()).toList(),
       };
 
-  factory FavoriteVerse.fromJson(Map<String, dynamic> json) => FavoriteVerse(
-        bookName: json['bookName'] as String,
-        chapter: json['chapter'] as int,
-        startVerse: json['startVerse'] as int,
-        endVerse: json['endVerse'] as int,
-        reference: json['reference'] as String,
-        text: json['text'] as String,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        memos: (json['memos'] as List<dynamic>?)
-                ?.map((m) => Memo.fromJson(m as Map<String, dynamic>))
-                .toList() ??
-            [],
-      );
+  factory FavoriteVerse.fromJson(Map<String, dynamic> json) {
+    // ✅ int와 String 둘 다 처리
+    DateTime parseDateTime(dynamic value) {
+      if (value is int) {
+        return DateTime.fromMillisecondsSinceEpoch(value);
+      } else if (value is String) {
+        return DateTime.parse(value);
+      }
+      return DateTime.now();
+    }
+
+    return FavoriteVerse(
+      bookName: json['bookName'] as String,
+      chapter: json['chapter'] as int,
+      startVerse: json['startVerse'] as int,
+      endVerse: json['endVerse'] as int,
+      reference: json['reference'] as String,
+      text: json['text'] as String,
+      createdAt: parseDateTime(json['createdAt']),
+      memos: (json['memos'] as List<dynamic>?)
+              ?.map((m) => Memo.fromJson(m as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+  }
 
   // 특정 절이 북마크 범위에 포함되는지 확인
   bool containsVerse(String bookName, int chapter, int verse) {

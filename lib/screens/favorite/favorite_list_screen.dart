@@ -16,7 +16,8 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
   final Set<String> _selectedKeys = {};
 
   String _formatDateTime(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+    final localTime = dateTime.isUtc ? dateTime.toLocal() : dateTime;
+    return DateFormat('yyyy-MM-dd HH:mm').format(localTime);
   }
 
   void _enterDeleteMode() {

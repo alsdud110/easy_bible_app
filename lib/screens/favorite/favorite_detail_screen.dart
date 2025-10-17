@@ -41,10 +41,14 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+    // ✅ 명시적으로 로컬 시간으로 변환
+    final localTime = dateTime.isUtc ? dateTime.toLocal() : dateTime;
+    return DateFormat('yyyy-MM-dd HH:mm').format(localTime);
   }
 
   String _formatMemoDateTime(DateTime dateTime) {
+    // ✅ 명시적으로 로컬 시간으로 변환
+    final localTime = dateTime.isUtc ? dateTime.toLocal() : dateTime;
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
@@ -52,7 +56,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
     if (difference.inHours < 1) return '${difference.inMinutes}분 전';
     if (difference.inDays < 1) return '${difference.inHours}시간 전';
     if (difference.inDays < 7) return '${difference.inDays}일 전';
-    return DateFormat('MM월 dd일').format(dateTime);
+    return DateFormat('MM월 dd일').format(localTime);
   }
 
   Map<int, String> _parseVerses() {
@@ -75,13 +79,6 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   void _copyToClipboard(BuildContext context) {
     final fullText = '${widget.favorite.reference}\n\n${widget.favorite.text}';
     Clipboard.setData(ClipboardData(text: fullText));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${widget.favorite.reference} 복사됨'),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
   }
 
   Future<void> _removeFavorite(BuildContext context) async {
@@ -254,7 +251,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '즐겨찾기',
+                            '북마크',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -338,7 +335,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
             // 입력창이 항상 살짝 보이도록 초기/최소 높이 설정
             initialChildSize: 0.16,
             minChildSize: 0.16,
-            maxChildSize: 0.9,
+            maxChildSize: 0.4,
             snap: true,
             builder: (context, sheetScrollController) {
               final cs = Theme.of(context).colorScheme;

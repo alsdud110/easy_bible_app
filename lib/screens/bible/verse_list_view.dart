@@ -154,13 +154,6 @@ class _VerseListViewState extends State<VerseListView> {
     final text = _getSelectedVersesText();
     final fullText = '$reference\n\n$text';
     Clipboard.setData(ClipboardData(text: fullText));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$reference 복사됨'),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
     _exitSelectionMode();
   }
 
@@ -169,6 +162,9 @@ class _VerseListViewState extends State<VerseListView> {
     final selectedVerses = _getSelectedVerseRange();
     if (selectedVerses.isEmpty) return;
 
+    // ✅ 명시적으로 로컬 시간으로 생성
+    final now = DateTime.now().toLocal();
+
     final favorite = FavoriteVerse(
       bookName: widget.book.fullName,
       chapter: widget.chapter,
@@ -176,19 +172,13 @@ class _VerseListViewState extends State<VerseListView> {
       endVerse: selectedVerses.last,
       reference: _getVerseReference(),
       text: _getSelectedVersesText(),
-      createdAt: DateTime.now(),
+      createdAt: now,
     );
+
 
     await favoriteProvider.addFavorite(favorite);
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${_getVerseReference()} 북마크에 추가됨'),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
     _exitSelectionMode();
   }
 

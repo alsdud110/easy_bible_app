@@ -72,10 +72,13 @@ class FavoriteProvider with ChangeNotifier {
     final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
     if (index == -1) return;
 
+    // ✅ 명시적으로 로컬 시간으로 생성
+    final now = DateTime.now().toLocal();
+
     final memo = Memo(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       content: content,
-      createdAt: DateTime.now(),
+      createdAt: now,
     );
 
     final updatedMemos = [..._favorites[index].memos, memo];
@@ -97,7 +100,7 @@ class FavoriteProvider with ChangeNotifier {
 
     final updatedMemo = memos[memoIndex].copyWith(
       content: newContent,
-      updatedAt: DateTime.now(),
+      updatedAt: DateTime.now().toLocal(),
     );
 
     final updatedMemos = [...memos];
