@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
-import '../../widgets/banner_ad_widget.dart'; // ✅ 배너 광고 import
+import '../../widgets/banner_ad_widget.dart';
 
 void pushModernTransition(BuildContext context, Widget page) {
   Navigator.of(context).push(
@@ -52,21 +52,47 @@ class BookSelector extends StatefulWidget {
   State<BookSelector> createState() => _BookSelectorState();
 }
 
-class _BookSelectorState extends State<BookSelector> {
+class _BookSelectorState extends State<BookSelector>
+    with SingleTickerProviderStateMixin {
   bool isGrid = true;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.15),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+    _animationController.forward();
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   List<BibleData> _filterBooks(List<BibleData> books) {
     if (_searchQuery.isEmpty) return books;
 
-    final versePattern = RegExp(r'(.+?)\s*(\d+)[\s:]+(\d+)'); // ✅ 수정
+    final versePattern = RegExp(r'(.+?)\s*(\d+)[\s:]+(\d+)');
     final chapterPattern = RegExp(r'(.+?)\s+(\d+)$');
     if (versePattern.hasMatch(_searchQuery) ||
         chapterPattern.hasMatch(_searchQuery)) {
@@ -83,7 +109,6 @@ class _BookSelectorState extends State<BookSelector> {
   void _handleSearch(String query) async {
     if (query.isEmpty) return;
 
-    // ✅ 공백 또는 콜론으로 절 구분 가능
     final versePattern = RegExp(r'(.+?)\s*(\d+)[\s:]+(\d+)');
     final verseMatch = versePattern.firstMatch(query);
 
@@ -204,10 +229,8 @@ class _BookSelectorState extends State<BookSelector> {
       builder: (context) => AlertDialog(
         title: const Text('성경책을 선택하세요'),
         content: SizedBox(
-          // ✅ 크기 제한
           width: double.maxFinite,
           child: SingleChildScrollView(
-            // ✅ 스크롤 가능하게
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: books.map((book) {
@@ -268,10 +291,8 @@ class _BookSelectorState extends State<BookSelector> {
       builder: (context) => AlertDialog(
         title: const Text('성경책을 선택하세요'),
         content: SizedBox(
-          // ✅ 크기 제한
           width: double.maxFinite,
           child: SingleChildScrollView(
-            // ✅ 스크롤 가능하게
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: books.map((book) {
@@ -393,168 +414,177 @@ class _BookSelectorState extends State<BookSelector> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          // 검색 바
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-            height: MediaQuery.of(context).size.height * 0.065,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
-              border: Border(
-                bottom: BorderSide(
-                  color: theme.colorScheme.outline.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-            ),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16',
-                hintStyle: TextStyle(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
-                  fontSize: 15,
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: theme.colorScheme.primary,
-                ),
-                suffixIcon: _searchQuery.isNotEmpty
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward,
-                              color: theme.colorScheme.primary,
-                            ),
-                            onPressed: () =>
-                                _handleSearch(_searchController.text),
-                            tooltip: '검색',
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              color:
-                                  theme.colorScheme.onSurface.withOpacity(0.5),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _searchController.clear();
-                                _searchQuery = '';
-                              });
-                            },
-                          ),
-                        ],
-                      )
-                    : null,
-                filled: true,
-                fillColor: theme.colorScheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.outline.withOpacity(0.3),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.outline.withOpacity(0.3),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: theme.colorScheme.primary,
-                    width: 2,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-                // ✅ 자동 검색 제거 - 필터링만 작동
-              },
-              onSubmitted: _handleSearch,
-            ),
-          ),
-
-          // 검색 결과 또는 전체 목록
-          Expanded(
-            child: _searchQuery.isNotEmpty &&
-                    oldBooks.isEmpty &&
-                    newBooks.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 64,
-                          color: theme.colorScheme.onSurface.withOpacity(0.3),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          '검색 결과가 없습니다',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '다른 검색어를 시도해보세요',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: theme.colorScheme.onSurface.withOpacity(0.4),
-                          ),
-                        ),
-                      ],
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SlideTransition(
+          position: _slideAnimation,
+          child: Column(
+            children: [
+              // 검색 바
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                height: MediaQuery.of(context).size.height * 0.065,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest
+                      .withOpacity(0.3),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.2),
+                      width: 1,
                     ),
-                  )
-                : ListView(
-                    children: [
-                      if (oldBooks.isNotEmpty) ...[
-                        const _SectionTitle(title: '구약'),
-                        isGrid
-                            ? _BookGrid(
-                                books: oldBooks,
-                                allBooks: widget.books,
-                                onSelect: widget.onSelect,
-                              )
-                            : _BookList(
-                                books: oldBooks,
-                                allBooks: widget.books,
-                                onSelect: widget.onSelect,
-                              ),
-                      ],
-                      if (newBooks.isNotEmpty) ...[
-                        const _SectionTitle(title: '신약'),
-                        isGrid
-                            ? _BookGrid(
-                                books: newBooks,
-                                allBooks: widget.books,
-                                onSelect: widget.onSelect,
-                              )
-                            : _BookList(
-                                books: newBooks,
-                                allBooks: widget.books,
-                                onSelect: widget.onSelect,
-                              ),
-                      ],
-                    ],
                   ),
-          ),
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16',
+                    hintStyle: TextStyle(
+                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      fontSize: 15,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: theme.colorScheme.primary,
+                    ),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.arrow_forward,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                onPressed: () =>
+                                    _handleSearch(_searchController.text),
+                                tooltip: '검색',
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.5),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _searchController.clear();
+                                    _searchQuery = '';
+                                  });
+                                },
+                              ),
+                            ],
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: theme.colorScheme.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: theme.colorScheme.outline.withOpacity(0.3),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: theme.colorScheme.outline.withOpacity(0.3),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: theme.colorScheme.primary,
+                        width: 2,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  onSubmitted: _handleSearch,
+                ),
+              ),
 
-          // ✅ 하단 배너 광고
-          const BannerAdWidget(),
-        ],
+              // 검색 결과 또는 전체 목록
+              Expanded(
+                child: _searchQuery.isNotEmpty &&
+                        oldBooks.isEmpty &&
+                        newBooks.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 64,
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.3),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              '검색 결과가 없습니다',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.6),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '다른 검색어를 시도해보세요',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.4),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView(
+                        children: [
+                          if (oldBooks.isNotEmpty) ...[
+                            const _SectionTitle(title: '구약'),
+                            isGrid
+                                ? _BookGrid(
+                                    books: oldBooks,
+                                    allBooks: widget.books,
+                                    onSelect: widget.onSelect,
+                                  )
+                                : _BookList(
+                                    books: oldBooks,
+                                    allBooks: widget.books,
+                                    onSelect: widget.onSelect,
+                                  ),
+                          ],
+                          if (newBooks.isNotEmpty) ...[
+                            const _SectionTitle(title: '신약'),
+                            isGrid
+                                ? _BookGrid(
+                                    books: newBooks,
+                                    allBooks: widget.books,
+                                    onSelect: widget.onSelect,
+                                  )
+                                : _BookList(
+                                    books: newBooks,
+                                    allBooks: widget.books,
+                                    onSelect: widget.onSelect,
+                                  ),
+                          ],
+                        ],
+                      ),
+              ),
+
+              const BannerAdWidget(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -568,29 +598,44 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      margin: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-            color: theme.colorScheme.secondary.withOpacity(0.28), width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.secondary.withOpacity(0.09),
-            blurRadius: 9,
-            offset: const Offset(0, 2),
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 200),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutBack,
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: 0.85 + (value * 0.15),
+          child: Opacity(
+            opacity: value.clamp(0.0, 1.0),
+            child: child,
           ),
-        ],
-      ),
-      child: Text(
-        title,
-        style: theme.textTheme.headlineSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: 15.5,
-          letterSpacing: 1.2,
-          color: theme.colorScheme.primary,
+        );
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+              color: theme.colorScheme.secondary.withOpacity(0.28), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.secondary.withOpacity(0.09),
+              blurRadius: 9,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Text(
+          title,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 15.5,
+            letterSpacing: 1.2,
+            color: theme.colorScheme.primary,
+          ),
         ),
       ),
     );
@@ -625,23 +670,38 @@ class _BookGrid extends StatelessWidget {
       itemBuilder: (context, i) {
         final book = books[i];
         final originalIndex = allBooks.indexOf(book);
-        return GestureDetector(
-          onTap: () => onSelect(originalIndex),
-          child: Container(
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                  color: theme.colorScheme.secondary.withOpacity(0.32)),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              book.name,
-              style: theme.textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 14.5,
-                color: theme.colorScheme.primary,
-                letterSpacing: 0.2,
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 900 + (i * 60)),
+          tween: Tween(begin: 0.0, end: 1.0),
+          curve: Curves.easeOutBack,
+          builder: (context, value, child) {
+            return Transform.scale(
+              scale: 0.7 + (value * 0.3),
+              child: Opacity(
+                opacity: value.clamp(0.0, 1.0),
+                child: child,
+              ),
+            );
+          },
+          child: GestureDetector(
+            onTap: () => onSelect(originalIndex),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: theme.colorScheme.secondary.withOpacity(0.32)),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                book.name,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.5,
+                  color: theme.colorScheme.primary,
+                  letterSpacing: 0.2,
+                ),
               ),
             ),
           ),
@@ -674,23 +734,37 @@ class _BookList extends StatelessWidget {
       itemBuilder: (context, i) {
         final book = books[i];
         final originalIndex = allBooks.indexOf(book);
-        return ListTile(
-          onTap: () => onSelect(originalIndex),
-          title: Text(
-            book.fullName,
-            style: theme.textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-              letterSpacing: 0.2,
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 400 + (i * 25)),
+          tween: Tween(begin: 0.0, end: 1.0),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(-30 * (1 - value), 0),
+              child: Opacity(
+                opacity: value.clamp(0.0, 1.0),
+                child: child,
+              ),
+            );
+          },
+          child: ListTile(
+            onTap: () => onSelect(originalIndex),
+            title: Text(
+              book.fullName,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                letterSpacing: 0.2,
+              ),
             ),
+            trailing: Icon(Icons.chevron_right,
+                size: 20, color: theme.colorScheme.primary),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
+            tileColor: theme.colorScheme.surface,
           ),
-          trailing: Icon(Icons.chevron_right,
-              size: 20, color: theme.colorScheme.primary),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
-          tileColor: theme.colorScheme.surface,
         );
       },
     );

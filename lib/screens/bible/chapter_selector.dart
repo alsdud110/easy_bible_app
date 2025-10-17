@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
-import '../../widgets/breadcrumb_bar.dart'; // ✅ 추가
+import '../../widgets/breadcrumb_bar.dart';
 import '../../widgets/banner_ad_widget.dart';
 
-class ChapterSelector extends StatelessWidget {
+class ChapterSelector extends StatefulWidget {
   final BibleData book;
   final void Function(int chapterIdx) onSelect;
   final VoidCallback onBack;
@@ -16,6 +16,43 @@ class ChapterSelector extends StatelessWidget {
   });
 
   @override
+  State<ChapterSelector> createState() => _ChapterSelectorState();
+}
+
+class _ChapterSelectorState extends State<ChapterSelector>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.15),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -24,11 +61,11 @@ class ChapterSelector extends StatelessWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          '${book.fullName} (장 선택)',
+          '${widget.book.fullName} (장 선택)',
           style: theme.appBarTheme.titleTextStyle,
         ),
         leading: BackButton(
-          onPressed: onBack,
+          onPressed: widget.onBack,
           color: theme.appBarTheme.iconTheme?.color,
         ),
         backgroundColor: theme.appBarTheme.backgroundColor,
@@ -36,61 +73,84 @@ class ChapterSelector extends StatelessWidget {
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         centerTitle: theme.appBarTheme.centerTitle ?? true,
       ),
-      body: Column(
-        children: [
-          BreadcrumbBar(
-            items: [
-              BreadcrumbItem(
-                label: '홈',
-                onTap: onBack,
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SlideTransition(
+          position: _slideAnimation,
+          child: Column(
+            children: [
+              BreadcrumbBar(
+                items: [
+                  BreadcrumbItem(
+                    label: '홈',
+                    onTap: widget.onBack,
+                  ),
+                  BreadcrumbItem(
+                    label: widget.book.fullName,
+                    onTap: () {},
+                    isActive: true,
+                  ),
+                ],
               ),
-              BreadcrumbItem(
-                label: book.fullName, // ✅ fullName으로 변경
-                onTap: () {}, // 현재 페이지
-                isActive: true,
-              ),
-            ],
-          ),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 8,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 1.37,
-              ),
-              itemCount: book.chapters,
-              itemBuilder: (context, i) => GestureDetector(
-                onTap: () => onSelect(i),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: cs.surface,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: cs.secondary.withOpacity(0.33)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: cs.secondary.withOpacity(0.09),
-                        blurRadius: 5,
-                        offset: const Offset(0, 2),
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 8,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1.37,
+                  ),
+                  itemCount: widget.book.chapters,
+                  itemBuilder: (context, i) {
+                    return TweenAnimationBuilder<double>(
+                      duration: Duration(milliseconds: 900 + (i * 60)),
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      curve: Curves.easeOutBack,
+                      builder: (context, value, child) {
+                        return Transform.scale(
+                          scale: 0.7 + (value * 0.3),
+                          child: Opacity(
+                            opacity: value.clamp(0.0, 1.0),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: GestureDetector(
+                        onTap: () => widget.onSelect(i),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: cs.surface,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: cs.secondary.withOpacity(0.33)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: cs.secondary.withOpacity(0.09),
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${i + 1}',
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: cs.primary,
+                            ),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${i + 1}',
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                      color: cs.primary,
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
-            ),
+              const BannerAdWidget(),
+            ],
           ),
-          const BannerAdWidget(),
-        ],
+        ),
       ),
     );
   }
