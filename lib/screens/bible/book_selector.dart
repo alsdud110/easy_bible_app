@@ -410,7 +410,10 @@ class _BookSelectorState extends State<BookSelector>
           icon: const Icon(Icons.home_rounded),
           tooltip: '홈으로',
           onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/',
+              (route) => false,
+            );
           },
         ),
       ),
