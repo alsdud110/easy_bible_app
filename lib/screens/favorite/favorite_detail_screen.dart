@@ -23,6 +23,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   final _memoController = TextEditingController();
   final _focusNode = FocusNode();
   String? _editingMemoId;
+  bool _showMemoSheet = false;
 
   @override
   void initState() {
@@ -41,13 +42,11 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    // ✅ 명시적으로 로컬 시간으로 변환
     final localTime = dateTime.isUtc ? dateTime.toLocal() : dateTime;
     return DateFormat('yyyy-MM-dd HH:mm').format(localTime);
   }
 
   String _formatMemoDateTime(DateTime dateTime) {
-    // ✅ 명시적으로 로컬 시간으로 변환
     final localTime = dateTime.isUtc ? dateTime.toLocal() : dateTime;
     final now = DateTime.now();
     final difference = now.difference(dateTime);
@@ -65,7 +64,6 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
 
     for (var line in lines) {
       if (line.trim().isEmpty) continue;
-      // ✅ 끝 앵커는 \$ 가 아니라 $ 여야 함
       final match = RegExp(r'^(\d+)절:\s*(.+)$').firstMatch(line);
       if (match != null) {
         final verseNum = int.parse(match.group(1)!);
@@ -79,6 +77,13 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   void _copyToClipboard(BuildContext context) {
     final fullText = '${widget.favorite.reference}\n\n${widget.favorite.text}';
     Clipboard.setData(ClipboardData(text: fullText));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('클립보드에 복사되었습니다'),
+        duration: Duration(seconds: 1),
+        behavior: SnackBarBehavior.fixed,
+      ),
+    );
   }
 
   Future<void> _removeFavorite(BuildContext context) async {
@@ -140,7 +145,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
         _memoController.clear();
         _editingMemoId = null;
       });
-      _focusNode.requestFocus();
+      _focusNode.unfocus();
     }
   }
 
@@ -165,10 +170,9 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
     );
 
     if (confirm == true && mounted) {
-      await context.read<FavoriteProvider>().deleteMemo(
-            widget.favorite.key,
-            memoId,
-          );
+      await context
+          .read<FavoriteProvider>()
+          .deleteMemo(widget.favorite.key, memoId);
     }
   }
 
@@ -185,6 +189,44 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
       _editingMemoId = null;
       _memoController.clear();
     });
+    _focusNode.unfocus();
+  }
+
+  void _toggleMemoSheet() {
+    setState(() {
+      _showMemoSheet = !_showMemoSheet;
+    });
+    if (_showMemoSheet) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        enableDrag: true,
+        builder: (context) => GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => Navigator.pop(context), // ✅ 바깥 터치로 닫기
+          child: GestureDetector(
+            onTap: () {}, // ✅ 시트 내부 터치는 전파 차단
+            child: _MemoBottomSheet(
+              favoriteKey: widget.favorite.key,
+              memoController: _memoController,
+              focusNode: _focusNode,
+              editingMemoId: _editingMemoId,
+              onSave: _saveMemo,
+              onEdit: _startEditMemo,
+              onDelete: _deleteMemo,
+              onCancelEdit: _cancelEdit,
+              formatDateTime: _formatMemoDateTime,
+            ),
+          ),
+        ),
+      ).then((_) {
+        setState(() {
+          _showMemoSheet = false;
+        });
+      });
+    }
   }
 
   @override
@@ -200,7 +242,6 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
     );
 
     return Scaffold(
-      resizeToAvoidBottomInset: false, // 바텀시트가 자체적으로 처리
       appBar: AppBar(
         title: Text(
           widget.favorite.reference,
@@ -223,105 +264,432 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
           ),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          // 상단 본문(구절 리스트)
-          Column(
-            children: [
-              // 즐겨찾기 정보 바
-              Container(
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: cs.surfaceContainerHighest.withOpacity(0.3),
-                  border: Border(
-                    bottom: BorderSide(
-                      color: cs.outline.withOpacity(0.2),
-                      width: 1,
-                    ),
+          // 즐겨찾기 정보 바
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: cs.surfaceContainerHighest.withOpacity(0.3),
+              border: Border(
+                bottom: BorderSide(
+                  color: cs.outline.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.star, color: Colors.amber[700], size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '북마크',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: cs.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '추가일: ${_formatDateTime(currentFavorite.createdAt)}',
+                        style: TextStyle(
+                            fontSize: 11, color: cs.onSurface.withOpacity(0.6)),
+                      ),
+                    ],
                   ),
                 ),
+              ],
+            ),
+          ),
+
+          // 구절 리스트
+          Expanded(
+            child: verses.isEmpty
+                ? Center(
+                    child: Text(
+                      '구절을 불러올 수 없습니다',
+                      style: TextStyle(
+                          fontSize: 14, color: cs.onSurface.withOpacity(0.5)),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(bottom: 16),
+                    itemCount: verseNums.length,
+                    physics: const ClampingScrollPhysics(),
+                    itemBuilder: (context, idx) {
+                      final verseNum = verseNums[idx];
+                      final text = verses[verseNum] ?? '';
+                      return Container(
+                        key: idx == 0 ? _itemKey : null,
+                        child: ListTile(
+                          leading: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Text(
+                                '$verseNum',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  color: cs.onSurface,
+                                ),
+                              ),
+                              Positioned(
+                                top: -6,
+                                right: -10,
+                                child: Icon(Icons.star,
+                                    size: 12, color: Colors.amber[700]),
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            text,
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15,
+                                color: cs.onSurface),
+                          ),
+                          dense: true,
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _toggleMemoSheet,
+        icon: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            const Icon(Icons.sticky_note_2),
+            if (currentFavorite.memos.isNotEmpty)
+              Positioned(
+                right: -4,
+                top: -4,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 18,
+                    minHeight: 18,
+                  ),
+                  child: Text(
+                    '${currentFavorite.memos.length}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        label: const Text('메모'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
+
+// 메모 바텀시트
+class _MemoBottomSheet extends StatefulWidget {
+  final String favoriteKey;
+  final TextEditingController memoController;
+  final FocusNode focusNode;
+  final String? editingMemoId;
+  final VoidCallback onSave;
+  final Function(Memo) onEdit;
+  final Function(String) onDelete;
+  final VoidCallback onCancelEdit;
+  final String Function(DateTime) formatDateTime;
+
+  const _MemoBottomSheet({
+    required this.favoriteKey,
+    required this.memoController,
+    required this.focusNode,
+    required this.editingMemoId,
+    required this.onSave,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onCancelEdit,
+    required this.formatDateTime,
+  });
+
+  @override
+  State<_MemoBottomSheet> createState() => _MemoBottomSheetState();
+}
+
+class _MemoBottomSheetState extends State<_MemoBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+    widget.memoController.addListener(_onTextChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.memoController.removeListener(_onTextChanged);
+    super.dispose();
+  }
+
+  void _onTextChanged() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final favoriteProvider = context.watch<FavoriteProvider>();
+    final currentFavorite = favoriteProvider.favorites.firstWhere(
+      (f) => f.key == widget.favoriteKey,
+    );
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.6,
+      minChildSize: 0.4,
+      maxChildSize: 0.9,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              // 드래그 핸들
+              Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: cs.onSurface.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+
+              // 헤더
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Row(
                   children: [
-                    Icon(Icons.star, color: Colors.amber[700], size: 20),
+                    Icon(Icons.sticky_note_2, size: 24, color: cs.primary),
                     const SizedBox(width: 8),
+                    Text(
+                      '메모',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (widget.editingMemoId != null)
+                      TextButton.icon(
+                        onPressed: widget.onCancelEdit,
+                        icon: const Icon(Icons.close, size: 18),
+                        label: const Text('취소'),
+                      ),
+                  ],
+                ),
+              ),
+
+              const Divider(height: 1),
+
+              // 메모 입력창
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '북마크',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: cs.primary,
-                            ),
+                      child: TextField(
+                        controller: widget.memoController,
+                        focusNode: widget.focusNode,
+                        maxLines: 3,
+                        minLines: 1,
+                        textInputAction: TextInputAction.send,
+                        onSubmitted: (_) => widget.onSave(),
+                        decoration: InputDecoration(
+                          hintText: widget.editingMemoId != null
+                              ? '메모 수정 중...'
+                              : '메모를 입력하세요...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '추가일: ${_formatDateTime(currentFavorite.createdAt)}',
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: cs.onSurface.withOpacity(0.6)),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: cs.primary, width: 2),
                           ),
-                        ],
+                          filled: true,
+                          fillColor:
+                              cs.surfaceContainerHighest.withOpacity(0.5),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton.filled(
+                      onPressed: widget.memoController.text.trim().isEmpty
+                          ? null
+                          : widget.onSave,
+                      icon: Icon(widget.editingMemoId != null
+                          ? Icons.check
+                          : Icons.send),
+                      style: IconButton.styleFrom(
+                        backgroundColor:
+                            widget.memoController.text.trim().isEmpty
+                                ? cs.surfaceContainerHighest
+                                : cs.primary,
+                        foregroundColor:
+                            widget.memoController.text.trim().isEmpty
+                                ? cs.onSurface.withOpacity(0.3)
+                                : cs.onPrimary,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // 구절 리스트
+              const Divider(height: 1),
+
+              // 메모 리스트
               Expanded(
-                child: verses.isEmpty
+                child: currentFavorite.memos.isEmpty
                     ? Center(
-                        child: Text(
-                          '구절을 불러올 수 없습니다',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: cs.onSurface.withOpacity(0.5)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.sticky_note_2_outlined,
+                                size: 64, color: cs.onSurface.withOpacity(0.2)),
+                            const SizedBox(height: 16),
+                            Text(
+                              '작성된 메모가 없습니다',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: cs.onSurface.withOpacity(0.5)),
+                            ),
+                          ],
                         ),
                       )
                     : ListView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.only(
-                            bottom: 140), // 바텀시트와 겹침 방지 여유
-                        itemCount: verseNums.length,
-                        physics: const ClampingScrollPhysics(),
-                        itemBuilder: (context, idx) {
-                          final verseNum = verseNums[idx];
-                          final text = verses[verseNum] ?? '';
-                          return Container(
-                            key: idx == 0 ? _itemKey : null,
-                            child: ListTile(
-                              leading: Stack(
-                                clipBehavior: Clip.none,
+                        controller: scrollController,
+                        padding: const EdgeInsets.all(16),
+                        itemCount: currentFavorite.memos.length,
+                        itemBuilder: (context, index) {
+                          final reversedIndex =
+                              currentFavorite.memos.length - 1 - index;
+                          final memo = currentFavorite.memos[reversedIndex];
+
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '$verseNum',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15,
-                                      color: cs.onSurface,
-                                    ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          memo.content,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: cs.onSurface,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                      ),
+                                      PopupMenuButton(
+                                        icon: Icon(Icons.more_vert,
+                                            size: 20,
+                                            color:
+                                                cs.onSurface.withOpacity(0.6)),
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                            onTap: () => Future.delayed(
+                                                Duration.zero,
+                                                () => widget.onEdit(memo)),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.edit,
+                                                    size: 18,
+                                                    color: cs.primary),
+                                                const SizedBox(width: 12),
+                                                const Text('수정'),
+                                              ],
+                                            ),
+                                          ),
+                                          PopupMenuItem(
+                                            onTap: () => Future.delayed(
+                                                Duration.zero,
+                                                () => widget.onDelete(memo.id)),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.delete,
+                                                    size: 18, color: cs.error),
+                                                const SizedBox(width: 12),
+                                                const Text('삭제'),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  Positioned(
-                                    top: -6,
-                                    right: -10,
-                                    child: Icon(Icons.star,
-                                        size: 12, color: Colors.amber[700]),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.access_time,
+                                          size: 12,
+                                          color: cs.onSurface.withOpacity(0.5)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        widget.formatDateTime(memo.createdAt),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color:
+                                                cs.onSurface.withOpacity(0.5)),
+                                      ),
+                                      if (memo.updatedAt != null) ...[
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          '(수정됨)',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color:
+                                                cs.onSurface.withOpacity(0.4),
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ],
                               ),
-                              title: Text(
-                                text,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 15,
-                                    color: cs.onSurface),
-                              ),
-                              dense: true,
                             ),
                           );
                         },
@@ -329,284 +697,8 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
               ),
             ],
           ),
-
-          // 하단 드래그 가능한 메모 시트
-          DraggableScrollableSheet(
-            // 입력창이 항상 살짝 보이도록 초기/최소 높이 설정
-            initialChildSize: 0.16,
-            minChildSize: 0.16,
-            maxChildSize: 0.4,
-            snap: true,
-            builder: (context, sheetScrollController) {
-              final cs = Theme.of(context).colorScheme;
-
-              return Material(
-                elevation: 12,
-                color: cs.surface,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-                child: SafeArea(
-                  top: false,
-                  child: SingleChildScrollView(
-                    controller: sheetScrollController, // ✅ 시트 드래그 연동
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom + 12,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // 손잡이
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 6),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 44,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                color: cs.onSurface.withOpacity(0.25),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // 타이틀 바
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          child: Row(
-                            children: [
-                              Icon(Icons.sticky_note_2_outlined,
-                                  size: 18, color: cs.primary),
-                              const SizedBox(width: 8),
-                              Text('메모',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: cs.onSurface)),
-                              const Spacer(),
-                              if (_editingMemoId != null)
-                                TextButton.icon(
-                                  onPressed: _cancelEdit,
-                                  icon: const Icon(Icons.close, size: 16),
-                                  label: const Text('수정 취소'),
-                                ),
-                            ],
-                          ),
-                        ),
-
-                        // ✅ 입력창 — 시트를 다 올렸을 때 타이틀 바로 아래에 위치
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Expanded(
-                                child: ConstrainedBox(
-                                  constraints:
-                                      const BoxConstraints(maxHeight: 120),
-                                  child: TextField(
-                                    controller: _memoController,
-                                    focusNode: _focusNode,
-                                    maxLines: null,
-                                    minLines: 1,
-                                    keyboardType: TextInputType.multiline,
-                                    textInputAction: TextInputAction.newline,
-                                    decoration: InputDecoration(
-                                      hintText: _editingMemoId != null
-                                          ? '메모 수정 중...'
-                                          : '메모를 입력하세요...',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                        borderSide: BorderSide(
-                                            color: cs.outline.withOpacity(0.3)),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                        borderSide: BorderSide(
-                                            color: cs.outline.withOpacity(0.3)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                        borderSide: BorderSide(
-                                            color: cs.primary, width: 2),
-                                      ),
-                                      filled: true,
-                                      fillColor: cs.surface,
-                                      isDense: true,
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 10),
-                                      suffixIcon: _editingMemoId != null
-                                          ? IconButton(
-                                              icon: const Icon(Icons.close,
-                                                  size: 18),
-                                              onPressed: _cancelEdit,
-                                              tooltip: '취소',
-                                            )
-                                          : null,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              IconButton(
-                                onPressed: _memoController.text.trim().isEmpty
-                                    ? null
-                                    : _saveMemo,
-                                icon: Icon(
-                                    _editingMemoId != null
-                                        ? Icons.check
-                                        : Icons.send,
-                                    size: 20),
-                                tooltip: _editingMemoId != null ? '저장' : '전송',
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        if (currentFavorite.memos.isNotEmpty)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Divider(height: 20),
-                          ),
-
-                        // 메모 리스트 — 입력창 아래로 배치
-                        if (currentFavorite.memos.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 24),
-                            child: Text(
-                              '작성된 메모가 없습니다',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: cs.onSurface.withOpacity(0.5)),
-                            ),
-                          )
-                        else
-                          ...List.generate(currentFavorite.memos.length,
-                              (index) {
-                            final reversedIndex =
-                                currentFavorite.memos.length - 1 - index;
-                            final memo = currentFavorite.memos[reversedIndex];
-                            print(
-                                'reversed: $reversedIndex (orig index: $index)');
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                              child: _MemoItem(
-                                memo: memo,
-                                onEdit: () => _startEditMemo(memo),
-                                onDelete: () => _deleteMemo(memo.id),
-                                formatDateTime: _formatMemoDateTime,
-                              ),
-                            );
-                          }),
-
-                        const SizedBox(height: 12),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MemoItem extends StatelessWidget {
-  final Memo memo;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final String Function(DateTime) formatDateTime;
-
-  const _MemoItem({
-    required this.memo,
-    required this.onEdit,
-    required this.onDelete,
-    required this.formatDateTime,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerHighest.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outline.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  memo.content,
-                  style:
-                      TextStyle(fontSize: 14, color: cs.onSurface, height: 1.4),
-                ),
-              ),
-              PopupMenuButton(
-                icon: Icon(Icons.more_vert,
-                    size: 18, color: cs.onSurface.withOpacity(0.6)),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    onTap: onEdit,
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit, size: 18, color: cs.primary),
-                        const SizedBox(width: 8),
-                        const Text('수정'),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    onTap: onDelete,
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete, size: 18, color: cs.error),
-                        const SizedBox(width: 8),
-                        const Text('삭제'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text(
-                formatDateTime(memo.createdAt),
-                style: TextStyle(
-                    fontSize: 11, color: cs.onSurface.withOpacity(0.5)),
-              ),
-              if (memo.updatedAt != null) ...[
-                const SizedBox(width: 4),
-                Text(
-                  '(수정됨)',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: cs.onSurface.withOpacity(0.4),
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
