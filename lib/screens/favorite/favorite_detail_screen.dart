@@ -90,8 +90,8 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('즐겨찾기 삭제'),
-        content: Text('${widget.favorite.reference}\n즐겨찾기를 삭제하시겠습니까?'),
+        title: const Text('북마크 삭제'),
+        content: Text('${widget.favorite.reference}북마크를 삭제하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

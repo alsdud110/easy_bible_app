@@ -201,8 +201,8 @@ class CustomDrawer extends StatelessWidget {
 
           // ✅ 좋아하는 성경 구절
           _DrawerButton(
-            icon: Icons.star_rounded,
-            label: '좋아하는 성경 구절',
+            icon: Icons.bookmark_added,
+            label: '북마크',
             color: Colors.amber.shade700,
             onTap: () => _navigateToScreen(context, const FavoriteListScreen()),
           ),
@@ -233,7 +233,7 @@ class CustomDrawer extends StatelessWidget {
                 Switch(
                   value: isDark,
                   onChanged: (_) => onThemeToggle?.call(),
-                  activeColor: cs.primary,
+                  activeThumbColor: cs.primary,
                   inactiveThumbColor: cs.surface,
                   inactiveTrackColor: cs.secondary.withOpacity(0.44),
                 ),
