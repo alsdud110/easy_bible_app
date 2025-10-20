@@ -335,6 +335,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                               Text(
                                 '$verseNum',
                                 style: TextStyle(
+                                  fontFamily: 'ChosunCentennial',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15,
                                   color: cs.onSurface,
@@ -351,6 +352,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                           title: Text(
                             text,
                             style: TextStyle(
+                                fontFamily: 'ChosunCentennial',
                                 fontWeight: FontWeight.normal,
                                 fontSize: 15,
                                 color: cs.onSurface),
