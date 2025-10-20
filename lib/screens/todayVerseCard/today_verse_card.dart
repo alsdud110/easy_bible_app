@@ -141,6 +141,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 15.2,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'ChosunCentennial',
                               ),
                         ),
                       ),
@@ -151,6 +152,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               fontSize: 16.7,
                               height: 1.7,
                               fontWeight: FontWeight.w500,
+                              fontFamily: 'ChosunCentennial',
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
