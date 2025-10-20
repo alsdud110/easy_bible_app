@@ -6,7 +6,7 @@ import '../../screens/home_screen.dart'; // 어성경 바이블(홈)
 import '../../screens/biblePlan/day60_screen.dart';
 import '../../screens/biblePlan/day120_screen.dart';
 import '../../screens/biblePlan/day180_screen.dart';
-import '../../screens/favorite/favorite_list_screen.dart'; // ✅ 추가
+import '../../screens/favorite/favorite_list_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -56,7 +56,6 @@ class CustomDrawer extends StatelessWidget {
     }
   }
 
-  // ✅ 준비 중 알림 함수 추가
   void _showComingSoonDialog(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -118,7 +117,6 @@ class CustomDrawer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ✅ 심플한 헤더 - 중앙 정렬
           SafeArea(
             top: false,
             bottom: false,
@@ -143,8 +141,8 @@ class CustomDrawer extends StatelessWidget {
                   right: 24,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center, // ✅ 중앙 정렬
-                  mainAxisAlignment: MainAxisAlignment.center, // ✅ 세로 중앙 정렬
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     LayoutBuilder(
                       builder: (context, constraints) {
@@ -199,7 +197,6 @@ class CustomDrawer extends StatelessWidget {
             navigateToScreen: (screen) => _navigateToScreen(context, screen),
           ),
 
-          // ✅ 좋아하는 성경 구절
           _DrawerButton(
             icon: Icons.bookmark_added,
             label: '북마크',

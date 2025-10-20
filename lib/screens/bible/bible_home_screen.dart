@@ -55,7 +55,6 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     });
   }
 
-  // ✅ 추가: ChapterSelector로 이동
   void _goToChapterSelector() {
     setState(() {
       step = 1;
@@ -64,7 +63,6 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     });
   }
 
-  // ✅ 추가: VerseSelector로 이동
   void _goToVerseSelector() {
     setState(() {
       step = 2;
@@ -72,7 +70,6 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     });
   }
 
-  // ✅ 검색에서 장으로 이동 (절 선택 화면으로)
   void _navigateToChapter(int bookIdx, int chapter) {
     setState(() {
       selectedBook = bookIdx;
@@ -135,9 +132,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
             step = 1; // ChapterSelector로
           });
         },
-        // ✅ 검색에서 직접 절로 이동하는 콜백
         onDirectNavigate: _navigateDirectlyToVerse,
-        // ✅ 검색에서 장으로 이동하는 콜백 (절 선택 화면으로)
         onChapterNavigate: _navigateToChapter,
         onThemeToggle: widget.onThemeToggle,
         isDark: widget.isDark,

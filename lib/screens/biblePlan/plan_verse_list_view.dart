@@ -36,7 +36,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   late String _selectedVerseKey;
   bool _showFAB = false;
 
-  // ✅ 복사/북마크 기능을 위한 변수 추가
   String? _rangeStart;
   String? _rangeEnd;
   bool _isSelectionMode = false;
@@ -133,7 +132,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     return keys.sublist(start, end + 1);
   }
 
-  // ✅ 수정: "9절: 텍스트" 형식으로 저장
   String _getSelectedVersesText() {
     final selectedVerses = _getSelectedVerseRange();
     return selectedVerses.map((key) {
@@ -156,7 +154,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     if (firstMatch == null) return _prettyVerseKey(selectedVerses.first);
 
     final shortName = firstMatch.group(1)!;
-    final bookName = bookFullName[shortName] ?? shortName; // ✅ fullName으로 변환
+    final bookName = bookFullName[shortName] ?? shortName;
     final chapter = firstMatch.group(2)!;
     final startVerse = firstMatch.group(3)!;
 
@@ -196,7 +194,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     }
 
     final shortName = match.group(1)!;
-    final bookName = bookFullName[shortName] ?? shortName; // ✅ fullName으로 변환
+    final bookName = bookFullName[shortName] ?? shortName;
     final chapter = int.parse(match.group(2)!);
     final startVerse = int.parse(match.group(3)!);
 
@@ -211,7 +209,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
       startVerse: startVerse,
       endVerse: endVerse,
       reference: _getVerseReference(),
-      text: _getSelectedVersesText(), // ✅ "9절: 텍스트" 형식
+      text: _getSelectedVersesText(),
       createdAt: now,
     );
 
@@ -361,8 +359,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               bool isFavorited = false;
               if (match != null) {
                 final shortName = match.group(1)!;
-                final bookName =
-                    bookFullName[shortName] ?? shortName; // ✅ fullName으로 변환
+                final bookName = bookFullName[shortName] ?? shortName;
                 final chapter = int.parse(match.group(2)!);
                 final verse = int.parse(match.group(3)!);
                 isFavorited = favoriteProvider.isVerseFavorited(

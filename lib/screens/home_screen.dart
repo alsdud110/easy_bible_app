@@ -1,7 +1,7 @@
 import 'package:easy_bible_app/screens/bible/bible_home_screen.dart';
 import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:easy_bible_app/screens/todayVerseCard/today_verse_card.dart';
-import 'package:easy_bible_app/screens/favorite/favorite_list_screen.dart'; // ✅ 추가
+import 'package:easy_bible_app/screens/favorite/favorite_list_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/request_card.dart';
@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ),
     _MenuItem('성경일독(플랜)', Icons.calendar_month_outlined,
         const SizedBox.shrink(), Colors.deepPurple, '/plan'),
-    // ✅ 북마크 메뉴 추가
     _MenuItem(
       '북마크',
       Icons.bookmark_added_rounded,
@@ -275,7 +274,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   if (item.isComingSoon) {
                     _showComingSoonDialog(context);
                   } else if (item.route == '/favorites') {
-                    // ✅ 북마크 페이지로 직접 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(

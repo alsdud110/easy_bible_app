@@ -67,12 +67,10 @@ class FavoriteProvider with ChangeNotifier {
     await _saveFavorites();
   }
 
-  // ✅ 메모 추가
   Future<void> addMemo(String favoriteKey, String content) async {
     final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
     if (index == -1) return;
 
-    // ✅ 명시적으로 로컬 시간으로 생성
     final now = DateTime.now().toLocal();
 
     final memo = Memo(
@@ -88,7 +86,6 @@ class FavoriteProvider with ChangeNotifier {
     await _saveFavorites();
   }
 
-  // ✅ 메모 수정
   Future<void> updateMemo(
       String favoriteKey, String memoId, String newContent) async {
     final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
@@ -112,7 +109,6 @@ class FavoriteProvider with ChangeNotifier {
     await _saveFavorites();
   }
 
-  // ✅ 메모 삭제
   Future<void> deleteMemo(String favoriteKey, String memoId) async {
     final index = _favorites.indexWhere((fav) => fav.key == favoriteKey);
     if (index == -1) return;

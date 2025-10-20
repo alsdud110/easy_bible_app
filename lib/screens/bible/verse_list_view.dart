@@ -221,7 +221,6 @@ class _VerseListViewState extends State<VerseListView>
         _selectedVerse = 1;
         _exitSelectionMode();
       });
-      // ✅ 장 변경 시 애니메이션 리셋
       _animationController.reset();
       _animationController.forward();
 
@@ -315,7 +314,6 @@ class _VerseListViewState extends State<VerseListView>
           Expanded(
             child: Stack(
               children: [
-                // ✅ 절 목록 페이드인 애니메이션
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: ListView.builder(
@@ -408,7 +406,6 @@ class _VerseListViewState extends State<VerseListView>
                     },
                   ),
                 ),
-                // ✅ 하단 버튼 슬라이드 업 애니메이션
                 if (!_isSelectionMode)
                   Positioned(
                     left: 12,

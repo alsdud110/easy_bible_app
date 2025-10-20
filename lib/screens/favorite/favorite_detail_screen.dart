@@ -191,9 +191,9 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
         enableDrag: true,
         builder: (context) => GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => Navigator.pop(context), // ✅ 바깥 터치로 닫기
+          onTap: () => Navigator.pop(context),
           child: GestureDetector(
-            onTap: () {}, // ✅ 시트 내부 터치는 전파 차단
+            onTap: () {},
             child: _MemoBottomSheet(
               favoriteKey: widget.favorite.key,
               memoController: _memoController,

@@ -27,12 +27,12 @@ class BreadcrumbBar extends StatelessWidget {
         children: [
           // 홈 아이콘
           GestureDetector(
-            onTap: items.first.onTap, // ✅ 첫 번째 아이템의 onTap 사용 (변경 없음, 이미 올바름)
+            onTap: items.first.onTap,
             child: Icon(
               Icons.home_rounded,
               color: items.first.isActive
                   ? cs.primary
-                  : cs.primary.withOpacity(0.7), // ✅ 비활성화 시 투명도 적용
+                  : cs.primary.withOpacity(0.7),
               size: 20,
             ),
           ),

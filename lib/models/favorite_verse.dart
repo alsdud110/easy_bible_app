@@ -14,12 +14,11 @@ class Memo {
   Map<String, dynamic> toJson() => {
         'id': id,
         'content': content,
-        'createdAt': createdAt.millisecondsSinceEpoch, // ✅ 타임스탬프로 저장
-        'updatedAt': updatedAt?.millisecondsSinceEpoch, // ✅ 타임스탬프로 저장
+        'createdAt': createdAt.millisecondsSinceEpoch,
+        'updatedAt': updatedAt?.millisecondsSinceEpoch,
       };
 
   factory Memo.fromJson(Map<String, dynamic> json) {
-    // ✅ int와 String 둘 다 처리
     DateTime parseDateTime(dynamic value) {
       if (value is int) {
         return DateTime.fromMillisecondsSinceEpoch(value);
@@ -58,10 +57,10 @@ class FavoriteVerse {
   final int chapter;
   final int startVerse;
   final int endVerse;
-  final String reference; // "창세기 1:3-7"
+  final String reference;
   final String text;
   final DateTime createdAt;
-  final List<Memo> memos; // ✅ 메모 리스트로 변경
+  final List<Memo> memos;
 
   FavoriteVerse({
     required this.bookName,
@@ -82,12 +81,11 @@ class FavoriteVerse {
         'endVerse': endVerse,
         'reference': reference,
         'text': text,
-        'createdAt': createdAt.millisecondsSinceEpoch, // ✅ 타임스탬프로 저장
+        'createdAt': createdAt.millisecondsSinceEpoch,
         'memos': memos.map((m) => m.toJson()).toList(),
       };
 
   factory FavoriteVerse.fromJson(Map<String, dynamic> json) {
-    // ✅ int와 String 둘 다 처리
     DateTime parseDateTime(dynamic value) {
       if (value is int) {
         return DateTime.fromMillisecondsSinceEpoch(value);

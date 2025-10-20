@@ -213,7 +213,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
               itemBuilder: (context, index) {
                 final favorite = favorites[index];
                 final isSelected = _selectedKeys.contains(favorite.key);
-                // ✅ memos 리스트로 변경
                 final hasMemos = favorite.memos.isNotEmpty;
 
                 return ListTile(
@@ -242,7 +241,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                               color: Colors.amber[700],
                               size: 28,
                             ),
-                            // ✅ 메모 개수 뱃지
                             if (hasMemos)
                               Positioned(
                                 right: -4,
@@ -299,7 +297,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      // ✅ 메모 개수 표시
                       if (hasMemos) ...[
                         const SizedBox(height: 6),
                         Container(
