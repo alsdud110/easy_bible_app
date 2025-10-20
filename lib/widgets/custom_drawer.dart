@@ -233,7 +233,7 @@ class CustomDrawer extends StatelessWidget {
                 Switch(
                   value: isDark,
                   onChanged: (_) => onThemeToggle?.call(),
-                  activeThumbColor: cs.primary,
+                  thumbColor: WidgetStateProperty.all(Colors.blue),
                   inactiveThumbColor: cs.surface,
                   inactiveTrackColor: cs.secondary.withOpacity(0.44),
                 ),
