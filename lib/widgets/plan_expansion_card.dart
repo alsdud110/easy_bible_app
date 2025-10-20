@@ -28,8 +28,8 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
       vsync: this,
       duration: const Duration(milliseconds: 230),
     );
-    _boxFadeAnim = Tween<double>(begin: 0, end: 1)
-        .animate(CurvedAnimation(parent: _boxFadeCtrl, curve: Curves.easeIn));
+    _boxFadeAnim = Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(parent: _boxFadeCtrl, curve: Curves.easeInOut));
     if (widget.expanded) _boxFadeCtrl.value = 1;
   }
 
@@ -39,7 +39,7 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
     if (widget.expanded && !oldWidget.expanded) {
       _boxFadeCtrl.forward(from: 0);
     } else if (!widget.expanded && oldWidget.expanded) {
-      _boxFadeCtrl.value = 0;
+      _boxFadeCtrl.reverse();
     }
   }
 
@@ -111,16 +111,14 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
               ),
             ),
           ),
-          // Fade + 펼침
+          // SizeTransition으로 부드러운 확장/축소
           SizeTransition(
             sizeFactor: _boxFadeAnim,
             axisAlignment: -1,
-            child: (widget.expanded)
-                ? FadeTransition(
-                    opacity: _boxFadeAnim,
-                    child: _buildPlans(context),
-                  )
-                : const SizedBox.shrink(),
+            child: FadeTransition(
+              opacity: _boxFadeAnim,
+              child: _buildPlans(context),
+            ),
           ),
         ],
       ),
@@ -132,59 +130,65 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
     final cs = theme.colorScheme;
     final titles = ["DAY60 플랜", "DAY120 플랜", "DAY180 플랜"];
     final values = [60, 120, 180];
+
     return Column(
-      children: List.generate(titles.length, (i) {
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: widget.expanded ? 1 : 0),
-          duration: Duration(milliseconds: 160 + i * 80),
-          curve: Curves.easeIn,
-          builder: (context, value, child) {
-            return Opacity(
-              opacity: value,
-              child: Transform.scale(
-                scale: 0.97 + value * 0.03,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 4.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: cs.surface,
-                        foregroundColor: cs.primary,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: cs.primary.withOpacity(0.16),
-                            width: 1.2,
+      children: [
+        ...List.generate(titles.length, (i) {
+          return AnimatedBuilder(
+            animation: _boxFadeCtrl,
+            builder: (context, child) {
+              // 각 버튼마다 약간의 지연 효과
+              final delay = i * 0.15;
+              final progress =
+                  (_boxFadeCtrl.value - delay).clamp(0.0, 1.0) / (1 - delay);
+
+              return Opacity(
+                opacity: progress,
+                child: Transform.scale(
+                  scale: 0.97 + progress * 0.03,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 4.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: cs.surface,
+                          foregroundColor: cs.primary,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(
+                              color: cs.primary.withOpacity(0.16),
+                              width: 1.2,
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        textStyle: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
-                      onPressed: () => widget.onPlanTap(context, values[i]),
-                      child: Text(
-                        titles[i],
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          color: cs.primary,
+                        onPressed: () => widget.onPlanTap(context, values[i]),
+                        child: Text(
+                          titles[i],
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: cs.primary,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
-      })
-        ..add(const SizedBox(height: 10)),
+              );
+            },
+          );
+        }),
+        const SizedBox(height: 10),
+      ],
     );
   }
 }

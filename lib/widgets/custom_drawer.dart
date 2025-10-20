@@ -348,46 +348,126 @@ class _PlanExpansionMenu extends StatefulWidget {
   State<_PlanExpansionMenu> createState() => _PlanExpansionMenuState();
 }
 
-class _PlanExpansionMenuState extends State<_PlanExpansionMenu> {
+class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
+    with SingleTickerProviderStateMixin {
   bool expanded = false;
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggleExpansion() {
+    setState(() {
+      expanded = !expanded;
+      if (expanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _DrawerButton(
-          icon: Icons.flight_takeoff_rounded,
-          label: '성경일독(플랜)',
-          color: widget.color,
-          onTap: () => setState(() => expanded = !expanded),
+        Padding(
+          padding: const EdgeInsets.only(left: 18.0, right: 12, bottom: 4),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: widget.color.withOpacity(0.13),
+              child: Icon(Icons.flight_takeoff_rounded,
+                  color: widget.color, size: 24),
+            ),
+            title: Text(
+              '성경일독(플랜)',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.w600),
+            ),
+            trailing: AnimatedRotation(
+              turns: expanded ? 0.5 : 0,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              child: Icon(
+                Icons.keyboard_arrow_down,
+                color: widget.color,
+              ),
+            ),
+            onTap: _toggleExpansion,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            hoverColor: widget.color.withOpacity(0.10),
+            splashColor: widget.color.withOpacity(0.16),
+          ),
         ),
-        if (expanded)
-          Padding(
-            padding: const EdgeInsets.only(left: 34, right: 18),
-            child: Column(
-              children: [
-                _DrawerNumberButton(
-                  number: '60',
-                  label: 'DAY60 플랜',
-                  color: widget.color,
-                  onTap: () => widget.navigateToScreen(const Day60Screen()),
-                ),
-                _DrawerNumberButton(
-                  number: '120',
-                  label: 'DAY120 플랜',
-                  color: widget.color,
-                  onTap: () => widget.navigateToScreen(const Day120Screen()),
-                ),
-                _DrawerNumberButton(
-                  number: '180',
-                  label: 'DAY180 플랜',
-                  color: widget.color,
-                  onTap: () => widget.navigateToScreen(const Day180Screen()),
-                ),
-              ],
+        SizeTransition(
+          sizeFactor: _animation,
+          axisAlignment: -1,
+          child: FadeTransition(
+            opacity: _animation,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 34, right: 18),
+              child: Column(
+                children: [
+                  _buildAnimatedButton(0, '60', 'DAY60 플랜',
+                      () => widget.navigateToScreen(const Day60Screen())),
+                  _buildAnimatedButton(1, '120', 'DAY120 플랜',
+                      () => widget.navigateToScreen(const Day120Screen())),
+                  _buildAnimatedButton(2, '180', 'DAY180 플랜',
+                      () => widget.navigateToScreen(const Day180Screen())),
+                ],
+              ),
             ),
           ),
+        ),
       ],
+    );
+  }
+
+  Widget _buildAnimatedButton(
+      int index, String number, String label, VoidCallback onTap) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        // 각 버튼마다 약간의 지연 효과
+        final delay = index * 0.15;
+        final progress =
+            (_controller.value - delay).clamp(0.0, 1.0) / (1 - delay);
+
+        return Opacity(
+          opacity: progress,
+          child: Transform.translate(
+            offset: Offset(0, (1 - progress) * 10),
+            child: _DrawerNumberButton(
+              number: number,
+              label: label,
+              color: widget.color,
+              onTap: onTap,
+            ),
+          ),
+        );
+      },
     );
   }
 }
