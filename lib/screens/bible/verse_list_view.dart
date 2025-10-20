@@ -393,7 +393,7 @@ class _VerseListViewState extends State<VerseListView>
                               fontWeight: isInRange || isSelected
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              fontSize: isInRange || isSelected ? 18 : 15,
+                              fontSize: isInRange || isSelected ? 16 : 15,
                               color: isInRange || isSelected
                                   ? cs.primary
                                   : cs.onSurface,
