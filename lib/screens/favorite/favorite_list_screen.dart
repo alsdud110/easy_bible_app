@@ -77,13 +77,6 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${_selectedKeys.length}개 항목이 삭제되었습니다'),
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
         _exitDeleteMode();
       }
     }
@@ -113,15 +106,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
 
     if (confirm == true && mounted) {
       await context.read<FavoriteProvider>().clearAll();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('모든 북마크가 삭제되었습니다'),
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      if (mounted) {}
     }
   }
 

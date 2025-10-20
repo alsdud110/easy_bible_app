@@ -77,13 +77,6 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   void _copyToClipboard(BuildContext context) {
     final fullText = '${widget.favorite.reference}\n\n${widget.favorite.text}';
     Clipboard.setData(ClipboardData(text: fullText));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('클립보드에 복사되었습니다'),
-        duration: Duration(seconds: 1),
-        behavior: SnackBarBehavior.fixed,
-      ),
-    );
   }
 
   Future<void> _removeFavorite(BuildContext context) async {
@@ -112,13 +105,6 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
           .removeFavorite(widget.favorite.key);
       if (context.mounted) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${widget.favorite.reference} 삭제됨'),
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
       }
     }
   }
