@@ -69,6 +69,11 @@ flutter:
     - assets/icon/bible_icon.png
 
   fonts:
+    - family: ChosunCentennial
+      fonts:
+        - asset: assets/fonts/ChosunCentennial_ttf.ttf
+          weight: 400
+
     - family: Pretendard
       fonts:
         - asset: assets/fonts/Pretendard-Thin.ttf

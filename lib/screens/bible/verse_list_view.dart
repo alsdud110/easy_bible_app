@@ -352,6 +352,7 @@ class _VerseListViewState extends State<VerseListView>
                               AnimatedDefaultTextStyle(
                                 duration: const Duration(milliseconds: 200),
                                 style: TextStyle(
+                                  fontFamily: 'ChosunCentennial',
                                   fontWeight: isInRange || isSelected
                                       ? FontWeight.bold
                                       : FontWeight.w600,
@@ -388,6 +389,7 @@ class _VerseListViewState extends State<VerseListView>
                           title: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 200),
                             style: TextStyle(
+                              fontFamily: 'ChosunCentennial',
                               fontWeight: isInRange || isSelected
                                   ? FontWeight.bold
                                   : FontWeight.normal,

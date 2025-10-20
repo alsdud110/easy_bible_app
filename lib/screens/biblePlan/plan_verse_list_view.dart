@@ -121,6 +121,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                   child: Text(
                     dayTitle,
                     style: theme.textTheme.titleLarge?.copyWith(
+                      fontFamily: 'ChosunCentennial',
                       fontWeight: FontWeight.w800,
                       color: cs.onSurface, // ✅ 테마 적용
                     ),
@@ -310,6 +311,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
             Text(
               verse,
               style: TextStyle(
+                fontFamily: 'ChosunCentennial',
                 fontWeight: selected ? FontWeight.bold : FontWeight.w600,
                 fontSize: selected ? 17 : 13,
                 color: selected
@@ -322,6 +324,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
               child: Text(
                 text,
                 style: TextStyle(
+                  fontFamily: 'ChosunCentennial',
                   fontWeight: selected ? FontWeight.bold : FontWeight.normal,
                   fontSize: selected ? 17 : 15,
                   color: selected
