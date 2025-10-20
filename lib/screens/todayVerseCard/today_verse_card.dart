@@ -387,16 +387,18 @@ class _TodayVerseShowCard extends StatelessWidget {
               ),
               child: Text(
                 ref ?? "",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge
-                    ?.copyWith(color: cs.primary, fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: cs.primary,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'ChosunCentennial',
+                    ),
               ),
             ),
             const SizedBox(height: 13),
             Text(
               verse ?? "",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontFamily: 'ChosunCentennial',
                     fontWeight: FontWeight.w600,
                     fontSize: 17,
                     height: 1.7,
