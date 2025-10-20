@@ -30,7 +30,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "easy.bible.app.easy_bible_app"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 35  // 직접 지정
     ndkVersion flutter.ndkVersion
 
     signingConfigs {
@@ -56,12 +56,9 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "easy.bible.app.easy_bible_app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21  // 직접 지정 (또는 flutter.minSdkVersion 유지)
+        targetSdkVersion 35  // 직접 지정
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
