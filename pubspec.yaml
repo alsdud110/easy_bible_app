@@ -67,6 +67,7 @@ flutter:
     - assets/bible.json
     - assets/icon/app_icon.png
     - assets/icon/bible_icon.png
+    - assets/splash/splash_icon.png
 
   fonts:
     - family: ChosunCentennial

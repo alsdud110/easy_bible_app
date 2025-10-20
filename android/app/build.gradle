@@ -30,7 +30,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "easy.bible.app.easy_bible_app"
-    compileSdkVersion 35  // 직접 지정
+    compileSdk 36
     ndkVersion flutter.ndkVersion
 
     signingConfigs {
@@ -57,17 +57,27 @@ android {
 
     defaultConfig {
         applicationId "easy.bible.app.easy_bible_app"
-        minSdkVersion 21  // 직접 지정 (또는 flutter.minSdkVersion 유지)
-        targetSdkVersion 35  // 직접 지정
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        
+        // 16KB 페이지 크기 지원
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
+        }
+    }
+    
+    // 16KB 페이지 지원 설정
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
         }
     }
 }
