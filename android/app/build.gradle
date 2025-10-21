@@ -29,7 +29,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "easy.bible.app.easy_bible_app"
+    namespace "easy.bible.app"
     compileSdk 36
     ndkVersion flutter.ndkVersion
 
@@ -56,7 +56,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "easy.bible.app.easy_bible_app"
+        applicationId "easy.bible.app"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
