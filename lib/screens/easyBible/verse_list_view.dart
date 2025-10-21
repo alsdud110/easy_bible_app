@@ -134,7 +134,7 @@ class _VerseListViewState extends State<VerseListView> {
                 '$verseNum',
                 style: TextStyle(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  fontSize: isSelected ? 19 : 15,
+                  fontSize: isSelected ? 15.05 : 15,
                   color:
                       isSelected ? Theme.of(context).colorScheme.primary : null,
                 ),
@@ -143,7 +143,7 @@ class _VerseListViewState extends State<VerseListView> {
                 text,
                 style: TextStyle(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  fontSize: isSelected ? 18 : 15,
+                  fontSize: isSelected ? 15.05 : 15,
                   color:
                       isSelected ? Theme.of(context).colorScheme.primary : null,
                 ),

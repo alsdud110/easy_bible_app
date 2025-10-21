@@ -6,6 +6,7 @@ import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
+import 'providers/Highlight_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -31,12 +32,18 @@ void main() async {
   final favoriteProvider = FavoriteProvider();
   await favoriteProvider.loadFavorites();
 
+  final highlightProvider = HighlightProvider();
+  // HighlightProvider는 생성자에서 자동으로 _loadHighlights() 호출
+
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;
 
   runApp(
-    ChangeNotifierProvider.value(
-      value: favoriteProvider,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: favoriteProvider),
+        ChangeNotifierProvider.value(value: highlightProvider),
+      ],
       child: MyApp(initDark: isDark),
     ),
   );
