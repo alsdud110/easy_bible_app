@@ -6,7 +6,7 @@ import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
-import 'providers/Highlight_provider.dart';
+import 'providers/highlight_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 

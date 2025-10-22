@@ -5,7 +5,7 @@ import '../../models/bible_data.dart';
 import '../../models/favorite_verse.dart';
 import '../../models/highlight_verse.dart';
 import '../../providers/favorite_provider.dart';
-import '../../providers/Highlight_provider.dart';
+import '../../providers/highlight_provider.dart';
 import '../../widgets/breadcrumb_bar.dart';
 
 class VerseListView extends StatefulWidget {
