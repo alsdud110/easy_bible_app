@@ -7,6 +7,7 @@ import 'screens/bible/bible_home_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/highlight_provider.dart';
+import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -35,6 +36,10 @@ void main() async {
   final highlightProvider = HighlightProvider();
   // HighlightProvider는 생성자에서 자동으로 _loadHighlights() 호출
 
+  // ✅ LanguageProvider 초기화 추가
+  final languageProvider = LanguageProvider();
+  // LanguageProvider는 생성자에서 자동으로 _loadLanguage() 호출
+
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;
 
@@ -43,6 +48,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: favoriteProvider),
         ChangeNotifierProvider.value(value: highlightProvider),
+        ChangeNotifierProvider.value(value: languageProvider), // ✅ 추가!
       ],
       child: MyApp(initDark: isDark),
     ),

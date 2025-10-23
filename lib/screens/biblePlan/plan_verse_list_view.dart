@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../utils/pretty_range_label.dart';
 import '../../providers/favorite_provider.dart';
+import '../../providers/highlight_provider.dart';
 import '../../models/favorite_verse.dart';
+import '../../models/highlight_verse.dart';
 import '../../models/const/book_full_name.dart';
 import 'package:marquee/marquee.dart';
 
@@ -31,7 +33,8 @@ class PlanVerseListView extends StatefulWidget {
   State<PlanVerseListView> createState() => _PlanVerseListViewState();
 }
 
-class _PlanVerseListViewState extends State<PlanVerseListView> {
+class _PlanVerseListViewState extends State<PlanVerseListView>
+    with TickerProviderStateMixin {
   final _scrollController = ScrollController();
   late String _selectedVerseKey;
   bool _showFAB = false;
@@ -39,6 +42,15 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   String? _rangeStart;
   String? _rangeEnd;
   bool _isSelectionMode = false;
+
+  // ⭐ 플로팅 액션 바 애니메이션
+  late AnimationController _floatingActionBarController;
+  late Animation<double> _floatingActionBarScale;
+  late Animation<double> _floatingActionBarOpacity;
+
+  // ⭐ 하이라이트 관련 애니메이션
+  late AnimationController _highlightPickerController;
+  late AnimationController _highlightAppliedController;
 
   @override
   void initState() {
@@ -58,6 +70,38 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
         });
       }
     });
+
+    // ⭐ 플로팅 액션 바 애니메이션
+    _floatingActionBarController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _floatingActionBarScale = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _floatingActionBarController,
+      curve: Curves.easeOutBack,
+    ));
+
+    _floatingActionBarOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _floatingActionBarController,
+      curve: Curves.easeOut,
+    ));
+
+    _highlightPickerController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _highlightAppliedController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
   }
 
   @override
@@ -75,6 +119,9 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _floatingActionBarController.dispose();
+    _highlightPickerController.dispose();
+    _highlightAppliedController.dispose();
     super.dispose();
   }
 
@@ -97,16 +144,22 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
   }
 
   void _handleVerseLongPress(String verseKey) {
+    HapticFeedback.mediumImpact();
+
     setState(() {
       _selectedVerseKey = verseKey;
       _isSelectionMode = true;
       _rangeStart = verseKey;
       _rangeEnd = verseKey;
     });
+
+    // ⭐ 애니메이션 시작
+    _floatingActionBarController.forward(from: 0);
   }
 
   void _handleVerseTap(String verseKey) {
     if (_isSelectionMode) {
+      HapticFeedback.lightImpact();
       setState(() {
         _rangeEnd = verseKey;
       });
@@ -219,7 +272,259 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     _exitSelectionMode();
   }
 
+  void _showHighlightColorPicker() {
+    _highlightPickerController.forward(from: 0);
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.black54,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: AnimatedBuilder(
+          animation: _highlightPickerController,
+          builder: (context, child) {
+            final slideAnimation = CurvedAnimation(
+              parent: _highlightPickerController,
+              curve: Curves.easeOutCubic,
+            );
+
+            final scaleValue = Curves.easeOutBack
+                .transform(slideAnimation.value)
+                .clamp(0.0, 1.0);
+            final opacityValue = slideAnimation.value.clamp(0.0, 1.0);
+
+            return Transform.scale(
+              scale: scaleValue,
+              child: Opacity(
+                opacity: opacityValue,
+                child: child,
+              ),
+            );
+          },
+          child: Container(
+            width: 280,
+            height: 320,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.palette,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '하이라이트',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: 220,
+                  height: 220,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ...List.generate(7, (index) {
+                        final color = HighlightColor.values
+                            .where((c) => c != HighlightColor.clear)
+                            .toList()[index];
+                        final angle = (index * 360 / 7) * (3.14159 / 180);
+                        final radius = 80.0;
+                        final x = radius * _cos(angle);
+                        final y = radius * _sin(angle);
+
+                        return AnimatedBuilder(
+                          animation: _highlightPickerController,
+                          builder: (context, child) {
+                            final delay = index * 0.05;
+                            final rawValue =
+                                _highlightPickerController.value - delay;
+                            final normalizedValue = rawValue.clamp(0.0, 1.0);
+                            final curvedValue = Curves.easeOutBack
+                                .transform(normalizedValue)
+                                .clamp(0.0, 1.0);
+
+                            return Positioned(
+                              left: 110 + x * curvedValue - 28,
+                              top: 110 + y * curvedValue - 28,
+                              child: Transform.scale(
+                                scale: curvedValue,
+                                child: Opacity(
+                                  opacity: curvedValue,
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          },
+                          child: GestureDetector(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              Navigator.pop(context);
+                              _addHighlight(color);
+                            },
+                            child: Container(
+                              width: 56,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                color: color.color,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 3,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: color.darkColor.withOpacity(0.4),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                      AnimatedBuilder(
+                        animation: _highlightPickerController,
+                        builder: (context, child) {
+                          final value =
+                              _highlightPickerController.value.clamp(0.0, 1.0);
+                          final curvedValue = Curves.easeOutBack
+                              .transform(value)
+                              .clamp(0.0, 1.0);
+
+                          return Transform.scale(
+                            scale: curvedValue,
+                            child: Opacity(
+                              opacity: value,
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: GestureDetector(
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+                            Navigator.pop(context);
+                            _addHighlight(HighlightColor.clear);
+                          },
+                          child: Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 3,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.format_color_reset,
+                              color: Colors.grey.shade700,
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _cos(double radians) {
+    double result = 1.0;
+    double term = 1.0;
+    for (int i = 1; i <= 10; i++) {
+      term *= -radians * radians / ((2 * i - 1) * (2 * i));
+      result += term;
+    }
+    return result;
+  }
+
+  double _sin(double radians) {
+    double result = radians;
+    double term = radians;
+    for (int i = 1; i <= 10; i++) {
+      term *= -radians * radians / ((2 * i) * (2 * i + 1));
+      result += term;
+    }
+    return result;
+  }
+
+  void _addHighlight(HighlightColor color) async {
+    final highlightProvider = context.read<HighlightProvider>();
+    final selectedVerses = _getSelectedVerseRange();
+    if (selectedVerses.isEmpty) return;
+
+    final now = DateTime.now().toLocal();
+
+    // 각 구절에 대해 하이라이트 추가
+    for (final key in selectedVerses) {
+      final match = RegExp(r'^([가-힣]+)(\d+):(\d+)$').firstMatch(key);
+      if (match == null) continue;
+
+      final shortName = match.group(1)!;
+      final bookName = bookFullName[shortName] ?? shortName;
+      final chapter = int.parse(match.group(2)!);
+      final verse = int.parse(match.group(3)!);
+
+      final highlight = HighlightVerse(
+        bookName: bookName,
+        chapter: chapter,
+        startVerse: verse,
+        endVerse: verse,
+        color: color,
+        createdAt: now,
+      );
+
+      await highlightProvider.addHighlight(highlight);
+    }
+
+    _highlightAppliedController.forward(from: 0).then((_) {
+      _highlightAppliedController.reset();
+    });
+
+    if (!mounted) return;
+
+    _exitSelectionMode();
+  }
+
   void _exitSelectionMode() {
+    _floatingActionBarController.reverse(); // ⭐ 애니메이션 역재생
+
     setState(() {
       _isSelectionMode = false;
       _rangeStart = null;
@@ -243,6 +548,126 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     return currentIdx >= start && currentIdx <= end;
   }
 
+  // ⭐ 플로팅 액션 바 위젯
+  Widget _buildFloatingActionBar() {
+    if (!_isSelectionMode) {
+      return const SizedBox.shrink();
+    }
+
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Positioned(
+      left: 16,
+      right: 16,
+      bottom: 16, // 화면 하단에서 16px 위
+      child: AnimatedBuilder(
+        animation: _floatingActionBarController,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _floatingActionBarScale.value,
+            child: Opacity(
+              opacity: _floatingActionBarOpacity.value,
+              child: child,
+            ),
+          );
+        },
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(16),
+          shadowColor: Colors.black.withOpacity(0.3),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            decoration: BoxDecoration(
+              color: cs.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: cs.outline.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 복사 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.copy,
+                    label: '복사',
+                    onPressed: _copyToClipboard,
+                    color: cs.primary,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 하이라이트 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.format_color_fill,
+                    label: '하이라이트',
+                    onPressed: _showHighlightColorPicker,
+                    color: Colors.orange,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 북마크 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.star_border,
+                    label: '북마크',
+                    onPressed: _addToFavorites,
+                    color: Colors.amber.shade700,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 닫기 버튼
+                IconButton(
+                  icon: Icon(Icons.close, size: 20, color: cs.onSurface),
+                  onPressed: _exitSelectionMode,
+                  padding: const EdgeInsets.all(8),
+                  constraints: const BoxConstraints(),
+                  style: IconButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    required Color color,
+  }) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 22, color: color),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -252,6 +677,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     final dayTitle = titleArr.isNotEmpty ? titleArr[0] : '';
     final rangeTitle = titleArr.length > 1 ? titleArr[1] : '';
     final favoriteProvider = context.watch<FavoriteProvider>();
+    final highlightProvider = context.watch<HighlightProvider>();
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -260,8 +686,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
         elevation: theme.appBarTheme.elevation ?? 0,
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
         leading: _isSelectionMode
-            ? IconButton(
-                icon: const Icon(Icons.close),
+            ? BackButton(
                 onPressed: _exitSelectionMode,
                 color: theme.appBarTheme.iconTheme?.color,
               )
@@ -269,20 +694,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                 onPressed: widget.onBack,
                 color: theme.appBarTheme.iconTheme?.color,
               ),
-        actions: _isSelectionMode
-            ? [
-                IconButton(
-                  icon: const Icon(Icons.copy),
-                  onPressed: _copyToClipboard,
-                  tooltip: '복사',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.star_border),
-                  onPressed: _addToFavorites,
-                  tooltip: '북마크',
-                ),
-              ]
-            : const [SizedBox(width: 48)],
+        actions: const [SizedBox(width: 48)],
         centerTitle: true,
         titleSpacing: 0,
         title: _isSelectionMode
@@ -357,12 +769,18 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
 
               final match = RegExp(r'^([가-힣]+)(\d+):(\d+)$').firstMatch(key);
               bool isFavorited = false;
+              HighlightVerse? highlight;
               if (match != null) {
                 final shortName = match.group(1)!;
                 final bookName = bookFullName[shortName] ?? shortName;
                 final chapter = int.parse(match.group(2)!);
                 final verse = int.parse(match.group(3)!);
                 isFavorited = favoriteProvider.isVerseFavorited(
+                  bookName,
+                  chapter,
+                  verse,
+                );
+                highlight = highlightProvider.getVerseHighlight(
                   bookName,
                   chapter,
                   verse,
@@ -375,11 +793,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                 selected: isSelected,
                 isInRange: isInRange,
                 isFavorited: isFavorited,
+                highlight: highlight,
                 onTap: () => _handleVerseTap(key),
                 onLongPress: () => _handleVerseLongPress(key),
               );
             },
           ),
+          // ⭐ 플로팅 액션 바
+          _buildFloatingActionBar(),
           if (!_isSelectionMode)
             Positioned(
               right: 18,
@@ -489,11 +910,25 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
     required bool selected,
     required bool isInRange,
     required bool isFavorited,
+    HighlightVerse? highlight,
     required VoidCallback onTap,
     required VoidCallback onLongPress,
   }) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final isHighlighted = highlight != null;
+
+    Color? backgroundColor;
+    Color? borderColor;
+
+    if (isInRange) {
+      backgroundColor = cs.primary.withOpacity(0.25);
+    } else if (isHighlighted) {
+      backgroundColor = highlight.color.color;
+      borderColor = highlight.color.darkColor;
+    } else if (selected) {
+      backgroundColor = cs.primary.withOpacity(0.15);
+    }
 
     return GestureDetector(
       onTap: onTap,
@@ -501,9 +936,17 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        color: isInRange
-            ? cs.primary.withOpacity(0.25)
-            : (selected ? cs.primary.withOpacity(0.15) : null),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: isHighlighted
+              ? Border(
+                  left: BorderSide(
+                    color: borderColor ?? Colors.transparent,
+                    width: 4,
+                  ),
+                )
+              : null,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -518,7 +961,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                     fontWeight: isInRange || selected
                         ? FontWeight.bold
                         : FontWeight.w600,
-                    fontSize: isInRange || selected ? 17 : 13,
+                    fontSize: isInRange || selected ? 13.01 : 13,
                     color: isInRange || selected ? cs.primary : cs.onSurface,
                   ),
                 ),
@@ -543,7 +986,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView> {
                   fontWeight: isInRange || selected
                       ? FontWeight.bold
                       : FontWeight.normal,
-                  fontSize: isInRange || selected ? 16 : 15,
+                  fontSize: isInRange || selected ? 15.01 : 15,
                   color: isInRange || selected ? cs.primary : cs.onSurface,
                 ),
                 softWrap: true,

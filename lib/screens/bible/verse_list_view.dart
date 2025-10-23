@@ -6,6 +6,7 @@ import '../../models/favorite_verse.dart';
 import '../../models/highlight_verse.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
+import '../../providers/language_provider.dart';
 import '../../widgets/breadcrumb_bar.dart';
 
 class VerseListView extends StatefulWidget {
@@ -49,11 +50,18 @@ class _VerseListViewState extends State<VerseListView>
   bool _isSelectionMode = false;
 
   late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
 
-  // 하이라이트 애니메이션 컨트롤러
   late AnimationController _highlightPickerController;
   late AnimationController _highlightAppliedController;
+
+  late AnimationController _languageChangeController;
+  late Animation<double> _languageFadeAnimation;
+  late Animation<Offset> _languageSlideAnimation;
+
+  // ⭐ 플로팅 액션 바 애니메이션
+  late AnimationController _floatingActionBarController;
+  late Animation<double> _floatingActionBarScale;
+  late Animation<double> _floatingActionBarOpacity;
 
   @override
   void initState() {
@@ -64,23 +72,62 @@ class _VerseListViewState extends State<VerseListView>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _fadeAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    );
     _animationController.forward();
 
-    // 하이라이트 픽커 애니메이션
     _highlightPickerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
 
-    // 하이라이트 적용 애니메이션
     _highlightAppliedController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
+
+    _languageChangeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _languageFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _languageChangeController,
+      curve: Curves.easeInOut,
+    ));
+
+    _languageSlideAnimation = Tween<Offset>(
+      begin: const Offset(0.0, 0.03),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _languageChangeController,
+      curve: Curves.easeOutCubic,
+    ));
+
+    _languageChangeController.forward();
+
+    // ⭐ 플로팅 액션 바 애니메이션
+    _floatingActionBarController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _floatingActionBarScale = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _floatingActionBarController,
+      curve: Curves.easeOutBack,
+    ));
+
+    _floatingActionBarOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _floatingActionBarController,
+      curve: Curves.easeOut,
+    ));
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 1));
@@ -94,8 +141,45 @@ class _VerseListViewState extends State<VerseListView>
     _animationController.dispose();
     _highlightPickerController.dispose();
     _highlightAppliedController.dispose();
+    _languageChangeController.dispose();
+    _floatingActionBarController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant VerseListView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.verses != oldWidget.verses &&
+        widget.chapter == oldWidget.chapter) {
+      _languageChangeController.reset();
+      _languageChangeController.forward();
+      return;
+    }
+
+    if (widget.chapter != oldWidget.chapter) {
+      setState(() {
+        _selectedVerse = 1;
+        _exitSelectionMode();
+      });
+      _animationController.reset();
+      _animationController.forward();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToSelected();
+      });
+      return;
+    }
+
+    if (widget.selectedVerse != oldWidget.selectedVerse) {
+      setState(() {
+        _selectedVerse = widget.selectedVerse;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToSelected();
+      });
+    }
   }
 
   void _scrollToSelectedOnce() {
@@ -143,12 +227,16 @@ class _VerseListViewState extends State<VerseListView>
 
   void _handleVerseLongPress(int verseNum) {
     HapticFeedback.mediumImpact();
+
     setState(() {
       _selectedVerse = verseNum;
       _isSelectionMode = true;
       _rangeStart = verseNum;
       _rangeEnd = verseNum;
     });
+
+    // ⭐ 애니메이션 시작
+    _floatingActionBarController.forward(from: 0);
   }
 
   void _handleVerseTap(int verseNum) {
@@ -179,12 +267,17 @@ class _VerseListViewState extends State<VerseListView>
   }
 
   String _getVerseReference() {
+    final languageProvider = context.read<LanguageProvider>();
     final selectedVerses = _getSelectedVerseRange();
     if (selectedVerses.isEmpty) return '';
+
+    final bookName =
+        widget.book.getLocalizedFullName(languageProvider.isKorean);
+
     if (selectedVerses.length == 1) {
-      return '${widget.book.fullName} ${widget.chapter}:${selectedVerses.first}';
+      return '$bookName ${widget.chapter}:${selectedVerses.first}';
     } else {
-      return '${widget.book.fullName} ${widget.chapter}:${selectedVerses.first}-${selectedVerses.last}';
+      return '$bookName ${widget.chapter}:${selectedVerses.first}-${selectedVerses.last}';
     }
   }
 
@@ -235,7 +328,6 @@ class _VerseListViewState extends State<VerseListView>
               curve: Curves.easeOutCubic,
             );
 
-            // clamp 추가하여 opacity 범위 보장
             final scaleValue = Curves.easeOutBack
                 .transform(slideAnimation.value)
                 .clamp(0.0, 1.0);
@@ -450,7 +542,6 @@ class _VerseListViewState extends State<VerseListView>
 
     await highlightProvider.addHighlight(highlight);
 
-    // 하이라이트 적용 애니메이션
     _highlightAppliedController.forward(from: 0).then((_) {
       _highlightAppliedController.reset();
     });
@@ -461,6 +552,8 @@ class _VerseListViewState extends State<VerseListView>
   }
 
   void _exitSelectionMode() {
+    _floatingActionBarController.reverse(); // ⭐ 애니메이션 역재생
+
     setState(() {
       _isSelectionMode = false;
       _rangeStart = null;
@@ -475,32 +568,124 @@ class _VerseListViewState extends State<VerseListView>
     return verseNum >= start && verseNum <= end;
   }
 
-  @override
-  void didUpdateWidget(covariant VerseListView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.chapter != oldWidget.chapter) {
-      setState(() {
-        _selectedVerse = 1;
-        _exitSelectionMode();
-      });
-      _animationController.reset();
-      _animationController.forward();
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToSelected();
-      });
-      return;
+  // ⭐ 플로팅 액션 바 위젯
+  Widget _buildFloatingActionBar() {
+    if (!_isSelectionMode) {
+      return const SizedBox.shrink();
     }
 
-    if (widget.selectedVerse != oldWidget.selectedVerse) {
-      setState(() {
-        _selectedVerse = widget.selectedVerse;
-      });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToSelected();
-      });
-    }
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Positioned(
+      left: 16,
+      right: 16,
+      bottom: 16, // 화면 하단에서 16px 위
+      child: AnimatedBuilder(
+        animation: _floatingActionBarController,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _floatingActionBarScale.value,
+            child: Opacity(
+              opacity: _floatingActionBarOpacity.value,
+              child: child,
+            ),
+          );
+        },
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.black.withOpacity(0.3),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            decoration: BoxDecoration(
+              color: cs.surface,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: cs.outline.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 복사 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.copy,
+                    label: '복사',
+                    onPressed: _copyToClipboard,
+                    color: cs.primary,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 하이라이트 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.format_color_fill,
+                    label: '하이라이트',
+                    onPressed: _showHighlightColorPicker,
+                    color: const Color.fromARGB(255, 134, 209, 13),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 북마크 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.bookmark_add_outlined,
+                    label: '북마크',
+                    onPressed: _addToFavorites,
+                    color: const Color.fromARGB(255, 241, 146, 20),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 닫기 버튼
+                IconButton(
+                  icon: Icon(Icons.close, size: 20, color: cs.onSurface),
+                  onPressed: _exitSelectionMode,
+                  padding: const EdgeInsets.all(8),
+                  constraints: const BoxConstraints(),
+                  style: IconButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    required Color color,
+  }) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 22, color: color),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -510,6 +695,7 @@ class _VerseListViewState extends State<VerseListView>
     final verseNums = widget.verses.keys.toList()..sort();
     final favoriteProvider = context.watch<FavoriteProvider>();
     final highlightProvider = context.watch<HighlightProvider>();
+    final languageProvider = context.watch<LanguageProvider>();
 
     const minChapter = 1;
     final maxChapter = widget.book.chapters;
@@ -519,35 +705,26 @@ class _VerseListViewState extends State<VerseListView>
         title: Text(
           _isSelectionMode
               ? _getVerseReference()
-              : '${widget.book.fullName} ${widget.chapter}장',
+              : '${widget.book.getLocalizedFullName(languageProvider.isKorean)} ${widget.chapter}${languageProvider.isKorean ? '장' : ''}',
           style: theme.appBarTheme.titleTextStyle,
         ),
-        leading: _isSelectionMode
-            ? IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: _exitSelectionMode,
-                color: theme.appBarTheme.iconTheme?.color,
-              )
-            : BackButton(
-                onPressed: widget.onBack,
-                color: theme.appBarTheme.iconTheme?.color,
-              ),
-        actions: _isSelectionMode
+        leading: BackButton(
+          onPressed: _isSelectionMode ? _exitSelectionMode : widget.onBack,
+          color: theme.appBarTheme.iconTheme?.color,
+        ),
+        // ⭐ 선택 모드에서는 AppBar actions 숨김
+        actions: !_isSelectionMode
             ? [
                 IconButton(
-                  icon: const Icon(Icons.copy),
-                  onPressed: _copyToClipboard,
-                  tooltip: '복사',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.format_color_fill),
-                  onPressed: _showHighlightColorPicker,
-                  tooltip: '하이라이트',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.star_border),
-                  onPressed: _addToFavorites,
-                  tooltip: '북마크',
+                  icon: Icon(
+                    languageProvider.isKorean
+                        ? Icons.language
+                        : Icons.translate,
+                  ),
+                  tooltip: languageProvider.isKorean ? 'English' : '한글',
+                  onPressed: () async {
+                    await languageProvider.toggleLanguage();
+                  },
                 ),
               ]
             : null,
@@ -562,19 +739,24 @@ class _VerseListViewState extends State<VerseListView>
             BreadcrumbBar(
               items: [
                 BreadcrumbItem(
-                  label: '홈',
+                  label: languageProvider.isKorean ? '홈' : 'Home',
                   onTap: widget.onGoHome,
                 ),
                 BreadcrumbItem(
-                  label: widget.book.fullName,
+                  label: widget.book
+                      .getLocalizedFullName(languageProvider.isKorean),
                   onTap: widget.onGoToChapterSelector,
                 ),
                 BreadcrumbItem(
-                  label: '${widget.chapter}장',
+                  label: languageProvider.isKorean
+                      ? '${widget.chapter}장'
+                      : 'Ch ${widget.chapter}',
                   onTap: widget.onGoToVerseSelector,
                 ),
                 BreadcrumbItem(
-                  label: '$_selectedVerse절',
+                  label: languageProvider.isKorean
+                      ? '$_selectedVerse절'
+                      : 'V $_selectedVerse',
                   onTap: () {},
                   isActive: true,
                 ),
@@ -584,144 +766,152 @@ class _VerseListViewState extends State<VerseListView>
             child: Stack(
               children: [
                 FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: verseNums.length,
-                    physics: const ClampingScrollPhysics(),
-                    padding: const EdgeInsets.only(bottom: 80),
-                    itemBuilder: (context, idx) {
-                      final verseNum = verseNums[idx];
-                      final text = widget.verses[verseNum] ?? '';
-                      final isSelected =
-                          !_isSelectionMode && verseNum == _selectedVerse;
-                      final isInRange = _isVerseInRange(verseNum);
-                      final isFavorited = favoriteProvider.isVerseFavorited(
-                        widget.book.fullName,
-                        widget.chapter,
-                        verseNum,
-                      );
+                  opacity: _languageFadeAnimation,
+                  child: SlideTransition(
+                    position: _languageSlideAnimation,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: verseNums.length,
+                      physics: const ClampingScrollPhysics(),
+                      padding: const EdgeInsets.only(bottom: 80),
+                      itemBuilder: (context, idx) {
+                        final verseNum = verseNums[idx];
+                        final text = widget.verses[verseNum] ?? '';
+                        final isSelected =
+                            !_isSelectionMode && verseNum == _selectedVerse;
+                        final isInRange = _isVerseInRange(verseNum);
+                        final isFavorited = favoriteProvider.isVerseFavorited(
+                          widget.book.fullName,
+                          widget.chapter,
+                          verseNum,
+                        );
 
-                      final highlight = highlightProvider.getVerseHighlight(
-                        widget.book.fullName,
-                        widget.chapter,
-                        verseNum,
-                      );
-                      final isHighlighted = highlight != null;
+                        final highlight = highlightProvider.getVerseHighlight(
+                          widget.book.fullName,
+                          widget.chapter,
+                          verseNum,
+                        );
+                        final isHighlighted = highlight != null;
 
-                      Color? backgroundColor;
-                      Color? borderColor;
-                      Color? textColor;
+                        Color? backgroundColor;
+                        Color? borderColor;
+                        Color? textColor;
 
-                      if (isInRange) {
-                        // 범위 선택 시 - 부드러운 강조
-                        backgroundColor = cs.primary.withOpacity(0.1);
-                        borderColor = cs.primary;
-                        textColor = cs.onSurface.withOpacity(1.0);
-                      } else if (isHighlighted) {
-                        // 하이라이트 적용 시 - 배경만 변경, 텍스트는 기본 유지
-                        backgroundColor = highlight.color.color;
-                        borderColor = highlight.color.darkColor;
-                        textColor = cs.onSurface;
-                      } else if (isSelected) {
-                        // 단일 절 선택 시 - 매우 은은하게
-                        backgroundColor = cs.primary.withOpacity(0.1);
-                        textColor = cs.onSurface.withOpacity(0.7);
-                      } else {
-                        textColor = cs.onSurface;
-                      }
+                        if (isInRange) {
+                          backgroundColor = cs.primary.withOpacity(0.1);
+                          borderColor = cs.primary;
+                          textColor = cs.onSurface.withOpacity(1.0);
+                        } else if (isHighlighted) {
+                          backgroundColor = highlight.color.color;
+                          borderColor = highlight.color.darkColor;
+                          textColor = cs.onSurface;
+                        } else if (isSelected) {
+                          backgroundColor = cs.primary.withOpacity(0.1);
+                          textColor = cs.onSurface.withOpacity(0.7);
+                        } else {
+                          textColor = cs.onSurface;
+                        }
 
-                      return AnimatedBuilder(
-                        animation: _highlightAppliedController,
-                        builder: (context, child) {
-                          final isJustHighlighted = isInRange &&
-                              _highlightAppliedController.isAnimating;
-                          final pulseValue = _highlightAppliedController.value;
-                          final scale = isJustHighlighted
-                              ? 1.0 + (0.03 * _sin(pulseValue * 3.14159 * 2))
-                              : 1.0;
+                        return AnimatedBuilder(
+                          animation: _highlightAppliedController,
+                          builder: (context, child) {
+                            final isJustHighlighted = isInRange &&
+                                _highlightAppliedController.isAnimating;
+                            final pulseValue =
+                                _highlightAppliedController.value;
+                            final scale = isJustHighlighted
+                                ? 1.0 + (0.03 * _sin(pulseValue * 3.14159 * 2))
+                                : 1.0;
 
-                          return Transform.scale(
-                            scale: scale,
-                            alignment: Alignment.centerLeft,
-                            child: child,
-                          );
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOutCubic,
-                          key: idx == 0 ? _itemKey : null,
-                          decoration: BoxDecoration(
-                            color: backgroundColor,
-                            border: isHighlighted
-                                ? Border(
-                                    left: BorderSide(
-                                      color: borderColor ?? Colors.transparent,
-                                      width: 4,
-                                    ),
-                                  )
-                                : (isInRange
-                                    ? Border(
-                                        left: BorderSide(
-                                          color:
-                                              borderColor ?? Colors.transparent,
-                                          width: 3,
-                                        ),
-                                      )
-                                    : null),
-                          ),
-                          child: ListTile(
-                            onTap: () => _handleVerseTap(verseNum),
-                            onLongPress: () => _handleVerseLongPress(verseNum),
-                            leading: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                AnimatedDefaultTextStyle(
-                                  duration: const Duration(milliseconds: 200),
-                                  style: TextStyle(
-                                    fontFamily: 'ChosunCentennial',
-                                    fontWeight: isInRange || isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.w600,
-                                    fontSize:
-                                        isInRange || isSelected ? 15.05 : 15,
-                                    color: textColor,
-                                  ),
-                                  child: Text('$verseNum'),
-                                ),
-                                if (isFavorited)
-                                  Positioned(
-                                    top: -4,
-                                    right: -10,
-                                    child: Icon(
-                                      Icons.star,
-                                      size: 12,
-                                      color: Colors.amber[700],
-                                    ),
-                                  ),
-                              ],
+                            return Transform.scale(
+                              scale: scale,
+                              alignment: Alignment.centerLeft,
+                              child: child,
+                            );
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOutCubic,
+                            key: idx == 0 ? _itemKey : null,
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              border: isHighlighted
+                                  ? Border(
+                                      left: BorderSide(
+                                        color:
+                                            borderColor ?? Colors.transparent,
+                                        width: 4,
+                                      ),
+                                    )
+                                  : (isInRange
+                                      ? Border(
+                                          left: BorderSide(
+                                            color: borderColor ??
+                                                Colors.transparent,
+                                            width: 3,
+                                          ),
+                                        )
+                                      : null),
                             ),
-                            title: AnimatedDefaultTextStyle(
-                              duration: const Duration(milliseconds: 200),
-                              style: TextStyle(
-                                fontFamily: 'ChosunCentennial',
-                                fontWeight: isInRange || isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                                fontSize: isInRange || isSelected ? 15.05 : 15,
-                                color: textColor,
+                            child: ListTile(
+                              onTap: () => _handleVerseTap(verseNum),
+                              onLongPress: () =>
+                                  _handleVerseLongPress(verseNum),
+                              leading: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 200),
+                                    style: TextStyle(
+                                      fontFamily: 'ChosunCentennial',
+                                      fontWeight: isInRange || isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.w600,
+                                      fontSize:
+                                          isInRange || isSelected ? 15.01 : 15,
+                                      color: textColor,
+                                    ),
+                                    child: Text('$verseNum'),
+                                  ),
+                                  if (isFavorited)
+                                    Positioned(
+                                      top: -4,
+                                      right: -10,
+                                      child: Icon(
+                                        Icons.star,
+                                        size: 12,
+                                        color: Colors.amber[700],
+                                      ),
+                                    ),
+                                ],
                               ),
-                              child: Text(text),
+                              title: AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 200),
+                                style: TextStyle(
+                                  fontFamily: 'ChosunCentennial',
+                                  fontWeight: isInRange || isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                  fontSize:
+                                      isInRange || isSelected ? 15.01 : 15,
+                                  color: textColor,
+                                ),
+                                child: Text(text),
+                              ),
+                              dense: true,
+                              selected: isInRange || isSelected,
+                              selectedTileColor: Colors.transparent,
                             ),
-                            dense: true,
-                            selected: isInRange || isSelected,
-                            selectedTileColor: Colors.transparent,
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
+
+                // ⭐ 플로팅 액션 바
+                _buildFloatingActionBar(),
+
                 if (!_isSelectionMode)
                   Positioned(
                     left: 12,

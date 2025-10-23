@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../models/bible_data.dart';
+import '../../providers/language_provider.dart';
 import '../../widgets/breadcrumb_bar.dart';
 
 class VerseSelector extends StatefulWidget {
-  final String bookFullName;
+  final BibleData book;
   final int chapter;
   final int verseCount;
   final void Function(int verseIdx) onSelect;
@@ -10,7 +13,7 @@ class VerseSelector extends StatefulWidget {
   final VoidCallback? onGoHome;
 
   const VerseSelector({
-    required this.bookFullName,
+    required this.book,
     required this.chapter,
     required this.verseCount,
     required this.onSelect,
@@ -60,12 +63,15 @@ class _VerseSelectorState extends State<VerseSelector>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final languageProvider = context.watch<LanguageProvider>();
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          '${widget.bookFullName} ${widget.chapter}장(절 선택)',
+          languageProvider.isKorean
+              ? '${widget.book.getLocalizedFullName(true)} ${widget.chapter}장(절 선택)'
+              : '${widget.book.getLocalizedFullName(false)} ${widget.chapter} (Select Verse)',
           style: theme.appBarTheme.titleTextStyle,
         ),
         leading: BackButton(
@@ -86,17 +92,17 @@ class _VerseSelectorState extends State<VerseSelector>
               BreadcrumbBar(
                 items: [
                   BreadcrumbItem(
-                    label: '홈',
+                    label: languageProvider.isKorean ? '홈' : 'Home',
                     onTap: widget.onGoHome,
                   ),
                   BreadcrumbItem(
-                    label: widget.bookFullName,
+                    label: widget.book.getLocalizedFullName(languageProvider.isKorean),
                     onTap: () {
                       widget.onBack();
                     },
                   ),
                   BreadcrumbItem(
-                    label: '${widget.chapter}장',
+                    label: languageProvider.isKorean ? '${widget.chapter}장' : 'Ch ${widget.chapter}',
                     onTap: () {},
                     isActive: true,
                   ),

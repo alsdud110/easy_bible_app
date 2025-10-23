@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
+import '../../providers/language_provider.dart';
 import '../../widgets/breadcrumb_bar.dart';
 import '../../widgets/banner_ad_widget.dart';
 
@@ -56,12 +58,15 @@ class _ChapterSelectorState extends State<ChapterSelector>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final languageProvider = context.watch<LanguageProvider>();
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          '${widget.book.fullName} (장 선택)',
+          languageProvider.isKorean
+              ? '${widget.book.getLocalizedFullName(true)} (장 선택)'
+              : '${widget.book.getLocalizedFullName(false)} (Select Chapter)',
           style: theme.appBarTheme.titleTextStyle,
         ),
         leading: BackButton(
@@ -82,11 +87,11 @@ class _ChapterSelectorState extends State<ChapterSelector>
               BreadcrumbBar(
                 items: [
                   BreadcrumbItem(
-                    label: '홈',
+                    label: languageProvider.isKorean ? '홈' : 'Home',
                     onTap: widget.onBack,
                   ),
                   BreadcrumbItem(
-                    label: widget.book.fullName,
+                    label: widget.book.getLocalizedFullName(languageProvider.isKorean),
                     onTap: () {},
                     isActive: true,
                   ),

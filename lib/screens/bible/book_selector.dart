@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
+import '../../providers/language_provider.dart';
 import '../../widgets/banner_ad_widget.dart';
 
 void pushModernTransition(BuildContext context, Widget page) {
@@ -389,6 +391,7 @@ class _BookSelectorState extends State<BookSelector>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final languageProvider = context.watch<LanguageProvider>();
     final oldBooks = _filterBooks(
       widget.books.where((b) => b.isOldTestament).toList(),
     );
@@ -553,31 +556,35 @@ class _BookSelectorState extends State<BookSelector>
                     : ListView(
                         children: [
                           if (oldBooks.isNotEmpty) ...[
-                            const _SectionTitle(title: '구약'),
+                            _SectionTitle(title: languageProvider.isKorean ? '구약' : 'Old Testament'),
                             isGrid
                                 ? _BookGrid(
                                     books: oldBooks,
                                     allBooks: widget.books,
                                     onSelect: widget.onSelect,
+                                    isKorean: languageProvider.isKorean,
                                   )
                                 : _BookList(
                                     books: oldBooks,
                                     allBooks: widget.books,
                                     onSelect: widget.onSelect,
+                                    isKorean: languageProvider.isKorean,
                                   ),
                           ],
                           if (newBooks.isNotEmpty) ...[
-                            const _SectionTitle(title: '신약'),
+                            _SectionTitle(title: languageProvider.isKorean ? '신약' : 'New Testament'),
                             isGrid
                                 ? _BookGrid(
                                     books: newBooks,
                                     allBooks: widget.books,
                                     onSelect: widget.onSelect,
+                                    isKorean: languageProvider.isKorean,
                                   )
                                 : _BookList(
                                     books: newBooks,
                                     allBooks: widget.books,
                                     onSelect: widget.onSelect,
+                                    isKorean: languageProvider.isKorean,
                                   ),
                           ],
                         ],
@@ -649,11 +656,13 @@ class _BookGrid extends StatelessWidget {
   final List<BibleData> books;
   final List<BibleData> allBooks;
   final void Function(int idx) onSelect;
+  final bool isKorean;
 
   const _BookGrid({
     required this.books,
     required this.allBooks,
     required this.onSelect,
+    required this.isKorean,
   });
 
   @override
@@ -698,7 +707,7 @@ class _BookGrid extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                book.name,
+                book.getLocalizedName(isKorean),
                 style: theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 14.5,
@@ -718,11 +727,13 @@ class _BookList extends StatelessWidget {
   final List<BibleData> books;
   final List<BibleData> allBooks;
   final void Function(int idx) onSelect;
+  final bool isKorean;
 
   const _BookList({
     required this.books,
     required this.allBooks,
     required this.onSelect,
+    required this.isKorean,
   });
 
   @override
@@ -753,7 +764,7 @@ class _BookList extends StatelessWidget {
           child: ListTile(
             onTap: () => onSelect(originalIndex),
             title: Text(
-              book.fullName,
+              book.getLocalizedFullName(isKorean),
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
