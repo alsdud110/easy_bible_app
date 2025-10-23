@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/bible_60.dart';
 import '../../models/bible_json_loader.dart';
 import '../../utils/extract_verses.dart';
 import '../../utils/pretty_range_label.dart';
+import '../../providers/plan_progress_provider.dart';
 import 'plan_verse_list_view.dart';
 
 class Day60Screen extends StatefulWidget {
@@ -130,18 +132,24 @@ class _Day60ScreenState extends State<Day60Screen>
             opacity: _fadeAnimation,
             child: SlideTransition(
               position: _slideAnimation,
-              child: ListView.separated(
-                itemCount: bible60.length,
-                separatorBuilder: (_, __) => Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: cs.outline.withOpacity(0.2),
-                ),
-                itemBuilder: (_, idx) {
-                  final dayRanges = bible60[idx];
-                  final dayNum = idx + 1;
-                  final dayLabel = 'DAY $dayNum';
-                  final rangeLabel = dayRanges.join(', ');
+              child: Consumer<PlanProgressProvider>(
+                builder: (context, planProvider, _) {
+                  return ListView.separated(
+                    itemCount: bible60.length,
+                    separatorBuilder: (_, __) => Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: cs.outline.withOpacity(0.2),
+                    ),
+                    itemBuilder: (_, idx) {
+                      final dayRanges = bible60[idx];
+                      final dayNum = idx + 1;
+                      final dayLabel = 'DAY $dayNum';
+                      final rangeLabel = dayRanges.join(', ');
+
+                      // 읽음 처리 및 접근 가능 여부 확인
+                      final isCompleted = planProvider.isDayCompleted(dayNum);
+                      final canAccess = planProvider.canAccessDay(dayNum);
 
                   return TweenAnimationBuilder<double>(
                     duration: Duration(milliseconds: 400 + (idx * 20)),
@@ -155,97 +163,130 @@ class _Day60ScreenState extends State<Day60Screen>
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
-                      child: ListTile(
-                        tileColor: cs.surface,
-                        title: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // DAY 라벨 애니메이션
-                            TweenAnimationBuilder<double>(
-                              duration:
-                                  Duration(milliseconds: 600 + (idx * 30)),
-                              tween: Tween(begin: 0.0, end: 1.0),
-                              curve: Curves.easeOut,
-                              builder: (context, value, child) {
-                                return Transform.scale(
-                                  scale: 0.8 + (value * 0.2),
-                                  child: Opacity(
-                                    opacity: value.clamp(0.0, 1.0),
-                                    child: child,
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      cs.primary,
-                                      cs.primary.withOpacity(0.7),
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: cs.primary.withOpacity(0.3),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                      child: Opacity(
+                        opacity: canAccess ? 1.0 : 0.4,
+                        child: ListTile(
+                          tileColor: cs.surface,
+                          enabled: canAccess,
+                          title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // DAY 라벨 애니메이션
+                              TweenAnimationBuilder<double>(
+                                duration:
+                                    Duration(milliseconds: 600 + (idx * 30)),
+                                tween: Tween(begin: 0.0, end: 1.0),
+                                curve: Curves.easeOut,
+                                builder: (context, value, child) {
+                                  return Transform.scale(
+                                    scale: 0.8 + (value * 0.2),
+                                    child: Opacity(
+                                      opacity: value.clamp(0.0, 1.0),
+                                      child: child,
                                     ),
-                                  ],
-                                ),
-                                child: Text(
-                                  dayLabel,
-                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: cs.onPrimary,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: isCompleted
+                                          ? [
+                                              Colors.green,
+                                              Colors.green.withOpacity(0.7),
+                                            ]
+                                          : canAccess
+                                              ? [
+                                                  cs.primary,
+                                                  cs.primary.withOpacity(0.7),
+                                                ]
+                                              : [
+                                                  Colors.grey,
+                                                  Colors.grey.withOpacity(0.7),
+                                                ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: canAccess
+                                        ? [
+                                            BoxShadow(
+                                              color: isCompleted
+                                                  ? Colors.green
+                                                      .withOpacity(0.3)
+                                                  : cs.primary.withOpacity(0.3),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ]
+                                        : [],
+                                  ),
+                                  child: Text(
+                                    dayLabel,
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: cs.onPrimary,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                prettyRangeLabel(rangeLabel),
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 15,
-                                  color: cs.onSurface,
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  prettyRangeLabel(rangeLabel),
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontSize: 15,
+                                    color: canAccess
+                                        ? cs.onSurface
+                                        : cs.onSurface.withOpacity(0.5),
+                                  ),
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                softWrap: true,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
-                        ),
-                        trailing: TweenAnimationBuilder<double>(
-                          duration: Duration(milliseconds: 600 + (idx * 30)),
-                          tween: Tween(begin: 0.0, end: 1.0),
-                          curve: Curves.easeOut,
-                          builder: (context, value, child) {
-                            return Opacity(
-                              opacity: value.clamp(0.0, 1.0),
-                              child: child,
-                            );
-                          },
-                          child: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            size: 18,
-                            color: cs.primary,
+                              if (isCompleted)
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 20,
+                                ),
+                            ],
                           ),
+                          trailing: TweenAnimationBuilder<double>(
+                            duration: Duration(milliseconds: 600 + (idx * 30)),
+                            tween: Tween(begin: 0.0, end: 1.0),
+                            curve: Curves.easeOut,
+                            builder: (context, value, child) {
+                              return Opacity(
+                                opacity: value.clamp(0.0, 1.0),
+                                child: child,
+                              );
+                            },
+                            child: Icon(
+                              canAccess
+                                  ? Icons.arrow_forward_ios_rounded
+                                  : Icons.lock,
+                              size: 18,
+                              color: canAccess ? cs.primary : Colors.grey,
+                            ),
+                          ),
+                          onTap: canAccess
+                              ? () {
+                                  _openPlanVerse(context, bibleData, idx);
+                                }
+                              : null,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                         ),
-                        onTap: () {
-                          _openPlanVerse(context, bibleData, idx);
-                        },
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
                       ),
                     ),
+                  );
+                    },
                   );
                 },
               ),
@@ -270,21 +311,8 @@ class _Day60ScreenState extends State<Day60Screen>
         pageBuilder: (_, __, ___) => PlanVerseListView(
           title: '$dayLabel  $rangeLabel',
           verses: Map<String, String>.fromEntries(entries),
+          dayNumber: dayNum,
           onBack: () => Navigator.pop(context),
-          hasPrevDay: idx > 0,
-          hasNextDay: idx < bible60.length - 1,
-          onPrevDay: idx > 0
-              ? () {
-                  Navigator.pop(context);
-                  _openPlanVerse(context, bibleData, idx - 1);
-                }
-              : null,
-          onNextDay: idx < bible60.length - 1
-              ? () {
-                  Navigator.pop(context);
-                  _openPlanVerse(context, bibleData, idx + 1);
-                }
-              : null,
         ),
         transitionsBuilder: (_, animation, __, child) {
           return FadeTransition(

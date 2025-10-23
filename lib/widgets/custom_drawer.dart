@@ -135,8 +135,8 @@ class CustomDrawer extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 20.0,
-                  bottom: 10.0,
+                  top: 16.0,
+                  bottom: 8.0,
                   left: 24,
                   right: 24,
                 ),
@@ -147,7 +147,7 @@ class CustomDrawer extends StatelessWidget {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final imageSize =
-                            (constraints.maxWidth * 0.9).clamp(100.0, 200.0);
+                            (constraints.maxWidth * 0.6).clamp(80.0, 120.0);
 
                         return Image.asset(
                           'assets/icon/bible_icon.png',
@@ -156,12 +156,13 @@ class CustomDrawer extends StatelessWidget {
                         );
                       },
                     ),
+                    const SizedBox(height: 4),
                     Text(
                       'All in Bible',
                       style: GoogleFonts.dancingScript(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.w800,
-                        fontSize: 28,
+                        fontSize: 24,
                       ),
                     ),
                   ],
@@ -169,7 +170,7 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
 
           // 메뉴: 전체 성경
           _DrawerButton(

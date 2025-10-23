@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../utils/pretty_range_label.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
+import '../../providers/plan_progress_provider.dart';
 import '../../models/favorite_verse.dart';
 import '../../models/highlight_verse.dart';
 import '../../models/const/book_full_name.dart';
@@ -12,6 +13,7 @@ import 'package:marquee/marquee.dart';
 class PlanVerseListView extends StatefulWidget {
   final String title;
   final Map<String, String> verses;
+  final int? dayNumber; // Day 번호 (1, 2, 3, ...)
   final VoidCallback onBack;
   final VoidCallback? onPrevDay;
   final VoidCallback? onNextDay;
@@ -22,6 +24,7 @@ class PlanVerseListView extends StatefulWidget {
     super.key,
     required this.title,
     required this.verses,
+    this.dayNumber,
     required this.onBack,
     this.onPrevDay,
     this.onNextDay,
@@ -838,7 +841,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
           if (!_isSelectionMode)
             Positioned(
               right: 18,
-              bottom: 94,
+              bottom: widget.dayNumber != null ? 88 : 24,
               child: AnimatedOpacity(
                 opacity: _showFAB ? 1 : 0,
                 duration: const Duration(milliseconds: 220),
@@ -871,66 +874,72 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                 ),
               ),
             ),
-          if (!_isSelectionMode)
+          if (!_isSelectionMode && widget.dayNumber != null)
             Positioned(
-              left: 0,
-              right: 0,
-              bottom: 12,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Flexible(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: Consumer<PlanProgressProvider>(
+                builder: (context, planProvider, _) {
+                  final isCompleted =
+                      planProvider.isDayCompleted(widget.dayNumber!);
+
+                  return AnimatedOpacity(
+                    opacity: isCompleted ? 0.6 : 1.0,
+                    duration: const Duration(milliseconds: 300),
                     child: ElevatedButton.icon(
-                      onPressed: widget.hasPrevDay ? widget.onPrevDay : null,
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                          size: 18),
-                      label: const Text(
-                        '이전 DAY',
-                        style: TextStyle(fontWeight: FontWeight.w700),
+                      onPressed: isCompleted
+                          ? null
+                          : () async {
+                              await planProvider
+                                  .markDayAsCompleted(widget.dayNumber!);
+
+                              if (!mounted) return;
+
+                              // 완주 체크
+                              if (planProvider.isPlanCompleted) {
+                                _showCompletionDialog();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'DAY ${widget.dayNumber} 완독! 축하합니다!',
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              }
+                            },
+                      icon: Icon(
+                        isCompleted ? Icons.check_circle : Icons.check,
+                        size: 20,
+                      ),
+                      label: Text(
+                        isCompleted ? '완독 완료' : '완독 처리',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: cs.primary,
-                        backgroundColor: cs.surface,
-                        elevation: 1.5,
-                        shadowColor: Colors.black12,
+                        foregroundColor:
+                            isCompleted ? cs.onSurface : Colors.white,
+                        backgroundColor: isCompleted ? cs.surface : Colors.green,
+                        elevation: isCompleted ? 0 : 2,
+                        shadowColor:
+                            isCompleted ? null : Colors.green.withOpacity(0.5),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 10),
-                        textStyle: const TextStyle(fontSize: 15),
-                        disabledForegroundColor: cs.onSurface.withOpacity(0.38),
-                        disabledBackgroundColor: cs.surface.withOpacity(0.5),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: ElevatedButton.icon(
-                      onPressed: widget.hasNextDay ? widget.onNextDay : null,
-                      icon:
-                          const Icon(Icons.arrow_forward_ios_rounded, size: 18),
-                      label: const Text(
-                        '다음 DAY',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: cs.primary,
-                        backgroundColor: cs.surface,
-                        elevation: 1.5,
-                        shadowColor: Colors.black12,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(17),
+                          horizontal: 24,
+                          vertical: 14,
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 10),
-                        textStyle: const TextStyle(fontSize: 15),
-                        disabledForegroundColor: cs.onSurface.withOpacity(0.38),
-                        disabledBackgroundColor: cs.surface.withOpacity(0.5),
                       ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
         ],
@@ -1039,5 +1048,113 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     final ch = match.group(2)!;
     final verse = match.group(3)!;
     return '$book $ch:$verse';
+  }
+
+  // 완주 축하 다이얼로그
+  void _showCompletionDialog() {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final planProvider = context.read<PlanProgressProvider>();
+    final elapsedDays = planProvider.elapsedDays;
+    final totalDays = planProvider.totalDays;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 애니메이션 아이콘
+              TweenAnimationBuilder<double>(
+                duration: const Duration(milliseconds: 800),
+                tween: Tween(begin: 0.0, end: 1.0),
+                curve: Curves.elasticOut,
+                builder: (context, value, child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: child,
+                  );
+                },
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: Colors.amber.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.emoji_events,
+                    size: 48,
+                    color: Colors.amber,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                '축하합니다!',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: cs.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                '$elapsedDays일 만에\n성경 ${totalDays}일 통독을 완주하셨네요!',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: cs.onSurface.withOpacity(0.8),
+                  height: 1.6,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '정말 대단합니다! 👏',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: cs.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 다이얼로그 닫기
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: cs.primary,
+                    foregroundColor: cs.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

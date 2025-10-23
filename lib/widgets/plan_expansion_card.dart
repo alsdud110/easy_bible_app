@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/plan_progress_provider.dart';
+import '../models/plan_progress.dart';
 
 class PlanExpansionCard extends StatefulWidget {
   final bool expanded;
@@ -130,65 +133,144 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
     final cs = theme.colorScheme;
     final titles = ["DAY60 플랜", "DAY120 플랜", "DAY180 플랜"];
     final values = [60, 120, 180];
+    final planTypes = [PlanType.day60, PlanType.day120, PlanType.day180];
 
-    return Column(
-      children: [
-        ...List.generate(titles.length, (i) {
-          return AnimatedBuilder(
-            animation: _boxFadeCtrl,
-            builder: (context, child) {
-              // 각 버튼마다 약간의 지연 효과
-              final delay = i * 0.15;
-              final progress =
-                  (_boxFadeCtrl.value - delay).clamp(0.0, 1.0) / (1 - delay);
+    return Consumer<PlanProgressProvider>(
+      builder: (context, planProvider, _) {
+        return Column(
+          children: [
+            ...List.generate(titles.length, (i) {
+              // 현재 플랜이 이 타입인지 확인
+              final isCurrentPlan = planProvider.hasPlan &&
+                  planProvider.currentPlan!.planType == planTypes[i];
+              final progressPercent =
+                  isCurrentPlan ? planProvider.progressPercent : 0;
 
-              return Opacity(
-                opacity: progress,
-                child: Transform.scale(
-                  scale: 0.97 + progress * 0.03,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 4.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: cs.surface,
-                          foregroundColor: cs.primary,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: cs.primary.withOpacity(0.16),
-                              width: 1.2,
-                            ),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          textStyle: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                          ),
-                        ),
-                        onPressed: () => widget.onPlanTap(context, values[i]),
-                        child: Text(
-                          titles[i],
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: cs.primary,
+              return AnimatedBuilder(
+                animation: _boxFadeCtrl,
+                builder: (context, child) {
+                  // 각 버튼마다 약간의 지연 효과
+                  final delay = i * 0.15;
+                  final progress =
+                      (_boxFadeCtrl.value - delay).clamp(0.0, 1.0) / (1 - delay);
+
+                  return Opacity(
+                    opacity: progress,
+                    child: Transform.scale(
+                      scale: 0.97 + progress * 0.03,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 4.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Stack(
+                            children: [
+                              // 물 차오르는 배경 애니메이션
+                              if (isCurrentPlan)
+                                Positioned.fill(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 800),
+                                        curve: Curves.easeInOut,
+                                        height: (progressPercent / 100) *
+                                            56, // 버튼 높이 기준
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              cs.primary.withOpacity(0.15),
+                                              cs.primary.withOpacity(0.05),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              // 버튼 본체
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  foregroundColor: cs.primary,
+                                  shadowColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: isCurrentPlan
+                                          ? cs.primary.withOpacity(0.3)
+                                          : cs.primary.withOpacity(0.16),
+                                      width: isCurrentPlan ? 1.5 : 1.2,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16, horizontal: 16),
+                                  textStyle: theme.textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                onPressed: () => widget.onPlanTap(context, values[i]),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        titles[i],
+                                        style:
+                                            theme.textTheme.bodyLarge?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                          color: cs.primary,
+                                        ),
+                                      ),
+                                    ),
+                                    if (isCurrentPlan) ...[
+                                      const SizedBox(width: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 3,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: cs.primary.withOpacity(0.15),
+                                          border: Border.all(
+                                            color: cs.primary.withOpacity(0.35),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          '진행중 $progressPercent%',
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                            color: cs.primary,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
-            },
-          );
-        }),
-        const SizedBox(height: 10),
-      ],
+            }),
+            const SizedBox(height: 10),
+          ],
+        );
+      },
     );
   }
 }

@@ -8,6 +8,7 @@ import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/highlight_provider.dart';
 import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
+import 'providers/plan_progress_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -40,6 +41,10 @@ void main() async {
   final languageProvider = LanguageProvider();
   // LanguageProvider는 생성자에서 자동으로 _loadLanguage() 호출
 
+  // PlanProgressProvider 초기화
+  final planProgressProvider = PlanProgressProvider();
+  await planProgressProvider.loadPlan();
+
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;
 
@@ -49,6 +54,7 @@ void main() async {
         ChangeNotifierProvider.value(value: favoriteProvider),
         ChangeNotifierProvider.value(value: highlightProvider),
         ChangeNotifierProvider.value(value: languageProvider), // ✅ 추가!
+        ChangeNotifierProvider.value(value: planProgressProvider),
       ],
       child: MyApp(initDark: isDark),
     ),

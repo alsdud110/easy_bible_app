@@ -9,7 +9,11 @@ import '../widgets/plan_expansion_card.dart';
 import 'biblePlan/day60_screen.dart';
 import 'biblePlan/day120_screen.dart';
 import 'biblePlan/day180_screen.dart';
+import 'biblePlan/plan_start_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../models/plan_progress.dart';
+import '../providers/plan_progress_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback? onThemeToggle;
@@ -175,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(0.5),
           child: Divider(
-            thickness: 0.2,
+            thickness: 0.1,
             height: 0.5,
             color: Colors.black,
           ),
@@ -235,14 +239,35 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     setState(() => _planExpanded = !_planExpanded);
                   },
                   onPlanTap: (context, planType) {
-                    Widget page;
+                    final provider = context.read<PlanProgressProvider>();
+
+                    // planType을 PlanType enum으로 변환
+                    PlanType selectedPlanType;
                     if (planType == 60) {
-                      page = const Day60Screen();
+                      selectedPlanType = PlanType.day60;
                     } else if (planType == 120) {
-                      page = const Day120Screen();
+                      selectedPlanType = PlanType.day120;
                     } else {
-                      page = const Day180Screen();
+                      selectedPlanType = PlanType.day180;
                     }
+
+                    Widget page;
+
+                    // 이미 플랜이 있고, 같은 타입의 플랜이면 Day 화면으로
+                    if (provider.hasPlan &&
+                        provider.currentPlan!.planType == selectedPlanType) {
+                      if (planType == 60) {
+                        page = const Day60Screen();
+                      } else if (planType == 120) {
+                        page = const Day120Screen();
+                      } else {
+                        page = const Day180Screen();
+                      }
+                    } else {
+                      // 플랜이 없거나 다른 타입의 플랜이면 시작 화면으로
+                      page = PlanStartScreen(planType: selectedPlanType);
+                    }
+
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 300),
