@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="All in Bible"
+        android:label="올인바이블(All in Bible)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
