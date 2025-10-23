@@ -85,6 +85,13 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   @override
+  void didUpdateWidget(covariant BookSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 언어가 변경되면 애니메이션 재실행
+    _animationController.forward(from: 0);
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     _animationController.dispose();
@@ -402,7 +409,7 @@ class _BookSelectorState extends State<BookSelector>
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('성경책 선택'),
+        title: Text(languageProvider.isKorean ? '성경책 선택' : 'Select Book'),
         centerTitle: true,
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: theme.appBarTheme.elevation ?? 0,
@@ -411,7 +418,7 @@ class _BookSelectorState extends State<BookSelector>
         actionsIconTheme: theme.appBarTheme.actionsIconTheme,
         leading: IconButton(
           icon: const Icon(Icons.home_rounded),
-          tooltip: '홈으로',
+          tooltip: languageProvider.isKorean ? '홈으로' : 'Home',
           onPressed: () {
             Navigator.of(context).pushNamedAndRemoveUntil(
               '/',
@@ -419,6 +426,35 @@ class _BookSelectorState extends State<BookSelector>
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: animation,
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              child: Text(
+                languageProvider.isKorean ? 'Eng' : '한',
+                key: ValueKey(languageProvider.isKorean),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.onSurface,
+                ),
+              ),
+            ),
+            tooltip: languageProvider.isKorean ? 'English' : '한글',
+            onPressed: () async {
+              await languageProvider.toggleLanguage();
+            },
+          ),
+        ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,

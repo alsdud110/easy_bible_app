@@ -740,10 +740,26 @@ class _VerseListViewState extends State<VerseListView>
         actions: !_isSelectionMode
             ? [
                 IconButton(
-                  icon: Icon(
-                    languageProvider.isKorean
-                        ? Icons.language
-                        : Icons.translate,
+                  icon: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return RotationTransition(
+                        turns: animation,
+                        child: FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Text(
+                      languageProvider.isKorean ? 'Eng' : '한',
+                      key: ValueKey(languageProvider.isKorean),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
+                      ),
+                    ),
                   ),
                   tooltip: languageProvider.isKorean ? 'English' : '한글',
                   onPressed: () async {

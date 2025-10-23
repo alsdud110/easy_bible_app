@@ -49,6 +49,13 @@ class _ChapterSelectorState extends State<ChapterSelector>
   }
 
   @override
+  void didUpdateWidget(covariant ChapterSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 언어가 변경되면 애니메이션 재실행
+    _animationController.forward(from: 0);
+  }
+
+  @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
@@ -73,6 +80,35 @@ class _ChapterSelectorState extends State<ChapterSelector>
           onPressed: widget.onBack,
           color: theme.appBarTheme.iconTheme?.color,
         ),
+        actions: [
+          IconButton(
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: animation,
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              child: Text(
+                languageProvider.isKorean ? 'Eng' : '한',
+                key: ValueKey(languageProvider.isKorean),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
+                ),
+              ),
+            ),
+            tooltip: languageProvider.isKorean ? 'English' : '한글',
+            onPressed: () async {
+              await languageProvider.toggleLanguage();
+            },
+          ),
+        ],
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: theme.appBarTheme.elevation ?? 0,
         scrolledUnderElevation: theme.appBarTheme.scrolledUnderElevation ?? 0,
