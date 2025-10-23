@@ -47,7 +47,7 @@ const Map<String, String> koreanToEnglishBookMap = {
   '마': 'Mat',
   '막': 'Mar',
   '눅': 'Luk',
-  '요': 'Jhn',
+  '요': 'Joh',
   '행': 'Act',
   '롬': 'Rom',
   '고전': '1Co',

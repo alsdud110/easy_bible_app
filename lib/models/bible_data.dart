@@ -69,7 +69,7 @@ class BibleData {
       'Matthew': 'Mat',
       'Mark': 'Mar',
       'Luke': 'Luk',
-      'John': 'Jhn',
+      'John': 'Joh',
       'Acts': 'Act',
       'Romans': 'Rom',
       '1 Corinthians': '1Co',
