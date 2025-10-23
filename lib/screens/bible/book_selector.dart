@@ -109,9 +109,13 @@ class _BookSelectorState extends State<BookSelector>
     }
 
     return books.where((book) {
+      final query = _searchQuery.toLowerCase();
       final nameMatch = book.name.contains(_searchQuery) ||
           book.fullName.contains(_searchQuery);
-      return nameMatch;
+      // 영어 검색 지원
+      final engMatch = book.eng.toLowerCase().contains(query) ||
+          book.getLocalizedName(false).toLowerCase().contains(query);
+      return nameMatch || engMatch;
     }).toList();
   }
 
@@ -134,8 +138,13 @@ class _BookSelectorState extends State<BookSelector>
       final chapter = int.tryParse(chapterMatch.group(2)!) ?? 1;
       _handleChapterSearch(bookName, chapter);
     } else {
+      final queryLower = query.toLowerCase();
       final bookIndex = widget.books.indexWhere(
-        (b) => b.name == query || b.fullName == query,
+        (b) =>
+            b.name == query ||
+            b.fullName == query ||
+            b.eng.toLowerCase() == queryLower ||
+            b.getLocalizedName(false).toLowerCase() == queryLower,
       );
       if (bookIndex != -1) {
         widget.onSelect(bookIndex);
@@ -144,9 +153,14 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   void _handleVerseSearch(String bookName, int chapter, int verse) {
+    final bookNameLower = bookName.toLowerCase();
     final matchedBooks = widget.books
         .where(
-          (b) => b.name.contains(bookName) || b.fullName.contains(bookName),
+          (b) =>
+              b.name.contains(bookName) ||
+              b.fullName.contains(bookName) ||
+              b.eng.toLowerCase().contains(bookNameLower) ||
+              b.getLocalizedName(false).toLowerCase().contains(bookNameLower),
         )
         .toList();
 
@@ -185,9 +199,14 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   void _handleChapterSearch(String bookName, int chapter) {
+    final bookNameLower = bookName.toLowerCase();
     final matchedBooks = widget.books
         .where(
-          (b) => b.name.contains(bookName) || b.fullName.contains(bookName),
+          (b) =>
+              b.name.contains(bookName) ||
+              b.fullName.contains(bookName) ||
+              b.eng.toLowerCase().contains(bookNameLower) ||
+              b.getLocalizedName(false).toLowerCase().contains(bookNameLower),
         )
         .toList();
 
@@ -445,7 +464,8 @@ class _BookSelectorState extends State<BookSelector>
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.onSurface,
+                  color: theme.appBarTheme.iconTheme?.color ??
+                      theme.colorScheme.onSurface,
                 ),
               ),
             ),
@@ -480,10 +500,12 @@ class _BookSelectorState extends State<BookSelector>
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16',
+                    hintText: languageProvider.isKorean
+                        ? '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16'
+                        : 'e.g.) Genesis, Exo, Numbers 6, Luke 11, John 3:16',
                     hintStyle: TextStyle(
                       color: theme.colorScheme.onSurface.withOpacity(0.5),
-                      fontSize: 15,
+                      fontSize: 13,
                     ),
                     prefixIcon: Icon(
                       Icons.search,
@@ -500,7 +522,8 @@ class _BookSelectorState extends State<BookSelector>
                                 ),
                                 onPressed: () =>
                                     _handleSearch(_searchController.text),
-                                tooltip: '검색',
+                                tooltip:
+                                    languageProvider.isKorean ? '검색' : 'Search',
                               ),
                               IconButton(
                                 icon: Icon(
@@ -592,7 +615,10 @@ class _BookSelectorState extends State<BookSelector>
                     : ListView(
                         children: [
                           if (oldBooks.isNotEmpty) ...[
-                            _SectionTitle(title: languageProvider.isKorean ? '구약' : 'Old Testament'),
+                            _SectionTitle(
+                                title: languageProvider.isKorean
+                                    ? '구약'
+                                    : 'Old Testament'),
                             isGrid
                                 ? _BookGrid(
                                     books: oldBooks,
@@ -608,7 +634,10 @@ class _BookSelectorState extends State<BookSelector>
                                   ),
                           ],
                           if (newBooks.isNotEmpty) ...[
-                            _SectionTitle(title: languageProvider.isKorean ? '신약' : 'New Testament'),
+                            _SectionTitle(
+                                title: languageProvider.isKorean
+                                    ? '신약'
+                                    : 'New Testament'),
                             isGrid
                                 ? _BookGrid(
                                     books: newBooks,
