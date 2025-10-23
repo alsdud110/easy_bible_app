@@ -161,7 +161,41 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     if (_isSelectionMode) {
       HapticFeedback.lightImpact();
       setState(() {
-        _rangeEnd = verseKey;
+        // ⭐ 스마트 범위 선택 로직
+        // 현재 범위가 있는 경우
+        if (_rangeStart != null && _rangeEnd != null) {
+          final keys = widget.verses.keys.toList();
+          final startIdx = keys.indexOf(_rangeStart!);
+          final endIdx = keys.indexOf(_rangeEnd!);
+          final clickedIdx = keys.indexOf(verseKey);
+
+          if (startIdx != -1 && endIdx != -1 && clickedIdx != -1) {
+            final currentStart = startIdx < endIdx ? startIdx : endIdx;
+            final currentEnd = startIdx > endIdx ? startIdx : endIdx;
+
+            // 클릭한 절이 현재 범위보다 앞에 있으면 앞으로 확장
+            if (clickedIdx < currentStart) {
+              _rangeStart = verseKey;
+              _rangeEnd = keys[currentEnd];
+            }
+            // 클릭한 절이 현재 범위보다 뒤에 있으면 뒤로 확장
+            else if (clickedIdx > currentEnd) {
+              _rangeStart = keys[currentStart];
+              _rangeEnd = verseKey;
+            }
+            // 클릭한 절이 범위 내에 있으면 그 절만 선택
+            else {
+              _rangeStart = verseKey;
+              _rangeEnd = verseKey;
+            }
+          } else {
+            // 인덱스를 찾을 수 없으면 기존 로직
+            _rangeEnd = verseKey;
+          }
+        } else {
+          // 범위가 없으면 기존 로직
+          _rangeEnd = verseKey;
+        }
       });
     } else {
       setState(() {
