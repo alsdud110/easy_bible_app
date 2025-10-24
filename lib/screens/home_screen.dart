@@ -253,18 +253,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                     Widget page;
 
-                    // 이미 플랜이 있고, 같은 타입의 플랜이면 Day 화면으로
-                    if (provider.hasPlan &&
-                        provider.currentPlan!.planType == selectedPlanType) {
-                      if (planType == 60) {
+                    // 이미 해당 타입의 플랜이 있으면 Day 화면으로
+                    if (provider.hasPlan(selectedPlanType)) {
+                      if (selectedPlanType == PlanType.day60) {
                         page = const Day60Screen();
-                      } else if (planType == 120) {
+                      } else if (selectedPlanType == PlanType.day120) {
                         page = const Day120Screen();
                       } else {
                         page = const Day180Screen();
                       }
                     } else {
-                      // 플랜이 없거나 다른 타입의 플랜이면 시작 화면으로
+                      // 해당 타입의 플랜이 없으면 시작 화면으로
                       page = PlanStartScreen(planType: selectedPlanType);
                     }
 

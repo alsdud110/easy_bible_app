@@ -4,13 +4,55 @@ import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
+import 'screens/biblePlan/day60_screen.dart';
+import 'screens/biblePlan/day120_screen.dart';
+import 'screens/biblePlan/day180_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/highlight_provider.dart';
 import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
 import 'providers/plan_progress_provider.dart';
+import 'services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+// GlobalKey for navigation
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+// 알림 탭 핸들러
+void _handleNotificationTap(String payload) {
+  print('알림 탭됨: $payload');
+
+  // payload 형식: "day60" | "day120" | "day180"
+  final context = navigatorKey.currentContext;
+  if (context == null) return;
+
+  Widget targetScreen;
+  switch (payload) {
+    case 'day60':
+      targetScreen = const Day60Screen();
+      break;
+    case 'day120':
+      targetScreen = const Day120Screen();
+      break;
+    case 'day180':
+      targetScreen = const Day180Screen();
+      break;
+    default:
+      return;
+  }
+
+  // 모든 스택을 제거하고 홈으로 이동한 후, Day 화면을 푸시
+  navigatorKey.currentState?.pushAndRemoveUntil(
+    MaterialPageRoute(builder: (context) => const HomeScreen()),
+    (route) => false,
+  ).then((_) {
+    // 홈으로 이동 후 Day 화면 푸시
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (context) => targetScreen),
+    );
+  });
+}
 
 /// 모든 스크롤의 바운스/Glow(쭉쭉) 완전 제거
 class NoBounceScrollBehavior extends ScrollBehavior {
@@ -30,6 +72,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await MobileAds.instance.initialize();
+
+  // 알림 서비스 초기화 (알림 탭 핸들러 포함)
+  await NotificationService().initialize(
+    onNotificationTap: (payload) {
+      if (payload != null) {
+        _handleNotificationTap(payload);
+      }
+    },
+  );
 
   final favoriteProvider = FavoriteProvider();
   await favoriteProvider.loadFavorites();
@@ -90,6 +141,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'All in Bible',
       debugShowCheckedModeBanner: false,
       theme: appTheme.copyWith(

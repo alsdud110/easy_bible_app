@@ -140,11 +140,10 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
         return Column(
           children: [
             ...List.generate(titles.length, (i) {
-              // 현재 플랜이 이 타입인지 확인
-              final isCurrentPlan = planProvider.hasPlan &&
-                  planProvider.currentPlan!.planType == planTypes[i];
+              // 이 타입의 플랜이 있는지 확인
+              final isCurrentPlan = planProvider.hasPlan(planTypes[i]);
               final progressPercent =
-                  isCurrentPlan ? planProvider.progressPercent : 0;
+                  isCurrentPlan ? planProvider.getProgressPercent(planTypes[i]) : 0;
 
               return AnimatedBuilder(
                 animation: _boxFadeCtrl,

@@ -8,12 +8,14 @@ import '../../providers/plan_progress_provider.dart';
 import '../../models/favorite_verse.dart';
 import '../../models/highlight_verse.dart';
 import '../../models/const/book_full_name.dart';
+import '../../models/plan_progress.dart';
 import 'package:marquee/marquee.dart';
 
 class PlanVerseListView extends StatefulWidget {
   final String title;
   final Map<String, String> verses;
   final int? dayNumber; // Day 번호 (1, 2, 3, ...)
+  final PlanType? planType; // 플랜 타입 (day60, day120, day180)
   final VoidCallback onBack;
   final VoidCallback? onPrevDay;
   final VoidCallback? onNextDay;
@@ -25,6 +27,7 @@ class PlanVerseListView extends StatefulWidget {
     required this.title,
     required this.verses,
     this.dayNumber,
+    this.planType,
     required this.onBack,
     this.onPrevDay,
     this.onNextDay,
@@ -881,8 +884,9 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
               bottom: 16,
               child: Consumer<PlanProgressProvider>(
                 builder: (context, planProvider, _) {
-                  final isCompleted =
-                      planProvider.isDayCompleted(widget.dayNumber!);
+                  final isCompleted = widget.planType != null && widget.dayNumber != null
+                      ? planProvider.isDayCompleted(widget.planType!, widget.dayNumber!)
+                      : false;
 
                   return AnimatedOpacity(
                     opacity: isCompleted ? 0.6 : 1.0,
@@ -891,24 +895,18 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       onPressed: isCompleted
                           ? null
                           : () async {
-                              await planProvider
-                                  .markDayAsCompleted(widget.dayNumber!);
+                              if (widget.planType != null && widget.dayNumber != null) {
+                                await planProvider
+                                    .markDayAsCompleted(widget.planType!, widget.dayNumber!);
 
-                              if (!mounted) return;
+                                if (!mounted) return;
 
-                              // 완주 체크
-                              if (planProvider.isPlanCompleted) {
-                                _showCompletionDialog();
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'DAY ${widget.dayNumber} 완독! 축하합니다!',
-                                    ),
-                                    duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
+                                // 완주 체크
+                                if (planProvider.isPlanCompleted(widget.planType!)) {
+                                  _showCompletionDialog();
+                                } else {
+                                  _showDayCompletionDialog();
+                                }
                               }
                             },
                       icon: Icon(
@@ -916,7 +914,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         size: 20,
                       ),
                       label: Text(
-                        isCompleted ? '완독 완료' : '완독 처리',
+                        isCompleted ? '일독 완료' : '일독 완료',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -1055,8 +1053,12 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final planProvider = context.read<PlanProgressProvider>();
-    final elapsedDays = planProvider.elapsedDays;
-    final totalDays = planProvider.totalDays;
+    final elapsedDays = widget.planType != null
+        ? planProvider.getElapsedDays(widget.planType!)
+        : 0;
+    final totalDays = widget.planType != null
+        ? planProvider.getTotalDays(widget.planType!)
+        : 0;
 
     showDialog(
       context: context,
@@ -1146,6 +1148,102 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     '확인',
                     style: TextStyle(
                       fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Day 완료 작은 팝업
+  void _showDayCompletionDialog() {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black26,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 체크 아이콘 애니메이션
+              TweenAnimationBuilder<double>(
+                duration: const Duration(milliseconds: 600),
+                tween: Tween(begin: 0.0, end: 1.0),
+                curve: Curves.elasticOut,
+                builder: (context, value, child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: child,
+                  );
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    size: 36,
+                    color: Colors.green,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'DAY ${widget.dayNumber} 일독!',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: cs.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '축하합니다! 🎉',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: cs.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 1,
+                  ),
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
