@@ -268,11 +268,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     }
 
                     Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 300),
-                        pageBuilder: (_, __, ___) => page,
-                        transitionsBuilder: (_, animation, __, child) =>
-                            FadeTransition(opacity: animation, child: child),
+                      MaterialPageRoute(
+                        builder: (context) => page,
                       ),
                     );
                   },

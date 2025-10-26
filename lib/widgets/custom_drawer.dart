@@ -135,7 +135,7 @@ class CustomDrawer extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 16.0,
+                  top: 28.0,
                   bottom: 8.0,
                   left: 24,
                   right: 24,

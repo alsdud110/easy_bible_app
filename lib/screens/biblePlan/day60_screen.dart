@@ -672,29 +672,14 @@ class _Day60ScreenState extends State<Day60Screen>
 
     final entries = extractVersesForDay(bibleData, dayRanges);
     Navigator.of(context).push(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, __, ___) => PlanVerseListView(
+      MaterialPageRoute(
+        builder: (context) => PlanVerseListView(
           title: '$dayLabel  $rangeLabel',
           verses: Map<String, String>.fromEntries(entries),
           dayNumber: dayNum,
           planType: PlanType.day60,
           onBack: () => Navigator.pop(context),
         ),
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: ScaleTransition(
-              scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-                CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeOutCubic,
-                ),
-              ),
-              child: child,
-            ),
-          );
-        },
       ),
     );
   }
