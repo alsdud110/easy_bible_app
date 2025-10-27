@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/bible_180.dart';
 import '../../models/bible_json_loader.dart';
 import '../../models/plan_progress.dart';
@@ -62,7 +63,8 @@ class _Day180ScreenState extends State<Day180Screen>
     const itemHeight = 80.0;
     final targetIndex = nextDay - 1;
     final screenHeight = MediaQuery.of(context).size.height;
-    final offset = (targetIndex * itemHeight) - (screenHeight / 2) + (itemHeight / 2);
+    final offset =
+        (targetIndex * itemHeight) - (screenHeight / 2) + (itemHeight / 2);
 
     final maxScroll = _scrollController.position.maxScrollExtent;
     final targetOffset = offset.clamp(0.0, maxScroll);
@@ -257,13 +259,15 @@ class _Day180ScreenState extends State<Day180Screen>
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                isSame ? Icons.check_circle_outline : Icons.notifications_active,
+                isSame
+                    ? Icons.check_circle_outline
+                    : Icons.notifications_active,
                 size: 48,
                 color: cs.primary,
               ),
               const SizedBox(height: 16),
               Text(
-                isSame ? '동일한 시간이에요' : '알림 시간이 변경되었어요',
+                isSame ? '동일한 시간이에요' : '알림 일정이 변경되었어요',
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: cs.onSurface,
                   fontWeight: FontWeight.w600,
@@ -271,7 +275,8 @@ class _Day180ScreenState extends State<Day180Screen>
               ),
               const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 decoration: BoxDecoration(
                   color: cs.primaryContainer.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(12),
@@ -286,9 +291,7 @@ class _Day180ScreenState extends State<Day180Screen>
               ),
               const SizedBox(height: 8),
               Text(
-                isSame
-                    ? '이미 이 시간으로 설정되어 있어요'
-                    : '매일 이 시간에 알림을 받아요',
+                isSame ? '이미 이 시간으로 설정되어 있어요' : '매일 이 시간에 알림을 받아요',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: cs.onSurface.withOpacity(0.6),
                   fontSize: 13,
@@ -331,66 +334,74 @@ class _Day180ScreenState extends State<Day180Screen>
     TimeOfDay initialTime;
 
     if (currentTime != null) {
-      initialTime = TimeOfDay(hour: currentTime.hour, minute: currentTime.minute);
+      initialTime =
+          TimeOfDay(hour: currentTime.hour, minute: currentTime.minute);
     } else {
       initialTime = const TimeOfDay(hour: 7, minute: 0);
     }
 
-    final selectedTime = await showDialog<TimeOfDay>(
+    // Load saved days from SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final savedDaysString = prefs.getStringList('notification_days_180');
+    List<bool>? initialSelectedDays;
+    if (savedDaysString != null) {
+      initialSelectedDays = savedDaysString.map((e) => e == 'true').toList();
+    }
+
+    final result = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (context) => _NotificationTimeDialog(
         initialTime: initialTime,
         currentPlanName: plan.planName,
+        initialSelectedDays: initialSelectedDays,
       ),
     );
 
-    if (selectedTime != null) {
-      // 기존 시간과 비교
-      final isSameTime = initialTime.hour == selectedTime.hour &&
-                         initialTime.minute == selectedTime.minute;
+    if (result != null) {
+      final selectedTime = result['time'] as TimeOfDay;
+      final selectedDays = result['selectedDays'] as List<bool>;
 
       if (!mounted) return;
 
-      if (isSameTime) {
-        // 동일한 시간이면 알림만 표시
-        await _showNotificationResultDialog(
-          isSame: true,
-          time: selectedTime,
-        );
-      } else {
-        // 다른 시간이면 업데이트하고 알림 표시
-        final now = DateTime.now();
-        final newNotificationTime = DateTime(
-          now.year,
-          now.month,
-          now.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
+      // 시간 업데이트
+      final now = DateTime.now();
+      final newNotificationTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
 
-        await planProvider.updateNotificationTime(
-          PlanType.day180,
-          newNotificationTime,
-        );
+      await planProvider.updateNotificationTime(
+        PlanType.day180,
+        newNotificationTime,
+      );
 
-        // 기존 알림 취소하고 새로 등록
-        await NotificationService().cancelNotification(180);
-        await NotificationService().scheduleDailyNotification(
-          id: 180,
-          title: '📖 성경 읽기 시간이에요!',
-          body: '${plan.planName} - 오늘의 말씀을 읽어보세요',
-          hour: selectedTime.hour,
-          minute: selectedTime.minute,
-          payload: 'day180',
-        );
+      // 선택한 요일 저장
+      await prefs.setStringList(
+        'notification_days_180',
+        selectedDays.map((e) => e.toString()).toList(),
+      );
 
-        if (!mounted) return;
+      // 기존 알림 취소하고 새로 등록 (요일별)
+      await NotificationService().cancelNotification(180);
+      await NotificationService().scheduleWeeklyNotification(
+        baseId: 1800, // 180 * 10
+        title: '📖 성경일독 Day180 - 읽기 시간!',
+        body: '${plan.planName} - 오늘의 말씀을 읽어보세요 🙏',
+        hour: selectedTime.hour,
+        minute: selectedTime.minute,
+        selectedDays: selectedDays,
+        payload: 'day180',
+      );
 
-        await _showNotificationResultDialog(
-          isSame: false,
-          time: selectedTime,
-        );
-      }
+      if (!mounted) return;
+
+      await _showNotificationResultDialog(
+        isSame: false,
+        time: selectedTime,
+      );
     }
   }
 
@@ -484,8 +495,10 @@ class _Day180ScreenState extends State<Day180Screen>
                       final rangeLabel = dayRanges.join(', ');
 
                       // 읽음 처리 및 접근 가능 여부 확인
-                      final isCompleted = planProvider.isDayCompleted(PlanType.day180, dayNum);
-                      final canAccess = planProvider.canAccessDay(PlanType.day180, dayNum);
+                      final isCompleted =
+                          planProvider.isDayCompleted(PlanType.day180, dayNum);
+                      final canAccess =
+                          planProvider.canAccessDay(PlanType.day180, dayNum);
 
                       return TweenAnimationBuilder<double>(
                         duration: Duration(milliseconds: 400 + (idx * 20)),
@@ -526,7 +539,8 @@ class _Day180ScreenState extends State<Day180Screen>
                                                   ]
                                                 : [
                                                     Colors.grey,
-                                                    Colors.grey.withOpacity(0.7),
+                                                    Colors.grey
+                                                        .withOpacity(0.7),
                                                   ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -536,8 +550,10 @@ class _Day180ScreenState extends State<Day180Screen>
                                           ? [
                                               BoxShadow(
                                                 color: isCompleted
-                                                    ? Colors.green.withOpacity(0.3)
-                                                    : cs.primary.withOpacity(0.3),
+                                                    ? Colors.green
+                                                        .withOpacity(0.3)
+                                                    : cs.primary
+                                                        .withOpacity(0.3),
                                                 blurRadius: 8,
                                                 offset: const Offset(0, 2),
                                               ),
@@ -546,7 +562,8 @@ class _Day180ScreenState extends State<Day180Screen>
                                     ),
                                     child: Text(
                                       dayLabel,
-                                      style: theme.textTheme.bodyLarge?.copyWith(
+                                      style:
+                                          theme.textTheme.bodyLarge?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                         color: cs.onPrimary,
@@ -557,7 +574,8 @@ class _Day180ScreenState extends State<Day180Screen>
                                   Expanded(
                                     child: Text(
                                       prettyRangeLabel(rangeLabel),
-                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                      style:
+                                          theme.textTheme.bodyMedium?.copyWith(
                                         fontSize: 15,
                                         color: canAccess
                                             ? cs.onSurface
@@ -577,7 +595,8 @@ class _Day180ScreenState extends State<Day180Screen>
                                 ],
                               ),
                               trailing: TweenAnimationBuilder<double>(
-                                duration: Duration(milliseconds: 400 + (idx * 20)),
+                                duration:
+                                    Duration(milliseconds: 400 + (idx * 20)),
                                 tween: Tween(begin: 0.0, end: 1.0),
                                 curve: Curves.easeOut,
                                 builder: (context, value, child) {
@@ -643,22 +662,27 @@ class _Day180ScreenState extends State<Day180Screen>
 class _NotificationTimeDialog extends StatefulWidget {
   final TimeOfDay initialTime;
   final String currentPlanName;
+  final List<bool>? initialSelectedDays;
 
   const _NotificationTimeDialog({
     required this.initialTime,
     required this.currentPlanName,
+    this.initialSelectedDays,
   });
 
   @override
-  State<_NotificationTimeDialog> createState() => _NotificationTimeDialogState();
+  State<_NotificationTimeDialog> createState() =>
+      _NotificationTimeDialogState();
 }
 
 class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
   late int _selectedHour;
   late int _selectedMinute;
   late bool _isAM;
-  final TextEditingController _hourController = TextEditingController();
-  final TextEditingController _minuteController = TextEditingController();
+  late FixedExtentScrollController _amPmController;
+  late FixedExtentScrollController _hourController;
+  late FixedExtentScrollController _minuteController;
+  late List<bool> _selectedDays;
 
   @override
   void initState() {
@@ -666,36 +690,46 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
     _selectedHour = widget.initialTime.hour;
     _selectedMinute = widget.initialTime.minute;
     _isAM = _selectedHour < 12;
+    _selectedDays = widget.initialSelectedDays != null
+        ? List<bool>.from(widget.initialSelectedDays!)
+        : List.filled(7, true);
 
-    final displayHour = _selectedHour == 0 ? 12 : (_selectedHour > 12 ? _selectedHour - 12 : _selectedHour);
-    _hourController.text = displayHour.toString().padLeft(2, '0');
-    _minuteController.text = _selectedMinute.toString().padLeft(2, '0');
+    // 12시간 형식으로 표시 (1~12)
+    final displayHour = _selectedHour == 0
+        ? 12
+        : (_selectedHour > 12 ? _selectedHour - 12 : _selectedHour);
+
+    // 스크롤 컨트롤러 초기화 (0-based index이므로 -1)
+    _amPmController = FixedExtentScrollController(initialItem: _isAM ? 0 : 1);
+    _hourController = FixedExtentScrollController(initialItem: displayHour - 1);
+    _minuteController =
+        FixedExtentScrollController(initialItem: _selectedMinute);
   }
 
-  void _updateHour() {
-    final displayHour = int.tryParse(_hourController.text) ?? 7;
-    if (displayHour >= 1 && displayHour <= 12) {
-      setState(() {
-        if (displayHour == 12) {
-          _selectedHour = _isAM ? 0 : 12;
+  void _onAmPmChanged(int index) {
+    setState(() {
+      final newIsAM = index == 0;
+      if (_isAM != newIsAM) {
+        _isAM = newIsAM;
+        // 현재 _selectedHour를 기준으로 AM/PM 전환
+        if (_isAM) {
+          // 오후 -> 오전
+          if (_selectedHour >= 12) {
+            _selectedHour = _selectedHour == 12 ? 0 : _selectedHour - 12;
+          }
         } else {
-          _selectedHour = _isAM ? displayHour : displayHour + 12;
+          // 오전 -> 오후
+          if (_selectedHour < 12) {
+            _selectedHour = _selectedHour == 0 ? 12 : _selectedHour + 12;
+          }
         }
-      });
-    }
-  }
-
-  void _updateMinute() {
-    final minute = int.tryParse(_minuteController.text) ?? 0;
-    if (minute >= 0 && minute <= 59) {
-      setState(() {
-        _selectedMinute = minute;
-      });
-    }
+      }
+    });
   }
 
   @override
   void dispose() {
+    _amPmController.dispose();
     _hourController.dispose();
     _minuteController.dispose();
     super.dispose();
@@ -706,31 +740,33 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
+    // 선택된 시간을 12시간 형식으로 표시
+    final displayHour = _selectedHour == 0
+        ? 12
+        : (_selectedHour > 12 ? _selectedHour - 12 : _selectedHour);
+    final timeString =
+        '${_isAM ? '오전' : '오후'} ${displayHour.toString().padLeft(2, '0')}:${_selectedMinute.toString().padLeft(2, '0')}';
+
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        constraints: const BoxConstraints(maxWidth: 400),
+        padding: const EdgeInsets.all(28),
         decoration: BoxDecoration(
           color: cs.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-            Icon(
-              Icons.notifications_outlined,
-              size: 40,
-              color: cs.primary.withOpacity(0.7),
-            ),
-            const SizedBox(height: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 타이틀
             Text(
               '알림 시간 설정',
-              style: theme.textTheme.titleMedium?.copyWith(
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
                 color: cs.onSurface,
-                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),
@@ -742,211 +778,292 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
             ),
             const SizedBox(height: 24),
 
-            // 현재 설정된 시간 표시
+            // 반복 요일 선택
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '반복 요일',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: cs.onSurface.withOpacity(0.7),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                        child: _DayButton(
+                      label: '일',
+                      isSelected: _selectedDays[0],
+                      isSunday: true,
+                      onTap: () =>
+                          setState(() => _selectedDays[0] = !_selectedDays[0]),
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _DayButton(
+                      label: '월',
+                      isSelected: _selectedDays[1],
+                      isSunday: false,
+                      onTap: () =>
+                          setState(() => _selectedDays[1] = !_selectedDays[1]),
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _DayButton(
+                      label: '화',
+                      isSelected: _selectedDays[2],
+                      isSunday: false,
+                      onTap: () =>
+                          setState(() => _selectedDays[2] = !_selectedDays[2]),
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _DayButton(
+                      label: '수',
+                      isSelected: _selectedDays[3],
+                      isSunday: false,
+                      onTap: () =>
+                          setState(() => _selectedDays[3] = !_selectedDays[3]),
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _DayButton(
+                      label: '목',
+                      isSelected: _selectedDays[4],
+                      isSunday: false,
+                      onTap: () =>
+                          setState(() => _selectedDays[4] = !_selectedDays[4]),
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _DayButton(
+                      label: '금',
+                      isSelected: _selectedDays[5],
+                      isSunday: false,
+                      onTap: () =>
+                          setState(() => _selectedDays[5] = !_selectedDays[5]),
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(
+                        child: _DayButton(
+                      label: '토',
+                      isSelected: _selectedDays[6],
+                      isSunday: false,
+                      onTap: () =>
+                          setState(() => _selectedDays[6] = !_selectedDays[6]),
+                    )),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // 선택한 시간 미리보기
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               decoration: BoxDecoration(
-                color: cs.primaryContainer.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors: [
+                    cs.primary.withOpacity(0.1),
+                    cs.primaryContainer.withOpacity(0.2),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: cs.primary.withOpacity(0.3),
+                  width: 1.5,
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: [
-                  Icon(Icons.access_time, size: 18, color: cs.primary),
-                  const SizedBox(width: 8),
                   Text(
-                    '현재: ${widget.initialTime.format(context)}',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: cs.onSurface.withOpacity(0.8),
+                    '선택한 시간',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: cs.onSurface.withOpacity(0.6),
                       fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    timeString,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: cs.primary,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            // 오전/오후 선택
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _AMPMButton(
-                  label: '오전',
-                  isSelected: _isAM,
-                  onTap: () {
-                    setState(() {
-                      if (!_isAM) {
-                        _isAM = true;
-                        if (_selectedHour >= 12) {
-                          _selectedHour = _selectedHour == 12 ? 0 : _selectedHour - 12;
-                        }
-                        _updateHour();
-                      }
-                    });
-                  },
-                ),
-                const SizedBox(width: 12),
-                _AMPMButton(
-                  label: '오후',
-                  isSelected: !_isAM,
-                  onTap: () {
-                    setState(() {
-                      if (_isAM) {
-                        _isAM = false;
-                        if (_selectedHour < 12) {
-                          _selectedHour = _selectedHour == 0 ? 12 : _selectedHour + 12;
-                        }
-                        _updateHour();
-                      }
-                    });
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // 시간 입력
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      width: 80,
-                      child: TextField(
-                        controller: _hourController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        maxLength: 2,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        onChanged: (_) => _updateHour(),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '시',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: cs.onSurface.withOpacity(0.6),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 28, left: 12, right: 12),
-                  child: Text(
-                    ':',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    SizedBox(
-                      width: 80,
-                      child: TextField(
-                        controller: _minuteController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        maxLength: 2,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        onChanged: (_) => _updateMinute(),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '분',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: cs.onSurface.withOpacity(0.6),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
             const SizedBox(height: 24),
 
-            // 버튼
-            Row(
+            // 알림 시간 선택 (오전/오후 | 시 | 분)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: Text(
-                      '취소',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: cs.onSurface.withOpacity(0.7),
-                      ),
-                    ),
+                Text(
+                  '알림 시간',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: cs.onSurface.withOpacity(0.7),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final selectedTime = TimeOfDay(
-                        hour: _selectedHour,
-                        minute: _selectedMinute,
-                      );
-                      Navigator.of(context).pop(selectedTime);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cs.primary,
-                      foregroundColor: cs.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    // 오전/오후
+                    Expanded(
+                      flex: 2,
+                      child: _TimePickerColumn(
+                        label: '오전/오후',
+                        controller: _amPmController,
+                        itemCount: 2,
+                        onSelectedItemChanged: _onAmPmChanged,
+                        itemBuilder: (index) => index == 0 ? '오전' : '오후',
                       ),
                     ),
-                    child: const Text(
-                      '확인',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    const SizedBox(width: 12),
+                    // 시
+                    Expanded(
+                      flex: 2,
+                      child: _TimePickerColumn(
+                        label: '시',
+                        controller: _hourController,
+                        itemCount: 12,
+                        itemBuilder: (index) => '${index + 1}'.padLeft(2, '0'),
+                        onSelectedItemChanged: (index) {
+                          final displayHour = index + 1; // 1~12
+                          setState(() {
+                            if (displayHour == 12) {
+                              _selectedHour = _isAM ? 0 : 12;
+                            } else {
+                              _selectedHour =
+                                  _isAM ? displayHour : displayHour + 12;
+                            }
+                          });
+                        },
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 12),
+                    // 분
+                    Expanded(
+                      flex: 2,
+                      child: _TimePickerColumn(
+                        label: '분',
+                        controller: _minuteController,
+                        itemCount: 60,
+                        itemBuilder: (index) =>
+                            index.toString().padLeft(2, '0'),
+                        onSelectedItemChanged: (index) {
+                          setState(() {
+                            _selectedMinute = index;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
+            ),
+            const SizedBox(height: 28),
+
+            // 저장 버튼
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop({
+                    'time':
+                        TimeOfDay(hour: _selectedHour, minute: _selectedMinute),
+                    'selectedDays': List<bool>.from(_selectedDays),
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: cs.primary,
+                  foregroundColor: cs.onPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  '저장',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ),
       ),
     );
   }
 }
 
-// AM/PM 버튼
-class _AMPMButton extends StatelessWidget {
+// 요일 선택 버튼
+class _DayButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final bool isSunday;
+  final VoidCallback onTap;
+
+  const _DayButton({
+    required this.label,
+    required this.isSelected,
+    required this.isSunday,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isSelected ? cs.primary : cs.surfaceContainerHighest,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? cs.primary : cs.outline.withOpacity(0.3),
+            width: 1.5,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected
+                  ? cs.onPrimary
+                  : (isSunday ? Colors.red : cs.onSurface.withOpacity(0.6)),
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              fontSize: 13,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 오전/오후 선택 버튼
+class _TimeSelectButton extends StatelessWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _AMPMButton({
+  const _TimeSelectButton({
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -959,21 +1076,114 @@ class _AMPMButton extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: isSelected ? cs.primary : cs.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? cs.primary : Colors.transparent,
+            width: 1.5,
+          ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            fontSize: 14,
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.7),
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+// 시간/분 선택 컬럼
+class _TimePickerColumn extends StatelessWidget {
+  final String label;
+  final FixedExtentScrollController controller;
+  final int itemCount;
+  final String Function(int) itemBuilder;
+  final ValueChanged<int> onSelectedItemChanged;
+
+  const _TimePickerColumn({
+    required this.label,
+    required this.controller,
+    required this.itemCount,
+    required this.itemBuilder,
+    required this.onSelectedItemChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Column(
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: cs.onSurface.withOpacity(0.6),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 150,
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerHighest.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: cs.outline.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // 선택 영역 하이라이트
+              Container(
+                height: 40,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  color: cs.primaryContainer.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: cs.primary.withOpacity(0.5),
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              ListWheelScrollView.useDelegate(
+                controller: controller,
+                itemExtent: 40,
+                physics: const FixedExtentScrollPhysics(),
+                diameterRatio: 1.5,
+                perspective: 0.002,
+                onSelectedItemChanged: onSelectedItemChanged,
+                childDelegate: ListWheelChildBuilderDelegate(
+                  builder: (context, index) {
+                    return Center(
+                      child: Text(
+                        itemBuilder(index),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: itemCount,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

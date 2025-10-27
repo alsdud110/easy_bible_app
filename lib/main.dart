@@ -19,13 +19,26 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 // GlobalKey for navigation
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-// 알림 탭 핸들러
-void _handleNotificationTap(String payload) {
-  print('알림 탭됨: $payload');
+// 알림으로 앱이 시작된 경우의 초기 라우트
+String? _initialNotificationPayload;
 
-  // payload 형식: "day60" | "day120" | "day180"
-  final context = navigatorKey.currentContext;
-  if (context == null) return;
+// 알림 탭 핸들러 (앱 실행 중일 때)
+void _handleNotificationTap(String payload) {
+  print('알림 탭됨 (앱 실행 중): $payload');
+
+  // 네비게이터가 준비될 때까지 대기
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _navigateToScreen(payload);
+  });
+}
+
+// 화면 이동 로직 (홈을 거쳐서 Day 화면으로)
+void _navigateToScreen(String payload) {
+  final navigator = navigatorKey.currentState;
+  if (navigator == null) {
+    print('Navigator가 아직 준비되지 않음');
+    return;
+  }
 
   Widget targetScreen;
   switch (payload) {
@@ -39,15 +52,17 @@ void _handleNotificationTap(String payload) {
       targetScreen = const Day180Screen();
       break;
     default:
+      print('알 수 없는 payload: $payload');
       return;
   }
 
-  // 모든 스택을 제거하고 홈으로 이동한 후, Day 화면을 푸시
-  navigatorKey.currentState?.pushAndRemoveUntil(
-    MaterialPageRoute(builder: (context) => const HomeScreen()),
-    (route) => false,
-  ).then((_) {
-    // 홈으로 이동 후 Day 화면 푸시
+  print('홈 화면을 거쳐 Day 화면으로 이동: $payload');
+
+  // 현재 경로가 홈이 아니면 홈으로 먼저 이동
+  navigator.popUntil((route) => route.isFirst);
+
+  // 약간의 딜레이 후 Day 화면으로 이동 (부드러운 전환)
+  Future.delayed(const Duration(milliseconds: 300), () {
     navigatorKey.currentState?.push(
       MaterialPageRoute(builder: (context) => targetScreen),
     );
@@ -81,6 +96,12 @@ void main() async {
       }
     },
   );
+
+  // 앱이 종료된 상태에서 알림으로 시작된 경우 확인
+  _initialNotificationPayload = NotificationService().getLaunchPayload();
+  if (_initialNotificationPayload != null) {
+    print('앱이 알림으로 시작됨: $_initialNotificationPayload');
+  }
 
   final favoriteProvider = FavoriteProvider();
   await favoriteProvider.loadFavorites();
@@ -127,6 +148,14 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _themeMode = widget.initDark ? ThemeMode.dark : ThemeMode.light;
+
+    // 앱이 알림으로 시작된 경우 해당 화면으로 이동
+    if (_initialNotificationPayload != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _navigateToScreen(_initialNotificationPayload!);
+        _initialNotificationPayload = null; // 처리 후 초기화
+      });
+    }
   }
 
   Future<void> _toggleTheme() async {

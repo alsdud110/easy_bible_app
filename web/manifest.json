@@ -1,6 +1,6 @@
 {
-    "name": "여? 성경이 읽어지네!",
-    "short_name": "여? 성경!",
+    "name": "올인바이블(All in Bible)",
+    "short_name": "올인바이블!",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
