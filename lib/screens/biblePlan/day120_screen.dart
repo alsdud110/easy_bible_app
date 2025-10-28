@@ -340,12 +340,17 @@ class _Day120ScreenState extends State<Day120Screen>
       initialTime = const TimeOfDay(hour: 7, minute: 0);
     }
 
-    // 저장된 요일 불러오기
+    // 저장된 요일 정보 불러오기
     final prefs = await SharedPreferences.getInstance();
-    final savedDaysString = prefs.getStringList('notification_days_120');
-    List<bool>? initialSelectedDays;
-    if (savedDaysString != null) {
-      initialSelectedDays = savedDaysString.map((e) => e == 'true').toList();
+    final daysKey = 'notification_days_120';
+    final savedDays = prefs.getString(daysKey);
+    List<bool> initialSelectedDays = List.filled(7, true);
+
+    if (savedDays != null) {
+      final daysList = savedDays.split(',');
+      if (daysList.length == 7) {
+        initialSelectedDays = daysList.map((e) => e == '1').toList();
+      }
     }
 
     final result = await showDialog<Map<String, dynamic>>(
@@ -378,16 +383,13 @@ class _Day120ScreenState extends State<Day120Screen>
         newNotificationTime,
       );
 
-      // selectedDays 저장
-      await prefs.setStringList(
-        'notification_days_120',
-        selectedDays.map((e) => e.toString()).toList(),
-      );
+      // 선택한 요일 저장
+      await prefs.setString(
+          daysKey, selectedDays.map((e) => e ? '1' : '0').join(','));
 
-      // 기존 알림 취소하고 새로 등록
-      await NotificationService().cancelNotification(120);
+      // 기존 알림 취소하고 새로 등록 (요일별)
       await NotificationService().scheduleWeeklyNotification(
-        baseId: 1200,
+        baseId: 1200, // 120 * 10
         title: '📖 성경일독 Day120 - 읽기 시간!',
         body: '${plan.planName} - 오늘의 말씀을 읽어보세요 🙏',
         hour: selectedTime.hour,
@@ -1049,51 +1051,6 @@ class _DayButton extends StatelessWidget {
                   : (isSunday ? Colors.red : cs.onSurface.withOpacity(0.6)),
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               fontSize: 13,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// 오전/오후 선택 버튼
-class _TimeSelectButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _TimeSelectButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? cs.primary : cs.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? cs.primary : Colors.transparent,
-            width: 1.5,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.7),
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              fontSize: 14,
             ),
           ),
         ),

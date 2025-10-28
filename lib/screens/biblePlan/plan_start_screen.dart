@@ -179,7 +179,8 @@ class _PlanStartScreenState extends State<PlanStartScreen>
       // 선택한 요일 저장
       final prefs = await SharedPreferences.getInstance();
       final daysKey = 'notification_days_${widget.planType.totalDays}';
-      await prefs.setString(daysKey, _selectedDays.map((e) => e ? '1' : '0').join(','));
+      await prefs.setString(
+          daysKey, _selectedDays.map((e) => e ? '1' : '0').join(','));
 
       // 요일별 알림 스케줄링 (baseId는 플랜 타입 * 10으로 설정하여 7개 ID 확보)
       await NotificationService().scheduleWeeklyNotification(
@@ -585,7 +586,8 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
     // 스크롤 컨트롤러 초기화 (0-based index이므로 -1)
     _amPmController = FixedExtentScrollController(initialItem: _isAM ? 0 : 1);
     _hourController = FixedExtentScrollController(initialItem: displayHour - 1);
-    _minuteController = FixedExtentScrollController(initialItem: _selectedMinute);
+    _minuteController =
+        FixedExtentScrollController(initialItem: _selectedMinute);
   }
 
   void _onAmPmChanged(int index) {
@@ -626,7 +628,8 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
     final displayHour = _selectedHour == 0
         ? 12
         : (_selectedHour > 12 ? _selectedHour - 12 : _selectedHour);
-    final timeString = '${_isAM ? '오전' : '오후'} ${displayHour.toString().padLeft(2, '0')}:${_selectedMinute.toString().padLeft(2, '0')}';
+    final timeString =
+        '${_isAM ? '오전' : '오후'} ${displayHour.toString().padLeft(2, '0')}:${_selectedMinute.toString().padLeft(2, '0')}';
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -699,53 +702,67 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '일',
                       isSelected: _selectedDays[0],
                       isSunday: true,
-                      onTap: () => setState(() => _selectedDays[0] = !_selectedDays[0]),
+                      onTap: () =>
+                          setState(() => _selectedDays[0] = !_selectedDays[0]),
                     )),
                     const SizedBox(width: 4),
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '월',
                       isSelected: _selectedDays[1],
                       isSunday: false,
-                      onTap: () => setState(() => _selectedDays[1] = !_selectedDays[1]),
+                      onTap: () =>
+                          setState(() => _selectedDays[1] = !_selectedDays[1]),
                     )),
                     const SizedBox(width: 4),
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '화',
                       isSelected: _selectedDays[2],
                       isSunday: false,
-                      onTap: () => setState(() => _selectedDays[2] = !_selectedDays[2]),
+                      onTap: () =>
+                          setState(() => _selectedDays[2] = !_selectedDays[2]),
                     )),
                     const SizedBox(width: 4),
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '수',
                       isSelected: _selectedDays[3],
                       isSunday: false,
-                      onTap: () => setState(() => _selectedDays[3] = !_selectedDays[3]),
+                      onTap: () =>
+                          setState(() => _selectedDays[3] = !_selectedDays[3]),
                     )),
                     const SizedBox(width: 4),
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '목',
                       isSelected: _selectedDays[4],
                       isSunday: false,
-                      onTap: () => setState(() => _selectedDays[4] = !_selectedDays[4]),
+                      onTap: () =>
+                          setState(() => _selectedDays[4] = !_selectedDays[4]),
                     )),
                     const SizedBox(width: 4),
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '금',
                       isSelected: _selectedDays[5],
                       isSunday: false,
-                      onTap: () => setState(() => _selectedDays[5] = !_selectedDays[5]),
+                      onTap: () =>
+                          setState(() => _selectedDays[5] = !_selectedDays[5]),
                     )),
                     const SizedBox(width: 4),
-                    Expanded(child: _DayButton(
+                    Expanded(
+                        child: _DayButton(
                       label: '토',
                       isSelected: _selectedDays[6],
                       isSunday: false,
-                      onTap: () => setState(() => _selectedDays[6] = !_selectedDays[6]),
+                      onTap: () =>
+                          setState(() => _selectedDays[6] = !_selectedDays[6]),
                     )),
                   ],
                 ),
@@ -836,7 +853,8 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
                             if (displayHour == 12) {
                               _selectedHour = _isAM ? 0 : 12;
                             } else {
-                              _selectedHour = _isAM ? displayHour : displayHour + 12;
+                              _selectedHour =
+                                  _isAM ? displayHour : displayHour + 12;
                             }
                           });
                         },
@@ -856,7 +874,8 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
                             _selectedMinute = index;
                           });
                         },
-                        itemBuilder: (index) => index.toString().padLeft(2, '0'),
+                        itemBuilder: (index) =>
+                            index.toString().padLeft(2, '0'),
                       ),
                     ),
                   ],
@@ -871,7 +890,8 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop({
-                    'time': TimeOfDay(hour: _selectedHour, minute: _selectedMinute),
+                    'time':
+                        TimeOfDay(hour: _selectedHour, minute: _selectedMinute),
                     'selectedDays': List<bool>.from(_selectedDays),
                   });
                 },
@@ -894,131 +914,6 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// AM/PM 버튼
-class _AMPMButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _AMPMButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: isSelected ? cs.primary : cs.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected ? cs.primary : Colors.transparent,
-              width: 2,
-            ),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: cs.primary.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : [],
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.7),
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                fontSize: 16,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// 스크롤 휠 위젯
-class _ScrollWheel extends StatelessWidget {
-  final FixedExtentScrollController controller;
-  final int itemCount;
-  final ValueChanged<int> onSelectedItemChanged;
-  final Widget Function(int index) itemBuilder;
-
-  const _ScrollWheel({
-    required this.controller,
-    required this.itemCount,
-    required this.onSelectedItemChanged,
-    required this.itemBuilder,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListWheelScrollView.useDelegate(
-      controller: controller,
-      itemExtent: 50,
-      physics: const FixedExtentScrollPhysics(),
-      diameterRatio: 1.5,
-      perspective: 0.002,
-      onSelectedItemChanged: onSelectedItemChanged,
-      childDelegate: ListWheelChildBuilderDelegate(
-        builder: (context, index) => itemBuilder(index),
-        childCount: itemCount,
-      ),
-    );
-  }
-}
-
-// 시간 조정 버튼
-class _AdjustButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  const _AdjustButton({
-    required this.icon,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return InkWell(
-      onTap: onPressed,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: cs.primaryContainer.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(
-          icon,
-          size: 20,
-          color: cs.primary,
         ),
       ),
     );
@@ -1089,45 +984,6 @@ class _DayButton extends StatelessWidget {
   }
 }
 
-// 오전/오후 선택 버튼
-class _TimeSelectButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _TimeSelectButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? cs.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 // 시/분 선택 컬럼
 class _TimePickerColumn extends StatelessWidget {
   final String label;
@@ -1179,8 +1035,11 @@ class _TimePickerColumn extends StatelessWidget {
                     itemBuilder(index),
                     style: TextStyle(
                       fontSize: isSelected ? 20 : 16,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? cs.primary : cs.onSurface.withOpacity(0.5),
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected
+                          ? cs.primary
+                          : cs.onSurface.withOpacity(0.5),
                     ),
                   ),
                 );

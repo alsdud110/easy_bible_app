@@ -1105,51 +1105,6 @@ class _DayButton extends StatelessWidget {
   }
 }
 
-// 오전/오후 선택 버튼
-class _TimeSelectButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _TimeSelectButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? cs.primary : cs.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? cs.primary : Colors.transparent,
-            width: 1.5,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.7),
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 // 시간/분 선택 컬럼
 class _TimePickerColumn extends StatelessWidget {
   final String label;
