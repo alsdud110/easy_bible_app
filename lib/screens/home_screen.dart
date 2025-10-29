@@ -785,8 +785,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             color: color,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            '진행 중',
+                          child: Text(
+                            progress == 100.0 ? '완료' : '진행 중',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 11,

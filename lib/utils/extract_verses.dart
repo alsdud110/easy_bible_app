@@ -160,6 +160,131 @@ List<MapEntry<String, String>> _extractSingleRangeEntries(
         '${mFix.group(1)}${mFix.group(2)}:${mFix.group(3)}~${mFix.group(2)}:${mFix.group(4)}';
   }
 
+  // cross-book with verse: ex) 삼상25장~삼하2:11
+  final crossBookVerseMatch =
+      RegExp(r'^([가-힣]+)(\d+)장?~([가-힣]+)(\d+):(\d+)$').firstMatch(clean);
+  if (crossBookVerseMatch != null) {
+    final books = [
+      "창",
+      "출",
+      "레",
+      "민",
+      "신",
+      "수",
+      "삿",
+      "룻",
+      "삼상",
+      "삼하",
+      "왕상",
+      "왕하",
+      "대상",
+      "대하",
+      "스",
+      "느",
+      "에",
+      "욥",
+      "시",
+      "잠",
+      "전",
+      "아",
+      "사",
+      "렘",
+      "애",
+      "겔",
+      "단",
+      "호",
+      "욜",
+      "암",
+      "옵",
+      "욘",
+      "미",
+      "나",
+      "합",
+      "습",
+      "학",
+      "슥",
+      "말",
+      "마",
+      "막",
+      "눅",
+      "요",
+      "행",
+      "롬",
+      "고전",
+      "고후",
+      "갈",
+      "엡",
+      "빌",
+      "골",
+      "살전",
+      "살후",
+      "딤전",
+      "딤후",
+      "딛",
+      "몬",
+      "히",
+      "약",
+      "벧전",
+      "벧후",
+      "요일",
+      "요이",
+      "요삼",
+      "유",
+      "계"
+    ];
+    final startBook = crossBookVerseMatch.group(1)!;
+    final startCh = int.parse(crossBookVerseMatch.group(2)!);
+    final endBook = crossBookVerseMatch.group(3)!;
+    final endCh = int.parse(crossBookVerseMatch.group(4)!);
+    final endVerse = int.parse(crossBookVerseMatch.group(5)!);
+
+    final startIdx = books.indexOf(startBook);
+    final endIdx = books.indexOf(endBook);
+
+    // (1) 시작책: startCh~존재하는 마지막장까지
+    int ch = startCh;
+    while (true) {
+      bool found = false;
+      for (final e in bibleData.entries) {
+        if (e.key.startsWith('$startBook$ch:')) {
+          found = true;
+          result.add(e);
+        }
+      }
+      if (!found) break;
+      ch++;
+    }
+
+    // (2) 중간책: 모두
+    for (int i = startIdx + 1; i < endIdx; i++) {
+      final midBook = books[i];
+      final chapters = bibleData.keys
+          .where((k) => k.startsWith(midBook))
+          .map((k) =>
+              int.parse(RegExp(r'^[가-힣]+(\d+):').firstMatch(k)!.group(1)!))
+          .toSet();
+      for (final midCh in chapters) {
+        _addChapterVersesEntries(bibleData, midBook, midCh, result);
+      }
+    }
+
+    // (3) 마지막책: 1~endCh까지, 마지막장은 endVerse까지만
+    for (int ch = 1; ch < endCh; ch++) {
+      _addChapterVersesEntries(bibleData, endBook, ch, result);
+    }
+    // 마지막 장의 1~endVerse
+    final lastVerses = bibleData.entries
+        .where((e) =>
+            e.key.startsWith('$endBook$endCh:') &&
+            int.parse(e.key.split(':')[1]) <= endVerse)
+        .toList();
+    lastVerses.sort((a, b) => int.parse(a.key.split(':')[1])
+        .compareTo(int.parse(b.key.split(':')[1])));
+    result.addAll(lastVerses);
+
+    return result;
+  }
+
   // cross-book: ex) 삼상18~삼하3장
   final crossBookMatch =
       RegExp(r'^([가-힣]+)(\d+)~([가-힣]+)(\d+)[장편]$').firstMatch(clean);
