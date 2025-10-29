@@ -34,38 +34,62 @@ void _handleNotificationTap(String payload) {
 
 // 화면 이동 로직 (홈을 거쳐서 Day 화면으로)
 void _navigateToScreen(String payload) {
+  print('📍 _navigateToScreen 호출됨: $payload');
+
   final navigator = navigatorKey.currentState;
   if (navigator == null) {
-    print('Navigator가 아직 준비되지 않음');
+    print('⚠️ Navigator가 아직 준비되지 않음 - 500ms 후 재시도');
+    // Navigator가 준비되지 않았다면 다시 시도
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _navigateToScreen(payload);
+    });
     return;
   }
 
+  print('✅ Navigator 준비 완료');
+
   Widget targetScreen;
+  String screenName;
   switch (payload) {
     case 'day60':
       targetScreen = const Day60Screen();
+      screenName = '60일 플랜';
       break;
     case 'day120':
       targetScreen = const Day120Screen();
+      screenName = '120일 플랜';
       break;
     case 'day180':
       targetScreen = const Day180Screen();
+      screenName = '180일 플랜';
       break;
     default:
-      print('알 수 없는 payload: $payload');
+      print('❌ 알 수 없는 payload: $payload');
       return;
   }
 
-  print('홈 화면을 거쳐 Day 화면으로 이동: $payload');
+  print('🎯 목표 화면: $screenName ($payload)');
 
   // 현재 경로가 홈이 아니면 홈으로 먼저 이동
-  navigator.popUntil((route) => route.isFirst);
+  try {
+    navigator.popUntil((route) => route.isFirst);
+    print('✅ 홈 화면으로 이동 완료');
+  } catch (e) {
+    print('⚠️ popUntil 오류: $e');
+  }
 
   // 약간의 딜레이 후 Day 화면으로 이동 (부드러운 전환)
-  Future.delayed(const Duration(milliseconds: 300), () {
-    navigatorKey.currentState?.push(
-      MaterialPageRoute(builder: (context) => targetScreen),
-    );
+  Future.delayed(const Duration(milliseconds: 500), () {
+    final currentNavigator = navigatorKey.currentState;
+    if (currentNavigator != null && currentNavigator.mounted) {
+      print('🚀 $screenName 화면으로 이동 중...');
+      currentNavigator.push(
+        MaterialPageRoute(builder: (context) => targetScreen),
+      );
+      print('✅ 화면 이동 완료!');
+    } else {
+      print('❌ Navigator가 사용 불가능한 상태');
+    }
   });
 }
 
@@ -92,15 +116,16 @@ void main() async {
   await NotificationService().initialize(
     onNotificationTap: (payload) {
       if (payload != null) {
+        print('📱 알림 탭 핸들러 호출: $payload');
         _handleNotificationTap(payload);
       }
     },
   );
 
   // 앱이 종료된 상태에서 알림으로 시작된 경우 확인
-  _initialNotificationPayload = NotificationService().getLaunchPayload();
+  _initialNotificationPayload = await NotificationService().getLaunchPayload();
   if (_initialNotificationPayload != null) {
-    print('앱이 알림으로 시작됨: $_initialNotificationPayload');
+    print('🚀 앱이 알림으로 시작됨: $_initialNotificationPayload');
   }
 
   final favoriteProvider = FavoriteProvider();
@@ -141,21 +166,58 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late ThemeMode _themeMode;
+  bool _navigationHandled = false;
 
   @override
   void initState() {
     super.initState();
     _themeMode = widget.initDark ? ThemeMode.dark : ThemeMode.light;
+    WidgetsBinding.instance.addObserver(this);
 
     // 앱이 알림으로 시작된 경우 해당 화면으로 이동
+    _handleInitialNotification();
+  }
+
+  Future<void> _handleInitialNotification() async {
+    if (_navigationHandled) return;
+
+    // main()에서 가져온 payload 확인
     if (_initialNotificationPayload != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _navigateToScreen(_initialNotificationPayload!);
-        _initialNotificationPayload = null; // 처리 후 초기화
-      });
+      _navigationHandled = true;
+      print('🔔 initState에서 launch payload 감지 (main): $_initialNotificationPayload');
+      _scheduleNavigation(_initialNotificationPayload!);
+      return;
     }
+
+    // 만약 main()에서 못 가져왔다면 다시 한번 시도
+    final payload = await NotificationService().getLaunchPayload();
+    if (payload != null) {
+      _navigationHandled = true;
+      print('🔔 initState에서 launch payload 감지 (재확인): $payload');
+      _scheduleNavigation(payload);
+    }
+  }
+
+  void _scheduleNavigation(String payload) {
+    // 충분한 딜레이를 주어 모든 Provider와 UI가 준비되도록 함
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 첫 프레임 후에도 약간의 딜레이
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (mounted) {
+          print('🚀 이제 화면 이동 시작: $payload');
+          _navigateToScreen(payload);
+          _initialNotificationPayload = null; // 처리 후 초기화
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   Future<void> _toggleTheme() async {

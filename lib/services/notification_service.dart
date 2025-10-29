@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class NotificationService {
@@ -19,6 +20,7 @@ class NotificationService {
 
   // 앱 종료 상태에서 알림 탭으로 시작한 경우의 payload 저장
   String? _launchPayload;
+  bool _launchPayloadProcessed = false;
 
   Future<void> initialize({Function(String?)? onNotificationTap}) async {
     if (_initialized) return;
@@ -28,6 +30,24 @@ class NotificationService {
     // timezone 초기화
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+
+    // 앱이 종료된 상태에서 알림을 탭해서 시작된 경우 먼저 확인
+    final notificationAppLaunchDetails =
+        await _notifications.getNotificationAppLaunchDetails();
+
+    print('=== Notification Launch Details ===');
+    print('didNotificationLaunchApp: ${notificationAppLaunchDetails?.didNotificationLaunchApp}');
+    print('payload: ${notificationAppLaunchDetails?.notificationResponse?.payload}');
+
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      final payload = notificationAppLaunchDetails?.notificationResponse?.payload;
+      if (payload != null) {
+        _launchPayload = payload;
+        print('✅ 앱이 알림으로 시작됨: $_launchPayload');
+        // 즉시 SharedPreferences에도 저장 (백업용)
+        await _saveLaunchPayload(payload);
+      }
+    }
 
     // Android 설정
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -49,30 +69,69 @@ class NotificationService {
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
 
-    // 앱이 종료된 상태에서 알림을 탭해서 시작된 경우 확인
-    final notificationAppLaunchDetails =
-        await _notifications.getNotificationAppLaunchDetails();
-    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-      _launchPayload = notificationAppLaunchDetails
-          ?.notificationResponse?.payload;
-      print('앱이 알림으로 시작됨: $_launchPayload');
-    }
-
     _initialized = true;
   }
 
   void _onNotificationTapped(NotificationResponse response) {
-    print('Notification tapped: ${response.payload}');
-    if (onNotificationTap != null && response.payload != null) {
-      onNotificationTap!(response.payload);
+    print('=== Notification Tapped ===');
+    print('payload: ${response.payload}');
+    print('actionId: ${response.actionId}');
+
+    // 앱이 실행 중일 때만 여기서 처리
+    if (response.payload != null) {
+      print('📱 앱 실행 중 알림 탭 감지');
+
+      // 콜백 실행 (UI가 준비되어 있음)
+      if (onNotificationTap != null) {
+        onNotificationTap!(response.payload);
+      }
+    }
+  }
+
+  // SharedPreferences에 payload 저장 (백업용)
+  Future<void> _saveLaunchPayload(String payload) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('notification_launch_payload', payload);
+      await prefs.setBool('notification_launch_flag', true);
+      print('💾 Launch payload 저장: $payload');
+    } catch (e) {
+      print('❌ Launch payload 저장 실패: $e');
     }
   }
 
   // 앱 시작 시 저장된 launch payload 가져오기
-  String? getLaunchPayload() {
-    final payload = _launchPayload;
-    _launchPayload = null; // 한번 가져오면 초기화
-    return payload;
+  Future<String?> getLaunchPayload() async {
+    if (_launchPayloadProcessed) return null;
+
+    // 먼저 메모리에서 확인 (getNotificationAppLaunchDetails로 가져온 값)
+    if (_launchPayload != null) {
+      _launchPayloadProcessed = true;
+      print('✅ Launch payload 반환: $_launchPayload');
+      return _launchPayload;
+    }
+
+    // SharedPreferences에서 확인 (백업 - 혹시 위에서 못 가져왔을 경우)
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final hasLaunchFlag = prefs.getBool('notification_launch_flag') ?? false;
+
+      if (hasLaunchFlag) {
+        final payload = prefs.getString('notification_launch_payload');
+        if (payload != null) {
+          _launchPayloadProcessed = true;
+          // 플래그 제거
+          await prefs.remove('notification_launch_flag');
+          await prefs.remove('notification_launch_payload');
+          print('✅ Launch payload 반환 (백업): $payload');
+          return payload;
+        }
+      }
+    } catch (e) {
+      print('❌ Launch payload 로드 실패: $e');
+    }
+
+    return null;
   }
 
   /// 알림 권한 요청
