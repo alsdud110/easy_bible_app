@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
 import '../../utils/pretty_range_label.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
@@ -884,9 +885,11 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
               bottom: 16,
               child: Consumer<PlanProgressProvider>(
                 builder: (context, planProvider, _) {
-                  final isCompleted = widget.planType != null && widget.dayNumber != null
-                      ? planProvider.isDayCompleted(widget.planType!, widget.dayNumber!)
-                      : false;
+                  final isCompleted =
+                      widget.planType != null && widget.dayNumber != null
+                          ? planProvider.isDayCompleted(
+                              widget.planType!, widget.dayNumber!)
+                          : false;
 
                   return AnimatedOpacity(
                     opacity: isCompleted ? 0.6 : 1.0,
@@ -895,14 +898,16 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       onPressed: isCompleted
                           ? null
                           : () async {
-                              if (widget.planType != null && widget.dayNumber != null) {
-                                await planProvider
-                                    .markDayAsCompleted(widget.planType!, widget.dayNumber!);
+                              if (widget.planType != null &&
+                                  widget.dayNumber != null) {
+                                await planProvider.markDayAsCompleted(
+                                    widget.planType!, widget.dayNumber!);
 
                                 if (!mounted) return;
 
                                 // 완주 체크
-                                if (planProvider.isPlanCompleted(widget.planType!)) {
+                                if (planProvider
+                                    .isPlanCompleted(widget.planType!)) {
                                   _showCompletionDialog();
                                 } else {
                                   _showDayCompletionDialog();
@@ -923,7 +928,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       style: ElevatedButton.styleFrom(
                         foregroundColor:
                             isCompleted ? cs.onSurface : Colors.white,
-                        backgroundColor: isCompleted ? cs.surface : Colors.green,
+                        backgroundColor:
+                            isCompleted ? cs.surface : Colors.green,
                         elevation: isCompleted ? 0 : 2,
                         shadowColor:
                             isCompleted ? null : Colors.green.withOpacity(0.5),
@@ -1076,30 +1082,13 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 애니메이션 아이콘
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 800),
-                tween: Tween(begin: 0.0, end: 1.0),
-                curve: Curves.elasticOut,
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: value,
-                    child: child,
-                  );
-                },
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.amber.withOpacity(0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.emoji_events,
-                    size: 48,
-                    color: Colors.amber,
-                  ),
-                ),
+              // 🏆 Trophy Lottie 애니메이션
+              Lottie.asset(
+                'assets/lottie/trophy.json',
+                width: 150,
+                height: 150,
+                fit: BoxFit.contain,
+                repeat: true,
               ),
               const SizedBox(height: 24),
               Text(
@@ -1111,10 +1100,10 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
               ),
               const SizedBox(height: 16),
               Text(
-                '$elapsedDays일 만에\n성경 ${totalDays}일 통독을 완주하셨네요!',
+                '$elapsedDays일 만에\n성경 $totalDays일 통독을 완주하셨네요!',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: cs.onSurface.withOpacity(0.8),
+                  color: cs.onSurface.withValues(alpha: 0.8),
                   height: 1.6,
                   fontSize: 16,
                 ),
@@ -1168,85 +1157,143 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     showDialog(
       context: context,
       barrierDismissible: true,
-      barrierColor: Colors.black26,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: cs.surface,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: SizedBox(
+          width: 300,
+          height: 400,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              // 체크 아이콘 애니메이션
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 600),
-                tween: Tween(begin: 0.0, end: 1.0),
-                curve: Curves.elasticOut,
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: value,
-                    child: child,
-                  );
-                },
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.15),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.check_circle,
-                    size: 36,
-                    color: Colors.green,
-                  ),
+              // 배경 Confetti 애니메이션
+              Positioned.fill(
+                child: Lottie.asset(
+                  'assets/lottie/celebration.json',
+                  fit: BoxFit.cover,
+                  repeat: false,
                 ),
               ),
-              const SizedBox(height: 16),
-              Text(
-                'DAY ${widget.dayNumber} 일독!',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: cs.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '축하합니다! 🎉',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: cs.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              // 다이얼로그 내용
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: cs.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
                     ),
-                    elevation: 1,
-                  ),
-                  child: const Text(
-                    '확인',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 체크 아이콘 애니메이션
+                    TweenAnimationBuilder<double>(
+                      duration: const Duration(milliseconds: 600),
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      curve: Curves.elasticOut,
+                      builder: (context, value, child) {
+                        return Transform.scale(
+                          scale: value,
+                          child: child,
+                        );
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.green.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.check_circle,
+                          size: 36,
+                          color: Colors.green,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    Text(
+                      '${widget.dayNumber}일차 일독 완료!',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: cs.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '축하합니다! 🎉',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: cs.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 1,
+                            ),
+                            child: const Text(
+                              '확인',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (widget.hasNextDay) ...[
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                if (widget.onNextDay != null) {
+                                  widget.onNextDay!();
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: cs.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 1,
+                              ),
+                              icon: const Icon(Icons.arrow_forward, size: 18),
+                              label: const Text(
+                                '다음일차',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],

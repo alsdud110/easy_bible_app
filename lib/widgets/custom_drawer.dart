@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 // 각 스크린 import 추가
 import '../../screens/bible/bible_home_screen.dart'; // 전체 성경
@@ -207,36 +208,10 @@ class CustomDrawer extends StatelessWidget {
 
           const Spacer(),
 
-          // ----- 테마 토글 스위치 -----
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-            child: Row(
-              children: [
-                Icon(
-                  isDark ? Icons.nights_stay_rounded : Icons.wb_sunny_rounded,
-                  color: cs.primary,
-                  size: 22,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    isDark ? "어두운 테마" : "밝은 테마",
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: cs.onSurface,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                Switch(
-                  value: isDark,
-                  onChanged: (_) => onThemeToggle?.call(),
-                  thumbColor: WidgetStateProperty.all(Colors.blue),
-                  inactiveThumbColor: cs.surface,
-                  inactiveTrackColor: cs.secondary.withOpacity(0.44),
-                ),
-              ],
-            ),
+          // ----- 테마 토글 Lottie 애니메이션 -----
+          _ThemeToggleLottie(
+            isDark: isDark,
+            onThemeToggle: onThemeToggle,
           ),
           const SizedBox(height: 12),
         ],
@@ -469,6 +444,132 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
           ),
         );
       },
+    );
+  }
+}
+
+// 테마 토글 Lottie 애니메이션 위젯
+class _ThemeToggleLottie extends StatefulWidget {
+  final bool isDark;
+  final VoidCallback? onThemeToggle;
+
+  const _ThemeToggleLottie({
+    required this.isDark,
+    this.onThemeToggle,
+  });
+
+  @override
+  State<_ThemeToggleLottie> createState() => _ThemeToggleLottieState();
+}
+
+class _ThemeToggleLottieState extends State<_ThemeToggleLottie>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    // 초기 상태 설정
+    if (widget.isDark) {
+      _controller.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(_ThemeToggleLottie oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 테마가 바뀌면 애니메이션 실행
+    if (oldWidget.isDark != widget.isDark) {
+      if (widget.isDark) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      child: GestureDetector(
+        onTap: () {
+          widget.onThemeToggle?.call();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: cs.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: cs.primary.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              // Lottie 애니메이션
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: Lottie.asset(
+                  'assets/lottie/theme_toggler.json',
+                  controller: _controller,
+                  onLoaded: (composition) {
+                    _controller.duration = composition.duration;
+                    if (widget.isDark) {
+                      _controller.value = 1.0;
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.isDark ? "다크 모드" : "라이트 모드",
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: cs.onSurface,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.isDark ? "어두운 테마 사용 중" : "밝은 테마 사용 중",
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: cs.onSurface.withOpacity(0.6),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: cs.primary,
+                size: 24,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

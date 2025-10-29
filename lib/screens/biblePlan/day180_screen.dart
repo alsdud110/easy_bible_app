@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 import '../../models/bible_180.dart';
 import '../../models/bible_json_loader.dart';
 import '../../models/plan_progress.dart';
@@ -109,12 +110,14 @@ class _Day180ScreenState extends State<Day180Screen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.refresh_rounded,
-                size: 44,
-                color: cs.primary.withOpacity(0.7),
+              Lottie.asset(
+                'assets/lottie/reload.json',
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
+                repeat: true,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Text(
                 '플랜 초기화',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -654,6 +657,20 @@ class _Day180ScreenState extends State<Day180Screen>
           dayNumber: dayNum,
           planType: PlanType.day180,
           onBack: () => Navigator.pop(context),
+          hasPrevDay: idx > 0,
+          hasNextDay: idx < bible180.length - 1,
+          onPrevDay: idx > 0
+              ? () {
+                  Navigator.pop(context);
+                  _openPlanVerse(context, bibleData, idx - 1);
+                }
+              : null,
+          onNextDay: idx < bible180.length - 1
+              ? () {
+                  Navigator.pop(context);
+                  _openPlanVerse(context, bibleData, idx + 1);
+                }
+              : null,
         ),
       ),
     );

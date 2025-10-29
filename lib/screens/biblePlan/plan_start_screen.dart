@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 import '../../models/plan_progress.dart';
 import '../../providers/plan_progress_provider.dart';
 import '../../services/notification_service.dart';
@@ -236,16 +237,19 @@ class _PlanStartScreenState extends State<PlanStartScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.celebration,
-                size: 64,
-                color: cs.primary,
+              // Success Lottie 애니메이션
+              Lottie.asset(
+                'assets/lottie/success.json',
+                width: 120,
+                height: 120,
+                fit: BoxFit.contain,
+                repeat: true,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Text(
                 '${DateTime.now().year}년 ${DateTime.now().month}월 ${DateTime.now().day}일',
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: cs.onSurface.withOpacity(0.7),
+                  color: cs.onSurface.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -262,7 +266,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                 '${widget.planType.totalDays}일 동안\n성경 통독을 응원하겠습니다!',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: cs.onSurface.withOpacity(0.8),
+                  color: cs.onSurface.withValues(alpha: 0.8),
                   height: 1.5,
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 import '../../models/today_verse_model.dart';
+import 'package:lottie/lottie.dart';
 
 class TodayVerseCard extends StatefulWidget {
   const TodayVerseCard({super.key});
@@ -103,9 +104,13 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.stars_rounded,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 34),
+                      Lottie.asset(
+                        'assets/lottie/pray.json',
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.contain,
+                        repeat: true,
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         "오늘의 구절",
@@ -326,7 +331,7 @@ class _TodayVerseEmptyCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: cs.primary.withOpacity(0.03),
+              color: cs.primary.withOpacity(0.43),
               blurRadius: 9,
               offset: const Offset(0, 3),
             ),
@@ -335,7 +340,26 @@ class _TodayVerseEmptyCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.auto_awesome_rounded, size: 34, color: cs.primary),
+            SizedBox(
+              width: 34,
+              height: 34,
+              child: OverflowBox(
+                minWidth: 0,
+                minHeight: 0,
+                maxWidth: double.infinity,
+                maxHeight: double.infinity,
+                child: Transform.scale(
+                  scale: 3.0,
+                  child: Lottie.asset(
+                    'assets/lottie/loading.json',
+                    width: 34,
+                    height: 34,
+                    fit: BoxFit.contain,
+                    repeat: true,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 14),
             Text(
               '오늘의 구절 뽑기',
@@ -350,7 +374,7 @@ class _TodayVerseEmptyCard extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: cs.onSurface.withOpacity(0.55)),
+                  ?.copyWith(color: cs.onSurface.withOpacity(0.75)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -373,7 +397,7 @@ class _TodayVerseShowCard extends StatelessWidget {
       key: const ValueKey("verse"),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: cs.surface,
+        color: cs.primary.withOpacity(0.18),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Padding(
