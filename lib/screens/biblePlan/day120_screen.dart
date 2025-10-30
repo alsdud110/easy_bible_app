@@ -535,8 +535,8 @@ class _Day120ScreenState extends State<Day120Screen>
                                       gradient: LinearGradient(
                                         colors: isCompleted
                                             ? [
-                                                Colors.green,
-                                                Colors.green.withOpacity(0.7),
+                                                const Color(0xFF6ABAA6),
+                                                const Color(0xFF6ABAA6).withOpacity(0.7),
                                               ]
                                             : canAccess
                                                 ? [
@@ -556,7 +556,7 @@ class _Day120ScreenState extends State<Day120Screen>
                                           ? [
                                               BoxShadow(
                                                 color: isCompleted
-                                                    ? Colors.green
+                                                    ? const Color(0xFF6ABAA6)
                                                         .withOpacity(0.3)
                                                     : cs.primary
                                                         .withOpacity(0.3),
@@ -595,7 +595,7 @@ class _Day120ScreenState extends State<Day120Screen>
                                   if (isCompleted)
                                     const Icon(
                                       Icons.check_circle,
-                                      color: Colors.green,
+                                      color: Color(0xFF6ABAA6),
                                       size: 20,
                                     ),
                                 ],

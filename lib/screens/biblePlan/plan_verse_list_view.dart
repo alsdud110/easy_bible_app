@@ -929,10 +929,10 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         foregroundColor:
                             isCompleted ? cs.onSurface : Colors.white,
                         backgroundColor:
-                            isCompleted ? cs.surface : Colors.green,
+                            isCompleted ? cs.surface : const Color(0xFF6ABAA6),
                         elevation: isCompleted ? 0 : 2,
                         shadowColor:
-                            isCompleted ? null : Colors.green.withOpacity(0.5),
+                            isCompleted ? null : const Color(0xFF6ABAA6).withOpacity(0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -1208,13 +1208,13 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                          color: Colors.green.withValues(alpha: 0.15),
+                          color: const Color(0xFF6ABAA6).withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.check_circle,
                           size: 36,
-                          color: Colors.green,
+                          color: Color(0xFF6ABAA6),
                         ),
                       ),
                     ),
@@ -1244,7 +1244,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: const Color(0xFF6ABAA6),
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
