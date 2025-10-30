@@ -173,40 +173,47 @@ class CustomDrawer extends StatelessWidget {
           ),
           const SizedBox(height: 8),
 
-          // 메뉴: 전체 성경
-          _DrawerButton(
-            icon: Icons.menu_book_rounded,
-            label: '전체 성경',
-            color: cs.primary,
-            onTap: () => _navigateToScreen(
-                context,
-                BibleHomeScreen(
-                  onThemeToggle: onThemeToggle,
-                  isDark: isDark,
-                )),
-          ),
-          // 메뉴: 어성경 바이블(홈)
-          _DrawerButton(
-            icon: Icons.home_rounded,
-            label: '어성경 바이블',
-            color: cs.primary,
-            onTap: () => _showComingSoonDialog(context),
-          ),
+          // 스크롤 가능한 메뉴 영역
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // 메뉴: 전체 성경
+                  _DrawerButton(
+                    icon: Icons.menu_book_rounded,
+                    label: '전체 성경',
+                    color: cs.primary,
+                    onTap: () => _navigateToScreen(
+                        context,
+                        BibleHomeScreen(
+                          onThemeToggle: onThemeToggle,
+                          isDark: isDark,
+                        )),
+                  ),
+                  // 메뉴: 어성경 바이블(홈)
+                  _DrawerButton(
+                    icon: Icons.home_rounded,
+                    label: '어성경 바이블',
+                    color: cs.primary,
+                    onTap: () => _showComingSoonDialog(context),
+                  ),
 
-          // 성경일독(플랜) - 펼침/접기
-          _PlanExpansionMenu(
-            color: cs.secondary,
-            navigateToScreen: (screen) => _navigateToScreen(context, screen),
-          ),
+                  // 성경일독(플랜) - 펼침/접기
+                  _PlanExpansionMenu(
+                    color: cs.secondary,
+                    navigateToScreen: (screen) => _navigateToScreen(context, screen),
+                  ),
 
-          _DrawerButton(
-            icon: Icons.bookmark_added,
-            label: '북마크',
-            color: Colors.amber.shade700,
-            onTap: () => _navigateToScreen(context, const FavoriteListScreen()),
+                  _DrawerButton(
+                    icon: Icons.bookmark_added,
+                    label: '북마크',
+                    color: Colors.amber.shade700,
+                    onTap: () => _navigateToScreen(context, const FavoriteListScreen()),
+                  ),
+                ],
+              ),
+            ),
           ),
-
-          const Spacer(),
 
           // ----- 테마 토글 Lottie 애니메이션 -----
           _ThemeToggleLottie(
