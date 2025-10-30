@@ -73,7 +73,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
       context: context,
       barrierLabel: "오늘의 구절",
       barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.22),
+      barrierColor: Colors.black.withValues(alpha: 0.22),
       transitionDuration: const Duration(milliseconds: 340),
       pageBuilder: (context, anim1, anim2) => const SizedBox(),
       transitionBuilder: (context, anim1, anim2, child) {
@@ -94,7 +94,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.13),
+                        color: Colors.black.withValues(alpha: 0.13),
                         blurRadius: 36,
                         offset: const Offset(0, 18),
                       ),
@@ -123,7 +123,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.93),
+                                  .withValues(alpha: 0.93),
                             ),
                       ),
                       const SizedBox(height: 14),
@@ -134,7 +134,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                           color: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(0.09),
+                              .withValues(alpha: 0.09),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Text(
@@ -161,7 +161,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.98),
+                                  .withValues(alpha: 0.98),
                             ),
                         textAlign: TextAlign.center,
                       ),
@@ -322,8 +322,8 @@ class _TodayVerseEmptyCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              cs.primary.withOpacity(0.035),
-              cs.surface.withOpacity(0.98)
+              cs.primary.withValues(alpha: 0.035),
+              cs.surface.withValues(alpha: 0.98)
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -331,7 +331,7 @@ class _TodayVerseEmptyCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: cs.primary.withOpacity(0.43),
+              color: cs.primary.withValues(alpha: 0.43),
               blurRadius: 9,
               offset: const Offset(0, 3),
             ),
@@ -374,7 +374,7 @@ class _TodayVerseEmptyCard extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: cs.onSurface.withOpacity(0.75)),
+                  ?.copyWith(color: cs.onSurface.withValues(alpha: 0.75)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -397,7 +397,7 @@ class _TodayVerseShowCard extends StatelessWidget {
       key: const ValueKey("verse"),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: cs.primary.withOpacity(0.18),
+        color: cs.primary.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Padding(
@@ -408,7 +408,7 @@ class _TodayVerseShowCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 11),
               decoration: BoxDecoration(
-                color: cs.primary.withOpacity(0.10),
+                color: cs.primary.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Text(
@@ -435,7 +435,7 @@ class _TodayVerseShowCard extends StatelessWidget {
             Text(
               '내일이 되면 새롭게 받을 수 있어요!',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: cs.onSurface.withOpacity(0.72),
+                    color: cs.onSurface.withValues(alpha: 0.72),
                     fontSize: 13.5,
                     fontWeight: FontWeight.w500,
                   ),
@@ -466,13 +466,13 @@ class _SimpleGlowPainter extends CustomPainter {
     final gradient = LinearGradient(
       colors: [
         Colors.transparent,
-        primaryColor.withOpacity(0.03),
-        primaryColor.withOpacity(0.06),
-        primaryColor.withOpacity(0.12),
-        primaryColor.withOpacity(0.13),
-        primaryColor.withOpacity(0.12),
-        primaryColor.withOpacity(0.06),
-        primaryColor.withOpacity(0.03),
+        primaryColor.withValues(alpha: 0.03),
+        primaryColor.withValues(alpha: 0.06),
+        primaryColor.withValues(alpha: 0.12),
+        primaryColor.withValues(alpha: 0.13),
+        primaryColor.withValues(alpha: 0.12),
+        primaryColor.withValues(alpha: 0.06),
+        primaryColor.withValues(alpha: 0.03),
         Colors.transparent,
       ],
       stops: const [0.0, 0.1, 0.2, 0.35, 0.4, 0.5, 0.65, 0.8, 1.0],
