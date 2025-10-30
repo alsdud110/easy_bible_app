@@ -7,6 +7,7 @@ import '../../models/highlight_verse.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
 import '../../providers/language_provider.dart';
+import '../../services/bible_subtitle_service.dart';
 import '../../widgets/breadcrumb_bar.dart';
 
 class VerseListView extends StatefulWidget {
@@ -720,6 +721,8 @@ class _VerseListViewState extends State<VerseListView>
     final favoriteProvider = context.watch<FavoriteProvider>();
     final highlightProvider = context.watch<HighlightProvider>();
     final languageProvider = context.watch<LanguageProvider>();
+    final subtitles = BibleSubtitleService()
+        .getSubtitlesForChapter(widget.book.fullName, widget.chapter);
 
     const minChapter = 1;
     final maxChapter = widget.book.chapters;
@@ -825,6 +828,7 @@ class _VerseListViewState extends State<VerseListView>
                           widget.chapter,
                           verseNum,
                         );
+                        final subtitle = subtitles[verseNum];
 
                         final highlight = highlightProvider.getVerseHighlight(
                           widget.book.fullName,
@@ -852,97 +856,117 @@ class _VerseListViewState extends State<VerseListView>
                           textColor = cs.onSurface;
                         }
 
-                        return AnimatedBuilder(
-                          animation: _highlightAppliedController,
-                          builder: (context, child) {
-                            final isJustHighlighted = isInRange &&
-                                _highlightAppliedController.isAnimating;
-                            final pulseValue =
-                                _highlightAppliedController.value;
-                            final scale = isJustHighlighted
-                                ? 1.0 + (0.03 * _sin(pulseValue * 3.14159 * 2))
-                                : 1.0;
+                        return Column(
+                          key: idx == 0 ? _itemKey : null,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 소제목이 있으면 표시
+                            if (subtitle != null)
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+                                child: Text(
+                                  subtitle,
+                                  style: TextStyle(
+                                    fontFamily: 'ChosunCentennial',
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: cs.onSurface,
+                                  ),
+                                ),
+                              ),
+                            // 본문 절
+                            AnimatedBuilder(
+                              animation: _highlightAppliedController,
+                              builder: (context, child) {
+                                final isJustHighlighted = isInRange &&
+                                    _highlightAppliedController.isAnimating;
+                                final pulseValue =
+                                    _highlightAppliedController.value;
+                                final scale = isJustHighlighted
+                                    ? 1.0 + (0.03 * _sin(pulseValue * 3.14159 * 2))
+                                    : 1.0;
 
-                            return Transform.scale(
-                              scale: scale,
-                              alignment: Alignment.centerLeft,
-                              child: child,
-                            );
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeOutCubic,
-                            key: idx == 0 ? _itemKey : null,
-                            decoration: BoxDecoration(
-                              color: backgroundColor,
-                              border: isHighlighted
-                                  ? Border(
-                                      left: BorderSide(
-                                        color:
-                                            borderColor ?? Colors.transparent,
-                                        width: 4,
-                                      ),
-                                    )
-                                  : (isInRange
+                                return Transform.scale(
+                                  scale: scale,
+                                  alignment: Alignment.centerLeft,
+                                  child: child,
+                                );
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeOutCubic,
+                                decoration: BoxDecoration(
+                                  color: backgroundColor,
+                                  border: isHighlighted
                                       ? Border(
                                           left: BorderSide(
-                                            color: borderColor ??
-                                                Colors.transparent,
-                                            width: 3,
+                                            color:
+                                                borderColor ?? Colors.transparent,
+                                            width: 4,
                                           ),
                                         )
-                                      : null),
-                            ),
-                            child: ListTile(
-                              onTap: () => _handleVerseTap(verseNum),
-                              onLongPress: () =>
-                                  _handleVerseLongPress(verseNum),
-                              leading: Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  AnimatedDefaultTextStyle(
+                                      : (isInRange
+                                          ? Border(
+                                              left: BorderSide(
+                                                color: borderColor ??
+                                                    Colors.transparent,
+                                                width: 3,
+                                              ),
+                                            )
+                                          : null),
+                                ),
+                                child: ListTile(
+                                  onTap: () => _handleVerseTap(verseNum),
+                                  onLongPress: () =>
+                                      _handleVerseLongPress(verseNum),
+                                  leading: Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      AnimatedDefaultTextStyle(
+                                        duration: const Duration(milliseconds: 200),
+                                        style: TextStyle(
+                                          fontFamily: 'ChosunCentennial',
+                                          fontWeight: isInRange || isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.w600,
+                                          fontSize:
+                                              isInRange || isSelected ? 15.01 : 15,
+                                          color: textColor,
+                                        ),
+                                        child: Text('$verseNum'),
+                                      ),
+                                      if (isFavorited)
+                                        Positioned(
+                                          top: -4,
+                                          right: -10,
+                                          child: Icon(
+                                            Icons.star,
+                                            size: 12,
+                                            color: Colors.amber[700],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  title: AnimatedDefaultTextStyle(
                                     duration: const Duration(milliseconds: 200),
                                     style: TextStyle(
                                       fontFamily: 'ChosunCentennial',
                                       fontWeight: isInRange || isSelected
                                           ? FontWeight.bold
-                                          : FontWeight.w600,
+                                          : FontWeight.normal,
                                       fontSize:
                                           isInRange || isSelected ? 15.01 : 15,
                                       color: textColor,
                                     ),
-                                    child: Text('$verseNum'),
+                                    child: Text(text),
                                   ),
-                                  if (isFavorited)
-                                    Positioned(
-                                      top: -4,
-                                      right: -10,
-                                      child: Icon(
-                                        Icons.star,
-                                        size: 12,
-                                        color: Colors.amber[700],
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              title: AnimatedDefaultTextStyle(
-                                duration: const Duration(milliseconds: 200),
-                                style: TextStyle(
-                                  fontFamily: 'ChosunCentennial',
-                                  fontWeight: isInRange || isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  fontSize:
-                                      isInRange || isSelected ? 15.01 : 15,
-                                  color: textColor,
+                                  dense: true,
+                                  selected: isInRange || isSelected,
+                                  selectedTileColor: Colors.transparent,
                                 ),
-                                child: Text(text),
                               ),
-                              dense: true,
-                              selected: isInRange || isSelected,
-                              selectedTileColor: Colors.transparent,
                             ),
-                          ),
+                          ],
                         );
                       },
                     ),

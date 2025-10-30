@@ -13,6 +13,7 @@ import 'providers/highlight_provider.dart';
 import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
 import 'providers/plan_progress_provider.dart';
 import 'services/notification_service.dart';
+import 'services/bible_subtitle_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -141,6 +142,9 @@ void main() async {
   // PlanProgressProvider 초기화
   final planProgressProvider = PlanProgressProvider();
   await planProgressProvider.loadPlan();
+
+  // BibleSubtitleService 초기화
+  await BibleSubtitleService().loadSubtitles();
 
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;
