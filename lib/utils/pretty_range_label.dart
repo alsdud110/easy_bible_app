@@ -4,11 +4,30 @@ String prettyRangeLabel(String input) {
   input = input.replaceAll(RegExp(r'[\-–~]'), '~');
   input = input.replaceAll(' ', '');
 
-  // 여기 추가!
-  input = input.replaceAllMapped(
-    RegExp(r'(\d+):(\d+)'),
-    (m) => '${m.group(1)}장 ${m.group(2)}절',
-  );
+  // 0-1. 장:절~장:절 범위 "행19:23~20:2" → "사도행전 19장 23절~20장 2절"
+  final regChapterVerseRange = RegExp(r'^([가-힣]+)(\d+):(\d+)~(\d+):(\d+)$');
+  final matchChapterVerseRange = regChapterVerseRange.firstMatch(input);
+  if (matchChapterVerseRange != null) {
+    final book = matchChapterVerseRange.group(1)!;
+    final startCh = matchChapterVerseRange.group(2)!;
+    final startVerse = matchChapterVerseRange.group(3)!;
+    final endCh = matchChapterVerseRange.group(4)!;
+    final endVerse = matchChapterVerseRange.group(5)!;
+    final fullBook = bookFullName[book] ?? book;
+    return '$fullBook $startCh장 $startVerse절~$endCh장 $endVerse절';
+  }
+
+  // 0-2. 장:절~장 범위 "행20:3~28장" → "사도행전 20장 3절~28장"
+  final regVerseToChapter = RegExp(r'^([가-힣]+)(\d+):(\d+)~(\d+)장$');
+  final matchVerseToChapter = regVerseToChapter.firstMatch(input);
+  if (matchVerseToChapter != null) {
+    final book = matchVerseToChapter.group(1)!;
+    final startCh = matchVerseToChapter.group(2)!;
+    final startVerse = matchVerseToChapter.group(3)!;
+    final endCh = matchVerseToChapter.group(4)!;
+    final fullBook = bookFullName[book] ?? book;
+    return '$fullBook $startCh장 $startVerse절~$endCh장';
+  }
 
   // 1. 두 책명 범위 ex: "시119~잠9장"
   final crossBook = RegExp(r'^([가-힣]+)(\d+)~([가-힣]+)(\d+)[장편]$');
@@ -61,7 +80,19 @@ String prettyRangeLabel(String input) {
     return '$fullBook $ch$suffix';
   }
 
-  // 5. 장:절 "창24:5" → "창세기 24장 5절"
+  // 5. 절 범위 "행20:2~3" → "사도행전 20장 2절~3절"
+  final regVerseRange = RegExp(r'^([가-힣]+)(\d+):(\d+)~(\d+)$');
+  final matchVerseRange = regVerseRange.firstMatch(input);
+  if (matchVerseRange != null) {
+    final book = matchVerseRange.group(1)!;
+    final ch = matchVerseRange.group(2)!;
+    final startVerse = matchVerseRange.group(3)!;
+    final endVerse = matchVerseRange.group(4)!;
+    final fullBook = bookFullName[book] ?? book;
+    return '$fullBook $ch장 $startVerse절~$endVerse절';
+  }
+
+  // 6. 단일 장:절 "창24:5" → "창세기 24장 5절"
   final regVerse = RegExp(r'^([가-힣]+)(\d+):(\d+)$');
   final matchVerse = regVerse.firstMatch(input);
   if (matchVerse != null) {
