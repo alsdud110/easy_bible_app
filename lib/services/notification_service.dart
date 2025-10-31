@@ -31,7 +31,7 @@ class NotificationService {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
 
-    // 앱이 종료된 상태에서 알림을 탭해서 시작된 경우 먼저 확인
+    // 초기화 전에 알림으로 시작됐는지 확인 (중요!)
     final notificationAppLaunchDetails =
         await _notifications.getNotificationAppLaunchDetails();
 
@@ -77,9 +77,10 @@ class NotificationService {
     print('payload: ${response.payload}');
     print('actionId: ${response.actionId}');
 
-    // 앱이 실행 중일 때만 여기서 처리
+    // iOS에서도 백업용으로 SharedPreferences에 저장
     if (response.payload != null) {
-      print('📱 앱 실행 중 알림 탭 감지');
+      print('📱 알림 탭 감지: ${response.payload}');
+      _saveLaunchPayload(response.payload!);
 
       // 콜백 실행 (UI가 준비되어 있음)
       if (onNotificationTap != null) {

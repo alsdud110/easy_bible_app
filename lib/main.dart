@@ -39,10 +39,10 @@ void _navigateToScreen(String payload) {
   print('📍 _navigateToScreen 호출됨: $payload');
 
   final navigator = navigatorKey.currentState;
-  if (navigator == null) {
-    print('⚠️ Navigator가 아직 준비되지 않음 - 500ms 후 재시도');
+  if (navigator == null || !navigator.mounted) {
+    print('⚠️ Navigator가 아직 준비되지 않음 - 700ms 후 재시도');
     // Navigator가 준비되지 않았다면 다시 시도
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 700), () {
       _navigateToScreen(payload);
     });
     return;
@@ -74,14 +74,17 @@ void _navigateToScreen(String payload) {
 
   // 현재 경로가 홈이 아니면 홈으로 먼저 이동
   try {
-    navigator.popUntil((route) => route.isFirst);
+    // 홈 화면으로 리셋
+    while (navigator.canPop()) {
+      navigator.pop();
+    }
     print('✅ 홈 화면으로 이동 완료');
   } catch (e) {
-    print('⚠️ popUntil 오류: $e');
+    print('⚠️ pop 오류: $e');
   }
 
-  // 약간의 딜레이 후 Day 화면으로 이동 (부드러운 전환)
-  Future.delayed(const Duration(milliseconds: 500), () {
+  // Day 화면으로 이동 (딜레이를 더 길게 설정)
+  Future.delayed(const Duration(milliseconds: 800), () {
     final currentNavigator = navigatorKey.currentState;
     if (currentNavigator != null && currentNavigator.mounted) {
       print('🚀 $screenName 화면으로 이동 중...');
@@ -209,14 +212,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       _navigationHandled = true;
       print('🔔 initState에서 launch payload 감지 (재확인): $payload');
       _scheduleNavigation(payload);
+      return;
+    }
+
+    // iOS에서 백업용 SharedPreferences 확인 (2차 백업)
+    final prefs = await SharedPreferences.getInstance();
+    final backupPayload = prefs.getString('notification_launch_payload');
+    if (backupPayload != null && prefs.getBool('notification_launch_flag') == true) {
+      _navigationHandled = true;
+      print('🔔 initState에서 launch payload 감지 (백업): $backupPayload');
+      await prefs.remove('notification_launch_flag');
+      await prefs.remove('notification_launch_payload');
+      _scheduleNavigation(backupPayload);
     }
   }
 
   void _scheduleNavigation(String payload) {
-    // 충분한 딜레이를 주어 모든 Provider와 UI가 준비되도록 함
+    // iOS에서는 더 긴 딜레이가 필요할 수 있음
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 첫 프레임 후에도 약간의 딜레이
-      Future.delayed(const Duration(milliseconds: 1000), () {
+      // 첫 프레임 후에도 충분한 딜레이
+      Future.delayed(const Duration(milliseconds: 1500), () {
         if (mounted) {
           print('🚀 이제 화면 이동 시작: $payload');
           _navigateToScreen(payload);
