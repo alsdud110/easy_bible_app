@@ -6,6 +6,7 @@ import '../../utils/pretty_range_label.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
 import '../../providers/plan_progress_provider.dart';
+import '../../providers/font_size_provider.dart';
 import '../../models/favorite_verse.dart';
 import '../../models/highlight_verse.dart';
 import '../../models/const/book_full_name.dart';
@@ -719,6 +720,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     final rangeTitle = titleArr.length > 1 ? titleArr[1] : '';
     final favoriteProvider = context.watch<FavoriteProvider>();
     final highlightProvider = context.watch<HighlightProvider>();
+    final fontSizeProvider = context.watch<PlanFontSizeProvider>();
+    final fontSize = fontSizeProvider.currentSize;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -735,7 +738,39 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                 onPressed: widget.onBack,
                 color: theme.appBarTheme.iconTheme?.color,
               ),
-        actions: const [SizedBox(width: 48)],
+        actions: _isSelectionMode
+            ? const [SizedBox(width: 48)]
+            : [
+                IconButton(
+                  icon: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return RotationTransition(
+                        turns: animation,
+                        child: FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Text(
+                      fontSize.nextKoreanLabel,
+                      key: ValueKey(fontSize),
+                      style: const TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  tooltip: '글자 크기: ${fontSize.displayName}',
+                  onPressed: () {
+                    fontSizeProvider.cycleFontSize();
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                const SizedBox(width: 8),
+              ],
         centerTitle: true,
         titleSpacing: 0,
         title: _isSelectionMode
@@ -835,6 +870,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                 isInRange: isInRange,
                 isFavorited: isFavorited,
                 highlight: highlight,
+                fontSize: fontSize,
                 onTap: () => _handleVerseTap(key),
                 onLongPress: () => _handleVerseLongPress(key),
               );
@@ -958,6 +994,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     required bool isInRange,
     required bool isFavorited,
     HighlightVerse? highlight,
+    required FontSize fontSize,
     required VoidCallback onTap,
     required VoidCallback onLongPress,
   }) {
@@ -1008,7 +1045,9 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     fontWeight: isInRange || selected
                         ? FontWeight.bold
                         : FontWeight.w600,
-                    fontSize: isInRange || selected ? 13.01 : 13,
+                    fontSize: isInRange || selected
+                        ? fontSize.verseNumberSelectedSize
+                        : fontSize.verseNumberSize,
                     color: isInRange || selected ? cs.primary : cs.onSurface,
                   ),
                 ),
@@ -1033,7 +1072,9 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                   fontWeight: isInRange || selected
                       ? FontWeight.bold
                       : FontWeight.normal,
-                  fontSize: isInRange || selected ? 15.01 : 15,
+                  fontSize: isInRange || selected
+                      ? fontSize.verseTextSelectedSize
+                      : fontSize.verseTextSize,
                   color: isInRange || selected ? cs.primary : cs.onSurface,
                 ),
                 softWrap: true,

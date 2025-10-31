@@ -7,6 +7,7 @@ import '../../models/highlight_verse.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
 import '../../providers/language_provider.dart';
+import '../../providers/font_size_provider.dart';
 import '../../services/bible_subtitle_service.dart';
 import '../../widgets/breadcrumb_bar.dart';
 
@@ -247,8 +248,10 @@ class _VerseListViewState extends State<VerseListView>
         // ⭐ 스마트 범위 선택 로직
         // 현재 범위가 있는 경우
         if (_rangeStart != null && _rangeEnd != null) {
-          final currentStart = _rangeStart! < _rangeEnd! ? _rangeStart! : _rangeEnd!;
-          final currentEnd = _rangeStart! > _rangeEnd! ? _rangeStart! : _rangeEnd!;
+          final currentStart =
+              _rangeStart! < _rangeEnd! ? _rangeStart! : _rangeEnd!;
+          final currentEnd =
+              _rangeStart! > _rangeEnd! ? _rangeStart! : _rangeEnd!;
 
           // 클릭한 절이 현재 범위보다 앞에 있으면 앞으로 확장
           if (verseNum < currentStart) {
@@ -721,6 +724,8 @@ class _VerseListViewState extends State<VerseListView>
     final favoriteProvider = context.watch<FavoriteProvider>();
     final highlightProvider = context.watch<HighlightProvider>();
     final languageProvider = context.watch<LanguageProvider>();
+    final fontSizeProvider = context.watch<BibleFontSizeProvider>();
+    final fontSize = fontSizeProvider.currentSize;
     final subtitles = BibleSubtitleService()
         .getSubtitlesForChapter(widget.book.fullName, widget.chapter);
 
@@ -755,12 +760,45 @@ class _VerseListViewState extends State<VerseListView>
                       );
                     },
                     child: Text(
+                      languageProvider.isKorean
+                          ? fontSize.nextKoreanLabel
+                          : fontSize.nextEnglishLabel,
+                      key: ValueKey(fontSize),
+                      style: TextStyle(
+                        fontSize: languageProvider.isKorean ? 16.0 : 18.0,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
+                      ),
+                    ),
+                  ),
+                  tooltip: '글자 크기: ${fontSize.displayName}',
+                  onPressed: () {
+                    fontSizeProvider.cycleFontSize();
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                IconButton(
+                  icon: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return RotationTransition(
+                        turns: animation,
+                        child: FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Text(
                       languageProvider.isKorean ? 'Eng' : '한',
                       key: ValueKey(languageProvider.isKorean),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
+                        color:
+                            theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                       ),
                     ),
                   ),
@@ -768,7 +806,10 @@ class _VerseListViewState extends State<VerseListView>
                   onPressed: () async {
                     await languageProvider.toggleLanguage();
                   },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                 ),
+                const SizedBox(width: 2),
               ]
             : null,
         backgroundColor: theme.appBarTheme.backgroundColor,
@@ -860,10 +901,11 @@ class _VerseListViewState extends State<VerseListView>
                           key: idx == 0 ? _itemKey : null,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 소제목이 있으면 표시
-                            if (subtitle != null)
+                            // 소제목이 있으면 표시 (한글 모드일 때만)
+                            if (subtitle != null && languageProvider.isKorean)
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 20, 16, 12),
                                 child: Text(
                                   subtitle,
                                   style: TextStyle(
@@ -883,7 +925,8 @@ class _VerseListViewState extends State<VerseListView>
                                 final pulseValue =
                                     _highlightAppliedController.value;
                                 final scale = isJustHighlighted
-                                    ? 1.0 + (0.03 * _sin(pulseValue * 3.14159 * 2))
+                                    ? 1.0 +
+                                        (0.03 * _sin(pulseValue * 3.14159 * 2))
                                     : 1.0;
 
                                 return Transform.scale(
@@ -900,8 +943,8 @@ class _VerseListViewState extends State<VerseListView>
                                   border: isHighlighted
                                       ? Border(
                                           left: BorderSide(
-                                            color:
-                                                borderColor ?? Colors.transparent,
+                                            color: borderColor ??
+                                                Colors.transparent,
                                             width: 4,
                                           ),
                                         )
@@ -923,14 +966,16 @@ class _VerseListViewState extends State<VerseListView>
                                     clipBehavior: Clip.none,
                                     children: [
                                       AnimatedDefaultTextStyle(
-                                        duration: const Duration(milliseconds: 200),
+                                        duration:
+                                            const Duration(milliseconds: 200),
                                         style: TextStyle(
                                           fontFamily: 'ChosunCentennial',
                                           fontWeight: isInRange || isSelected
                                               ? FontWeight.bold
                                               : FontWeight.w600,
-                                          fontSize:
-                                              isInRange || isSelected ? 15.01 : 15,
+                                          fontSize: isInRange || isSelected
+                                              ? fontSize.verseNumberSelectedSize
+                                              : fontSize.verseNumberSize,
                                           color: textColor,
                                         ),
                                         child: Text('$verseNum'),
@@ -954,8 +999,9 @@ class _VerseListViewState extends State<VerseListView>
                                       fontWeight: isInRange || isSelected
                                           ? FontWeight.bold
                                           : FontWeight.normal,
-                                      fontSize:
-                                          isInRange || isSelected ? 15.01 : 15,
+                                      fontSize: isInRange || isSelected
+                                          ? fontSize.verseTextSelectedSize
+                                          : fontSize.verseTextSize,
                                       color: textColor,
                                     ),
                                     child: Text(text),

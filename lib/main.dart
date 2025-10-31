@@ -12,6 +12,7 @@ import 'providers/favorite_provider.dart';
 import 'providers/highlight_provider.dart';
 import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
 import 'providers/plan_progress_provider.dart';
+import 'providers/font_size_provider.dart';
 import 'services/notification_service.dart';
 import 'services/bible_subtitle_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -139,6 +140,11 @@ void main() async {
   final languageProvider = LanguageProvider();
   // LanguageProvider는 생성자에서 자동으로 _loadLanguage() 호출
 
+  // ✅ FontSizeProvider 초기화 추가
+  final bibleFontSizeProvider = BibleFontSizeProvider();
+  final planFontSizeProvider = PlanFontSizeProvider();
+  // FontSizeProvider는 생성자에서 자동으로 _loadFontSize() 호출
+
   // PlanProgressProvider 초기화
   final planProgressProvider = PlanProgressProvider();
   await planProgressProvider.loadPlan();
@@ -155,6 +161,8 @@ void main() async {
         ChangeNotifierProvider.value(value: favoriteProvider),
         ChangeNotifierProvider.value(value: highlightProvider),
         ChangeNotifierProvider.value(value: languageProvider), // ✅ 추가!
+        ChangeNotifierProvider.value(value: bibleFontSizeProvider), // ✅ Bible FontSize 추가!
+        ChangeNotifierProvider.value(value: planFontSizeProvider), // ✅ Plan FontSize 추가!
         ChangeNotifierProvider.value(value: planProgressProvider),
       ],
       child: MyApp(initDark: isDark),
