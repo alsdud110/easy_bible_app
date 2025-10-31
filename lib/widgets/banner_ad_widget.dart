@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -12,11 +13,20 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
   bool _isLoaded = false;
 
-  // ✅ 실제 광고 단위 ID
-  // static const String _adUnitId = 'ca-app-pub-7446781962805745/4003972619';
-
-  // 개발/테스트 중에는 아래 테스트 ID 사용 (자기 광고 클릭 방지)
-  static const String _adUnitId = 'ca-app-pub-3940256099942544/6300978111';
+  /// ✅ 플랫폼별 광고 단위 ID
+  static String get _adUnitId {
+    if (Platform.isAndroid) {
+      // Android 실제 광고 단위
+      // return 'ca-app-pub-7446781962805745/4003972619';
+      return 'ca-app-pub-3940256099942544/6300978111'; // 테스트용
+    } else if (Platform.isIOS) {
+      // iOS 실제 광고 단위
+      // return 'ca-app-pub-7446781962805745/8072089412';
+      return 'ca-app-pub-3940256099942544/2934735716'; // iOS 테스트용
+    } else {
+      throw UnsupportedError('Unsupported platform');
+    }
+  }
 
   @override
   void initState() {
