@@ -2,6 +2,8 @@ import 'package:easy_bible_app/screens/easyBible/easy_bible_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'dart:io';
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
 import 'screens/biblePlan/day60_screen.dart';
@@ -191,8 +193,33 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _themeMode = widget.initDark ? ThemeMode.dark : ThemeMode.light;
     WidgetsBinding.instance.addObserver(this);
 
+    // iOS에서 광고 추적 권한 요청 (앱이 완전히 시작된 후)
+    _requestTrackingPermission();
+
     // 앱이 알림으로 시작된 경우 해당 화면으로 이동
     _handleInitialNotification();
+  }
+
+  /// iOS 광고 추적 권한 요청
+  Future<void> _requestTrackingPermission() async {
+    if (!Platform.isIOS) return;
+
+    // 앱이 완전히 활성화될 때까지 대기
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    try {
+      final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      print('📍 ATT 현재 상태: $status');
+
+      // 아직 권한을 요청하지 않았다면 요청
+      if (status == TrackingStatus.notDetermined) {
+        print('🔔 ATT 권한 팝업 표시 중...');
+        final result = await AppTrackingTransparency.requestTrackingAuthorization();
+        print('✅ ATT 권한 결과: $result');
+      }
+    } catch (e) {
+      print('⚠️ ATT 권한 요청 오류: $e');
+    }
   }
 
   Future<void> _handleInitialNotification() async {
