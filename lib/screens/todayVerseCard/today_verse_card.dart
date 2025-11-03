@@ -201,6 +201,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               verse = todayVerses[idx].text;
                               ref = todayVerses[idx].ref;
                               pendingIdx = null;
+                              _hasWatchedAdForCurrentVerse = false; // 새 말씀을 받으면 광고 시청 상태 초기화
                             });
                             await _fadeCtrl.forward();
                           },
