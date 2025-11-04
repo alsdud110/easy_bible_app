@@ -2,13 +2,11 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart'; // ← RenderRepaintBoundary 타입
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gal/gal.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:screenshot/screenshot.dart';
@@ -936,32 +934,14 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   /// 갤러리에 저장
   Future<void> _saveToGallery(File imageFile) async {
     try {
-      if (Platform.isAndroid) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        if (androidInfo.version.sdkInt < 33) {
-          final status = await Permission.storage.request();
-          if (!status.isGranted) {
-            _showErrorDialog('저장소 권한이 필요합니다.');
-            return;
-          }
-        }
-      } else if (Platform.isIOS) {
-        // iOS는 권한 요청 없이 직접 저장 시도 (ImageGallerySaver가 자동 처리)
-        // 권한이 없으면 ImageGallerySaver에서 에러가 발생하고 catch로 처리
-      }
-
-      final bytes = await imageFile.readAsBytes();
-      final result = await ImageGallerySaver.saveImage(
-        bytes,
-        name: 'bible_card_${DateTime.now().millisecondsSinceEpoch}',
-      );
+      // gal 패키지가 자동으로 권한을 처리하므로 별도 권한 요청 불필요
+      // Android 10 이하: WRITE_EXTERNAL_STORAGE 권한 자동 요청
+      // Android 11+: Scoped Storage로 자동 처리
+      // iOS: NSPhotoLibraryAddUsageDescription 권한 자동 요청
+      await Gal.putImage(imageFile.path);
 
       if (mounted) {
-        if (result != null && result['isSuccess'] == true) {
-          _showSuccessDialog('저장 완료');
-        } else {
-          _showErrorDialog('이미지를 저장하는 중 오류가 발생했습니다.\n설정에서 사진 라이브러리 권한을 허용해주세요.');
-        }
+        _showSuccessDialog('저장 완료');
       }
     } catch (e) {
       debugPrint('❌ 갤러리 저장 오류: $e');
