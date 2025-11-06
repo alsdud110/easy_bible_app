@@ -10,12 +10,10 @@ class RewardedAdManager {
   static String get _adUnitId {
     if (Platform.isAndroid) {
       // Android 테스트 광고 (테스트 완료 후 실제 광고로 변경 필요!)
-      return 'ca-app-pub-3940256099942544/5224354917'; // 테스트용
-      // return 'ca-app-pub-7446781962805745/2448103937'; // 실제 광고 단위
+      return 'ca-app-pub-7446781962805745/2448103937'; // 실제 광고 단위
     } else if (Platform.isIOS) {
       // iOS 테스트 광고 (테스트 완료 후 실제 광고로 변경 필요!)
-      return 'ca-app-pub-3940256099942544/1712485313'; // iOS 테스트용
-      // return 'ca-app-pub-7446781962805745/3097064524'; // 실제 광고 단위
+      return 'ca-app-pub-7446781962805745/3097064524'; // 실제 광고 단위
     } else {
       throw UnsupportedError('Unsupported platform');
     }
