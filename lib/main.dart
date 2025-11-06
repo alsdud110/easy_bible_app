@@ -166,8 +166,10 @@ void main() async {
         ChangeNotifierProvider.value(value: favoriteProvider),
         ChangeNotifierProvider.value(value: highlightProvider),
         ChangeNotifierProvider.value(value: languageProvider), // ✅ 추가!
-        ChangeNotifierProvider.value(value: bibleFontSizeProvider), // ✅ Bible FontSize 추가!
-        ChangeNotifierProvider.value(value: planFontSizeProvider), // ✅ Plan FontSize 추가!
+        ChangeNotifierProvider.value(
+            value: bibleFontSizeProvider), // ✅ Bible FontSize 추가!
+        ChangeNotifierProvider.value(
+            value: planFontSizeProvider), // ✅ Plan FontSize 추가!
         ChangeNotifierProvider.value(value: planProgressProvider),
       ],
       child: MyApp(initDark: isDark),
@@ -186,6 +188,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late ThemeMode _themeMode;
   bool _navigationHandled = false;
+  DateTime? _lastPausedTime;
 
   @override
   void initState() {
@@ -198,6 +201,72 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // 앱이 알림으로 시작된 경우 해당 화면으로 이동
     _handleInitialNotification();
+
+    // 마지막 paused 시간 확인
+    _checkLastPausedTime();
+  }
+
+  Future<void> _checkLastPausedTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final pausedTimestamp = prefs.getInt('last_paused_time');
+    if (pausedTimestamp != null) {
+      _lastPausedTime = DateTime.fromMillisecondsSinceEpoch(pausedTimestamp);
+      print('📅 마지막 paused 시간: $_lastPausedTime');
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print('🔄 앱 상태 변경: $state');
+
+    if (state == AppLifecycleState.paused) {
+      // 백그라운드로 갈 때 시간 저장
+      _lastPausedTime = DateTime.now();
+      _saveLastPausedTime();
+      print('⏸️ 앱이 백그라운드로 이동: $_lastPausedTime');
+    } else if (state == AppLifecycleState.resumed) {
+      // 포그라운드로 돌아올 때
+      print('▶️ 앱이 포그라운드로 복귀');
+      if (_lastPausedTime != null) {
+        final duration = DateTime.now().difference(_lastPausedTime!);
+        print('⏱️ 백그라운드 시간: ${duration.inMinutes}분');
+
+        // 120분 이상 지났으면 상태 초기화 (너무 오래 백그라운드에 있었음)
+        if (duration.inMinutes >= 120) {
+          print('🏠 2시간 이상 지나서 홈으로 이동');
+          _resetToHome();
+        }
+      }
+    } else if (state == AppLifecycleState.detached) {
+      // 앱이 완전히 종료될 때
+      print('🔴 앱 종료');
+    }
+  }
+
+  Future<void> _saveLastPausedTime() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(
+          'last_paused_time', _lastPausedTime!.millisecondsSinceEpoch);
+      print('💾 paused 시간 저장: $_lastPausedTime');
+    } catch (e) {
+      print('❌ paused 시간 저장 실패: $e');
+    }
+  }
+
+  void _resetToHome() {
+    final navigator = navigatorKey.currentState;
+    if (navigator != null && navigator.mounted) {
+      try {
+        while (navigator.canPop()) {
+          navigator.pop();
+        }
+        print('✅ 홈으로 초기화 완료');
+      } catch (e) {
+        print('❌ 홈으로 초기화 실패: $e');
+      }
+    }
   }
 
   /// iOS 광고 추적 권한 요청
@@ -214,7 +283,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // 아직 권한을 요청하지 않았다면 요청
       if (status == TrackingStatus.notDetermined) {
         print('🔔 ATT 권한 팝업 표시 중...');
-        final result = await AppTrackingTransparency.requestTrackingAuthorization();
+        final result =
+            await AppTrackingTransparency.requestTrackingAuthorization();
         print('✅ ATT 권한 결과: $result');
       }
     } catch (e) {
@@ -228,7 +298,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // main()에서 가져온 payload 확인
     if (_initialNotificationPayload != null) {
       _navigationHandled = true;
-      print('🔔 initState에서 launch payload 감지 (main): $_initialNotificationPayload');
+      print(
+          '🔔 initState에서 launch payload 감지 (main): $_initialNotificationPayload');
       _scheduleNavigation(_initialNotificationPayload!);
       return;
     }
@@ -245,7 +316,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // iOS에서 백업용 SharedPreferences 확인 (2차 백업)
     final prefs = await SharedPreferences.getInstance();
     final backupPayload = prefs.getString('notification_launch_payload');
-    if (backupPayload != null && prefs.getBool('notification_launch_flag') == true) {
+    if (backupPayload != null &&
+        prefs.getBool('notification_launch_flag') == true) {
       _navigationHandled = true;
       print('🔔 initState에서 launch payload 감지 (백업): $backupPayload');
       await prefs.remove('notification_launch_flag');
