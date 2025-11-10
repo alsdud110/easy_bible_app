@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
 import '../../widgets/breadcrumb_bar.dart';
+import '../../widgets/banner_ad_widget.dart';
 
 class VerseSelector extends StatefulWidget {
   final BibleData book;
@@ -199,6 +200,7 @@ class _VerseSelectorState extends State<VerseSelector>
                   },
                 ),
               ),
+              const BannerAdWidget(),
             ],
           ),
         ),
