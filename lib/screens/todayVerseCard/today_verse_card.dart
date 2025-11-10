@@ -14,6 +14,7 @@ import 'package:screenshot/screenshot.dart';
 import '../../models/bible_card_theme.dart';
 import '../../models/today_verse_model.dart';
 import '../../services/rewarded_ad_manager.dart';
+import '../../services/verse_history_service.dart';
 import '../../widgets/beautiful_bible_card.dart';
 
 class TodayVerseCard extends StatefulWidget {
@@ -65,6 +66,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     final today = DateTime.now();
     final lastPickDate = prefs.getString('lastVerseDate');
     final verseIdx = prefs.getInt('todayVerseIdx');
+
+    debugPrint('📖 _loadTodayVerse - lastPickDate: $lastPickDate, verseIdx: $verseIdx');
 
     if (lastPickDate == '${today.year}-${today.month}-${today.day}' &&
         verseIdx != null) {
@@ -195,6 +198,19 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             await prefs.setString('lastVerseDate',
                                 '${today.year}-${today.month}-${today.day}');
                             await prefs.setInt('todayVerseIdx', idx);
+
+                            // Save to history
+                            debugPrint('💾 새 말씀 히스토리에 저장: ${todayVerses[idx].ref}');
+                            final historyService = VerseHistoryService();
+                            await historyService.saveVerse(VerseHistoryItem(
+                              reference: todayVerses[idx].ref,
+                              text: todayVerses[idx].text,
+                              date: today,
+                            ));
+
+                            final savedHistory = await historyService.getHistory();
+                            debugPrint('✅ 저장 후 히스토리 개수: ${savedHistory.length}');
+
                             setState(() {
                               verse = todayVerses[idx].text;
                               ref = todayVerses[idx].ref;
@@ -243,12 +259,258 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     await _fadeCtrl.forward();
   }
 
-  Future<void> _handleShareButton() async {
+  Future<void> _showHistory() async {
+    final historyService = VerseHistoryService();
+    final history = await historyService.getHistory();
+
+    debugPrint('🔍 히스토리 다이얼로그 열기 - 히스토리 개수: ${history.length}');
+    for (var i = 0; i < history.length; i++) {
+      debugPrint('  [$i] ${history[i].reference} - ${history[i].date}');
+    }
+
+    if (!mounted) return;
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "오늘의 말씀 히스토리",
+      barrierColor: Colors.black.withValues(alpha: 0.4),
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, anim1, anim2) => const SizedBox(),
+      transitionBuilder: (context, anim1, anim2, child) {
+        final curvedAnimation = CurvedAnimation(
+          parent: anim1,
+          curve: Curves.easeOutCubic,
+        );
+
+        return FadeTransition(
+          opacity: curvedAnimation,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.92, end: 1.0).animate(curvedAnimation),
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 420, maxHeight: 600),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 헤더
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.history_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '오늘의 말씀 히스토리',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18,
+                                ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.close_rounded),
+                            onPressed: () => Navigator.of(context).pop(),
+                            splashRadius: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1),
+                    // 히스토리 리스트
+                    if (history.isEmpty)
+                      Expanded(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.inbox_rounded,
+                                  size: 64,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.3),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  '아직 히스토리가 없습니다',
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.6),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          itemCount: history.length,
+                          itemBuilder: (context, index) {
+                            final item = history[index];
+                            final date = item.date;
+                            final dateStr =
+                                '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
+                            final timeStr =
+                                '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.05),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withValues(alpha: 0.1),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(14),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            item.reference,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'ChosunCentennial',
+                                                ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                dateStr,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelSmall
+                                                    ?.copyWith(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(alpha: 0.5),
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                              ),
+                                              Text(
+                                                timeStr,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelSmall
+                                                    ?.copyWith(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(alpha: 0.4),
+                                                      fontSize: 11,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        // 공유 버튼
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.share_rounded,
+                                            size: 20,
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                          onPressed: () async {
+                                            // 히스토리 다이얼로그는 닫지 않고 공유 다이얼로그 열기
+                                            await _handleShareButton(
+                                              customVerse: item.text,
+                                              customRef: item.reference,
+                                            );
+                                          },
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(),
+                                          splashRadius: 18,
+                                          tooltip: '공유하기',
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      item.text,
+                                      style:
+                                          Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                height: 1.5,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'ChosunCentennial',
+                                              ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleShareButton({String? customVerse, String? customRef}) async {
     // 이미 광고를 본 경우 바로 미리보기 열기
     if (_hasWatchedAdForCurrentVerse) {
       if (!mounted) return;
       debugPrint('✅ 광고 이미 시청함 - 바로 미리보기 열기');
-      await _openPreviewSaveShareDialog();
+      await _openPreviewSaveShareDialog(
+        customVerse: customVerse,
+        customRef: customRef,
+      );
       return;
     }
 
@@ -300,7 +562,10 @@ class _TodayVerseCardState extends State<TodayVerseCard>
 
       if (!mounted) return;
       debugPrint('🖼️ 미리보기 다이얼로그 열기');
-      await _openPreviewSaveShareDialog();
+      await _openPreviewSaveShareDialog(
+        customVerse: customVerse,
+        customRef: customRef,
+      );
       debugPrint('✅ 미리보기 다이얼로그 열림');
     } else {
       debugPrint('⚠️ 광고 시청 실패 또는 취소됨');
@@ -483,8 +748,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   }
 
   /// ====== 미리보기/색상/저장/공유 통합 팝업 (미리보기 == 내보내기) ======
-  Future<void> _openPreviewSaveShareDialog() async {
-    if (verse == null || ref == null) {
+  Future<void> _openPreviewSaveShareDialog({
+    String? customVerse,
+    String? customRef,
+  }) async {
+    // customVerse와 customRef가 제공되면 사용, 아니면 현재 state 사용
+    final displayVerse = customVerse ?? verse;
+    final displayRef = customRef ?? ref;
+
+    if (displayVerse == null || displayRef == null) {
       debugPrint('⚠️ verse 또는 ref가 null');
       return;
     }
@@ -702,8 +974,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                       child: Material(
                                         color: Colors.transparent,
                                         child: BeautifulBibleCard(
-                                          verse: verse!,
-                                          reference: ref!,
+                                          verse: displayVerse,
+                                          reference: displayRef,
                                           theme: BibleCardTheme
                                               .presets[selectedThemeIndex],
                                           forceWhiteText: useWhiteText,
@@ -1118,6 +1390,17 @@ $appLink''';
                           : _TodayVerseShowCard(ref: ref, verse: verse),
                     ),
                   ),
+                  if (verse != null)
+                    Positioned(
+                      left: 8,
+                      top: 8,
+                      child: IconButton(
+                        icon: Icon(Icons.history_rounded, color: cs.primary),
+                        tooltip: '오늘의 말씀 히스토리',
+                        onPressed: _showHistory,
+                        splashRadius: 22,
+                      ),
+                    ),
                   if (verse != null)
                     Positioned(
                       right: 8,
