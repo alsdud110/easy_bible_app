@@ -199,7 +199,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               verse = todayVerses[idx].text;
                               ref = todayVerses[idx].ref;
                               pendingIdx = null;
-                              _hasWatchedAdForCurrentVerse = false; // 새 말씀을 받으면 광고 시청 상태 초기화
+                              _hasWatchedAdForCurrentVerse =
+                                  false; // 새 말씀을 받으면 광고 시청 상태 초기화
                             });
                             await _fadeCtrl.forward();
                           },
@@ -411,12 +412,14 @@ class _TodayVerseCardState extends State<TodayVerseCard>
         return FadeTransition(
           opacity: anim1,
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.85, end: 1.0).animate(curvedAnimation),
+            scale:
+                Tween<double>(begin: 0.85, end: 1.0).animate(curvedAnimation),
             child: Center(
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(20),
@@ -435,7 +438,10 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                         width: 56,
                         height: 56,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -447,10 +453,11 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                       const SizedBox(height: 16),
                       Text(
                         message,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 17,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17,
+                                ),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -505,374 +512,492 @@ class _TodayVerseCardState extends State<TodayVerseCard>
 
     try {
       await showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: "오늘의 말씀 카드",
-      barrierColor: Colors.black.withValues(alpha: 0.5),
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, anim1, anim2) => const SizedBox(),
-      transitionBuilder: (context, anim1, anim2, child) {
-        final curvedAnimation = CurvedAnimation(
-          parent: anim1,
-          curve: Curves.easeOutCubic,
-        );
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: "오늘의 말씀 카드",
+        barrierColor: Colors.black.withValues(alpha: 0.5),
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (context, anim1, anim2) => const SizedBox(),
+        transitionBuilder: (context, anim1, anim2, child) {
+          final curvedAnimation = CurvedAnimation(
+            parent: anim1,
+            curve: Curves.easeOutCubic,
+          );
 
-        return FadeTransition(
-          opacity: curvedAnimation,
-          child: ScaleTransition(
-            scale: Tween<double>(begin: 0.92, end: 1.0).animate(curvedAnimation),
-            child: StatefulBuilder(builder: (context, setStateSB) {
-              return Dialog(
-                backgroundColor: Colors.transparent,
-                insetPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                child: Container(
-              constraints: const BoxConstraints(maxWidth: 420),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Row(
-                      children: [
-                        Text('오늘의 말씀 카드',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w800)),
-                        const Spacer(),
-                        // 텍스트 색상 토글 버튼
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GestureDetector(
-                                onTap: () => setStateSB(() {
-                                  useWhiteText = true;
-                                }),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
+          return FadeTransition(
+            opacity: curvedAnimation,
+            child: ScaleTransition(
+              scale:
+                  Tween<double>(begin: 0.92, end: 1.0).animate(curvedAnimation),
+              child: StatefulBuilder(builder: (context, setStateSB) {
+                return Dialog(
+                  backgroundColor: Colors.transparent,
+                  insetPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: Row(
+                              children: [
+                                Text('오늘의 말씀 카드',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.w800)),
+                                const Spacer(),
+                                // 텍스트 색상 토글 버튼 (흰색/검정색 직관적 표시)
+                                Container(
                                   decoration: BoxDecoration(
-                                    color: useWhiteText
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(16),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Icon(
-                                    Icons.brightness_5,
-                                    size: 18,
-                                    color: useWhiteText
-                                        ? Colors.white
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withValues(alpha: 0.6),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => setStateSB(() {
-                                  useWhiteText = false;
-                                }),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: !useWhiteText
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Icon(
-                                    Icons.brightness_2,
-                                    size: 18,
-                                    color: !useWhiteText
-                                        ? Colors.white
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withValues(alpha: 0.6),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          maxHeight: 360,
-                          minHeight: 200,
-                        ),
-                        alignment: Alignment.center,
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          alignment: Alignment.center,
-                          child: RepaintBoundary(
-                            key: previewKey,
-                            child: SizedBox(
-                              width: exportSize.width,
-                              height: exportSize.height,
-                              child: Material(
-                                color: Colors.transparent,
-                                child: BeautifulBibleCard(
-                                  verse: verse!,
-                                  reference: ref!,
-                                  theme: BibleCardTheme
-                                      .presets[selectedThemeIndex],
-                                  forceWhiteText: useWhiteText,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  SizedBox(
-                    height: 70,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                      itemCount: BibleCardTheme.presets.length,
-                      itemBuilder: (context, index) {
-                        final th = BibleCardTheme.presets[index];
-                        final isSelected = selectedThemeIndex == index;
-                        return GestureDetector(
-                          onTap: () => setStateSB(() {
-                            selectedThemeIndex = index;
-                          }),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            width: isSelected ? 54 : 48,
-                            height: isSelected ? 54 : 48,
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 8),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: th.gradientColors,
-                                stops: th.gradientStops,
-                              ),
-                              shape: BoxShape.circle,
-                              border: isSelected
-                                  ? Border.all(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      width: 3,
-                                    )
-                                  : Border.all(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.3),
-                                      width: 2,
-                                    ),
-                              boxShadow: isSelected
-                                  ? [
-                                      BoxShadow(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary
-                                            .withValues(alpha: 0.4),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ]
-                                  : [
-                                      BoxShadow(
-                                        color: Colors.black
-                                            .withValues(alpha: 0.15),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                            ),
-                            child: isSelected
-                                ? const Icon(Icons.check_rounded,
-                                    color: Colors.white, size: 24)
-                                : null,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 0, 18, 16),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: {
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  // 로딩 표시
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (ctx) => Center(
-                                      child: Container(
-                                        padding: const EdgeInsets.all(32),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.surface,
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Lottie.asset(
-                                              'assets/lottie/loading.json',
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.contain,
-                                              repeat: true,
-                                            ),
-                                            const SizedBox(height: 16),
-                                            Text('이미지 생성 중...',
-                                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-
-                                  final file = await _exportPreviewToTempFile(
-                                      previewKey, exportSize);
-
-                                  if (context.mounted) {
-                                    Navigator.of(context).pop(); // 로딩 닫기
-                                  }
-
-                                  if (file == null) return;
-
-                                  if (context.mounted) {
-                                    Navigator.of(context).pop(); // 미리보기 팝업 닫기
-                                    await _saveToGallery(file);
-                                  }
-                                },
-                                icon: const Icon(Icons.download_rounded),
-                                label: const Text('저장'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  foregroundColor: Colors.white,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Builder(
-                                builder: (btnContext) => ElevatedButton.icon(
-                                  onPressed: () async {
-                                    // 로딩 표시
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (ctx) => Center(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // 흰색 텍스트 버튼
+                                      GestureDetector(
+                                        onTap: () => setStateSB(() {
+                                          useWhiteText = true;
+                                        }),
                                         child: Container(
-                                          padding: const EdgeInsets.all(32),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 6),
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.surface,
-                                            borderRadius: BorderRadius.circular(20),
+                                            color: useWhiteText
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                : Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                           ),
-                                          child: Column(
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Lottie.asset(
-                                                'assets/lottie/loading.json',
-                                                width: 80,
-                                                height: 80,
-                                                fit: BoxFit.contain,
-                                                repeat: true,
+                                              Container(
+                                                width: 16,
+                                                height: 16,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color: useWhiteText
+                                                        ? Colors.white
+                                                            .withValues(
+                                                                alpha: 0.3)
+                                                        : Colors.grey
+                                                            .withValues(
+                                                                alpha: 0.3),
+                                                    width: 1.5,
+                                                  ),
+                                                ),
                                               ),
-                                              const SizedBox(height: 16),
-                                              Text('이미지 생성 중...',
-                                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                    fontWeight: FontWeight.w700,
-                                                  )),
+                                              if (useWhiteText) ...[
+                                                const SizedBox(width: 4),
+                                                const Text(
+                                                  '흰색',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
                                             ],
                                           ),
                                         ),
                                       ),
-                                    );
-
-                                    final file = await _exportPreviewToTempFile(
-                                        previewKey, exportSize);
-
-                                    if (context.mounted) {
-                                      Navigator.of(context).pop(); // 로딩 닫기
-                                    }
-
-                                    if (file == null) return;
-
-                                    final box = btnContext.findRenderObject()
-                                        as RenderBox?;
-                                    await Share.shareXFiles(
-                                      [XFile(file.path)],
-                                      sharePositionOrigin: box != null
-                                          ? box.localToGlobal(Offset.zero) &
-                                              box.size
-                                          : null,
-                                    );
-                                  },
-                                  icon: const Icon(Icons.share_rounded),
-                                  label: const Text('공유'),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.secondary,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
+                                      // 검정색 텍스트 버튼
+                                      GestureDetector(
+                                        onTap: () => setStateSB(() {
+                                          useWhiteText = false;
+                                        }),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 6),
+                                          decoration: BoxDecoration(
+                                            color: !useWhiteText
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                : Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: 16,
+                                                height: 16,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black87,
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color: !useWhiteText
+                                                        ? Colors.white
+                                                            .withValues(
+                                                                alpha: 0.3)
+                                                        : Colors.grey
+                                                            .withValues(
+                                                                alpha: 0.3),
+                                                    width: 1.5,
+                                                  ),
+                                                ),
+                                              ),
+                                              if (!useWhiteText) ...[
+                                                const SizedBox(width: 4),
+                                                const Text(
+                                                  '검정',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Container(
+                                constraints: const BoxConstraints(
+                                  maxHeight: 360,
+                                  minHeight: 200,
+                                ),
+                                alignment: Alignment.center,
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  alignment: Alignment.center,
+                                  child: RepaintBoundary(
+                                    key: previewKey,
+                                    child: SizedBox(
+                                      width: exportSize.width,
+                                      height: exportSize.height,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: BeautifulBibleCard(
+                                          verse: verse!,
+                                          reference: ref!,
+                                          theme: BibleCardTheme
+                                              .presets[selectedThemeIndex],
+                                          forceWhiteText: useWhiteText,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          }.toList(),
-                        ),
-                        const SizedBox(height: 8),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('닫기'),
-                        ),
-                      ],
+                          ),
+                          const SizedBox(height: 14),
+                          SizedBox(
+                            height: 70,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
+                              itemCount: BibleCardTheme.presets.length,
+                              itemBuilder: (context, index) {
+                                final th = BibleCardTheme.presets[index];
+                                final isSelected = selectedThemeIndex == index;
+                                return GestureDetector(
+                                  onTap: () => setStateSB(() {
+                                    selectedThemeIndex = index;
+                                  }),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 180),
+                                    width: isSelected ? 54 : 48,
+                                    height: isSelected ? 54 : 48,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: th.gradientColors,
+                                        stops: th.gradientStops,
+                                      ),
+                                      shape: BoxShape.circle,
+                                      border: isSelected
+                                          ? Border.all(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              width: 3,
+                                            )
+                                          : Border.all(
+                                              color: Colors.white
+                                                  .withValues(alpha: 0.3),
+                                              width: 2,
+                                            ),
+                                      boxShadow: isSelected
+                                          ? [
+                                              BoxShadow(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                    .withValues(alpha: 0.4),
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ]
+                                          : [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withValues(alpha: 0.15),
+                                                blurRadius: 4,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                    ),
+                                    child: isSelected
+                                        ? const Icon(Icons.check_rounded,
+                                            color: Colors.white, size: 24)
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 0, 18, 16),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: {
+                                    Expanded(
+                                      child: ElevatedButton.icon(
+                                        onPressed: () async {
+                                          // 로딩 표시
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (ctx) => Center(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(32),
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .surface,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Lottie.asset(
+                                                      'assets/lottie/loading.json',
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.contain,
+                                                      repeat: true,
+                                                    ),
+                                                    const SizedBox(height: 16),
+                                                    Text('이미지 생성 중...',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            )),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+
+                                          final file =
+                                              await _exportPreviewToTempFile(
+                                                  previewKey, exportSize);
+
+                                          if (context.mounted) {
+                                            Navigator.of(context)
+                                                .pop(); // 로딩 닫기
+                                          }
+
+                                          if (file == null) return;
+
+                                          if (context.mounted) {
+                                            Navigator.of(context)
+                                                .pop(); // 미리보기 팝업 닫기
+                                            await _saveToGallery(file);
+                                          }
+                                        },
+                                        icon:
+                                            const Icon(Icons.download_rounded),
+                                        label: const Text('저장'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Builder(
+                                        builder: (btnContext) =>
+                                            ElevatedButton.icon(
+                                          onPressed: () async {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (ctx) => Center(
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(32),
+                                                  decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .surface,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Lottie.asset(
+                                                        'assets/lottie/loading.json',
+                                                        width: 80,
+                                                        height: 80,
+                                                        fit: BoxFit.contain,
+                                                        repeat: true,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 16),
+                                                      Text('이미지 생성 중...',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                  )),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+
+                                            final file =
+                                                await _exportPreviewToTempFile(
+                                                    previewKey, exportSize);
+
+                                            if (context.mounted) {
+                                              Navigator.of(context)
+                                                  .pop(); // 로딩 닫기
+                                            }
+
+                                            if (file == null) return;
+
+                                            final box =
+                                                btnContext.findRenderObject()
+                                                    as RenderBox?;
+
+                                            // 앱 다운로드 링크와 메시지 추가 (기기별로 다르게)
+                                            const appStoreLink =
+                                                'https://apps.apple.com/us/app/%EC%98%AC%EC%9D%B8%EB%B0%94%EC%9D%B4%EB%B8%94-all-in-bible/id6754250799';
+                                            const playStoreLink =
+                                                'https://play.google.com/store/apps/details?id=easy.bible.app.easy_bible_app';
+
+                                            // 현재 플랫폼에 맞는 링크 선택
+                                            final isIOS = Platform.isIOS;
+                                            final appLink = isIOS
+                                                ? appStoreLink
+                                                : playStoreLink;
+                                            final storeName = isIOS
+                                                ? 'App Store'
+                                                : 'Play 스토어';
+
+                                            final shareMessage = '''
+오늘의 말씀을 공유합니다 📖✨
+
+올인바이블(All in Bible) 앱에서 매일 새로운 말씀을 받아보세요!
+
+📱 $storeName에서 다운로드:
+$appLink''';
+
+                                            await Share.shareXFiles(
+                                              [XFile(file.path)],
+                                              text: shareMessage,
+                                              sharePositionOrigin: box != null
+                                                  ? box.localToGlobal(
+                                                          Offset.zero) &
+                                                      box.size
+                                                  : null,
+                                            );
+                                          },
+                                          icon: const Icon(Icons.share_rounded),
+                                          label: const Text('공유'),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            foregroundColor: Colors.white,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 12),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  }.toList(),
+                                ),
+                                const SizedBox(height: 8),
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text('닫기'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-              ),
+                );
+              }),
             ),
-              );
-            }),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
     } catch (e, stackTrace) {
       debugPrint('❌ 미리보기 다이얼로그 오류: $e');
       debugPrint('스택 트레이스: $stackTrace');
