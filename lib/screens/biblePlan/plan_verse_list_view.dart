@@ -598,11 +598,12 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
     return Positioned(
       left: 16,
       right: 16,
-      bottom: 16, // 화면 하단에서 16px 위
+      bottom: 16 + bottomPadding, // 시스템 네비게이션 바 고려
       child: AnimatedBuilder(
         animation: _floatingActionBarController,
         builder: (context, child) {
@@ -881,7 +882,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
           if (!_isSelectionMode)
             Positioned(
               right: 18,
-              bottom: widget.dayNumber != null ? 88 : 24,
+              bottom: (widget.dayNumber != null ? 88 : 24) + MediaQuery.of(context).viewPadding.bottom,
               child: AnimatedOpacity(
                 opacity: _showFAB ? 1 : 0,
                 duration: const Duration(milliseconds: 220),
@@ -918,7 +919,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).viewPadding.bottom,
               child: Consumer<PlanProgressProvider>(
                 builder: (context, planProvider, _) {
                   final isCompleted =

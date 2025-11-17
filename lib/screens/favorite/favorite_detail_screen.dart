@@ -351,40 +351,43 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _toggleMemoSheet,
-        icon: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            const Icon(Icons.sticky_note_2),
-            if (currentFavorite.memos.isNotEmpty)
-              Positioned(
-                right: -4,
-                top: -4,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 18,
-                    minHeight: 18,
-                  ),
-                  child: Text(
-                    '${currentFavorite.memos.length}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
+        child: FloatingActionButton.extended(
+          onPressed: _toggleMemoSheet,
+          icon: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              const Icon(Icons.sticky_note_2),
+              if (currentFavorite.memos.isNotEmpty)
+                Positioned(
+                  right: -4,
+                  top: -4,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
                     ),
-                    textAlign: TextAlign.center,
+                    constraints: const BoxConstraints(
+                      minWidth: 18,
+                      minHeight: 18,
+                    ),
+                    child: Text(
+                      '${currentFavorite.memos.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
+          label: const Text('메모'),
         ),
-        label: const Text('메모'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

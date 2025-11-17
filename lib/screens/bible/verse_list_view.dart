@@ -604,11 +604,12 @@ class _VerseListViewState extends State<VerseListView>
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
     return Positioned(
       left: 16,
       right: 16,
-      bottom: 16, // 화면 하단에서 16px 위
+      bottom: 16 + bottomPadding, // 시스템 네비게이션 바 고려
       child: AnimatedBuilder(
         animation: _floatingActionBarController,
         builder: (context, child) {
@@ -1026,7 +1027,7 @@ class _VerseListViewState extends State<VerseListView>
                   Positioned(
                     left: 12,
                     right: 88,
-                    bottom: 12,
+                    bottom: 12 + MediaQuery.of(context).viewPadding.bottom,
                     child: TweenAnimationBuilder<Offset>(
                       duration: const Duration(milliseconds: 600),
                       tween: Tween(
