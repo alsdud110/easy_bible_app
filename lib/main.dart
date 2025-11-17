@@ -117,7 +117,9 @@ class NoBounceScrollBehavior extends ScrollBehavior {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await MobileAds.instance.initialize();
+  // ✅ AdMob 초기화 및 상태 확인
+  final initializationStatus = await MobileAds.instance.initialize();
+  print('🎯 AdMob 초기화 완료: ${initializationStatus.adapterStatuses}');
 
   // 알림 서비스 초기화 (알림 탭 핸들러 포함)
   await NotificationService().initialize(

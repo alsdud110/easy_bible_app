@@ -5,15 +5,27 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class RewardedAdManager {
   RewardedAd? _rewardedAd;
   bool _isAdLoaded = false;
+  int _retryCount = 0;
+  static const int _maxRetries = 3;
 
   /// 플랫폼별 보상형 광고 단위 ID
   static String get _adUnitId {
+    // 🧪 테스트 모드: 필요시 true로 변경
+    const bool useTestAds = false;
+
+    if (useTestAds) {
+      if (Platform.isAndroid) {
+        return 'ca-app-pub-3940256099942544/5224354917'; // Android 테스트 리워드 광고
+      } else if (Platform.isIOS) {
+        return 'ca-app-pub-3940256099942544/1712485313'; // iOS 테스트 리워드 광고
+      }
+    }
+
+    // 실제 광고 단위 ID
     if (Platform.isAndroid) {
-      // Android 테스트 광고 (테스트 완료 후 실제 광고로 변경 필요!)
-      return 'ca-app-pub-7446781962805745/2448103937'; // 실제 광고 단위
+      return 'ca-app-pub-7446781962805745/2448103937';
     } else if (Platform.isIOS) {
-      // iOS 테스트 광고 (테스트 완료 후 실제 광고로 변경 필요!)
-      return 'ca-app-pub-7446781962805745/3097064524'; // 실제 광고 단위
+      return 'ca-app-pub-7446781962805745/3097064524';
     } else {
       throw UnsupportedError('Unsupported platform');
     }
@@ -24,6 +36,8 @@ class RewardedAdManager {
 
   /// 광고 로드
   Future<void> loadAd() async {
+    print('🔄 보상형 광고 로드 시작...');
+
     await RewardedAd.load(
       adUnitId: _adUnitId,
       request: const AdRequest(),
@@ -31,6 +45,7 @@ class RewardedAdManager {
         onAdLoaded: (ad) {
           _rewardedAd = ad;
           _isAdLoaded = true;
+          _retryCount = 0; // 성공 시 재시도 카운트 리셋
           print('✅ 보상형 광고 로드 성공');
 
           // 광고 이벤트 리스너 설정
@@ -47,6 +62,7 @@ class RewardedAdManager {
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               print('❌ 보상형 광고 표시 실패: ${error.message}');
+              print('   에러 코드: ${error.code}');
               ad.dispose();
               _isAdLoaded = false;
               loadAd();
@@ -55,7 +71,23 @@ class RewardedAdManager {
         },
         onAdFailedToLoad: (error) {
           print('❌ 보상형 광고 로드 실패: ${error.message}');
+          print('   에러 코드: ${error.code}');
+          print('   도메인: ${error.domain}');
           _isAdLoaded = false;
+          _retryCount++;
+
+          // 재시도 횟수 제한 (무한 루프 방지)
+          if (_retryCount <= _maxRetries) {
+            // 지수 백오프: 5초, 10초, 20초
+            final delay = Duration(seconds: 5 * _retryCount);
+            print('🔄 $delay 후 재시도 ($_retryCount/$_maxRetries)');
+            Future.delayed(delay, () {
+              print('🔄 보상형 광고 재시도 중... ($_retryCount/$_maxRetries)');
+              loadAd();
+            });
+          } else {
+            print('⚠️ 최대 재시도 횟수 도달. 다음 요청 시 다시 시도합니다.');
+          }
         },
       ),
     );

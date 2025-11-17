@@ -12,14 +12,26 @@ class BannerAdWidget extends StatefulWidget {
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
   bool _isLoaded = false;
+  int _retryCount = 0;
+  static const int _maxRetries = 3;
 
   /// ✅ 플랫폼별 광고 단위 ID
   static String get _adUnitId {
+    // 🧪 테스트 모드: 필요시 true로 변경
+    const bool useTestAds = false;
+
+    if (useTestAds) {
+      if (Platform.isAndroid) {
+        return 'ca-app-pub-3940256099942544/6300978111'; // Android 테스트 배너 광고
+      } else if (Platform.isIOS) {
+        return 'ca-app-pub-3940256099942544/2934735716'; // iOS 테스트 배너 광고
+      }
+    }
+
+    // 실제 광고 단위 ID
     if (Platform.isAndroid) {
-      // Android 실제 광고 단위
       return 'ca-app-pub-7446781962805745/4003972619';
     } else if (Platform.isIOS) {
-      // iOS 실제 광고 단위
       return 'ca-app-pub-7446781962805745/8072089412';
     } else {
       throw UnsupportedError('Unsupported platform');
@@ -39,14 +51,36 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          setState(() {
-            _isLoaded = true;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoaded = true;
+            });
+          }
+          _retryCount = 0; // 성공 시 재시도 카운트 리셋
           print('✅ 배너 광고 로드 성공');
         },
         onAdFailedToLoad: (ad, error) {
           print('❌ 배너 광고 로드 실패: ${error.message}');
+          print('   에러 코드: ${error.code}');
+          print('   도메인: ${error.domain}');
           ad.dispose();
+          _bannerAd = null;
+          _retryCount++;
+
+          // 재시도 횟수 제한 (무한 루프 방지)
+          if (_retryCount <= _maxRetries) {
+            // 지수 백오프: 3초, 6초, 12초
+            final delay = Duration(seconds: 3 * _retryCount);
+            print('🔄 $delay 후 재시도 ($_retryCount/$_maxRetries)');
+            Future.delayed(delay, () {
+              if (mounted) {
+                print('🔄 배너 광고 재시도 중... ($_retryCount/$_maxRetries)');
+                _loadAd();
+              }
+            });
+          } else {
+            print('⚠️ 최대 재시도 횟수 도달. 광고가 표시되지 않습니다.');
+          }
         },
       ),
     )..load();
@@ -61,10 +95,11 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   Widget build(BuildContext context) {
     if (_bannerAd != null && _isLoaded) {
+      final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
       return Container(
         width: _bannerAd!.size.width.toDouble(),
-        height: _bannerAd!.size.height.toDouble(),
-        alignment: Alignment.center,
+        height: _bannerAd!.size.height.toDouble() + bottomPadding,
+        alignment: Alignment.topCenter,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           border: Border(
