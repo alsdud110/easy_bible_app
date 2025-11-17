@@ -95,7 +95,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   Widget build(BuildContext context) {
     if (_bannerAd != null && _isLoaded) {
-      final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
+      // padding.bottom은 시스템 네비게이션 바를 포함한 전체 여백
+      // viewPadding.bottom은 노치만 고려 (네비게이션 바 제외)
+      final bottomPadding = MediaQuery.of(context).padding.bottom;
       return Container(
         width: _bannerAd!.size.width.toDouble(),
         height: _bannerAd!.size.height.toDouble() + bottomPadding,
