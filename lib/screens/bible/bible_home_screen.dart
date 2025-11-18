@@ -328,6 +328,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
           });
         },
         onBack: _reset,
+        onDirectNavigate: _navigateDirectlyToVerse,
       );
     } else if (step == 2) {
       final book = bibleBookList[selectedBook];
@@ -362,6 +363,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
           setState(() => step = 1);
         },
         onGoHome: _reset,
+        onDirectNavigate: _navigateDirectlyToVerse,
       );
     } else if (step == 3) {
       final book = bibleBookList[selectedBook];

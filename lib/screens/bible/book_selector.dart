@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
+import '../../services/bible_search_service.dart';
 import '../../widgets/banner_ad_widget.dart';
+import 'verse_list_view.dart';
 
 void pushModernTransition(BuildContext context, Widget page) {
   Navigator.of(context).push(
@@ -54,14 +58,22 @@ class BookSelector extends StatefulWidget {
   State<BookSelector> createState() => _BookSelectorState();
 }
 
+enum SearchMode { quickFind, wordSearch }
+
 class _BookSelectorState extends State<BookSelector>
     with SingleTickerProviderStateMixin {
   bool isGrid = true;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  SearchMode _searchMode = SearchMode.quickFind;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+
+  // 단어 검색 관련
+  List<BibleSearchResult> _wordSearchResults = [];
+  bool _isSearching = false;
+  int _totalWordSearchCount = 0;
 
   @override
   void initState() {
@@ -87,8 +99,7 @@ class _BookSelectorState extends State<BookSelector>
   @override
   void didUpdateWidget(covariant BookSelector oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 언어가 변경되면 애니메이션 재실행
-    _animationController.forward(from: 0);
+    // 애니메이션은 초기 로드 시에만 실행
   }
 
   @override
@@ -482,11 +493,8 @@ class _BookSelectorState extends State<BookSelector>
           position: _slideAnimation,
           child: Column(
             children: [
-              // 검색 바
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                height: MediaQuery.of(context).size.height * 0.065,
+              // 검색 영역
+              Container(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHighest
                       .withOpacity(0.3),
@@ -497,168 +505,566 @@ class _BookSelectorState extends State<BookSelector>
                     ),
                   ),
                 ),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: languageProvider.isKorean
-                        ? '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16'
-                        : 'e.g.) Genesis, Exo, Numbers 6, Luke 11, John 3:16',
-                    hintStyle: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
-                      fontSize: 13,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: theme.colorScheme.primary,
-                    ),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.arrow_forward,
-                                  color: theme.colorScheme.primary,
-                                ),
-                                onPressed: () =>
-                                    _handleSearch(_searchController.text),
-                                tooltip:
-                                    languageProvider.isKorean ? '검색' : 'Search',
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.clear,
-                                  color: theme.colorScheme.onSurface
-                                      .withOpacity(0.5),
-                                ),
-                                onPressed: () {
+                child: Column(
+                  children: [
+                    // 세그먼트 버튼
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _buildSegmentButton(
+                                context,
+                                label: languageProvider.isKorean
+                                    ? '성경 간편 찾기'
+                                    : 'Quick Find',
+                                icon: Icons.menu_book,
+                                isSelected: _searchMode == SearchMode.quickFind,
+                                onTap: () {
                                   setState(() {
+                                    _searchMode = SearchMode.quickFind;
                                     _searchController.clear();
                                     _searchQuery = '';
                                   });
                                 },
                               ),
-                            ],
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: theme.colorScheme.surface,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: theme.colorScheme.outline.withOpacity(0.3),
+                            ),
+                            Expanded(
+                              child: _buildSegmentButton(
+                                context,
+                                label: languageProvider.isKorean
+                                    ? '단어 검색'
+                                    : 'Word Search',
+                                icon: Icons.search,
+                                isSelected:
+                                    _searchMode == SearchMode.wordSearch,
+                                onTap: () {
+                                  setState(() {
+                                    _searchMode = SearchMode.wordSearch;
+                                    _searchController.clear();
+                                    _searchQuery = '';
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: theme.colorScheme.outline.withOpacity(0.3),
+                    // 검색 바
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: _searchMode == SearchMode.quickFind
+                              ? (languageProvider.isKorean
+                                  ? '예) 창세기, 출, 민수기 6, 눅 11, 요한복음 3:16, 요 3 16'
+                                  : 'e.g.) Genesis, Exo, Numbers 6, Luke 11, John 3:16')
+                              : (languageProvider.isKorean
+                                  ? '단어 검색 (예: 사랑, 믿음)'
+                                  : 'Word search (e.g., love, faith)'),
+                          hintStyle: TextStyle(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                            fontSize: 13,
+                          ),
+                          prefixIcon: Icon(
+                            _searchMode == SearchMode.quickFind
+                                ? Icons.menu_book
+                                : Icons.search,
+                            color: theme.colorScheme.primary,
+                          ),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // 단어 검색 모드가 아닐 때만 화살표 표시
+                                    if (_searchMode == SearchMode.quickFind)
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.arrow_forward,
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                        onPressed: () {
+                                          _handleSearch(_searchController.text);
+                                        },
+                                        tooltip: languageProvider.isKorean
+                                            ? '검색'
+                                            : 'Search',
+                                      ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.clear,
+                                        color: theme.colorScheme.onSurface
+                                            .withOpacity(0.5),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _searchController.clear();
+                                          _searchQuery = '';
+                                          _wordSearchResults = [];
+                                          _totalWordSearchCount = 0;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : null,
+                          filled: true,
+                          fillColor: theme.colorScheme.surface,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.outline.withOpacity(0.3),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.outline.withOpacity(0.3),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value;
+                          });
+                          // 단어 검색 모드일 때 자동 검색 (디바운싱)
+                          if (_searchMode == SearchMode.wordSearch) {
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              if (_searchController.text == value && mounted) {
+                                _performWordSearch(value);
+                              }
+                            });
+                          }
+                        },
+                        onSubmitted: (value) {
+                          if (_searchMode == SearchMode.quickFind) {
+                            _handleSearch(value);
+                          } else {
+                            _performWordSearch(value);
+                          }
+                        },
                       ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: theme.colorScheme.primary,
-                        width: 2,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _searchQuery = value;
-                    });
-                  },
-                  onSubmitted: _handleSearch,
+                  ],
                 ),
               ),
 
               // 검색 결과 또는 전체 목록
               Expanded(
-                child: _searchQuery.isNotEmpty &&
-                        oldBooks.isEmpty &&
-                        newBooks.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search_off,
-                              size: 64,
-                              color:
-                                  theme.colorScheme.onSurface.withOpacity(0.3),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              '검색 결과가 없습니다',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: theme.colorScheme.onSurface
-                                    .withOpacity(0.6),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '다른 검색어를 시도해보세요',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: theme.colorScheme.onSurface
-                                    .withOpacity(0.4),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView(
-                        children: [
-                          if (oldBooks.isNotEmpty) ...[
-                            _SectionTitle(
-                                title: languageProvider.isKorean
-                                    ? '구약'
-                                    : 'Old Testament'),
-                            isGrid
-                                ? _BookGrid(
-                                    books: oldBooks,
-                                    allBooks: widget.books,
-                                    onSelect: widget.onSelect,
-                                    isKorean: languageProvider.isKorean,
-                                  )
-                                : _BookList(
-                                    books: oldBooks,
-                                    allBooks: widget.books,
-                                    onSelect: widget.onSelect,
-                                    isKorean: languageProvider.isKorean,
+                child: _searchMode == SearchMode.wordSearch &&
+                        _searchQuery.isNotEmpty
+                    ? _buildWordSearchResults(theme, languageProvider)
+                    : _searchQuery.isNotEmpty &&
+                            oldBooks.isEmpty &&
+                            newBooks.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  size: 64,
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.3),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  '검색 결과가 없습니다',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.6),
                                   ),
-                          ],
-                          if (newBooks.isNotEmpty) ...[
-                            _SectionTitle(
-                                title: languageProvider.isKorean
-                                    ? '신약'
-                                    : 'New Testament'),
-                            isGrid
-                                ? _BookGrid(
-                                    books: newBooks,
-                                    allBooks: widget.books,
-                                    onSelect: widget.onSelect,
-                                    isKorean: languageProvider.isKorean,
-                                  )
-                                : _BookList(
-                                    books: newBooks,
-                                    allBooks: widget.books,
-                                    onSelect: widget.onSelect,
-                                    isKorean: languageProvider.isKorean,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '다른 검색어를 시도해보세요',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.4),
                                   ),
-                          ],
-                        ],
-                      ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView(
+                            children: [
+                              if (oldBooks.isNotEmpty) ...[
+                                _SectionTitle(
+                                    title: languageProvider.isKorean
+                                        ? '구약'
+                                        : 'Old Testament'),
+                                isGrid
+                                    ? _BookGrid(
+                                        books: oldBooks,
+                                        allBooks: widget.books,
+                                        onSelect: widget.onSelect,
+                                        isKorean: languageProvider.isKorean,
+                                      )
+                                    : _BookList(
+                                        books: oldBooks,
+                                        allBooks: widget.books,
+                                        onSelect: widget.onSelect,
+                                        isKorean: languageProvider.isKorean,
+                                      ),
+                              ],
+                              if (newBooks.isNotEmpty) ...[
+                                _SectionTitle(
+                                    title: languageProvider.isKorean
+                                        ? '신약'
+                                        : 'New Testament'),
+                                isGrid
+                                    ? _BookGrid(
+                                        books: newBooks,
+                                        allBooks: widget.books,
+                                        onSelect: widget.onSelect,
+                                        isKorean: languageProvider.isKorean,
+                                      )
+                                    : _BookList(
+                                        books: newBooks,
+                                        allBooks: widget.books,
+                                        onSelect: widget.onSelect,
+                                        isKorean: languageProvider.isKorean,
+                                      ),
+                              ],
+                            ],
+                          ),
               ),
 
               const BannerAdWidget(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  // 단어 검색 수행
+  Future<void> _performWordSearch(String query) async {
+    if (query.trim().isEmpty) {
+      setState(() {
+        _wordSearchResults = [];
+        _isSearching = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isSearching = true;
+    });
+
+    final languageProvider = context.read<LanguageProvider>();
+    final response = await BibleSearchService.searchBible(
+      query,
+      languageProvider.currentLanguage,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _wordSearchResults = response.results;
+      _totalWordSearchCount = response.totalCount;
+      _isSearching = false;
+    });
+  }
+
+  // 단어 검색 결과 표시
+  Widget _buildWordSearchResults(
+      ThemeData theme, LanguageProvider languageProvider) {
+    final cs = theme.colorScheme;
+
+    if (_isSearching) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_wordSearchResults.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_off,
+              size: 64,
+              color: cs.onSurface.withOpacity(0.3),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              languageProvider.isKorean ? '검색 결과가 없습니다' : 'No results found',
+              style: TextStyle(
+                fontSize: 16,
+                color: cs.onSurface.withOpacity(0.6),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              languageProvider.isKorean
+                  ? '다른 검색어를 시도해보세요'
+                  : 'Try different search terms',
+              style: TextStyle(
+                fontSize: 14,
+                color: cs.onSurface.withOpacity(0.4),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            languageProvider.isKorean
+                ? '$_totalWordSearchCount개의 결과'
+                : '$_totalWordSearchCount result${_totalWordSearchCount > 1 ? 's' : ''}',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: cs.onSurface.withOpacity(0.7),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.separated(
+            itemCount: _wordSearchResults.length,
+            separatorBuilder: (context, index) => Divider(
+              height: 1,
+              color: cs.outline.withOpacity(0.2),
+            ),
+            itemBuilder: (context, index) {
+              final result = _wordSearchResults[index];
+              return _buildSearchResultTile(result, theme, languageProvider);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 검색 결과 타일
+  Widget _buildSearchResultTile(
+    BibleSearchResult result,
+    ThemeData theme,
+    LanguageProvider languageProvider,
+  ) {
+    final cs = theme.colorScheme;
+
+    return ListTile(
+      onTap: () => _navigateToVerseFromSearch(result),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Text(
+          result.reference,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color: cs.primary,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ),
+      subtitle: RichText(
+        text: _highlightSearchTerm(
+          result.text,
+          _searchQuery,
+          cs.primary.withOpacity(0.2),
+          cs.onSurface,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: cs.primary.withOpacity(0.5),
+      ),
+    );
+  }
+
+  // 검색어 하이라이트 처리
+  TextSpan _highlightSearchTerm(
+      String text, String query, Color highlightColor, Color textColor) {
+    if (query.isEmpty) {
+      return TextSpan(
+        text: text,
+        style: TextStyle(
+          fontFamily: 'ChosunCentennial',
+          fontSize: 15,
+          height: 1.5,
+          color: textColor,
+        ),
+      );
+    }
+
+    final lowerText = text.toLowerCase();
+    final lowerQuery = query.toLowerCase();
+    final spans = <TextSpan>[];
+    int start = 0;
+
+    while (true) {
+      final index = lowerText.indexOf(lowerQuery, start);
+      if (index == -1) {
+        if (start < text.length) {
+          spans.add(TextSpan(
+            text: text.substring(start),
+            style: TextStyle(
+              fontFamily: 'ChosunCentennial',
+              fontSize: 15,
+              height: 1.5,
+              color: textColor,
+            ),
+          ));
+        }
+        break;
+      }
+
+      if (index > start) {
+        spans.add(TextSpan(
+          text: text.substring(start, index),
+          style: TextStyle(
+            fontFamily: 'ChosunCentennial',
+            fontSize: 15,
+            height: 1.5,
+            color: textColor,
+          ),
+        ));
+      }
+
+      spans.add(TextSpan(
+        text: text.substring(index, index + query.length),
+        style: TextStyle(
+          fontFamily: 'ChosunCentennial',
+          fontSize: 15,
+          height: 1.5,
+          backgroundColor: highlightColor,
+          fontWeight: FontWeight.bold,
+          color: textColor,
+        ),
+      ));
+
+      start = index + query.length;
+    }
+
+    return TextSpan(children: spans);
+  }
+
+  // 검색 결과에서 구절로 이동
+  Future<void> _navigateToVerseFromSearch(BibleSearchResult result) async {
+    final languageProvider = context.read<LanguageProvider>();
+    final currentLanguage = languageProvider.currentLanguage;
+
+    // JSON 로드
+    final String assetPath = currentLanguage == BibleLanguage.korean
+        ? 'assets/bible.json'
+        : 'assets/bible_kjv.json';
+
+    final String data = await rootBundle.loadString(assetPath);
+    final Map<String, dynamic> fullBibleData = json.decode(data);
+
+    // 해당 장의 모든 구절 추출
+    final Map<int, String> verses = {};
+    String searchPrefix;
+
+    if (currentLanguage == BibleLanguage.korean) {
+      final book = bibleBooks[result.bookIndex];
+      searchPrefix = '${book.name}${result.chapter}:';
+    } else {
+      final book = bibleBooks[result.bookIndex];
+      searchPrefix = '${book.eng}${result.chapter}:';
+    }
+
+    fullBibleData.forEach((key, value) {
+      if (key.startsWith(searchPrefix)) {
+        final verseNumStr = key.substring(searchPrefix.length);
+        final verseNum = int.tryParse(verseNumStr);
+        if (verseNum != null) {
+          verses[verseNum] = value as String;
+        }
+      }
+    });
+
+    if (!mounted) return;
+
+    // verse_list_view로 이동
+    final book = bibleBooks[result.bookIndex];
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VerseListView(
+          book: book,
+          chapter: result.chapter,
+          verses: verses,
+          selectedVerse: result.verse,
+          onBack: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? cs.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color:
+                    isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
+              ),
+            ),
+          ],
         ),
       ),
     );

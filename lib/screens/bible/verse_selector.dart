@@ -12,6 +12,7 @@ class VerseSelector extends StatefulWidget {
   final void Function(int verseIdx) onSelect;
   final VoidCallback onBack;
   final VoidCallback? onGoHome;
+  final void Function(int bookIdx, int chapter, int verse)? onDirectNavigate;
 
   const VerseSelector({
     required this.book,
@@ -20,6 +21,7 @@ class VerseSelector extends StatefulWidget {
     required this.onSelect,
     required this.onBack,
     this.onGoHome,
+    this.onDirectNavigate,
     super.key,
   });
 

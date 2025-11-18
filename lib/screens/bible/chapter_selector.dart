@@ -9,11 +9,13 @@ class ChapterSelector extends StatefulWidget {
   final BibleData book;
   final void Function(int chapterIdx) onSelect;
   final VoidCallback onBack;
+  final void Function(int bookIdx, int chapter, int verse)? onDirectNavigate;
 
   const ChapterSelector({
     required this.book,
     required this.onSelect,
     required this.onBack,
+    this.onDirectNavigate,
     super.key,
   });
 
