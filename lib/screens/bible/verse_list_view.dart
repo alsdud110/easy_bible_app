@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -606,12 +607,14 @@ class _VerseListViewState extends State<VerseListView>
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
+    final systemBottomPadding = MediaQuery.of(context).padding.bottom;
+    // iOS는 제스처 바 영역이 크므로 절반만 사용, Android는 전체 사용
+    final bottomPadding = Platform.isIOS ? systemBottomPadding * 0.5 : systemBottomPadding;
 
     return Positioned(
       left: 16,
       right: 16,
-      bottom: 16 + bottomPadding, // 시스템 네비게이션 바 고려
+      bottom: 16 + bottomPadding, // 시스템 네비게이션 바 고려 (iOS 제스처 바 + Android 바텀 네비게이션)
       child: AnimatedBuilder(
         animation: _floatingActionBarController,
         builder: (context, child) {

@@ -94,19 +94,23 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final systemBottomPadding = MediaQuery.of(context).padding.bottom;
+    // iOS는 제스처 바 영역이 크므로 절반만 사용, Android는 전체 사용
+    final bottomPadding = Platform.isIOS ? systemBottomPadding * 0.5 : systemBottomPadding;
+    final theme = Theme.of(context);
+
     if (_bannerAd != null && _isLoaded) {
       // padding.bottom은 시스템 네비게이션 바를 포함한 전체 여백
-      // viewPadding.bottom은 노치만 고려 (네비게이션 바 제외)
-      final bottomPadding = MediaQuery.of(context).padding.bottom;
+      // iOS는 제스처 바가 크므로 절반만 사용
       return Container(
         width: _bannerAd!.size.width.toDouble(),
         height: _bannerAd!.size.height.toDouble() + bottomPadding,
         alignment: Alignment.topCenter,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: theme.colorScheme.surface,
           border: Border(
             top: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withOpacity(0.2),
               width: 1,
             ),
           ),
@@ -114,6 +118,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         child: AdWidget(ad: _bannerAd!),
       );
     }
+
     // 광고 로딩 중이거나 실패했을 때는 빈 공간
     return const SizedBox.shrink();
   }
