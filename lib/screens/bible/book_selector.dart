@@ -439,7 +439,11 @@ class _BookSelectorState extends State<BookSelector>
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(languageProvider.isKorean ? '성경책 선택' : 'Select Book'),
+        title: Text(
+          _searchMode == SearchMode.wordSearch
+              ? (languageProvider.isKorean ? '성경 단어 검색' : 'Bible Word Search')
+              : (languageProvider.isKorean ? '성경책 선택' : 'Select Book'),
+        ),
         centerTitle: true,
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: theme.appBarTheme.elevation ?? 0,
@@ -483,6 +487,15 @@ class _BookSelectorState extends State<BookSelector>
             tooltip: languageProvider.isKorean ? 'English' : '한글',
             onPressed: () async {
               await languageProvider.toggleLanguage();
+              // 단어 검색 모드일 때 언어 전환 시 검색어 초기화
+              if (_searchMode == SearchMode.wordSearch) {
+                setState(() {
+                  _searchController.clear();
+                  _searchQuery = '';
+                  _wordSearchResults = [];
+                  _totalWordSearchCount = 0;
+                });
+              }
             },
           ),
         ],
@@ -864,6 +877,36 @@ class _BookSelectorState extends State<BookSelector>
     );
   }
 
+  // 검색어 주변 텍스트 추출 (컨텍스트 표시용)
+  String _extractContextAroundQuery(String text, String query) {
+    if (query.isEmpty) return text;
+
+    final lowerText = text.toLowerCase();
+    final lowerQuery = query.toLowerCase();
+    final index = lowerText.indexOf(lowerQuery);
+
+    if (index == -1) return text;
+
+    // 검색어 앞뒤로 약 30자씩 표시
+    const contextLength = 30;
+    final start = (index - contextLength).clamp(0, text.length);
+    final end = (index + query.length + contextLength).clamp(0, text.length);
+
+    String excerpt = text.substring(start, end);
+
+    // 시작 부분에 ... 추가
+    if (start > 0) {
+      excerpt = '...$excerpt';
+    }
+
+    // 끝 부분에 ... 추가
+    if (end < text.length) {
+      excerpt = '$excerpt...';
+    }
+
+    return excerpt;
+  }
+
   // 검색 결과 타일
   Widget _buildSearchResultTile(
     BibleSearchResult result,
@@ -871,6 +914,7 @@ class _BookSelectorState extends State<BookSelector>
     LanguageProvider languageProvider,
   ) {
     final cs = theme.colorScheme;
+    final excerptText = _extractContextAroundQuery(result.text, _searchQuery);
 
     return ListTile(
       onTap: () => _navigateToVerseFromSearch(result),
@@ -889,7 +933,7 @@ class _BookSelectorState extends State<BookSelector>
       ),
       subtitle: RichText(
         text: _highlightSearchTerm(
-          result.text,
+          excerptText,
           _searchQuery,
           cs.primary.withOpacity(0.2),
           cs.onSurface,
@@ -976,9 +1020,10 @@ class _BookSelectorState extends State<BookSelector>
   Future<void> _navigateToVerseFromSearch(BibleSearchResult result) async {
     final languageProvider = context.read<LanguageProvider>();
     final currentLanguage = languageProvider.currentLanguage;
+    final isKorean = currentLanguage == BibleLanguage.korean;
 
     // JSON 로드
-    final String assetPath = currentLanguage == BibleLanguage.korean
+    final String assetPath = isKorean
         ? 'assets/bible.json'
         : 'assets/bible_kjv.json';
 
@@ -987,15 +1032,11 @@ class _BookSelectorState extends State<BookSelector>
 
     // 해당 장의 모든 구절 추출
     final Map<int, String> verses = {};
-    String searchPrefix;
+    final book = bibleBooks[result.bookIndex];
 
-    if (currentLanguage == BibleLanguage.korean) {
-      final book = bibleBooks[result.bookIndex];
-      searchPrefix = '${book.name}${result.chapter}:';
-    } else {
-      final book = bibleBooks[result.bookIndex];
-      searchPrefix = '${book.eng}${result.chapter}:';
-    }
+    // 언어에 맞는 책 이름 가져오기 (한글: name, 영어: 약칭)
+    final bookName = book.getLocalizedName(isKorean);
+    final searchPrefix = '$bookName${result.chapter}:';
 
     fullBibleData.forEach((key, value) {
       if (key.startsWith(searchPrefix)) {
@@ -1010,7 +1051,6 @@ class _BookSelectorState extends State<BookSelector>
     if (!mounted) return;
 
     // verse_list_view로 이동
-    final book = bibleBooks[result.bookIndex];
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -1019,6 +1059,7 @@ class _BookSelectorState extends State<BookSelector>
           chapter: result.chapter,
           verses: verses,
           selectedVerse: result.verse,
+          hideLanguageToggle: true, // 단어 검색으로 들어왔으므로 언어 전환 버튼 숨김
           onBack: () {
             Navigator.pop(context);
           },

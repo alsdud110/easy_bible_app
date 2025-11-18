@@ -21,6 +21,7 @@ class VerseListView extends StatefulWidget {
   final VoidCallback? onGoToChapterSelector;
   final VoidCallback? onGoToVerseSelector;
   final VoidCallback? onGoHome;
+  final bool hideLanguageToggle; // 언어 전환 버튼 숨김 여부 (단어 검색으로 들어온 경우)
 
   const VerseListView({
     super.key,
@@ -33,6 +34,7 @@ class VerseListView extends StatefulWidget {
     this.onGoToChapterSelector,
     this.onGoToVerseSelector,
     this.onGoHome,
+    this.hideLanguageToggle = false,
   });
 
   @override
@@ -780,36 +782,38 @@ class _VerseListViewState extends State<VerseListView>
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
-                IconButton(
-                  icon: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) {
-                      return RotationTransition(
-                        turns: animation,
-                        child: FadeTransition(
-                          opacity: animation,
-                          child: child,
+                // 단어 검색으로 들어온 경우 언어 전환 버튼 숨김
+                if (!widget.hideLanguageToggle)
+                  IconButton(
+                    icon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) {
+                        return RotationTransition(
+                          turns: animation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        languageProvider.isKorean ? 'Eng' : '한',
+                        key: ValueKey(languageProvider.isKorean),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                         ),
-                      );
-                    },
-                    child: Text(
-                      languageProvider.isKorean ? 'Eng' : '한',
-                      key: ValueKey(languageProvider.isKorean),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                       ),
                     ),
+                    tooltip: languageProvider.isKorean ? 'English' : '한글',
+                    onPressed: () async {
+                      await languageProvider.toggleLanguage();
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                   ),
-                  tooltip: languageProvider.isKorean ? 'English' : '한글',
-                  onPressed: () async {
-                    await languageProvider.toggleLanguage();
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
                 const SizedBox(width: 2),
               ]
             : null,
@@ -1023,11 +1027,12 @@ class _VerseListViewState extends State<VerseListView>
                 // ⭐ 플로팅 액션 바
                 _buildFloatingActionBar(),
 
-                if (!_isSelectionMode)
+                // 단어 검색으로 들어온 경우 이전/다음장 버튼 숨김
+                if (!_isSelectionMode && !widget.hideLanguageToggle)
                   Positioned(
                     left: 12,
                     right: 88,
-                    bottom: 12 + MediaQuery.of(context).viewPadding.bottom,
+                    bottom: 12 + (Platform.isIOS ? MediaQuery.of(context).padding.bottom * 0.5 : MediaQuery.of(context).padding.bottom),
                     child: TweenAnimationBuilder<Offset>(
                       duration: const Duration(milliseconds: 600),
                       tween: Tween(
@@ -1055,9 +1060,10 @@ class _VerseListViewState extends State<VerseListView>
                                   : null,
                               icon: const Icon(Icons.arrow_back_ios_new,
                                   size: 18),
-                              label: const Text('이전 장',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w700)),
+                              label: Text(
+                                  languageProvider.isKorean ? '이전 장' : 'Previous',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700)),
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: theme.colorScheme.primary,
                                 backgroundColor: Colors.white,
@@ -1084,9 +1090,10 @@ class _VerseListViewState extends State<VerseListView>
                                   : null,
                               icon:
                                   const Icon(Icons.arrow_forward_ios, size: 18),
-                              label: const Text('다음 장',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w700)),
+                              label: Text(
+                                  languageProvider.isKorean ? '다음 장' : 'Next',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700)),
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: theme.colorScheme.primary,
                                 backgroundColor: Colors.white,
@@ -1109,7 +1116,8 @@ class _VerseListViewState extends State<VerseListView>
           ),
         ],
       ),
-      floatingActionButton: !_isSelectionMode
+      // 단어 검색으로 들어온 경우 플로팅 액션 버튼 숨김
+      floatingActionButton: !_isSelectionMode && !widget.hideLanguageToggle
           ? TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 600),
               tween: Tween(begin: 0.0, end: 1.0),
@@ -1122,7 +1130,7 @@ class _VerseListViewState extends State<VerseListView>
               },
               child: FloatingActionButton(
                 onPressed: widget.onGoHome,
-                tooltip: '책 선택으로',
+                tooltip: languageProvider.isKorean ? '책 선택으로' : 'Select Book',
                 backgroundColor: cs.primary,
                 foregroundColor: cs.onPrimary,
                 child: const Icon(Icons.menu_book),
