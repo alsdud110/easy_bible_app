@@ -425,9 +425,11 @@ class _Day180ScreenState extends State<Day180Screen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(
-                    color: cs.primary,
-                    strokeWidth: 4,
+                  Lottie.asset(
+                    'assets/lottie/loading.json',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 24),
                   Text(

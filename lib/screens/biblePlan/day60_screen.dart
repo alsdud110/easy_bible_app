@@ -432,22 +432,11 @@ class _Day60ScreenState extends State<Day60Screen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TweenAnimationBuilder<double>(
-                    duration: const Duration(milliseconds: 1200),
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    builder: (context, value, child) {
-                      return Transform.rotate(
-                        angle: value * 6.28 * 2, // 2바퀴 회전
-                        child: Transform.scale(
-                          scale: 0.8 + (value * 0.2),
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: CircularProgressIndicator(
-                      color: cs.primary,
-                      strokeWidth: 4,
-                    ),
+                  Lottie.asset(
+                    'assets/lottie/loading.json',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 24),
                   TweenAnimationBuilder<double>(
