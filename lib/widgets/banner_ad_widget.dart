@@ -17,17 +17,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   /// ✅ 플랫폼별 광고 단위 ID
   static String get _adUnitId {
-    // 🧪 테스트 모드: 필요시 true로 변경
-    const bool useTestAds = false;
-
-    if (useTestAds) {
-      if (Platform.isAndroid) {
-        return 'ca-app-pub-3940256099942544/6300978111'; // Android 테스트 배너 광고
-      } else if (Platform.isIOS) {
-        return 'ca-app-pub-3940256099942544/2934735716'; // iOS 테스트 배너 광고
-      }
-    }
-
     // 실제 광고 단위 ID
     if (Platform.isAndroid) {
       return 'ca-app-pub-7446781962805745/4003972619';
@@ -96,7 +85,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   Widget build(BuildContext context) {
     final systemBottomPadding = MediaQuery.of(context).padding.bottom;
     // iOS는 제스처 바 영역이 크므로 절반만 사용, Android는 전체 사용
-    final bottomPadding = Platform.isIOS ? systemBottomPadding * 0.5 : systemBottomPadding;
+    final bottomPadding =
+        Platform.isIOS ? systemBottomPadding * 0.5 : systemBottomPadding;
     final theme = Theme.of(context);
 
     if (_bannerAd != null && _isLoaded) {

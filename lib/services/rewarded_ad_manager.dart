@@ -10,17 +10,6 @@ class RewardedAdManager {
 
   /// 플랫폼별 보상형 광고 단위 ID
   static String get _adUnitId {
-    // 🧪 테스트 모드: 필요시 true로 변경
-    const bool useTestAds = false;
-
-    if (useTestAds) {
-      if (Platform.isAndroid) {
-        return 'ca-app-pub-3940256099942544/5224354917'; // Android 테스트 리워드 광고
-      } else if (Platform.isIOS) {
-        return 'ca-app-pub-3940256099942544/1712485313'; // iOS 테스트 리워드 광고
-      }
-    }
-
     // 실제 광고 단위 ID
     if (Platform.isAndroid) {
       return 'ca-app-pub-7446781962805745/2448103937';
