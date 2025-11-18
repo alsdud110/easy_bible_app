@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -216,9 +217,16 @@ class CustomDrawer extends StatelessWidget {
           ),
 
           // ----- 테마 토글 Lottie 애니메이션 -----
-          _ThemeToggleLottie(
-            isDark: isDark,
-            onThemeToggle: onThemeToggle,
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: Platform.isAndroid
+                ? MediaQuery.of(context).padding.bottom
+                : 0,
+            ),
+            child: _ThemeToggleLottie(
+              isDark: isDark,
+              onThemeToggle: onThemeToggle,
+            ),
           ),
           const SizedBox(height: 12),
         ],
