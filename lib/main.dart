@@ -9,6 +9,7 @@ import 'screens/bible/bible_home_screen.dart';
 import 'screens/biblePlan/day60_screen.dart';
 import 'screens/biblePlan/day120_screen.dart';
 import 'screens/biblePlan/day180_screen.dart';
+import 'screens/onboarding/onboarding_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/highlight_provider.dart';
@@ -436,10 +437,101 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           settings: settings,
         );
       },
-      home: HomeScreen(
+      home: _OnboardingWrapper(
         onThemeToggle: _toggleTheme,
         isDark: _themeMode == ThemeMode.dark,
       ),
+    );
+  }
+}
+
+/// 온보딩 체크를 하는 래퍼 위젯
+class _OnboardingWrapper extends StatefulWidget {
+  final VoidCallback onThemeToggle;
+  final bool isDark;
+
+  const _OnboardingWrapper({
+    required this.onThemeToggle,
+    required this.isDark,
+  });
+
+  @override
+  State<_OnboardingWrapper> createState() => _OnboardingWrapperState();
+}
+
+class _OnboardingWrapperState extends State<_OnboardingWrapper> {
+  bool _isLoading = true;
+  bool _showOnboarding = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboarding();
+  }
+
+  Future<void> _checkOnboarding() async {
+    // 🔧 테스트용: 항상 온보딩 표시 (완료하면 저장은 됨)
+    // final prefs = await SharedPreferences.getInstance();
+    // final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+
+    if (mounted) {
+      setState(() {
+        _showOnboarding = true; // 항상 온보딩 표시
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_completed', true);
+
+    if (mounted) {
+      setState(() {
+        _showOnboarding = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 600),
+      switchInCurve: Curves.easeInOut,
+      switchOutCurve: Curves.easeInOut,
+      transitionBuilder: (child, animation) {
+        // 페이드 + 스케일 효과
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+              ),
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: _showOnboarding
+          ? OnboardingScreen(
+              key: const ValueKey('onboarding'),
+              onComplete: _completeOnboarding,
+            )
+          : HomeScreen(
+              key: const ValueKey('home'),
+              onThemeToggle: widget.onThemeToggle,
+              isDark: widget.isDark,
+            ),
     );
   }
 }
