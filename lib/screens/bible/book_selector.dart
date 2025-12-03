@@ -43,6 +43,7 @@ class BookSelector extends StatefulWidget {
   final void Function(int bookIdx, int chapter)? onChapterNavigate;
   final VoidCallback? onThemeToggle;
   final bool isDark;
+  final Widget? bannerAdWidget;
 
   const BookSelector({
     required this.books,
@@ -51,6 +52,7 @@ class BookSelector extends StatefulWidget {
     this.onChapterNavigate,
     this.onThemeToggle,
     this.isDark = false,
+    this.bannerAdWidget,
     super.key,
   });
 
@@ -765,7 +767,8 @@ class _BookSelectorState extends State<BookSelector>
                           ),
               ),
 
-              const BannerAdWidget(),
+              // 부모에서 전달받은 배너 위젯 사용 (없으면 새로 생성)
+              widget.bannerAdWidget ?? const BannerAdWidget(),
             ],
           ),
         ),

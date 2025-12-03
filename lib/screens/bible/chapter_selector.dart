@@ -10,12 +10,14 @@ class ChapterSelector extends StatefulWidget {
   final void Function(int chapterIdx) onSelect;
   final VoidCallback onBack;
   final void Function(int bookIdx, int chapter, int verse)? onDirectNavigate;
+  final Widget? bannerAdWidget;
 
   const ChapterSelector({
     required this.book,
     required this.onSelect,
     required this.onBack,
     this.onDirectNavigate,
+    this.bannerAdWidget,
     super.key,
   });
 
@@ -190,7 +192,8 @@ class _ChapterSelectorState extends State<ChapterSelector>
                   },
                 ),
               ),
-              const BannerAdWidget(),
+              // 부모에서 전달받은 배너 위젯 사용 (없으면 새로 생성)
+              widget.bannerAdWidget ?? const BannerAdWidget(),
             ],
           ),
         ),

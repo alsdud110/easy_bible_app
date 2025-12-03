@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
 import '../../utils/bible_key_converter.dart';
+import '../../widgets/banner_ad_widget.dart';
 import 'book_selector.dart';
 import 'chapter_selector.dart';
 import 'verse_selector.dart';
@@ -37,10 +38,16 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
 
   bool isLoading = true;
 
+  // 배너 광고를 한 번만 로드하고 재사용
+  Widget? _sharedBannerAd;
+
   @override
   void initState() {
     super.initState();
     _initBible();
+
+    // 배너 광고를 한 번만 생성
+    _sharedBannerAd = const BannerAdWidget();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return; // ⭐ mounted 체크
@@ -314,6 +321,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         onChapterNavigate: _navigateToChapter,
         onThemeToggle: widget.onThemeToggle,
         isDark: widget.isDark,
+        bannerAdWidget: _sharedBannerAd,
       );
     } else if (step == 1) {
       final book = bibleBookList[selectedBook];
@@ -329,6 +337,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         },
         onBack: _reset,
         onDirectNavigate: _navigateDirectlyToVerse,
+        bannerAdWidget: _sharedBannerAd,
       );
     } else if (step == 2) {
       final book = bibleBookList[selectedBook];
@@ -364,6 +373,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         },
         onGoHome: _reset,
         onDirectNavigate: _navigateDirectlyToVerse,
+        bannerAdWidget: _sharedBannerAd,
       );
     } else if (step == 3) {
       final book = bibleBookList[selectedBook];

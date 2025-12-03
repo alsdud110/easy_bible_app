@@ -13,6 +13,7 @@ class VerseSelector extends StatefulWidget {
   final VoidCallback onBack;
   final VoidCallback? onGoHome;
   final void Function(int bookIdx, int chapter, int verse)? onDirectNavigate;
+  final Widget? bannerAdWidget;
 
   const VerseSelector({
     required this.book,
@@ -22,6 +23,7 @@ class VerseSelector extends StatefulWidget {
     required this.onBack,
     this.onGoHome,
     this.onDirectNavigate,
+    this.bannerAdWidget,
     super.key,
   });
 
@@ -202,7 +204,8 @@ class _VerseSelectorState extends State<VerseSelector>
                   },
                 ),
               ),
-              const BannerAdWidget(),
+              // 부모에서 전달받은 배너 위젯 사용 (없으면 새로 생성)
+              widget.bannerAdWidget ?? const BannerAdWidget(),
             ],
           ),
         ),
