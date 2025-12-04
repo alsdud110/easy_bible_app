@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -27,6 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       lottieAsset: 'assets/lottie/bible_book.json',
       icon: Icons.menu_book_rounded,
       color: const Color(0xFF6366F1),
+      lottieSize: 260,
     ),
     OnboardingPage(
       title: '성경 읽기 플랜',
@@ -34,13 +36,15 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       lottieAsset: 'assets/lottie/calender.json',
       icon: Icons.calendar_month_rounded,
       color: const Color(0xFF8B5CF6),
+      lottieSize: 200,
     ),
     OnboardingPage(
       title: '오늘의 말씀 카드',
       description: '매일 새로운 성경 구절을 받아보고\n나만의 말씀 카드를 만들어 공유하세요',
       lottieAsset: 'assets/lottie/Microsoft Designer.json',
       icon: Icons.auto_awesome_rounded,
-      color: const Color(0xFFEC4899),
+      color: const Color.fromARGB(212, 131, 32, 224),
+      lottieSize: 200,
     ),
     OnboardingPage(
       title: '묵상과 기록',
@@ -123,9 +127,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   // 로고 또는 앱 이름
                   Text(
                     'All in Bible',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'ChosunCentennial',
+                    style: GoogleFonts.dancingScript(
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 26,
+                      letterSpacing: -0.5,
                     ),
                   ),
                   // Skip 버튼 (공간 유지를 위해 Opacity 사용)
@@ -164,7 +170,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
             // 인디케이터
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.only(top: 24, bottom: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -187,25 +193,56 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
             // 하단 버튼
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-              child: SizedBox(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
-                  onPressed: _nextPage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      _pages[_currentPage].color,
+                      _pages[_currentPage].color.withValues(alpha: 0.8),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  child: Text(
-                    _currentPage < _pages.length - 1 ? '다음' : '시작하기',
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
+                  borderRadius: BorderRadius.circular(28),
+                  boxShadow: [
+                    BoxShadow(
+                      color: _pages[_currentPage].color.withValues(alpha: 0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _nextPage,
+                    borderRadius: BorderRadius.circular(28),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _currentPage < _pages.length - 1 ? '다음' : '시작하기',
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            _currentPage < _pages.length - 1
+                                ? Icons.arrow_forward_rounded
+                                : Icons.check_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -258,11 +295,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     );
                   },
                   child: page.lottieAsset != null
-                      ? Lottie.asset(
-                          page.lottieAsset!,
-                          width: 240,
-                          height: 240,
-                          fit: BoxFit.contain,
+                      ? SizedBox(
+                          width: 260,
+                          height: 260,
+                          child: Center(
+                            child: Lottie.asset(
+                              page.lottieAsset!,
+                              width: page.lottieSize ?? 240,
+                              height: page.lottieSize ?? 240,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         )
                       : Container(
                           width: 160,
@@ -286,7 +329,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         ),
                 ),
 
-                const SizedBox(height: 48),
+                const SizedBox(height: 32),
 
                 // 제목 (슬라이드 업 애니메이션)
                 TweenAnimationBuilder<double>(
@@ -354,6 +397,7 @@ class OnboardingPage {
   final String? lottieAsset;
   final IconData? icon;
   final Color color;
+  final double? lottieSize;
 
   OnboardingPage({
     required this.title,
@@ -361,5 +405,6 @@ class OnboardingPage {
     this.lottieAsset,
     this.icon,
     required this.color,
+    this.lottieSize,
   });
 }

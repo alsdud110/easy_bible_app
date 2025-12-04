@@ -470,13 +470,12 @@ class _OnboardingWrapperState extends State<_OnboardingWrapper> {
   }
 
   Future<void> _checkOnboarding() async {
-    // 🔧 테스트용: 항상 온보딩 표시 (완료하면 저장은 됨)
-    // final prefs = await SharedPreferences.getInstance();
-    // final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+    final prefs = await SharedPreferences.getInstance();
+    final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
 
     if (mounted) {
       setState(() {
-        _showOnboarding = true; // 항상 온보딩 표시
+        _showOnboarding = !onboardingCompleted; // 완료되지 않았을 때만 온보딩 표시
         _isLoading = false;
       });
     }
