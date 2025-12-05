@@ -18,6 +18,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
   late AnimationController _questionAnimController;
   late Animation<double> _questionFadeAnimation;
   late Animation<Offset> _questionSlideAnimation;
+  final ScrollController _scrollController = ScrollController();
 
   int? _selectedAnswer;
   bool _showFeedback = false;
@@ -57,6 +58,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
   @override
   void dispose() {
     _questionAnimController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -70,6 +72,17 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
 
     final provider = context.read<QuizProvider>();
     provider.submitAnswer(answer);
+
+    // 피드백 영역으로 자동 스크롤
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    });
   }
 
   void _handleNext(BuildContext context) {
@@ -144,28 +157,31 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
+                            controller: _scrollController,
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 // 난이도 뱃지
                                 _buildDifficultyBadge(question.difficulty, cs),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 12),
 
                                 // 문제 카드
                                 _buildQuestionCard(question, cs),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 16),
 
                                 // 선택지
                                 if (question.isOX)
                                   _buildOXOptions(context, question, cs)
                                 else
-                                  _buildMultipleChoiceOptions(context, question, cs),
+                                  _buildMultipleChoiceOptions(
+                                      context, question, cs),
 
                                 // 피드백
                                 if (_showFeedback) ...[
-                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 14),
                                   _buildFeedback(context, question, cs),
                                 ],
                               ],
@@ -255,21 +271,14 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
 
   Widget _buildQuestionCard(QuizQuestion question, ColorScheme cs) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [cs.primary, cs.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+        color: cs.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: cs.outline.withValues(alpha: 0.1),
+          width: 1,
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: cs.primary.withValues(alpha: 0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,39 +286,31 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(10),
+                  color: cs.primaryContainer,
+                  borderRadius: BorderRadius.circular(7),
                 ),
-                child: const Icon(
-                  Icons.help_outline_rounded,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 10),
-              const Expanded(
                 child: Text(
-                  '문제',
+                  'Q',
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    color: cs.onPrimaryContainer,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             question.question,
-            style: const TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-              height: 1.4,
-              letterSpacing: -0.5,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: cs.onSurface,
+              height: 1.5,
+              letterSpacing: -0.3,
             ),
           ),
         ],
@@ -325,9 +326,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     return Row(
       children: [
         Expanded(
-          child: _AnswerButton(
-            label: 'O',
-            subtitle: '참',
+          child: _OXButton(
+            isTrue: true,
             isSelected: _selectedAnswer == 1,
             isCorrect: _showFeedback ? question.answer == true : null,
             onTap: _showFeedback ? null : () => _handleAnswer(context, true),
@@ -335,9 +335,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _AnswerButton(
-            label: 'X',
-            subtitle: '거짓',
+          child: _OXButton(
+            isTrue: false,
             isSelected: _selectedAnswer == 0,
             isCorrect: _showFeedback ? question.answer == false : null,
             onTap: _showFeedback ? null : () => _handleAnswer(context, false),
@@ -357,21 +356,14 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
 
     return Column(
       children: List.generate(options.length, (index) {
-        // 피드백 표시 로직: 정답이거나 선택한 답만 표시
+        // 피드백 시 정답 여부 확인
         bool? isCorrect;
-        if (_showFeedback) {
-          if (index == question.correctIndex) {
-            // 정답은 항상 O 표시
-            isCorrect = true;
-          } else if (index == _selectedAnswer) {
-            // 선택한 답이 오답이면 X 표시
-            isCorrect = false;
-          }
-          // 그 외의 답은 null (표시 안 함)
+        if (_showFeedback && _selectedAnswer == index) {
+          isCorrect = index == question.correctIndex;
         }
 
         return Padding(
-          padding: EdgeInsets.only(bottom: index < options.length - 1 ? 12 : 0),
+          padding: EdgeInsets.only(bottom: index < options.length - 1 ? 10 : 0),
           child: _AnswerButton(
             label: labels[index],
             subtitle: options[index],
@@ -390,8 +382,19 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     ColorScheme cs,
   ) {
     final provider = context.read<QuizProvider>();
-    final lastAnswer = provider.answers.isNotEmpty ? provider.answers.last : null;
+    final lastAnswer =
+        provider.answers.isNotEmpty ? provider.answers.last : null;
     final isCorrect = lastAnswer?.isCorrect ?? false;
+
+    // 객관식의 경우 정답 텍스트 가져오기
+    String? correctAnswerText;
+    if (!question.isOX &&
+        question.options != null &&
+        question.correctIndex != null) {
+      final labels = ['A', 'B', 'C', 'D'];
+      correctAnswerText =
+          '${labels[question.correctIndex!]}. ${question.options![question.correctIndex!]}';
+    }
 
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
@@ -413,24 +416,26 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           // Sparkle animation for correct answer
           if (isCorrect)
             Positioned(
-              top: -30,
+              top: -25,
               child: Lottie.asset(
                 'assets/lottie/sparkle.json',
-                width: 80,
-                height: 80,
+                width: 70,
+                height: 70,
                 fit: BoxFit.contain,
                 repeat: true,
               ),
             ),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: isCorrect
                   ? const Color(0xFF10B981).withValues(alpha: 0.1)
                   : const Color(0xFFEF4444).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                color: isCorrect
+                    ? const Color(0xFF10B981)
+                    : const Color(0xFFEF4444),
                 width: 2,
               ),
             ),
@@ -440,41 +445,94 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                 Row(
                   children: [
                     Icon(
-                      isCorrect ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                      color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
-                      size: 28,
+                      isCorrect
+                          ? Icons.check_circle_rounded
+                          : Icons.cancel_rounded,
+                      color: isCorrect
+                          ? const Color(0xFF10B981)
+                          : const Color(0xFFEF4444),
+                      size: 26,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 9),
                     Text(
-                      isCorrect ? '정답입니다!' : '아쉬워요!',
+                      isCorrect ? '정답이에요!' : '아쉬워요!',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.w800,
-                        color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                        color: isCorrect
+                            ? const Color(0xFF10B981)
+                            : const Color(0xFFEF4444),
                       ),
                     ),
                   ],
                 ),
-                if (question.reference != null) ...[
-                  const SizedBox(height: 12),
+                // 오답인 경우 정답 표시
+                if (!isCorrect && correctAnswerText != null) ...[
+                  const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: cs.surface,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.lightbulb_rounded,
+                          color: const Color(0xFF10B981),
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '정답',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  color: const Color(0xFF10B981),
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                correctAnswerText,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: cs.onSurface,
+                                  height: 1.3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                if (question.reference != null) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(9),
+                    decoration: BoxDecoration(
+                      color: cs.surface,
+                      borderRadius: BorderRadius.circular(9),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.menu_book_rounded,
                           color: cs.primary,
-                          size: 18,
+                          size: 17,
                         ),
                         const SizedBox(width: 6),
                         Text(
                           question.reference!,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: cs.primary,
                           ),
@@ -484,12 +542,12 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   ),
                 ],
                 if (question.explanation != null) ...[
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 9),
                   Text(
                     question.explanation!,
                     style: TextStyle(
                       fontSize: 13,
-                      color: cs.onSurface.withValues(alpha: 0.8),
+                      color: cs.onSurface.withValues(alpha: 0.75),
                       height: 1.4,
                     ),
                   ),
@@ -602,6 +660,69 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
   }
 }
 
+// OX 버튼
+class _OXButton extends StatelessWidget {
+  final bool isTrue;
+  final bool isSelected;
+  final bool? isCorrect;
+  final VoidCallback? onTap;
+
+  const _OXButton({
+    required this.isTrue,
+    required this.isSelected,
+    this.isCorrect,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color:
+                  isSelected ? cs.primary : cs.outline.withValues(alpha: 0.2),
+              width: isSelected ? 2 : 1,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: cs.onSurface.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    isTrue ? 'O' : 'X',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      color: cs.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // 답변 버튼
 class _AnswerButton extends StatelessWidget {
   final String label;
@@ -622,25 +743,27 @@ class _AnswerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    Color? backgroundColor;
-    Color? borderColor;
-    Color? textColor;
-
-    if (isCorrect != null) {
-      if (isCorrect!) {
-        backgroundColor = const Color(0xFF10B981).withValues(alpha: 0.15);
-        borderColor = const Color(0xFF10B981);
-        textColor = const Color(0xFF10B981);
-      } else if (isSelected) {
-        backgroundColor = const Color(0xFFEF4444).withValues(alpha: 0.15);
-        borderColor = const Color(0xFFEF4444);
-        textColor = const Color(0xFFEF4444);
-      }
-    } else if (isSelected) {
-      backgroundColor = cs.primaryContainer;
-      borderColor = cs.primary;
-      textColor = cs.onPrimaryContainer;
+    // 배경색: 정답일 때만 초록색, 나머지는 기본
+    Color backgroundColor;
+    if (isCorrect == true) {
+      backgroundColor = const Color(0xFF10B981).withValues(alpha: 0.15);
+    } else {
+      backgroundColor = cs.surface;
     }
+
+    // Border 색상: 선택되었을 때만 표시
+    Color borderColor;
+    if (isCorrect == true) {
+      borderColor = const Color(0xFF10B981);
+    } else if (isSelected) {
+      borderColor = cs.primary;
+    } else {
+      borderColor = cs.outline.withValues(alpha: 0.15);
+    }
+
+    // 텍스트 색상
+    Color textColor;
+    textColor = cs.onSurface;
 
     return Material(
       color: Colors.transparent,
@@ -649,18 +772,18 @@ class _AnswerButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(13),
           decoration: BoxDecoration(
-            color: backgroundColor ?? cs.surface,
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: borderColor ?? cs.outline.withValues(alpha: 0.2),
-              width: borderColor != null ? 2 : 1,
+              color: borderColor,
+              width: isSelected ? 2 : 1,
             ),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: (borderColor ?? cs.primary).withValues(alpha: 0.2),
+                      color: borderColor.withValues(alpha: 0.2),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -670,40 +793,34 @@ class _AnswerButton extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
-                  color: (textColor ?? cs.onSurface).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  color: textColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(9),
                 ),
                 child: Center(
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w900,
-                      color: textColor ?? cs.onSurface,
+                      color: textColor,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 11),
               Expanded(
                 child: Text(
                   subtitle,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: textColor ?? cs.onSurface,
+                    color: textColor,
                   ),
                 ),
               ),
-              if (isCorrect != null)
-                Icon(
-                  isCorrect! ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                  color: isCorrect! ? const Color(0xFF10B981) : const Color(0xFFEF4444),
-                  size: 24,
-                ),
             ],
           ),
         ),

@@ -5,6 +5,7 @@ import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/quiz_provider.dart';
 import 'quiz_home_screen.dart';
+import 'quiz_play_screen.dart';
 
 /// 퀴즈 결과 화면
 class QuizResultScreen extends StatefulWidget {
@@ -73,7 +74,13 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             centerTitle: true,
             elevation: 0,
             backgroundColor: cs.surface,
-            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: const Icon(Icons.home_rounded),
+              onPressed: () {
+                provider.resetQuiz();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+            ),
           ),
           body: FadeTransition(
             opacity: _fadeAnimation,
@@ -129,42 +136,82 @@ class _QuizResultScreenState extends State<QuizResultScreen>
     }
 
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [cs.primary, cs.secondary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: cs.primary.withValues(alpha: 0.4),
-            blurRadius: 30,
-            offset: const Offset(0, 15),
+            color: cs.primary.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         children: [
-          // Lottie animation based on score
-          Lottie.asset(
-            lottieAsset,
-            width: 120,
-            height: 120,
-            fit: BoxFit.contain,
-            repeat: true,
+          // Lottie animation based on score with glowing background
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // Glowing background
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: const Duration(milliseconds: 1200),
+                curve: Curves.easeOut,
+                builder: (context, value, child) {
+                  return Container(
+                    width: 100 * value,
+                    height: 100 * value,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          Colors.white.withValues(alpha: 0.3 * value),
+                          Colors.white.withValues(alpha: 0.1 * value),
+                          Colors.white.withValues(alpha: 0.0),
+                        ],
+                        stops: const [0.0, 0.5, 1.0],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              // Lottie animation
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.7, end: 1.0),
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.elasticOut,
+                builder: (context, value, child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: child,
+                  );
+                },
+                child: Lottie.asset(
+                  lottieAsset,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.contain,
+                  repeat: true,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           const Text(
             '최종 점수',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           TweenAnimationBuilder<int>(
             tween: IntTween(begin: 0, end: result.score),
             duration: const Duration(milliseconds: 1500),
@@ -173,7 +220,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
               return Text(
                 '$value점',
                 style: const TextStyle(
-                  fontSize: 64,
+                  fontSize: 48,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
                   letterSpacing: -2,
@@ -181,11 +228,11 @@ class _QuizResultScreenState extends State<QuizResultScreen>
               );
             },
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             '${result.correctCount}개 정답 / ${result.totalQuestions}문제',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Colors.white.withValues(alpha: 0.9),
             ),
@@ -195,47 +242,77 @@ class _QuizResultScreenState extends State<QuizResultScreen>
     );
   }
 
-  Widget _buildStarRating(int stars, ColorScheme cs) {
+  Widget _buildStarRating(double stars, ColorScheme cs) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: Duration(milliseconds: 300 + (index * 100)),
-          curve: Curves.easeOutBack,
-          builder: (context, value, child) {
-            return Transform.scale(
-              scale: value,
-              child: Icon(
-                index < stars ? Icons.star_rounded : Icons.star_outline_rounded,
-                size: 40,
-                color: index < stars
-                    ? const Color(0xFFFBBF24)
-                    : cs.outline.withValues(alpha: 0.3),
-              ),
-            );
-          },
+        // 각 별의 채움 정도 계산 (0.0 ~ 1.0)
+        double fillAmount;
+        if (stars >= index + 1) {
+          fillAmount = 1.0; // 완전히 채움
+        } else if (stars > index) {
+          fillAmount = stars - index; // 부분적으로 채움 (예: 0.5)
+        } else {
+          fillAmount = 0.0; // 채우지 않음
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: fillAmount),
+            duration: Duration(milliseconds: 800 + (index * 200)),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, child) {
+              return Transform.scale(
+                scale: 0.5 + (value * 0.5), // 크기도 함께 애니메이션
+                child: Stack(
+                  children: [
+                    // 배경 별 (회색)
+                    Icon(
+                      Icons.star_rounded,
+                      size: 48,
+                      color: cs.outline.withValues(alpha: 0.2),
+                    ),
+                    // 채워지는 별 (노란색) - ShaderMask로 왼쪽부터 채움
+                    ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: const [
+                            Color(0xFFFBBF24),
+                            Color(0xFFFBBF24),
+                            Colors.transparent,
+                            Colors.transparent,
+                          ],
+                          stops: [0.0, value, value, 1.0],
+                        ).createShader(bounds);
+                      },
+                      child: const Icon(
+                        Icons.star_rounded,
+                        size: 48,
+                        color: Color(0xFFFBBF24),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       }),
     );
   }
 
   Widget _buildFeedbackMessage(QuizResult result, ColorScheme cs) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: cs.primaryContainer,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Text(
-        result.feedbackMessage,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          color: cs.onPrimaryContainer,
-          height: 1.5,
-        ),
+    return Text(
+      result.feedbackMessage,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: cs.onSurface.withValues(alpha: 0.7),
+        height: 1.5,
       ),
     );
   }
@@ -376,7 +453,11 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             onPressed: () async {
               await provider.restartQuiz();
               if (context.mounted) {
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const QuizPlayScreen(),
+                  ),
+                );
               }
             },
             style: ElevatedButton.styleFrom(
@@ -406,8 +487,18 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             onPressed: () {
               provider.resetQuiz();
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => const QuizHomeScreen(),
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const QuizHomeScreen(),
+                  transitionDuration: const Duration(milliseconds: 300),
+                  reverseTransitionDuration: const Duration(milliseconds: 250),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
                 ),
                 (route) => route.isFirst,
               );
@@ -572,3 +663,4 @@ class _DifficultyStatRow extends StatelessWidget {
     );
   }
 }
+

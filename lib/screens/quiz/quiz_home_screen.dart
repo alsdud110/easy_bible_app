@@ -65,28 +65,29 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
         opacity: _fadeAnimation,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 헤더
               _buildHeader(cs),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // 난이도 선택
               _buildSectionTitle('난이도 선택', Icons.trending_up_rounded, cs),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               _buildDifficultySelector(cs),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // 퀴즈 유형 선택
               _buildSectionTitle('퀴즈 유형', Icons.quiz_rounded, cs),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               _buildQuizTypeSelector(cs),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // 시작 버튼
               _buildStartButton(context, cs),
+              const SizedBox(height: 12),
             ],
           ),
         ),
@@ -95,55 +96,44 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
   }
 
   Widget _buildHeader(ColorScheme cs) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            cs.primary,
-            cs.secondary,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Column(
+      children: [
+        Transform.translate(
+          offset: const Offset(0, -16),
+          child: Lottie.asset(
+            'assets/lottie/bible_book.json',
+            width: 130,
+            height: 130,
+            fit: BoxFit.contain,
+            repeat: true,
+          ),
         ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: cs.primary.withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+        Transform.translate(
+          offset: const Offset(0, -24),
+          child: Column(
+            children: [
+              Text(
+                '성경 퀴즈',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: cs.onSurface,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '당신의 성경 지식을 확인해보세요',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: cs.onSurface.withValues(alpha: 0.6),
+                  height: 1.4,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.emoji_events_rounded,
-            size: 48,
-            color: Colors.white.withValues(alpha: 0.9),
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            '성경 지식 테스트',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-              letterSpacing: -0.5,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '난이도와 유형을 선택하고 퀴즈를 풀어보세요!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.white.withValues(alpha: 0.9),
-              height: 1.4,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -186,7 +176,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
             });
           },
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         _DifficultyCard(
           difficulty: Difficulty.medium,
           isSelected: _selectedDifficulty == Difficulty.medium,
@@ -196,7 +186,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
             });
           },
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         _DifficultyCard(
           difficulty: Difficulty.hard,
           isSelected: _selectedDifficulty == Difficulty.hard,
@@ -243,47 +233,65 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
   Widget _buildStartButton(BuildContext context, ColorScheme cs) {
     final isEnabled = _selectedDifficulty != null && _selectedType != null;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      height: 52,
-      decoration: BoxDecoration(
-        gradient: isEnabled
-            ? LinearGradient(
-                colors: [cs.primary, cs.secondary],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : null,
-        color: isEnabled ? null : cs.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: isEnabled
-            ? [
-                BoxShadow(
-                  color: cs.primary.withValues(alpha: 0.4),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: isEnabled ? 1.0 : 0.0),
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOutCubic,
+      builder: (context, value, child) {
+        // 색상 전환을 위한 부드러운 보간
+        final backgroundColor = Color.lerp(
+          cs.surfaceContainerHighest,
+          cs.primary,
+          value,
+        )!;
+
+        final gradientEndColor = Color.lerp(
+          cs.surfaceContainerHighest,
+          cs.secondary,
+          value,
+        )!;
+
+        return Container(
+          height: 50,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [backgroundColor, gradientEndColor],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: value > 0
+                ? [
+                    BoxShadow(
+                      color: cs.primary.withValues(alpha: 0.3 * value),
+                      blurRadius: 16 * value,
+                      offset: Offset(0, 8 * value),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: isEnabled ? () => _startQuiz(context) : null,
+              borderRadius: BorderRadius.circular(16),
+              child: Center(
+                child: Text(
+                  '퀴즈 시작하기',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: isEnabled
+                        ? Colors.white
+                        : cs.onSurface.withValues(alpha: 0.35),
+                    letterSpacing: -0.5,
+                  ),
                 ),
-              ]
-            : null,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isEnabled ? () => _startQuiz(context) : null,
-          borderRadius: BorderRadius.circular(16),
-          child: Center(
-            child: Text(
-              '퀴즈 시작하기',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: isEnabled ? Colors.white : cs.onSurface.withValues(alpha: 0.3),
-                letterSpacing: -0.5,
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -373,79 +381,71 @@ class _DifficultyCard extends StatelessWidget {
     required this.onTap,
   });
 
-  Color _getColor() {
-    switch (difficulty) {
-      case Difficulty.easy:
-        return const Color(0xFF10B981);
-      case Difficulty.medium:
-        return const Color(0xFF3B82F6);
-      case Difficulty.hard:
-        return const Color(0xFFEF4444);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final color = _getColor();
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(14),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(11),
           decoration: BoxDecoration(
-            color: isSelected ? color.withValues(alpha: 0.1) : cs.surface,
+            color: cs.surface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isSelected ? color : cs.outline.withValues(alpha: 0.2),
+              color: isSelected
+                  ? cs.primary
+                  : cs.outline.withValues(alpha: 0.2),
               width: isSelected ? 2 : 1,
             ),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : null,
           ),
           child: Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(10),
+                  color: cs.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(9),
                 ),
                 child: Center(
                   child: Text(
                     difficulty.emoji,
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 11),
               Expanded(
                 child: Text(
                   difficulty.displayName,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: isSelected ? color : cs.onSurface,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: cs.onSurface,
                   ),
                 ),
               ),
               if (isSelected)
-                Icon(
-                  Icons.check_circle_rounded,
-                  color: color,
-                  size: 24,
+                const Icon(
+                  Icons.check_circle,
+                  color: Color(0xFF10B981),
+                  size: 22,
+                )
+              else
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: cs.outline.withValues(alpha: 0.3),
+                      width: 2,
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -475,14 +475,11 @@ class _QuizTypeCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(16),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           decoration: BoxDecoration(
-            color: isSelected
-                ? cs.primaryContainer
-                : cs.surface,
+            color: cs.surface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: isSelected
@@ -490,29 +487,20 @@ class _QuizTypeCard extends StatelessWidget {
                   : cs.outline.withValues(alpha: 0.2),
               width: isSelected ? 2 : 1,
             ),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: cs.primary.withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : null,
           ),
           child: Column(
             children: [
               Text(
                 type.icon,
-                style: const TextStyle(fontSize: 36),
+                style: const TextStyle(fontSize: 32),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Text(
                 type.displayName,
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: isSelected ? cs.onPrimaryContainer : cs.onSurface,
+                  color: cs.onSurface,
                 ),
               ),
             ],

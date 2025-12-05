@@ -48,14 +48,11 @@ class QuizResult {
       ? 0.0
       : correctCount / totalQuestions;
 
-  /// 별점 (0-5)
-  int get stars {
-    if (score >= 90) return 5;
-    if (score >= 80) return 4;
-    if (score >= 70) return 3;
-    if (score >= 60) return 2;
-    if (score >= 50) return 1;
-    return 0;
+  /// 별점 (0.0-5.0, 0.5 단위)
+  double get stars {
+    // 10문제 기준: 1문제당 0.5개씩
+    // 정답 개수에 비례하여 계산
+    return (correctCount * 5.0) / totalQuestions;
   }
 
   /// 난이도별 통계

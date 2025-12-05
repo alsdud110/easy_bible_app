@@ -112,8 +112,8 @@ class QuizProvider with ChangeNotifier {
   QuizResult getResult() {
     return QuizResult(
       answers: _answers,
-      quizType: _selectedType!,
-      difficulty: _selectedDifficulty!,
+      quizType: _selectedType ?? QuizType.ox,
+      difficulty: _selectedDifficulty ?? Difficulty.easy,
       completedAt: DateTime.now(),
     );
   }
