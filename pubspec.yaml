@@ -81,6 +81,12 @@ flutter:
     - assets/icon/bible_icon.png
     - assets/splash/splash_icon.png
     - assets/lottie/
+    - assets/quiz/question_ox_easy.json
+    - assets/quiz/question_ox_medium.json
+    - assets/quiz/question_ox_hard.json
+    - assets/quiz/question_multiple_easy.json
+    - assets/quiz/question_multiple_medium.json
+    - assets/quiz/question_multiple_hard.json
 
   fonts:
     - family: ChosunCentennial

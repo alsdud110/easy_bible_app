@@ -1,0 +1,700 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
+import '../../models/quiz_question.dart';
+import '../../providers/quiz_provider.dart';
+import 'quiz_result_screen.dart';
+
+/// 퀴즈 진행 화면
+class QuizPlayScreen extends StatefulWidget {
+  const QuizPlayScreen({super.key});
+
+  @override
+  State<QuizPlayScreen> createState() => _QuizPlayScreenState();
+}
+
+class _QuizPlayScreenState extends State<QuizPlayScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _questionAnimController;
+  late Animation<double> _questionFadeAnimation;
+  late Animation<Offset> _questionSlideAnimation;
+
+  int? _selectedAnswer;
+  bool _showFeedback = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initAnimation();
+  }
+
+  void _initAnimation() {
+    _questionAnimController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _questionFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _questionAnimController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    _questionSlideAnimation = Tween<Offset>(
+      begin: const Offset(0.3, 0),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _questionAnimController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    _questionAnimController.forward();
+  }
+
+  @override
+  void dispose() {
+    _questionAnimController.dispose();
+    super.dispose();
+  }
+
+  void _handleAnswer(BuildContext context, dynamic answer) {
+    if (_showFeedback) return;
+
+    setState(() {
+      _selectedAnswer = answer is bool ? (answer ? 1 : 0) : answer;
+      _showFeedback = true;
+    });
+
+    final provider = context.read<QuizProvider>();
+    provider.submitAnswer(answer);
+  }
+
+  void _handleNext(BuildContext context) {
+    final provider = context.read<QuizProvider>();
+
+    if (provider.currentQuestionIndex < provider.totalQuestions - 1) {
+      // 다음 문제로
+      provider.nextQuestion();
+
+      setState(() {
+        _selectedAnswer = null;
+        _showFeedback = false;
+      });
+
+      // 애니메이션 리셋 및 재생
+      _questionAnimController.reset();
+      _questionAnimController.forward();
+    } else {
+      // 결과 화면으로
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const QuizResultScreen(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Consumer<QuizProvider>(
+      builder: (context, provider, child) {
+        final question = provider.currentQuestion;
+        if (question == null) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return Scaffold(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          appBar: AppBar(
+            title: Text(
+              '${provider.currentQuestionIndex + 1} / ${provider.totalQuestions}',
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+              ),
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: cs.surface,
+            leading: IconButton(
+              icon: const Icon(Icons.close_rounded),
+              onPressed: () => _showQuitDialog(context),
+            ),
+          ),
+          body: Column(
+            children: [
+              // 진행 바
+              _buildProgressBar(provider.progress, cs),
+
+              // 문제 영역
+              Expanded(
+                child: FadeTransition(
+                  opacity: _questionFadeAnimation,
+                  child: SlideTransition(
+                    position: _questionSlideAnimation,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // 난이도 뱃지
+                                _buildDifficultyBadge(question.difficulty, cs),
+                                const SizedBox(height: 16),
+
+                                // 문제 카드
+                                _buildQuestionCard(question, cs),
+                                const SizedBox(height: 20),
+
+                                // 선택지
+                                if (question.isOX)
+                                  _buildOXOptions(context, question, cs)
+                                else
+                                  _buildMultipleChoiceOptions(context, question, cs),
+
+                                // 피드백
+                                if (_showFeedback) ...[
+                                  const SizedBox(height: 16),
+                                  _buildFeedback(context, question, cs),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                        // 다음 버튼
+                        if (_showFeedback)
+                          _buildNextButton(context, provider, cs),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildProgressBar(double progress, ColorScheme cs) {
+    return Container(
+      height: 6,
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerHighest,
+      ),
+      child: FractionallySizedBox(
+        alignment: Alignment.centerLeft,
+        widthFactor: progress,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [cs.primary, cs.secondary],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDifficultyBadge(Difficulty difficulty, ColorScheme cs) {
+    Color color;
+    switch (difficulty) {
+      case Difficulty.easy:
+        color = const Color(0xFF10B981);
+        break;
+      case Difficulty.medium:
+        color = const Color(0xFF3B82F6);
+        break;
+      case Difficulty.hard:
+        color = const Color(0xFFEF4444);
+        break;
+    }
+
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: color, width: 1.5),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                difficulty.emoji,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                difficulty.displayName,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuestionCard(QuizQuestion question, ColorScheme cs) {
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [cs.primary, cs.secondary],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: cs.primary.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.help_outline_rounded,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  '문제',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            question.question,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              height: 1.5,
+              letterSpacing: -0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOXOptions(
+    BuildContext context,
+    QuizQuestion question,
+    ColorScheme cs,
+  ) {
+    return Row(
+      children: [
+        Expanded(
+          child: _AnswerButton(
+            label: 'O',
+            subtitle: '참',
+            isSelected: _selectedAnswer == 1,
+            isCorrect: _showFeedback ? question.answer == true : null,
+            onTap: _showFeedback ? null : () => _handleAnswer(context, true),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _AnswerButton(
+            label: 'X',
+            subtitle: '거짓',
+            isSelected: _selectedAnswer == 0,
+            isCorrect: _showFeedback ? question.answer == false : null,
+            onTap: _showFeedback ? null : () => _handleAnswer(context, false),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMultipleChoiceOptions(
+    BuildContext context,
+    QuizQuestion question,
+    ColorScheme cs,
+  ) {
+    final options = question.options ?? [];
+    final labels = ['A', 'B', 'C', 'D'];
+
+    return Column(
+      children: List.generate(options.length, (index) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: index < options.length - 1 ? 12 : 0),
+          child: _AnswerButton(
+            label: labels[index],
+            subtitle: options[index],
+            isSelected: _selectedAnswer == index,
+            isCorrect: _showFeedback ? question.correctIndex == index : null,
+            onTap: _showFeedback ? null : () => _handleAnswer(context, index),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _buildFeedback(
+    BuildContext context,
+    QuizQuestion question,
+    ColorScheme cs,
+  ) {
+    final provider = context.read<QuizProvider>();
+    final lastAnswer = provider.answers.isNotEmpty ? provider.answers.last : null;
+    final isCorrect = lastAnswer?.isCorrect ?? false;
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: value,
+          child: Opacity(
+            opacity: value,
+            child: child,
+          ),
+        );
+      },
+      child: Stack(
+        alignment: Alignment.topCenter,
+        clipBehavior: Clip.none,
+        children: [
+          // Sparkle animation for correct answer
+          if (isCorrect)
+            Positioned(
+              top: -40,
+              child: Lottie.asset(
+                'assets/lottie/sparkle.json',
+                width: 100,
+                height: 100,
+                fit: BoxFit.contain,
+                repeat: true,
+              ),
+            ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: isCorrect
+                  ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                  : const Color(0xFFEF4444).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                width: 2,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      isCorrect ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                      color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                      size: 32,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      isCorrect ? '정답입니다!' : '아쉬워요!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                      ),
+                    ),
+                  ],
+                ),
+                if (question.reference != null) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: cs.surface,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.menu_book_rounded,
+                          color: cs.primary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          question.reference!,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: cs.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                if (question.explanation != null) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    question.explanation!,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: cs.onSurface.withValues(alpha: 0.8),
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNextButton(
+    BuildContext context,
+    QuizProvider provider,
+    ColorScheme cs,
+  ) {
+    final isLastQuestion =
+        provider.currentQuestionIndex >= provider.totalQuestions - 1;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: () => _handleNext(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: cs.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              isLastQuestion ? '결과 보기' : '다음 문제',
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.5,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showQuitDialog(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: cs.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.warning_rounded, color: cs.error),
+            const SizedBox(width: 12),
+            const Text(
+              '퀴즈 종료',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        content: const Text('퀴즈를 종료하시겠어요?\n진행 상황이 저장되지 않습니다.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              '계속하기',
+              style: TextStyle(
+                color: cs.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              '종료',
+              style: TextStyle(
+                color: cs.error,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 답변 버튼
+class _AnswerButton extends StatelessWidget {
+  final String label;
+  final String subtitle;
+  final bool isSelected;
+  final bool? isCorrect;
+  final VoidCallback? onTap;
+
+  const _AnswerButton({
+    required this.label,
+    required this.subtitle,
+    required this.isSelected,
+    this.isCorrect,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    Color? backgroundColor;
+    Color? borderColor;
+    Color? textColor;
+
+    if (isCorrect != null) {
+      if (isCorrect!) {
+        backgroundColor = const Color(0xFF10B981).withValues(alpha: 0.15);
+        borderColor = const Color(0xFF10B981);
+        textColor = const Color(0xFF10B981);
+      } else if (isSelected) {
+        backgroundColor = const Color(0xFFEF4444).withValues(alpha: 0.15);
+        borderColor = const Color(0xFFEF4444);
+        textColor = const Color(0xFFEF4444);
+      }
+    } else if (isSelected) {
+      backgroundColor = cs.primaryContainer;
+      borderColor = cs.primary;
+      textColor = cs.onPrimaryContainer;
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: backgroundColor ?? cs.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: borderColor ?? cs.outline.withValues(alpha: 0.2),
+              width: borderColor != null ? 2 : 1,
+            ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: (borderColor ?? cs.primary).withValues(alpha: 0.2),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: (textColor ?? cs.onSurface).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: textColor ?? cs.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: textColor ?? cs.onSurface,
+                  ),
+                ),
+              ),
+              if (isCorrect != null)
+                Icon(
+                  isCorrect! ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                  color: isCorrect! ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                  size: 28,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,804 @@
+{
+    "questions": [
+        {
+            "id": "ox_hard_001",
+            "difficulty": "hard",
+            "question": "히브리어 구약에서 ‘엘로힘(Elohim)’이라는 단어는 문맥에 따라 단수와 복수 의미 모두로 쓰인다.",
+            "answer": true,
+            "reference": "히브리어 문법/구약 전반",
+            "explanation": "형태는 복수형이지만 문맥에 따라 단수(하나님) 또는 복수(신들)로 사용된다."
+        },
+        {
+            "id": "ox_hard_002",
+            "difficulty": "hard",
+            "question": "사울 왕은 사무엘이 죽은 뒤에도 사무엘을 직접 찾아가 조언을 구한 적이 있다.",
+            "answer": false,
+            "reference": "사무엘상 28장",
+            "explanation": "사울이 찾아간 것은 엔돌의 신접한 여인이며, 사울이 사무엘을 직접 찾아간 것이 아니다."
+        },
+        {
+            "id": "ox_hard_003",
+            "difficulty": "hard",
+            "question": "다니엘서는 초기 히브리어로 전체가 기록되어 있다.",
+            "answer": false,
+            "reference": "다니엘서 언어 구조",
+            "explanation": "다니엘서는 히브리어와 아람어가 혼합되어 기록되어 있다."
+        },
+        {
+            "id": "ox_hard_004",
+            "difficulty": "hard",
+            "question": "예수님의 사복음서 기적 중 ‘물 위를 걷는 기적’은 마태, 마가, 요한복음에 모두 기록되어 있다.",
+            "answer": true,
+            "reference": "마14, 막6, 요6",
+            "explanation": "누가복음만 이 기록이 없으며 나머지 세 복음서에는 존재한다."
+        },
+        {
+            "id": "ox_hard_005",
+            "difficulty": "hard",
+            "question": "여호수아는 모세가 죽은 후 바로 즉시 가나안 정복 전쟁을 시작했다.",
+            "answer": false,
+            "reference": "여호수아 1~3장",
+            "explanation": "요단강을 건너기 전 3일 준비 기간이 있으며 즉시 전쟁이 시작되지 않았다."
+        },
+        {
+            "id": "ox_hard_006",
+            "difficulty": "hard",
+            "question": "아모스는 남유다 출신이지만 북이스라엘을 향해 예언한 선지자이다.",
+            "answer": true,
+            "reference": "아모스 1장",
+            "explanation": "드고아(남유다) 출신이지만 북이스라엘에 경고하는 메시지를 주었다."
+        },
+        {
+            "id": "ox_hard_007",
+            "difficulty": "hard",
+            "question": "창세기의 요셉은 애굽 이름으로 ‘사브낫바네아’라는 이름을 받았다.",
+            "answer": true,
+            "reference": "창세기 41:45",
+            "explanation": "바로가 요셉에게 이 애굽식 이름을 부여하였다."
+        },
+        {
+            "id": "ox_hard_008",
+            "difficulty": "hard",
+            "question": "예수님이 십자가에 달리신 시간은 히브리 시간 계산으로 제3시(오전 9시)였다.",
+            "answer": true,
+            "reference": "마가복음 15:25",
+            "explanation": "마가복음은 예수님이 제3시에 못 박혔다고 기록한다."
+        },
+        {
+            "id": "ox_hard_009",
+            "difficulty": "hard",
+            "question": "느헤미야는 에스라보다 먼저 예루살렘에 돌아와 성벽을 재건했다.",
+            "answer": false,
+            "reference": "에스라·느헤미야 비교",
+            "explanation": "에스라(제2차 귀환)가 먼저 돌아왔고 느헤미야는 이후에 도착하여 성벽을 재건했다."
+        },
+        {
+            "id": "ox_hard_010",
+            "difficulty": "hard",
+            "question": "요한계시록의 일곱 나팔 심판은 일곱 인 심판보다 먼저 일어난다.",
+            "answer": false,
+            "reference": "요한계시록 6~11장",
+            "explanation": "일곱 인 → 일곱 나팔 → 일곱 대접 순서이다."
+        },
+        {
+            "id": "ox_hard_011",
+            "difficulty": "hard",
+            "question": "다윗과 요나단의 우정은 사무엘상보다 역대기서에 더 자세히 기록되어 있다.",
+            "answer": false,
+            "reference": "사무엘상 18~20장",
+            "explanation": "역대기는 간략히 언급하고, 상세 기록은 사무엘상에 나온다."
+        },
+        {
+            "id": "ox_hard_012",
+            "difficulty": "hard",
+            "question": "로마서에서 바울은 스페인 선교를 희망했다고 밝힌다.",
+            "answer": true,
+            "reference": "로마서 15:24,28",
+            "explanation": "바울은 스페인(서바나) 방문 계획을 언급한다."
+        },
+        {
+            "id": "ox_hard_013",
+            "difficulty": "hard",
+            "question": "레위기는 주로 광야 생활 후반기에 기록된 것으로 여겨진다.",
+            "answer": true,
+            "reference": "레위기 전체/학계 전통",
+            "explanation": "출애굽 직후 성막 제사 규례를 정리한 것으로 광야 초·중반에 속한다."
+        },
+        {
+            "id": "ox_hard_014",
+            "difficulty": "hard",
+            "question": "바울이 감옥에서 기록한 서신(옥중서신)에는 빌립보서, 골로새서, 빌레몬서, 데살로니가전서가 포함된다.",
+            "answer": false,
+            "reference": "바울 서신 분류",
+            "explanation": "옥중서신은 에베소서, 빌립보서, 골로새서, 빌레몬서이다."
+        },
+        {
+            "id": "ox_hard_015",
+            "difficulty": "hard",
+            "question": "삼손은 나실인 규례를 지키기 위해 포도주를 평생 마시지 않았다.",
+            "answer": false,
+            "reference": "사사기 14장",
+            "explanation": "삼손은 나실인이었으나 포도원에 들어가고 규례를 완전히 지키지 못했다."
+        },
+        {
+            "id": "ox_hard_016",
+            "difficulty": "hard",
+            "question": "예수님의 족보는 누가복음이 마태복음보다 더 오래된 조상까지 거슬러 올라간다.",
+            "answer": true,
+            "reference": "마1 / 눅3",
+            "explanation": "마태는 아브라함까지, 누가는 아담까지 거슬러 올라간다."
+        },
+        {
+            "id": "ox_hard_017",
+            "difficulty": "hard",
+            "question": "야고보서의 저자는 예수님의 열두 제자인 '세베대의 아들 야고보'로 확정되어 있다.",
+            "answer": false,
+            "reference": "야고보서 저자 논쟁",
+            "explanation": "전통적으로 예수님의 동생 야고보로 여겨지지만 100% 확정된 것은 아니다."
+        },
+        {
+            "id": "ox_hard_018",
+            "difficulty": "hard",
+            "question": "시편은 5권으로 구성되어 있으며 각 권은 ‘할렐루야’ 찬송으로 끝난다.",
+            "answer": false,
+            "reference": "시편 구조",
+            "explanation": "5권으로 구성된 것은 맞지만 모든 권이 할렐루야로 끝나지는 않는다."
+        },
+        {
+            "id": "ox_hard_019",
+            "difficulty": "hard",
+            "question": "아브라함이 멜기세덱에게 십일조를 드렸다는 기록은 신명기에도 나온다.",
+            "answer": false,
+            "reference": "창세기 14:20",
+            "explanation": "멜기세덱에게 십일조를 드린 기록은 창세기에만 있다."
+        },
+        {
+            "id": "ox_hard_020",
+            "difficulty": "hard",
+            "question": "왕하에서 엘리사는 엘리야보다 두 배의 능력을 구했고 실제로 기록된 기적 수도 엘리야보다 많다.",
+            "answer": true,
+            "reference": "열왕기하 2장",
+            "explanation": "‘갑절의 영감’을 구했고 실제로 더 많은 기적이 기록되어 있다."
+        },
+        {
+            "id": "ox_hard_021",
+            "difficulty": "hard",
+            "question": "솔로몬은 성전 봉헌식 때 번제물로 수소 2만 마리와 양 12만 마리를 드렸다.",
+            "answer": true,
+            "reference": "열왕기상 8:63",
+            "explanation": "성전 봉헌식에서 매우 많은 제물을 드린 기록이 있습니다."
+        },
+        {
+            "id": "ox_hard_022",
+            "difficulty": "hard",
+            "question": "예후는 북이스라엘의 왕 아합의 아들 여호람을 단 번에 즉시 죽였다.",
+            "answer": false,
+            "reference": "열왕기하 9:21-24",
+            "explanation": "예후는 여호람을 향해 활을 쏘아 죽였고, 죽이기까지 추격하는 과정이 있었습니다. '즉시 단번'은 아님."
+        },
+        {
+            "id": "ox_hard_023",
+            "difficulty": "hard",
+            "question": "다윗이 사울의 목숨을 살려준 사건은 엔게디 굴에서 한 번만 있었다.",
+            "answer": false,
+            "reference": "사무엘상 24장, 26장",
+            "explanation": "다윗은 사울을 두 번 살려줬습니다. (엔게디 굴 / 진영에서 창 옆에서)"
+        },
+        {
+            "id": "ox_hard_024",
+            "difficulty": "hard",
+            "question": "예레미야는 유다 왕 시드기야의 시대에는 감옥과 토굴(구덩이)에 갇힌 기록이 있다.",
+            "answer": true,
+            "reference": "예레미야 37–38장",
+            "explanation": "시드기야 시대에 예레미야는 감옥에 갇히고 진흙 구덩이에 던져졌습니다."
+        },
+        {
+            "id": "ox_hard_025",
+            "difficulty": "hard",
+            "question": "요엘서는 '메뚜기 재앙'과 관련된 기록이지만, 본문에는 단 한 번도 '회개'라는 주제가 등장하지 않는다.",
+            "answer": false,
+            "reference": "요엘 2:12-13",
+            "explanation": "요엘의 핵심 메시지는 회개이며, 직접적으로 회개를 촉구합니다."
+        },
+        {
+            "id": "ox_hard_026",
+            "difficulty": "hard",
+            "question": "히스기야는 아시리아 왕 산헤립에게 금을 바치기 위해 성전 문과 기둥에서 금을 벗겨 바쳤다.",
+            "answer": true,
+            "reference": "열왕기하 18:16",
+            "explanation": "히스기야는 산헤립에게 조공을 바치기 위해 성전 금을 벗겨 보냈습니다."
+        },
+        {
+            "id": "ox_hard_027",
+            "difficulty": "hard",
+            "question": "드고아의 여인은 압살롬을 돌아오게 하도록 다윗에게 직접 찾아가 설득했다.",
+            "answer": false,
+            "reference": "사무엘하 14:1-20",
+            "explanation": "드고아 여인은 요압의 지시를 받아 다윗에게 보낸 인물입니다. 직접 자발적으로 가진 않았습니다."
+        },
+        {
+            "id": "ox_hard_028",
+            "difficulty": "hard",
+            "question": "솔로몬의 성전 지성소에는 두 그룹(cherubim)의 날개 길이가 서로 합쳐져 총 20규빗이었다.",
+            "answer": true,
+            "reference": "열왕기상 6:23-28",
+            "explanation": "각각 날개가 10규빗이며 합쳐서 20규빗을 덮었습니다."
+        },
+        {
+            "id": "ox_hard_029",
+            "difficulty": "hard",
+            "question": "다니엘과 함께 포로로 끌려간 세 친구의 바벨론식 이름 중 '벨드사살'이 있다.",
+            "answer": false,
+            "reference": "다니엘 1:6-7",
+            "explanation": "벨드사살은 다니엘의 바벨론식 이름이며, 친구들은 사드락‧메삭‧아벳느고입니다."
+        },
+        {
+            "id": "ox_hard_030",
+            "difficulty": "hard",
+            "question": "욥기의 세 친구 중 빌닷은 ‘수아 사람’으로 소개된다.",
+            "answer": true,
+            "reference": "욥기 2:11",
+            "explanation": "욥의 친구: 데만 사람 엘리바스, 수아 사람 빌닷, 나아마 사람 소발."
+        },
+        {
+            "id": "ox_hard_031",
+            "difficulty": "hard",
+            "question": "아브넬은 사울의 군대 장관이었지만, 사울 사후에는 다윗을 곧바로 지지했다.",
+            "answer": false,
+            "reference": "사무엘하 2–3장",
+            "explanation": "아브넬은 먼저 사울의 아들 이스보셋을 왕으로 세우고 나중에 다윗에게 옮겼습니다."
+        },
+        {
+            "id": "ox_hard_032",
+            "difficulty": "hard",
+            "question": "룻은 이스라엘 베들레헴 출신이었으나 모압에서 잠시 살다가 돌아온 인물이다.",
+            "answer": false,
+            "reference": "룻기 1장",
+            "explanation": "룻은 모압 여인이며, 이스라엘 출신이 아닙니다."
+        },
+        {
+            "id": "ox_hard_033",
+            "difficulty": "hard",
+            "question": "엘리야는 사르밧 과부의 아들을 살릴 때, 그 아이 위에 세 번 엎드려 기도했다.",
+            "answer": true,
+            "reference": "열왕기상 17:21",
+            "explanation": "엘리야는 아이 위에 세 번 몸을 펴고 기도했습니다."
+        },
+        {
+            "id": "ox_hard_034",
+            "difficulty": "hard",
+            "question": "아도니야는 다윗이 죽기 전에 솔로몬을 왕으로 삼는 것을 적극 지지했던 인물이다.",
+            "answer": false,
+            "reference": "열왕기상 1장",
+            "explanation": "아도니야는 스스로 왕이 되고자 했으며 솔로몬의 등극을 반대했습니다."
+        },
+        {
+            "id": "ox_hard_035",
+            "difficulty": "hard",
+            "question": "느부갓네살의 금 신상은 높이가 60규빗, 너비가 6규빗이었다.",
+            "answer": true,
+            "reference": "다니엘 3:1",
+            "explanation": "높이 60규빗, 너비 6규빗으로 기록됨."
+        },
+        {
+            "id": "ox_hard_036",
+            "difficulty": "hard",
+            "question": "아모스는 유다 왕 요담 시대에 활동한 선지자로 기록되어 있다.",
+            "answer": false,
+            "reference": "아모스 1:1",
+            "explanation": "아모스는 웃시야 왕, 여로보암 2세 시대에 활동했습니다."
+        },
+        {
+            "id": "ox_hard_037",
+            "difficulty": "hard",
+            "question": "하나님은 아브라함에게 이삭을 바치라고 명령하신 뒤, 바로 그 자리에서 ‘여호와 닛시’라는 이름을 주셨다.",
+            "answer": false,
+            "reference": "창세기 22:14, 출애굽기 17:15",
+            "explanation": "아브라함은 ‘여호와 이레’를 불렀고 ‘여호와 닛시’는 모세가 아말렉 전투 후 사용한 이름입니다."
+        },
+        {
+            "id": "ox_hard_038",
+            "difficulty": "hard",
+            "question": "솔로몬이 병거 성읍을 세운 곳 중에는 하솔과 므깃도와 게셀도 포함된다.",
+            "answer": true,
+            "reference": "열왕기상 9:15-19",
+            "explanation": "솔로몬은 게셀, 하솔, 므깃도를 요새화했습니다."
+        },
+        {
+            "id": "ox_hard_039",
+            "difficulty": "hard",
+            "question": "에스겔서에는 ‘골짜기의 마른 뼈’ 환상이 등장하지만 그 장면은 바벨론 귀환 이후 시대를 배경으로 한다.",
+            "answer": false,
+            "reference": "에스겔 37장",
+            "explanation": "에스겔은 포로기 선지자이며, 마른 뼈 환상은 귀환 이전에 주어진 예언입니다."
+        },
+        {
+            "id": "ox_hard_040",
+            "difficulty": "hard",
+            "question": "므낫세 왕은 포로로 끌려갔다가 회개하고 다시 예루살렘으로 돌아온 기록이 있다.",
+            "answer": true,
+            "reference": "역대하 33:10-13",
+            "explanation": "므낫세는 앗시리아에 포로로 잡혀갔다가 회개 후 예루살렘으로 돌아왔습니다."
+        },
+        {
+            "id": "ox_hard_041",
+            "difficulty": "hard",
+            "question": "아사 왕은 발에 병이 들었을 때 끝까지 여호와께 구하지 않고 의사만 찾았다.",
+            "answer": true,
+            "reference": "역대하 16:12",
+            "explanation": "아사는 발에 병이 심해졌으나 여호와를 구하지 않았다고 기록합니다."
+        },
+        {
+            "id": "ox_hard_042",
+            "difficulty": "hard",
+            "question": "에훗은 오른손잡이라서 여리고 왕 에길론을 기습하는 데 유리했다.",
+            "answer": false,
+            "reference": "사사기 3:15-22",
+            "explanation": "에훗은 왼손잡이였기 때문에 칼을 오른쪽 허벅지에 숨길 수 있어 기습이 가능했습니다."
+        },
+        {
+            "id": "ox_hard_043",
+            "difficulty": "hard",
+            "question": "요담 왕은 말년에 문둥병에 걸려 별궁에서 격리된 채 통치했다.",
+            "answer": false,
+            "reference": "역대하 26:19-21",
+            "explanation": "문둥병에 걸린 왕은 요담이 아니라 그의 아버지 웃시야입니다."
+        },
+        {
+            "id": "ox_hard_044",
+            "difficulty": "hard",
+            "question": "아하시야 왕은 사마리아에서 떨어져 다쳤고, 그 부상으로 인해 병이 들었다.",
+            "answer": true,
+            "reference": "열왕기하 1:2",
+            "explanation": "아하시야는 사마리아의 다락 난간에서 떨어져 크게 다쳐 병이 났습니다."
+        },
+        {
+            "id": "ox_hard_045",
+            "difficulty": "hard",
+            "question": "엘리사는 아람 군대에게 눈이 멀게 하는 기적을 행하고 그들을 사마리아로 인도했다.",
+            "answer": true,
+            "reference": "열왕기하 6:18-20",
+            "explanation": "엘리사는 아람 군대의 눈을 멎게 하고 사마리아까지 데려갔습니다."
+        },
+        {
+            "id": "ox_hard_046",
+            "difficulty": "hard",
+            "question": "느헤미야는 바사 왕 아닥사스다의 술관원이었지만 본래 제사장 출신이다.",
+            "answer": false,
+            "reference": "느헤미야 1:11",
+            "explanation": "느헤미야는 술관원이었으며 제사장 출신이라는 기록은 없습니다."
+        },
+        {
+            "id": "ox_hard_047",
+            "difficulty": "hard",
+            "question": "에스겔은 바벨론 그발 강가에서 처음 환상을 보았다고 기록되어 있다.",
+            "answer": true,
+            "reference": "에스겔 1:1-3",
+            "explanation": "에스겔은 그발 강가에서 하나님의 환상을 보았습니다."
+        },
+        {
+            "id": "ox_hard_048",
+            "difficulty": "hard",
+            "question": "솔로몬은 오빌에서 들여온 금 외에도 백단목과 보석을 다량으로 들여왔다.",
+            "answer": true,
+            "reference": "열왕기상 10:11",
+            "explanation": "오빌에서 금뿐 아니라 백단목과 보석도 실어왔습니다."
+        },
+        {
+            "id": "ox_hard_049",
+            "difficulty": "hard",
+            "question": "요나가 니느웨로 가는 대신 도망친 배는 ‘다시스’로 가는 배였다.",
+            "answer": true,
+            "reference": "요나 1:3",
+            "explanation": "요나는 다시스로 도망가려고 요바 항구에서 배를 탔습니다."
+        },
+        {
+            "id": "ox_hard_050",
+            "difficulty": "hard",
+            "question": "므비보셋은 사울의 아들이며 다윗의 은총으로 왕의 상에서 식사했다.",
+            "answer": false,
+            "reference": "사무엘하 9:1-7",
+            "explanation": "므비보셋은 사울의 아들 요나단의 아들입니다."
+        },
+        {
+            "id": "ox_hard_051",
+            "difficulty": "hard",
+            "question": "하나님은 예레미야에게 무화과 두 광주리 환상을 보여주셨는데, 나쁜 무화과는 매우 썩어서 먹을 수 없었다.",
+            "answer": true,
+            "reference": "예레미야 24:2",
+            "explanation": "두 광주리 중 하나는 매우 좋고 하나는 아주 나빠 먹을 수 없었다고 설명합니다."
+        },
+        {
+            "id": "ox_hard_052",
+            "difficulty": "hard",
+            "question": "기드온의 삼백 용사들은 횃불과 나팔 외에도 짧은 칼을 들고 미디안 진을 기습했다.",
+            "answer": false,
+            "reference": "사사기 7:16-20",
+            "explanation": "삼백 용사는 나팔, 빈 항아리, 횃불만 사용했고 무기 사용 기록은 없습니다."
+        },
+        {
+            "id": "ox_hard_053",
+            "difficulty": "hard",
+            "question": "여로보암 2세 시대에 요나가 이스라엘의 국경을 회복할 것이라는 예언을 했다.",
+            "answer": true,
+            "reference": "열왕기하 14:25",
+            "explanation": "요나는 북이스라엘 영토 회복을 예언한 선지자로 기록됩니다."
+        },
+        {
+            "id": "ox_hard_054",
+            "difficulty": "hard",
+            "question": "사울은 길르앗 야베스 사람들에게 전쟁을 요청하는 편지를 보내면서 소 두 마리를 토막 내어 보냈다.",
+            "answer": false,
+            "reference": "사무엘상 11:7",
+            "explanation": "사울은 소 ‘한 마리’를 토막 내어 보냈습니다."
+        },
+        {
+            "id": "ox_hard_055",
+            "difficulty": "hard",
+            "question": "엘리야는 호렙 산 동굴에서 하나님의 음성을 들었는데, 그 음성은 강한 바람 속에서 들렸다.",
+            "answer": false,
+            "reference": "열왕기상 19:11-12",
+            "explanation": "하나님은 강한 바람, 지진, 불 속에 계시지 않았고 ‘세미한 소리’로 말씀하셨습니다."
+        },
+        {
+            "id": "ox_hard_056",
+            "difficulty": "hard",
+            "question": "히브리 산파 십브라와 부아는 아기들을 죽이라는 명령을 듣고도 하나님을 두려워하여 명령을 어겼다.",
+            "answer": true,
+            "reference": "출애굽기 1:15-17",
+            "explanation": "두 산파는 하나님을 경외하여 남자아이를 살렸습니다."
+        },
+        {
+            "id": "ox_hard_057",
+            "difficulty": "hard",
+            "question": "여호수아는 기브온 전투에서 태양이 기브온 위에서 멈추고 달은 아야론 골짜기에서 멈춰 섰다고 명령했다.",
+            "answer": true,
+            "reference": "여호수아 10:12-13",
+            "explanation": "여호수아가 외친 말 그대로 기록되어 있습니다."
+        },
+        {
+            "id": "ox_hard_058",
+            "difficulty": "hard",
+            "question": "예수님은 사마리아 여인을 만나기 위해 사마리아로 갈 필요가 없었으나 우연히 들르셨다.",
+            "answer": false,
+            "reference": "요한복음 4:4",
+            "explanation": "“사마리아를 통과하여야 하겠는지라”라고 되어 있어 의도적 방문입니다."
+        },
+        {
+            "id": "ox_hard_059",
+            "difficulty": "hard",
+            "question": "엘리사 시대에 시리아(아람) 군대 장수 나아만은 요단강에서 일곱 번 몸을 씻은 후 나병이 나았다.",
+            "answer": true,
+            "reference": "열왕기하 5:10-14",
+            "explanation": "엘리사가 요단강에서 일곱 번 씻으라고 말했고 그대로 했습니다."
+        },
+        {
+            "id": "ox_hard_060",
+            "difficulty": "hard",
+            "question": "하박국서는 예레미야보다 약 200년 뒤 시대의 선지자 기록으로 분류된다.",
+            "answer": false,
+            "reference": "하박국 1장 / 역사적 배경",
+            "explanation": "하박국은 예레미야와 거의 동시대(바벨론 침공 직전)이며 200년 차이는 아닙니다."
+        },
+        {
+            "id": "ox_hard_061",
+            "difficulty": "hard",
+            "question": "에스라가 백성들에게 율법을 낭독할 때, 레위인들이 백성에게 뜻을 깨닫게 하며 해석해 주었다.",
+            "answer": true,
+            "reference": "느헤미야 8:7-8",
+            "explanation": "레위인들이 백성에게 율법을 풀이하여 깨닫게 했다고 기록되어 있습니다."
+        },
+        {
+            "id": "ox_hard_062",
+            "difficulty": "hard",
+            "question": "다윗은 십광야에서 사울을 두 번 찾아가서 칼과 물병을 빼앗아왔다.",
+            "answer": false,
+            "reference": "사무엘상 26:7-12",
+            "explanation": "다윗은 사울의 창(칼이 아님)과 물병을 가져왔습니다."
+        },
+        {
+            "id": "ox_hard_063",
+            "difficulty": "hard",
+            "question": "느부갓네살 왕은 다니엘에게 벨드사살이라는 이름을 주었다.",
+            "answer": true,
+            "reference": "다니엘 1:7",
+            "explanation": "다니엘은 바벨론식 이름으로 벨드사살을 받았습니다."
+        },
+        {
+            "id": "ox_hard_064",
+            "difficulty": "hard",
+            "question": "요아스 왕은 여호야다가 죽은 후에도 성전에 충성하며 우상숭배를 거부하였다.",
+            "answer": false,
+            "reference": "역대하 24:17-18",
+            "explanation": "여호야다 죽은 후 방백들이 요아스를 꾀어 우상을 섬기게 합니다."
+        },
+        {
+            "id": "ox_hard_065",
+            "difficulty": "hard",
+            "question": "욥은 그의 딸들에게도 아들들과 같이 재산을 나누어 주었다.",
+            "answer": true,
+            "reference": "욥기 42:15",
+            "explanation": "욥은 딸들에게도 유산을 주었다는 기록이 등장합니다."
+        },
+        {
+            "id": "ox_hard_066",
+            "difficulty": "hard",
+            "question": "엘리야는 요단강을 건널 때 물 위를 걸어서 건넜다고 기록되어 있다.",
+            "answer": false,
+            "reference": "열왕기하 2:8",
+            "explanation": "엘리야는 겉옷으로 물을 쳐서 물이 갈라지자 건넜습니다."
+        },
+        {
+            "id": "ox_hard_067",
+            "difficulty": "hard",
+            "question": "드고아의 지혜로운 여인은 압살롬을 예루살렘으로 돌아오게 하는 데 중요한 역할을 했다.",
+            "answer": true,
+            "reference": "사무엘하 14:1-21",
+            "explanation": "요압이 드고아 여인을 시켜 다윗에게 비유로 말하게 했습니다."
+        },
+        {
+            "id": "ox_hard_068",
+            "difficulty": "hard",
+            "question": "히스기야 왕은 병 들었을 때 해 그림자가 규례보다 10도 앞으로 나아가는 표징을 보았다.",
+            "answer": false,
+            "reference": "열왕기하 20:9-11",
+            "explanation": "그림자가 앞으로 아니라 뒤로 10도 물러가는 표징이었습니다."
+        },
+        {
+            "id": "ox_hard_069",
+            "difficulty": "hard",
+            "question": "예레미야는 하나님의 명령으로 토기장이의 집으로 내려가 말씀을 들었다.",
+            "answer": true,
+            "reference": "예레미야 18:1-2",
+            "explanation": "예레미야는 토기장이 집의 모습으로 하나님의 메시지를 받았습니다."
+        },
+        {
+            "id": "ox_hard_070",
+            "difficulty": "hard",
+            "question": "모세는 므리바 사건에서 반석을 향해 두 번 말함으로써 하나님께 순종하지 못했다.",
+            "answer": false,
+            "reference": "민수기 20:10-11",
+            "explanation": "모세는 말한 것이 아니라 반석을 ‘두 번’ 쳤기 때문에 징계받았습니다."
+        },
+        {
+            "id": "ox_hard_071",
+            "difficulty": "hard",
+            "question": "바알 선지자 450명과 아세라 선지자 400명은 모두 갈멜산에서 엘리야와 대결했다.",
+            "answer": false,
+            "reference": "열왕기상 18:19-22",
+            "explanation": "갈멜산 대결에는 바알 선지자만 등장하며 아세라 선지자들은 나오지 않습니다."
+        },
+        {
+            "id": "ox_hard_072",
+            "difficulty": "hard",
+            "question": "솔로몬이 건축한 성전은 여호와의 영광이 구름으로 충만해 제사장들도 서서 섬기지 못했다.",
+            "answer": true,
+            "reference": "열왕기상 8:10-11",
+            "explanation": "여호와의 영광이 성전을 가득 채웠습니다."
+        },
+        {
+            "id": "ox_hard_073",
+            "difficulty": "hard",
+            "question": "호세아는 하나님의 명령으로 음란한 여인 ‘고멜’과 결혼했다.",
+            "answer": true,
+            "reference": "호세아 1:2-3",
+            "explanation": "고멜은 호세아의 아내가 됩니다."
+        },
+        {
+            "id": "ox_hard_074",
+            "difficulty": "hard",
+            "question": "예수님은 베다니에서 나사로를 살리실 때, 나사로가 죽은 지 정확히 7일이 지난 때였다.",
+            "answer": false,
+            "reference": "요한복음 11:17",
+            "explanation": "나사로는 죽은 지 4일째였습니다."
+        },
+        {
+            "id": "ox_hard_075",
+            "difficulty": "hard",
+            "question": "아비가일은 나발의 아내였으며, 다윗을 보고 땅에 엎드려 그에게 잘못을 대신하여 사과했다.",
+            "answer": true,
+            "reference": "사무엘상 25:23-24",
+            "explanation": "아비가일은 지혜롭게 행동하여 다윗의 분노를 막았습니다."
+        },
+        {
+            "id": "ox_hard_076",
+            "difficulty": "hard",
+            "question": "아브넬은 사울의 아들이며 다윗과 끝까지 싸운 장군이다.",
+            "answer": false,
+            "reference": "사무엘하 2:8",
+            "explanation": "아브넬은 사울의 아들 ‘이시보셋’의 군사령관이지, 사울의 아들이 아닙니다."
+        },
+        {
+            "id": "ox_hard_077",
+            "difficulty": "hard",
+            "question": "요나단은 다윗을 도망시키기 위해 활쏘기 사인을 사용했는데, 화살이 종 가까이에 떨어지면 위험 신호였다.",
+            "answer": false,
+            "reference": "사무엘상 20:20-22",
+            "explanation": "화살이 멀리 떨어지면 위험 신호였습니다. 가까우면 안전."
+        },
+        {
+            "id": "ox_hard_078",
+            "difficulty": "hard",
+            "question": "욜의 예언에는 ‘메뚜기 떼의 네 단계(풀무치, 느치, 황충, 메뚜기)’가 등장한다.",
+            "answer": true,
+            "reference": "요엘 1:4",
+            "explanation": "요엘서에 네 메뚜기 단계가 정확히 기록됩니다."
+        },
+        {
+            "id": "ox_hard_079",
+            "difficulty": "hard",
+            "question": "값비싼 향유를 예수님께 부은 여인은 베다니의 마리아와 막달라 마리아 두 사람이었다.",
+            "answer": false,
+            "reference": "요한복음 12:3 / 누가복음 7장",
+            "explanation": "향유 부은 사건 중 베다니 사건의 여인은 마리아 한 명입니다."
+        },
+        {
+            "id": "ox_hard_080",
+            "difficulty": "hard",
+            "question": "성경에 따르면, 십계명 돌판을 깨뜨린 후 모세는 산 위에서 80일 동안 연속으로 금식했다.",
+            "answer": false,
+            "reference": "출애굽기 34:28",
+            "explanation": "모세는 돌판을 받을 때 40일 금식했고, 연속 80일 기록은 없습니다."
+        },
+        {
+            "id": "ox_hard_081",
+            "difficulty": "hard",
+            "question": "요나가 니느웨 사람들이 회개하자 ‘내 생명을 거두어 달라’고 하나님께 요청한 것은 박넝쿨 사건 이후였다.",
+            "answer": false,
+            "reference": "요나 4:3-8",
+            "explanation": "생명을 거두어 달라는 말은 니느웨가 회개한 직후(4:3)였고, 박넝쿨 사건은 그 뒤(4:6-8)에 일어났습니다."
+        },
+        {
+            "id": "ox_hard_082",
+            "difficulty": "hard",
+            "question": "아모스는 직업 선지자로서 왕실에 소속된 예언자였다.",
+            "answer": false,
+            "reference": "아모스 7:14-15",
+            "explanation": "아모스는 ‘선지자의 아들도 아니요, 목자요 뽕나무 재배자’라며 왕실 예언자 출신이 아니었다고 밝힙니다."
+        },
+        {
+            "id": "ox_hard_083",
+            "difficulty": "hard",
+            "question": "사무엘은 사울에게 기름을 부을 때 이미 이스라엘의 사사가 아니었다.",
+            "answer": false,
+            "reference": "사무엘상 7:15, 10:1",
+            "explanation": "사무엘은 평생 사사였으며, 사울에게 기름 부을 때도 사사직을 유지하고 있었습니다."
+        },
+        {
+            "id": "ox_hard_084",
+            "difficulty": "hard",
+            "question": "에스겔이 본 ‘마른 뼈가 살아나는 환상’은 바벨론 포로 귀환을 상징적으로 보여준 것이다.",
+            "answer": true,
+            "reference": "에스겔 37:11-14",
+            "explanation": "하나님은 이 환상이 ‘이스라엘 백성의 회복과 귀환’을 의미한다고 직접 해석해 주십니다."
+        },
+        {
+            "id": "ox_hard_085",
+            "difficulty": "hard",
+            "question": "요한계시록에서 두 증인은 엘리야와 모세로 명확하게 기록되어 있다.",
+            "answer": false,
+            "reference": "요한계시록 11장",
+            "explanation": "두 증인의 정체는 상징적 표현이며, 엘리야·모세로 ‘명확하게’ 기록되지 않았습니다."
+        },
+        {
+            "id": "ox_hard_086",
+            "difficulty": "hard",
+            "question": "르우벤 지파는 요단 동편 땅을 요청한 지파들 중 하나였다.",
+            "answer": true,
+            "reference": "민수기 32:1-5",
+            "explanation": "르우벤과 갓 지파가 요단 동편 땅을 요청했고 므낫세 반 지파가 합류했습니다."
+        },
+        {
+            "id": "ox_hard_087",
+            "difficulty": "hard",
+            "question": "나봇의 포도원을 빼앗을 때, 아합은 직접 나봇을 죽이라는 명령을 내렸다.",
+            "answer": false,
+            "reference": "열왕기상 21:7-10",
+            "explanation": "직접 음모를 꾸민 것은 이세벨이었고, 아합은 소극적으로 따랐습니다."
+        },
+        {
+            "id": "ox_hard_088",
+            "difficulty": "hard",
+            "question": "에녹은 300년 동안 하나님과 동행한 후, 죽음을 보지 않고 하나님께로 옮겨졌다.",
+            "answer": true,
+            "reference": "창세기 5:24",
+            "explanation": "에녹은 ‘하나님이 그를 데려가시니’ 죽음을 경험하지 않았다고 기록됩니다."
+        },
+        {
+            "id": "ox_hard_089",
+            "difficulty": "hard",
+            "question": "예수님의 족보에서 ‘우리아의 아내’라고 표현된 인물은 다윗의 어머니를 가리킨다.",
+            "answer": false,
+            "reference": "마태복음 1:6",
+            "explanation": "‘우리아의 아내’는 밧세바를 뜻하며, 다윗의 어머니가 아닙니다."
+        },
+        {
+            "id": "ox_hard_090",
+            "difficulty": "hard",
+            "question": "호세아의 첫째 아들의 이름 ‘이스르엘’은 하나님의 회복과 긍휼의 메시지를 담은 긍정적 의미였다.",
+            "answer": false,
+            "reference": "호세아 1:4",
+            "explanation": "‘이스르엘’은 여로보암 왕조를 심판하겠다는 의미로 부정적 메시지입니다."
+        },
+        {
+            "id": "ox_hard_091",
+            "difficulty": "hard",
+            "question": "여호수아는 가나안 정복 직전 모압 평지에서 죽었다.",
+            "answer": false,
+            "reference": "여호수아 24:29-30",
+            "explanation": "모세가 모압에서 죽었고, 여호수아는 가나안 땅 ‘딤낫세라’에서 죽었습니다."
+        },
+        {
+            "id": "ox_hard_092",
+            "difficulty": "hard",
+            "question": "사울왕이 직접 엔돌 여인을 찾아간 사건은 블레셋과의 전쟁을 앞둔 ‘길보아 전투’ 직전이었다.",
+            "answer": true,
+            "reference": "사무엘상 28장",
+            "explanation": "엔돌 점쟁이 사건은 길보아 전투 직전의 마지막 절망적인 시도로 기록됩니다."
+        },
+        {
+            "id": "ox_hard_093",
+            "difficulty": "hard",
+            "question": "히스기야가 병에서 나을 때, 땅의 그림자가 ‘앞으로’ 10도 움직이는 표징이 나타났다.",
+            "answer": false,
+            "reference": "열왕기하 20:8-11",
+            "explanation": "그림자는 앞으로가 아니라 ‘뒤로 10도’ 움직였습니다."
+        },
+        {
+            "id": "ox_hard_094",
+            "difficulty": "hard",
+            "question": "바벨론에 잡혀간 다니엘은 처음 환관장에게 ‘왕의 음식 대신 채식만 먹게 해달라’고 요청했다.",
+            "answer": true,
+            "reference": "다니엘 1:8-16",
+            "explanation": "다니엘은 왕의 음식으로 자신을 더럽히지 않기 위해 채식을 요청했습니다."
+        },
+        {
+            "id": "ox_hard_095",
+            "difficulty": "hard",
+            "question": "바울이 마게도냐 환상을 본 도시는 데살로니가였다.",
+            "answer": false,
+            "reference": "사도행전 16:9-10",
+            "explanation": "마게도냐 환상은 트로아스에서 보았습니다."
+        },
+        {
+            "id": "ox_hard_096",
+            "difficulty": "hard",
+            "question": "다윗이 골리앗을 쓰러뜨릴 때 사용한 돌은 ‘무릿돌 1개’였고, 나머지 4개는 사용되지 않았다.",
+            "answer": true,
+            "reference": "사무엘상 17:40, 49",
+            "explanation": "다윗은 5개의 돌을 준비했지만 실제로 사용된 것은 1개뿐입니다."
+        },
+        {
+            "id": "ox_hard_097",
+            "difficulty": "hard",
+            "question": "압살롬이 죽을 때 그는 나귀를 타고 있었고, 큰 상수리나무에 머리가 걸려 버렸다.",
+            "answer": true,
+            "reference": "사무엘하 18:9",
+            "explanation": "도망치던 중 상수리나무 가지에 머리가 걸려 공중에 매달렸습니다."
+        },
+        {
+            "id": "ox_hard_098",
+            "difficulty": "hard",
+            "question": "예수께서 광야에서 시험받을 때, 사단이 먼저 한 시험은 ‘성전 꼭대기에서 뛰어내리라’는 시험이었다.",
+            "answer": false,
+            "reference": "마태복음 4:1-4",
+            "explanation": "첫 시험은 ‘돌을 떡으로 만들라’는 시험이었습니다."
+        },
+        {
+            "id": "ox_hard_099",
+            "difficulty": "hard",
+            "question": "스데반이 순교할 때 그의 시신을 거두어 장례한 사람들은 ‘경건한 사람들’이라고만 기록되어 있다.",
+            "answer": true,
+            "reference": "사도행전 8:2",
+            "explanation": "이름이 특정되지 않고 ‘경건한 사람들이’ 장례했다고만 기록됩니다."
+        },
+        {
+            "id": "ox_hard_100",
+            "difficulty": "hard",
+            "question": "요한계시록의 일곱 교회 중 ‘빌라델비아 교회’는 책망만 받고 칭찬은 받지 못했다.",
+            "answer": false,
+            "reference": "요한계시록 3:7-13",
+            "explanation": "빌라델비아 교회는 책망이 거의 없는 칭찬 중심의 메시지를 받은 교회입니다."
+        }
+    ]
+}

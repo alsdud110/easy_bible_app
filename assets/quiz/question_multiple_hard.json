@@ -1,0 +1,1404 @@
+{
+  "questions": [
+    {
+      "id": "mc_hard_001",
+      "difficulty": "hard",
+      "question": "멜기세덱이 아브람에게 떡과 포도주를 가지고 나와 축복할 때 사용한 핵심 표현은 무엇인가?",
+      "options": [
+        "천지의 주재이신 하나님께서 너를 도우셨다",
+        "너의 대적을 네 손에 붙이신 이",
+        "너는 복이 될지라",
+        "네 후손이 별과 같으리라"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 14:20",
+      "explanation": "멜기세덱은 ‘네 대적을 네 손에 붙이신 이’라 말하며 축복했다."
+    },
+    {
+      "id": "mc_hard_002",
+      "difficulty": "hard",
+      "question": "야곱이 벧엘에서 꿈을 꾼 후 그곳 이름을 바꿨는데, 원래 이름은 무엇이었는가?",
+      "options": [
+        "여부스",
+        "루스",
+        "마다바",
+        "하솔"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 28:19",
+      "explanation": "그 지역의 본래 이름은 루스였다."
+    },
+    {
+      "id": "mc_hard_003",
+      "difficulty": "hard",
+      "question": "요셉이 바로의 꿈을 해석할 때 풍년과 흉년의 기간은 각각 얼마라고 하였는가?",
+      "options": [
+        "5년",
+        "6년",
+        "7년",
+        "10년"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 41:26-30",
+      "explanation": "7년 풍년과 7년 흉년을 의미했다."
+    },
+    {
+      "id": "mc_hard_004",
+      "difficulty": "hard",
+      "question": "모세가 금송아지 사건 이후 십계명을 새로 받기 위해 다시 산에 올라간 기간은 몇 일이었는가?",
+      "options": [
+        "30일",
+        "40일",
+        "50일",
+        "60일"
+      ],
+      "correctIndex": 1,
+      "reference": "출애굽기 34:28",
+      "explanation": "모세는 다시 40일 금식하며 새 돌판을 받았다."
+    },
+    {
+      "id": "mc_hard_005",
+      "difficulty": "hard",
+      "question": "이스라엘이 광야에서 '만나' 외에 불평하며 찾았던 육류는 무엇이었는가?",
+      "options": [
+        "염소고기",
+        "메추라기",
+        "닭고기",
+        "양고기"
+      ],
+      "correctIndex": 1,
+      "reference": "민수기 11:31",
+      "explanation": "하나님은 메추라기를 풍성하게 주셨다."
+    },
+    {
+      "id": "mc_hard_006",
+      "difficulty": "hard",
+      "question": "여호수아가 가나안 정복 전 정탐을 보낸 지역은 어디였는가?",
+      "options": [
+        "여리고",
+        "아이",
+        "길갈",
+        "기브온"
+      ],
+      "correctIndex": 0,
+      "reference": "여호수아 2:1",
+      "explanation": "가나안 정복의 첫 목표는 여리고였다."
+    },
+    {
+      "id": "mc_hard_007",
+      "difficulty": "hard",
+      "question": "사사 삼손이 처음으로 하나님의 영에 크게 감동된 곳은?",
+      "options": [
+        "소라",
+        "에스다올",
+        "마하네단",
+        "딤나"
+      ],
+      "correctIndex": 2,
+      "reference": "사사기 13:25",
+      "explanation": "여호와의 영이 그를 마하네단에서 감동시켰다."
+    },
+    {
+      "id": "mc_hard_008",
+      "difficulty": "hard",
+      "question": "사무엘의 아버지 엘가나는 어떤 지파 사람이었는가?",
+      "options": [
+        "레위",
+        "유다",
+        "에브라임",
+        "베냐민"
+      ],
+      "correctIndex": 0,
+      "reference": "역대상 6:27-28",
+      "explanation": "엘가나는 레위 지파 출신이었다."
+    },
+    {
+      "id": "mc_hard_009",
+      "difficulty": "hard",
+      "question": "사울이 아말렉을 진멸하라는 명령을 어긴 주요 이유로 잡지 않은 왕은 누구인가?",
+      "options": [
+        "아각",
+        "아비멜렉",
+        "다윗",
+        "나답"
+      ],
+      "correctIndex": 0,
+      "reference": "사무엘상 15:9",
+      "explanation": "사울은 아말렉 왕 아각을 살려두어 책망을 받았다."
+    },
+    {
+      "id": "mc_hard_010",
+      "difficulty": "hard",
+      "question": "다윗이 골리앗을 쓰러뜨릴 때 사용한 무기는 무엇이었는가?",
+      "options": [
+        "방패와 창",
+        "투석줄과 돌",
+        "창과 단창",
+        "칼과 활"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 17:49",
+      "explanation": "다윗은 물매 돌 하나로 골리앗을 쓰러뜨렸다."
+    },
+    {
+      "id": "mc_hard_011",
+      "difficulty": "hard",
+      "question": "압살롬이 반역을 일으킨 후 도망치는 다윗에게 충성한 사람은 누구인가?",
+      "options": [
+        "아히도벨",
+        "후새",
+        "요압",
+        "아브넬"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘하 15:32-37",
+      "explanation": "후새는 다윗에게 충성을 다해 아히도벨의 계략을 무산시켰다."
+    },
+    {
+      "id": "mc_hard_012",
+      "difficulty": "hard",
+      "question": "솔로몬이 하나님께 일천 번제를 드린 곳은 어디였는가?",
+      "options": [
+        "실로",
+        "기브온",
+        "예루살렘",
+        "벧엘"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 3:4",
+      "explanation": "솔로몬은 큰 산당인 기브온에서 일천 번제를 드렸다."
+    },
+    {
+      "id": "mc_hard_013",
+      "difficulty": "hard",
+      "question": "엘리야가 바알 선지자들과 대결하던 중 사용된 제물의 숫자는 몇 마리였는가?",
+      "options": [
+        "한 마리",
+        "두 마리",
+        "세 마리",
+        "네 마리"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 18:23",
+      "explanation": "두 사람이 각각 한 마리씩 가져왔다."
+    },
+    {
+      "id": "mc_hard_014",
+      "difficulty": "hard",
+      "question": "히스기야 왕 시대 아시리아의 공격 때, 예루살렘을 포위한 장수는 누구였는가?",
+      "options": [
+        "랍사게",
+        "산헤립",
+        "바스길",
+        "아람"
+      ],
+      "correctIndex": 0,
+      "reference": "열왕기하 18:17",
+      "explanation": "랍사게가 예루살렘 앞에서 조롱하였다."
+    },
+    {
+      "id": "mc_hard_015",
+      "difficulty": "hard",
+      "question": "느헤미야가 성벽을 재건할 때 그 공사 기간은 얼마였는가?",
+      "options": [
+        "32일",
+        "42일",
+        "52일",
+        "62일"
+      ],
+      "correctIndex": 2,
+      "reference": "느헤미야 6:15",
+      "explanation": "성벽은 52일 만에 완성되었다."
+    },
+    {
+      "id": "mc_hard_016",
+      "difficulty": "hard",
+      "question": "에스더가 왕에게 나아가기 전 금식한 기간은 몇 일이었는가?",
+      "options": [
+        "2일",
+        "3일",
+        "5일",
+        "7일"
+      ],
+      "correctIndex": 1,
+      "reference": "에스더 4:16",
+      "explanation": "삼 일 밤낮으로 금식하였다."
+    },
+    {
+      "id": "mc_hard_017",
+      "difficulty": "hard",
+      "question": "다니엘이 바벨론 왕의 꿈을 해석할 때 나타난 큰 신상의 다리는 무엇을 의미했는가?",
+      "options": [
+        "메대-바사",
+        "헬라",
+        "로마",
+        "에돔"
+      ],
+      "correctIndex": 2,
+      "reference": "다니엘 2:33-40",
+      "explanation": "철로 된 다리는 로마를 상징한다."
+    },
+    {
+      "id": "mc_hard_018",
+      "difficulty": "hard",
+      "question": "호세아의 아내 고멜과의 결혼은 어떤 의미를 가진 상징적 행위였는가?",
+      "options": [
+        "이스라엘의 회개",
+        "이스라엘의 음란함",
+        "이스라엘의 구속",
+        "이스라엘의 회복"
+      ],
+      "correctIndex": 1,
+      "reference": "호세아 1:2",
+      "explanation": "이스라엘의 영적 음행을 상징했다."
+    },
+    {
+      "id": "mc_hard_019",
+      "difficulty": "hard",
+      "question": "요나가 니느웨로 가기를 싫어한 이유는 무엇이라고 직접 언급했는가?",
+      "options": [
+        "길이 멀어서",
+        "그들이 잔혹해서",
+        "하나님의 긍휼을 알고 있어서",
+        "자신을 죽일까 두려워서"
+      ],
+      "correctIndex": 2,
+      "reference": "요나 4:2",
+      "explanation": "하나님이 긍휼을 베푸실 것을 알았기 때문이다."
+    },
+    {
+      "id": "mc_hard_020",
+      "difficulty": "hard",
+      "question": "세례 요한의 부모 사가랴는 어느 제사반열에 속했는가?",
+      "options": [
+        "아비야 반",
+        "엘르아살 반",
+        "고핫 반",
+        "므라리 반"
+      ],
+      "correctIndex": 0,
+      "reference": "누가복음 1:5",
+      "explanation": "사가랴는 아비야 반열의 제사장이었다."
+    },
+    {
+      "id": "mc_hard_021",
+      "difficulty": "hard",
+      "question": "예수님이 첫 기적을 행하신 곳은 어디였는가?",
+      "options": [
+        "가버나움",
+        "가나",
+        "예루살렘",
+        "벳새다"
+      ],
+      "correctIndex": 1,
+      "reference": "요한복음 2:1-11",
+      "explanation": "예수님의 첫 기적은 가나 혼인잔치에서 물을 포도주로 만드신 사건이다."
+    },
+    {
+      "id": "mc_hard_022",
+      "difficulty": "hard",
+      "question": "예수님께 향유를 부은 여인이 깨뜨린 향유 옥합은 어떤 향유였는가?",
+      "options": [
+        "몰약",
+        "유향",
+        "나드",
+        "계피"
+      ],
+      "correctIndex": 2,
+      "reference": "마가복음 14:3",
+      "explanation": "극히 값진 나드 향유 옥합이었다."
+    },
+    {
+      "id": "mc_hard_023",
+      "difficulty": "hard",
+      "question": "예수님이 유월절을 제자들과 드신 다락방을 준비한 사람은 누구인가?",
+      "options": [
+        "요한",
+        "마가의 어머니",
+        "베드로와 요한",
+        "야고보"
+      ],
+      "correctIndex": 2,
+      "reference": "누가복음 22:8",
+      "explanation": "예수님은 베드로와 요한에게 유월절을 준비하게 하셨다."
+    },
+    {
+      "id": "mc_hard_024",
+      "difficulty": "hard",
+      "question": "가룟 유다가 은 전 30을 받고 넘겨준 예수님의 위치는 누구로부터 들은 것인가?",
+      "options": [
+        "서기관",
+        "로마군",
+        "대제사장들과 장로들",
+        "바리새인"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 26:14-15",
+      "explanation": "대제사장들과 장로들이 유다에게 값을 주었다."
+    },
+    {
+      "id": "mc_hard_025",
+      "difficulty": "hard",
+      "question": "예수님이 십자가에서 외친 '엘리 엘리 라마 사박다니'는 시편 몇 편을 인용한 것인가?",
+      "options": [
+        "시편 1편",
+        "시편 22편",
+        "시편 42편",
+        "시편 51편"
+      ],
+      "correctIndex": 1,
+      "reference": "시편 22:1",
+      "explanation": "예수님은 시편 22편 1절을 인용하셨다."
+    },
+    {
+      "id": "mc_hard_026",
+      "difficulty": "hard",
+      "question": "요담의 비유에서 가시나무가 왕이 되면 어떤 행동을 하겠다고 말하는가?",
+      "options": [
+        "모든 나무를 불태우겠다",
+        "그늘을 제공하겠다",
+        "열매를 나누겠다",
+        "다른 나무에게 복종하겠다"
+      ],
+      "correctIndex": 1,
+      "reference": "사사기 9:15",
+      "explanation": "가시나무는 ‘내 그늘에 피하라’고 말하며 왕이 되려 했다고 비유된다."
+    },
+    {
+      "id": "mc_hard_027",
+      "difficulty": "hard",
+      "question": "사무엘이 사울에게 전한 하나님의 말씀 중 ‘순종이 제사보다 낫다’는 선언은 어떤 사건과 관련이 있는가?",
+      "options": [
+        "사울이 소와 양을 전리품으로 남긴 사건",
+        "사울이 불레셋과의 전쟁을 두려워한 사건",
+        "사울이 요나단을 죽이려 한 사건",
+        "사울이 다윗을 질투한 사건"
+      ],
+      "correctIndex": 0,
+      "reference": "사무엘상 15:22",
+      "explanation": "아말렉 진멸 명령을 어기고 전리품을 살려둔 사건에 대한 책망이다."
+    },
+    {
+      "id": "mc_hard_028",
+      "difficulty": "hard",
+      "question": "다윗이 사울에게서 두 번째로 목숨을 살려준 사건에서, 다윗이 가져간 물품은 무엇인가?",
+      "options": [
+        "사울의 옷자락",
+        "사울의 창과 물병",
+        "사울의 갑옷",
+        "사울의 인장반지"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 26:12",
+      "explanation": "다윗은 사울이 자고 있는 동안 그의 창과 물병을 가져갔다."
+    },
+    {
+      "id": "mc_hard_029",
+      "difficulty": "hard",
+      "question": "다윗이 여부스 성을 점령할 때 성에 들어간 경로는 무엇으로 기록되어 있는가?",
+      "options": [
+        "지하 동굴",
+        "수로",
+        "숨겨진 문",
+        "성벽 틈"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘하 5:8",
+      "explanation": "다윗은 여부스 성을 공격할 때 ‘수로’를 언급하며 점령했다."
+    },
+    {
+      "id": "mc_hard_030",
+      "difficulty": "hard",
+      "question": "솔로몬이 성전을 봉헌할 때 하나님의 영광이 성전에 가득 차 제사장들이 감당할 수 없었던 현상은 무엇인가?",
+      "options": [
+        "불이 내려옴",
+        "구름이 가득함",
+        "땅이 진동함",
+        "빛이 번쩍임"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 8:10-11",
+      "explanation": "여호와의 영광이 구름으로 성전에 가득하였다."
+    },
+    {
+      "id": "mc_hard_031",
+      "difficulty": "hard",
+      "question": "르호보암 시대에 이스라엘이 남북으로 분열되게 된 근본 원인으로 제시되는 것은?",
+      "options": [
+        "솔로몬의 우상 숭배",
+        "세금과 부역의 과중",
+        "레위인의 반란",
+        "전쟁에서의 패배"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 12:4",
+      "explanation": "백성은 솔로몬의 과중한 부역을 가볍게 해달라고 요구했다."
+    },
+    {
+      "id": "mc_hard_032",
+      "difficulty": "hard",
+      "question": "아합이 나봇의 포도원을 빼앗기 위해 사용한 비열한 방법은 무엇인가?",
+      "options": [
+        "거짓 증인 세워 반역 혐의 적용",
+        "군대로 포위하여 압박",
+        "세금으로 압류",
+        "왕의 명령으로 강제 철거"
+      ],
+      "correctIndex": 0,
+      "reference": "열왕기상 21:13",
+      "explanation": "이세벨의 조종으로 거짓 증인들이 나봇을 비방하게 했다."
+    },
+    {
+      "id": "mc_hard_033",
+      "difficulty": "hard",
+      "question": "엘리야가 갈멜산에서 바알 선지자들을 이길 때 사용한 제사의 독특한 준비 과정은 무엇인가?",
+      "options": [
+        "소를 태우기 전에 돌을 쌓음",
+        "제단에 물을 세 번 붓고 도랑까지 채움",
+        "단을 금으로 칠함",
+        "나무를 바알 신전에 가져다 놓음"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 18:33-35",
+      "explanation": "엘리야는 제단에 물을 붓고 도랑까지 가득 차게 했다."
+    },
+    {
+      "id": "mc_hard_034",
+      "difficulty": "hard",
+      "question": "요나가 니느웨를 떠나 성 동편에 앉았을 때 하나님께서 요나를 위해 준비하신 것은?",
+      "options": [
+        "큰 바람",
+        "박넝쿨",
+        "양떼",
+        "천사"
+      ],
+      "correctIndex": 1,
+      "reference": "요나 4:6",
+      "explanation": "하나님은 요나를 그늘 아래 쉬게 하려고 박넝쿨을 예비하셨다."
+    },
+    {
+      "id": "mc_hard_035",
+      "difficulty": "hard",
+      "question": "하박국이 던진 질문 중 핵심 주제는 무엇인가?",
+      "options": [
+        "왜 악인이 형통한가?",
+        "왜 이방 민족이 강한가?",
+        "왜 성전이 파괴되는가?",
+        "왜 왕들이 교만한가?"
+      ],
+      "correctIndex": 0,
+      "reference": "하박국 1:3",
+      "explanation": "하박국은 악인의 번영과 의인의 고난에 대해 하나님께 질문한다."
+    },
+    {
+      "id": "mc_hard_036",
+      "difficulty": "hard",
+      "question": "느헤미야가 예루살렘 성벽 재건을 할 때 성문 공사를 방해한 두 주요 인물은?",
+      "options": [
+        "산발랏과 도비야",
+        "히스기야와 여호사밧",
+        "삼손과 아비멜렉",
+        "에돔과 모압"
+      ],
+      "correctIndex": 0,
+      "reference": "느헤미야 2:19",
+      "explanation": "산발랏과 도비야는 느헤미야의 성벽 재건을 여러 차례 방해했다."
+    },
+    {
+      "id": "mc_hard_037",
+      "difficulty": "hard",
+      "question": "에스더서에서 모르드개가 왕에게 충성을 보였음을 기록한 내용은 어떤 문서에서 발견되었는가?",
+      "options": [
+        "왕의 연대기",
+        "바빌론 기록지",
+        "성전 문서",
+        "유다 족보책"
+      ],
+      "correctIndex": 0,
+      "reference": "에스더 6:1",
+      "explanation": "아하수에로 왕은 밤에 연대기를 읽다가 모르드개 기록을 발견했다."
+    },
+    {
+      "id": "mc_hard_038",
+      "difficulty": "hard",
+      "question": "욥기에서 하나님께서 욥에게 최초로 던진 질문은 무엇을 묻는가?",
+      "options": [
+        "땅의 기초를 놓을 때 네가 어디 있었느냐",
+        "바다의 경계를 누가 정하였느냐",
+        "하늘의 별들을 네가 묶을 수 있느냐",
+        "기러기를 누가 먹이느냐"
+      ],
+      "correctIndex": 0,
+      "reference": "욥기 38:4",
+      "explanation": "하나님은 땅의 기초를 놓을 때 욥이 어디 있었는지 질문하며 인간의 한계를 보여 주신다."
+    },
+    {
+      "id": "mc_hard_039",
+      "difficulty": "hard",
+      "question": "잠언에서 ‘여호와를 경외하는 것이 지식의 근본’이라는 말은 누구에게 주는 권면인가?",
+      "options": [
+        "어리석은 자",
+        "지혜 없는 자",
+        "아들",
+        "왕"
+      ],
+      "correctIndex": 2,
+      "reference": "잠언 1:7-8",
+      "explanation": "잠언은 아들에게 주는 교훈 형식으로 기록되어 있다."
+    },
+    {
+      "id": "mc_hard_040",
+      "difficulty": "hard",
+      "question": "다니엘이 바벨론의 진미를 거절한 근본 이유는 무엇인가?",
+      "options": [
+        "건강 때문",
+        "율법에 부정함 때문",
+        "우상에게 바쳐진 음식이었기 때문",
+        "맛이 없어서"
+      ],
+      "correctIndex": 2,
+      "reference": "다니엘 1:8",
+      "explanation": "왕의 음식은 우상 숭배와 연관되었기에 다니엘은 더럽히지 않으려 했다."
+    },
+    {
+      "id": "mc_hard_041",
+      "difficulty": "hard",
+      "question": "스가랴의 환상 중 ‘날아다니는 두루마리’는 무엇을 상징하는가?",
+      "options": [
+        "이스라엘 회복",
+        "하나님의 심판",
+        "성전 재건",
+        "이방 민족의 멸망"
+      ],
+      "correctIndex": 1,
+      "reference": "스가랴 5:3",
+      "explanation": "날아다니는 두루마리는 땅에 있는 모든 도둑과 맹세를 어기는 자에 대한 심판을 의미한다."
+    },
+    {
+      "id": "mc_hard_042",
+      "difficulty": "hard",
+      "question": "말라기는 제사장들에게 어떤 문제를 집중적으로 책망하는가?",
+      "options": [
+        "우상 숭배",
+        "십일조 미납",
+        "불성실한 제사",
+        "이방 결혼"
+      ],
+      "correctIndex": 2,
+      "reference": "말라기 1:7-8",
+      "explanation": "말라기는 흠 있는 제물을 드리는 제사장의 불성실함을 책망한다."
+    },
+    {
+      "id": "mc_hard_043",
+      "difficulty": "hard",
+      "question": "예레미야가 토기장이의 집에서 깨닫게 된 메시지는 무엇인가?",
+      "options": [
+        "이스라엘은 이미 회복될 수 없음",
+        "하나님은 이스라엘을 마음대로 빚으실 수 있음",
+        "하나님은 열방을 버리심",
+        "우상은 아무 힘이 없음"
+      ],
+      "correctIndex": 1,
+      "reference": "예레미야 18:6",
+      "explanation": "하나님은 토기장이처럼 이스라엘을 빚고 고치실 수 있음을 말씀하신다."
+    },
+    {
+      "id": "mc_hard_044",
+      "difficulty": "hard",
+      "question": "에스겔이 본 환상 중 마른 뼈들이 살아나는 장면은 무엇을 의미하는가?",
+      "options": [
+        "이스라엘의 완전한 멸망",
+        "이스라엘의 정치적 승리",
+        "이스라엘의 회복과 부흥",
+        "이방국가의 몰락"
+      ],
+      "correctIndex": 2,
+      "reference": "에스겔 37:10-14",
+      "explanation": "마른 뼈 환상은 이스라엘의 회복을 상징한다."
+    },
+    {
+      "id": "mc_hard_045",
+      "difficulty": "hard",
+      "question": "이사야가 본 ‘주의 옷자락이 성전에 가득한’ 장면은 어떤 존재들과 함께 나타나는가?",
+      "options": [
+        "스랍들",
+        "그룹들",
+        "천사장들",
+        "네 생물"
+      ],
+      "correctIndex": 0,
+      "reference": "이사야 6:2",
+      "explanation": "이사야는 스랍들이 날며 여호와를 찬양하는 장면을 보았다."
+    },
+    {
+      "id": "mc_hard_046",
+      "difficulty": "hard",
+      "question": "호세아는 이스라엘의 배교를 무엇에 비유하는가?",
+      "options": [
+        "사자의 포효",
+        "간음하는 아내",
+        "무너진 성벽",
+        "마른 나무"
+      ],
+      "correctIndex": 1,
+      "reference": "호세아 1–3장",
+      "explanation": "호세아는 간음한 아내 고멜과의 관계로 이스라엘의 배교를 표현했다."
+    },
+    {
+      "id": "mc_hard_047",
+      "difficulty": "hard",
+      "question": "요엘서에서 하나님이 마지막 때에 부어주신다고 한 것은?",
+      "options": [
+        "불",
+        "풍성한 비",
+        "영",
+        "지혜의 말"
+      ],
+      "correctIndex": 2,
+      "reference": "요엘 2:28",
+      "explanation": "요엘은 하나님께서 모든 육체 위에 영을 부어주신다고 예언했다."
+    },
+    {
+      "id": "mc_hard_048",
+      "difficulty": "hard",
+      "question": "스바냐가 경고하는 ‘여호와의 큰 날’은 어떤 성격을 가지는 날인가?",
+      "options": [
+        "기쁨의 날",
+        "회복의 날",
+        "심판의 날",
+        "축복의 날"
+      ],
+      "correctIndex": 2,
+      "reference": "스바냐 1:14-15",
+      "explanation": "스바냐는 여호와의 큰 날을 두려움과 심판의 날로 묘사한다."
+    },
+    {
+      "id": "mc_hard_049",
+      "difficulty": "hard",
+      "question": "나훔이 예언한 심판 대상 도시는 어디인가?",
+      "options": [
+        "예루살렘",
+        "바벨론",
+        "사마리아",
+        "니느웨"
+      ],
+      "correctIndex": 3,
+      "reference": "나훔 1:1",
+      "explanation": "나훔은 니느웨에 대한 심판 예언을 전한다."
+    },
+    {
+      "id": "mc_hard_050",
+      "difficulty": "hard",
+      "question": "오바댜는 어떤 민족을 향한 예언서인가?",
+      "options": [
+        "에돔",
+        "모압",
+        "암몬",
+        "블레셋"
+      ],
+      "correctIndex": 0,
+      "reference": "오바댜 1:1",
+      "explanation": "오바댜는 에돔에 대한 심판을 다루는 가장 짧은 예언서이다."
+    },
+      {
+      "id": "mc_hard_051",
+      "difficulty": "hard",
+      "question": "요나가 니느웨에서 전도했을 때, 사람들이 회개한 결과 하나님은 무엇을 하셨는가?",
+      "options": [
+        "그 도시를 멸망시키셨다",
+        "재앙을 철회하셨다",
+        "다른 도시를 공격하셨다",
+        "요나를 처벌하셨다"
+      ],
+      "correctIndex": 1,
+      "reference": "요나 3:10",
+      "explanation": "니느웨 사람들이 회개하자 하나님은 계획하셨던 재앙을 철회하셨다."
+    },
+    {
+      "id": "mc_hard_052",
+      "difficulty": "hard",
+      "question": "다니엘이 느부갓네살 왕의 꿈을 해석하면서 왕에게 말한 내용은 무엇인가?",
+      "options": [
+        "왕국은 영원히 존재할 것이다",
+        "왕국은 무너질 것이다",
+        "왕국은 모래 위에 세워질 것이다",
+        "왕국은 다른 민족에게 속할 것이다"
+      ],
+      "correctIndex": 1,
+      "reference": "다니엘 2:31-45",
+      "explanation": "다니엘은 왕의 꿈을 해석하며 왕국의 무상함과 하나님의 주권을 강조했다."
+    },
+    {
+      "id": "mc_hard_053",
+      "difficulty": "hard",
+      "question": "요한계시록에서 하늘에서 내려온 새 예루살렘의 크기는 무엇으로 측정되는가?",
+      "options": [
+        "길이와 넓이",
+        "주변 성벽의 높이",
+        "돌들의 무게",
+        "보석의 수"
+      ],
+      "correctIndex": 0,
+      "reference": "요한계시록 21:16",
+      "explanation": "예루살렘의 길이, 넓이, 높이가 같다고 기록되어 있다."
+    },
+    {
+      "id": "mc_hard_054",
+      "difficulty": "hard",
+      "question": "스룹바벨이 예루살렘 성전을 재건할 때, 사마리아인들이 어떤 행동을 했는가?",
+      "options": [
+        "도움을 주었다",
+        "방해와 저지",
+        "제물을 바쳤다",
+        "기도하며 지켜보았다"
+      ],
+      "correctIndex": 1,
+      "reference": "에스라 4:4-5",
+      "explanation": "사마리아인들은 성전 재건을 방해하고 중지시키려 했다."
+    },
+    {
+      "id": "mc_hard_055",
+      "difficulty": "hard",
+      "question": "에스더가 왕에게 민족을 구해 달라고 간청할 때, 왕이 먼저 물어본 것은 무엇인가?",
+      "options": [
+        "왜 늦게 왔는가",
+        "누가 명령했는가",
+        "무엇을 구하는가",
+        "자신의 안전은 보장되는가"
+      ],
+      "correctIndex": 2,
+      "reference": "에스더 7:3",
+      "explanation": "왕은 에스더에게 무엇을 구하는지 먼저 물었다."
+    },
+    {
+      "id": "mc_hard_056",
+      "difficulty": "hard",
+      "question": "예레미야가 ‘눈물이 가득한 예언자’라고 불린 이유는 무엇인가?",
+      "options": [
+        "이스라엘의 심판을 예언했기 때문",
+        "왕과 백성을 비방했기 때문",
+        "성전을 지키지 못했기 때문",
+        "포로를 석방하지 않았기 때문"
+      ],
+      "correctIndex": 0,
+      "reference": "예레미야 9:1",
+      "explanation": "예레미야는 백성의 죄와 다가올 심판 때문에 눈물을 흘렸다."
+    },
+    {
+      "id": "mc_hard_057",
+      "difficulty": "hard",
+      "question": "스바냐가 경고하는 여호와의 날에서 불러 일으키는 감정은 무엇인가?",
+      "options": [
+        "두려움과 공포",
+        "기쁨과 희망",
+        "평화와 안정",
+        "축하와 연회"
+      ],
+      "correctIndex": 0,
+      "reference": "스바냐 1:14-18",
+      "explanation": "여호와의 날은 심판과 재앙의 날로 두려움을 의미한다."
+    },
+    {
+      "id": "mc_hard_058",
+      "difficulty": "hard",
+      "question": "요엘서에서 예언된 성령의 부어짐은 어떤 사건과 연결되는가?",
+      "options": [
+        "이스라엘의 회개",
+        "이스라엘 왕국의 멸망",
+        "말세와 구원의 날",
+        "전쟁과 패배"
+      ],
+      "correctIndex": 2,
+      "reference": "요엘 2:28-32",
+      "explanation": "하나님은 마지막 날에 성령을 모든 육체 위에 부어주신다고 예언했다."
+    },
+    {
+      "id": "mc_hard_059",
+      "difficulty": "hard",
+      "question": "하박국서에서 ‘의인은 믿음으로 살리라’는 선언은 어떤 상황에서 등장하는가?",
+      "options": [
+        "외적 공격과 내적 타락 중",
+        "성전 봉헌식에서",
+        "왕의 축제 때",
+        "제사장 반란 중"
+      ],
+      "correctIndex": 0,
+      "reference": "하박국 2:4",
+      "explanation": "하박국은 악인과 정의의 문제 속에서 의인의 믿음을 강조한다."
+    },
+    {
+      "id": "mc_hard_060",
+      "difficulty": "hard",
+      "question": "에스겔서에서 하나님이 사람의 뼈를 생명으로 회복시키는 장면은 어떤 상징을 담고 있는가?",
+      "options": [
+        "이스라엘 회복과 부흥",
+        "왕국의 멸망",
+        "이방인의 승리",
+        "성전 파괴"
+      ],
+      "correctIndex": 0,
+      "reference": "에스겔 37:1-14",
+      "explanation": "마른 뼈들이 살아나는 환상은 이스라엘 회복을 의미한다."
+    },
+    {
+      "id": "mc_hard_061",
+      "difficulty": "hard",
+      "question": "요나가 니느웨에서 설교한 후 사람들이 회개했음을 보여주는 행동은 무엇인가?",
+      "options": [
+        "재물 봉헌",
+        "금식과 굵은 베옷 입음",
+        "왕에게 항복",
+        "사자를 보내 배교"
+      ],
+      "correctIndex": 1,
+      "reference": "요나 3:5-6",
+      "explanation": "니느웨 사람들이 회개하며 금식하고 굵은 베옷을 입었다."
+    },
+    {
+      "id": "mc_hard_062",
+      "difficulty": "hard",
+      "question": "아모스가 강조한 ‘정의와 공의’는 어떤 배경에서 나오는 메시지인가?",
+      "options": [
+        "북이스라엘의 부패와 우상 숭배",
+        "남유다 왕의 통치 안정",
+        "이스라엘의 전쟁 승리",
+        "이방 민족과의 동맹"
+      ],
+      "correctIndex": 0,
+      "reference": "아모스 5:24",
+      "explanation": "아모스는 정의와 공의를 실천하지 않는 북이스라엘을 책망했다."
+    },
+    {
+      "id": "mc_hard_063",
+      "difficulty": "hard",
+      "question": "스가랴가 본 ‘네 가지 병거’는 무엇을 상징하는가?",
+      "options": [
+        "왕국의 부흥",
+        "하나님의 심판과 통치",
+        "이스라엘의 회개",
+        "이방 민족의 평화"
+      ],
+      "correctIndex": 1,
+      "reference": "스가랴 6:1-5",
+      "explanation": "네 병거는 하나님이 이 땅을 심판하고 다스리심을 상징한다."
+    },
+    {
+      "id": "mc_hard_064",
+      "difficulty": "hard",
+      "question": "말라기서에서 제사장들의 불성실은 어떤 방식으로 드러나는가?",
+      "options": [
+        "흠 있는 제물을 바친다",
+        "기도를 하지 않는다",
+        "성전을 떠난다",
+        "백성을 징벌한다"
+      ],
+      "correctIndex": 0,
+      "reference": "말라기 1:8",
+      "explanation": "제사장들은 흠 있는 제물을 드리며 하나님께 불성실함을 보였다."
+    },
+    {
+      "id": "mc_hard_065",
+      "difficulty": "hard",
+      "question": "예레미야서에서 ‘토기장이의 집’ 비유가 의미하는 핵심 메시지는 무엇인가?",
+      "options": [
+        "하나님은 공의롭지 않다",
+        "이스라엘의 운명은 하나님의 손에 달려 있다",
+        "왕은 절대 권력을 가진다",
+        "백성은 자력으로 구원해야 한다"
+      ],
+      "correctIndex": 1,
+      "reference": "예레미야 18:6",
+      "explanation": "토기장이의 집 비유는 하나님이 이스라엘을 빚고 고치실 수 있음을 보여준다."
+    },
+    {
+      "id": "mc_hard_066",
+      "difficulty": "hard",
+      "question": "요한계시록에서 어린 양이 일곱 인을 떼는 장면은 무엇을 상징하는가?",
+      "options": [
+        "이스라엘의 멸망",
+        "세상의 재앙과 심판",
+        "왕국의 부흥",
+        "천사의 승리"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 6:1-17",
+      "explanation": "일곱 인을 떼는 것은 세상에 임할 재앙과 심판을 상징한다."
+    },
+    {
+      "id": "mc_hard_067",
+      "difficulty": "hard",
+      "question": "사무엘상에서 다윗이 골리앗을 쓰러뜨릴 때 사용한 돌은 몇 개였는가?",
+      "options": [
+        "한 개",
+        "두 개",
+        "세 개",
+        "다섯 개"
+      ],
+      "correctIndex": 3,
+      "reference": "사무엘상 17:40",
+      "explanation": "다윗은 매끄러운 돌 다섯 개를 준비하여 물맷돌로 골리앗을 공격했다."
+    },
+    {
+      "id": "mc_hard_068",
+      "difficulty": "hard",
+      "question": "열왕기상에서 엘리야가 아합에게 말한 ‘하나님께서 보내신 가뭄’은 몇 년 동안 지속되었는가?",
+      "options": [
+        "1년",
+        "2년",
+        "3년",
+        "7년"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 17:1",
+      "explanation": "엘리야는 가뭄이 3년 동안 지속될 것임을 예언했다."
+    },
+    {
+      "id": "mc_hard_069",
+      "difficulty": "hard",
+      "question": "엘리사가 문둥병을 고친 나아만 장군에게 요구한 행동은 무엇인가?",
+      "options": [
+        "요단강에서 7번 몸을 씻으라",
+        "성전에서 기도하라",
+        "제사장에게 제물을 드리라",
+        "이스라엘을 떠나라"
+      ],
+      "correctIndex": 0,
+      "reference": "열왕기하 5:10-14",
+      "explanation": "엘리사는 요단강에서 몸을 일곱 번 씻으라고 명했다."
+    },
+    {
+      "id": "mc_hard_070",
+      "difficulty": "hard",
+      "question": "다니엘서에서 다니엘과 세 친구가 왕의 진미를 거절한 이유는 무엇인가?",
+      "options": [
+        "맛이 없어서",
+        "율법에 부정해서",
+        "왕의 분노를 피하기 위해",
+        "다른 종교적 의무 때문"
+      ],
+      "correctIndex": 1,
+      "reference": "다니엘 1:8",
+      "explanation": "그들은 음식이 유대 율법에 부정함으로 거절했다."
+    },
+    {
+      "id": "mc_hard_071",
+      "difficulty": "hard",
+      "question": "느헤미야가 성벽을 재건할 때 성문 공사를 맡은 사람은 누구인가?",
+      "options": [
+        "산발랏",
+        "도비야",
+        "브닌",
+        "모세"
+      ],
+      "correctIndex": 2,
+      "reference": "느헤미야 3:2",
+      "explanation": "브닌은 시문 성문을 맡아 재건했다."
+    },
+    {
+      "id": "mc_hard_072",
+      "difficulty": "hard",
+      "question": "하박국서에서 하나님은 악인을 어떻게 처리한다고 말하는가?",
+      "options": [
+        "즉시 처벌",
+        "믿는 자에게 맡김",
+        "그들의 죄를 무시함",
+        "믿음으로 살리라"
+      ],
+      "correctIndex": 3,
+      "reference": "하박국 2:4",
+      "explanation": "의인은 믿음으로 살며, 악인은 결국 심판을 받는다."
+    },
+    {
+      "id": "mc_hard_073",
+      "difficulty": "hard",
+      "question": "예레미야가 말한 ‘깨진 항아리’ 비유의 의미는 무엇인가?",
+      "options": [
+        "이스라엘이 회복될 것임",
+        "이스라엘의 완전한 파멸",
+        "왕국의 분열",
+        "성전의 재건"
+      ],
+      "correctIndex": 1,
+      "reference": "예레미야 19:11",
+      "explanation": "깨진 항아리는 유다와 예루살렘의 파멸을 상징한다."
+    },
+    {
+      "id": "mc_hard_074",
+      "difficulty": "hard",
+      "question": "에스겔이 본 환상에서 네 생물은 무엇을 상징하는가?",
+      "options": [
+        "왕국의 권위",
+        "하나님의 전능함과 창조의 질서",
+        "백성의 회개",
+        "이스라엘의 승리"
+      ],
+      "correctIndex": 1,
+      "reference": "에스겔 1:5-10",
+      "explanation": "네 생물은 하나님의 능력과 창조 질서를 상징한다."
+    },
+    {
+      "id": "mc_hard_075",
+      "difficulty": "hard",
+      "question": "요한계시록에서 ‘일곱 봉인’이 열릴 때 나타나는 상징적 의미는 무엇인가?",
+      "options": [
+        "왕국의 확장",
+        "세상에 임하는 재앙과 심판",
+        "천사의 승리",
+        "이스라엘 회복"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 6:1-17",
+      "explanation": "일곱 봉인은 세상에 임할 재앙과 심판을 상징한다."
+    },
+     {
+      "id": "mc_hard_076",
+      "difficulty": "hard",
+      "question": "요한계시록에서 일곱 나팔이 울릴 때 나타나는 것은 무엇인가?",
+      "options": [
+        "왕국의 평화",
+        "세상의 재앙과 심판",
+        "이스라엘의 회복",
+        "천사의 축복"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 8:6-13",
+      "explanation": "일곱 나팔은 재앙과 심판을 나타낸다."
+    },
+    {
+      "id": "mc_hard_077",
+      "difficulty": "hard",
+      "question": "요셉이 이집트에서 총리가 된 후 형제들을 처음 맞이했을 때, 그들에게 요구한 것은 무엇인가?",
+      "options": [
+        "자신을 알아보게 하라",
+        "형제들을 감옥에 가두라",
+        "식량을 가져오라",
+        "이집트를 떠나라"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 42:1-3",
+      "explanation": "요셉은 식량을 구하러 온 형제들을 시험하며 요구했다."
+    },
+    {
+      "id": "mc_hard_078",
+      "difficulty": "hard",
+      "question": "사도 바울이 고린도 교회에 보낸 편지에서 강조한 중요한 주제는 무엇인가?",
+      "options": [
+        "믿음과 사랑",
+        "율법과 의",
+        "전쟁과 평화",
+        "예언과 기적"
+      ],
+      "correctIndex": 0,
+      "reference": "고린도전서 13장",
+      "explanation": "바울은 사랑의 중요성을 강조하며 믿음과 사랑을 함께 말한다."
+    },
+    {
+      "id": "mc_hard_079",
+      "difficulty": "hard",
+      "question": "사무엘상에서 사울 왕이 하나님의 명령을 어기고 아말렉 사람을 진멸하지 않은 결과는 무엇인가?",
+      "options": [
+        "왕국이 강화되었다",
+        "사울이 왕위에서 쫓겨났다",
+        "사울이 승리를 거두었다",
+        "이스라엘이 멸망했다"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 15:22-23",
+      "explanation": "사울은 하나님의 명령을 불순종하여 왕위 상실의 결과를 맞았다."
+    },
+    {
+      "id": "mc_hard_080",
+      "difficulty": "hard",
+      "question": "엘리야가 길르앗에서 아합과 바알 선지자들을 대결할 때 하나님은 어떤 기적을 보여주셨는가?",
+      "options": [
+        "하늘에서 불을 내려 제단을 태움",
+        "비를 내려 가뭄을 끝냄",
+        "바다를 가름",
+        "바알 선지자를 죽임"
+      ],
+      "correctIndex": 0,
+      "reference": "열왕기상 18:36-38",
+      "explanation": "하나님은 하늘에서 불을 내려 제단과 제물을 태우는 기적을 보여주셨다."
+    },
+    {
+      "id": "mc_hard_081",
+      "difficulty": "hard",
+      "question": "다니엘이 사자굴에서 구원받은 이유는 무엇인가?",
+      "options": [
+        "왕의 명령",
+        "하나님께 기도했기 때문",
+        "사자들이 배고팠기 때문",
+        "다른 선지자의 중재"
+      ],
+      "correctIndex": 1,
+      "reference": "다니엘 6:10-23",
+      "explanation": "다니엘이 하나님께 기도했기 때문에 사자굴에서 구원받았다."
+    },
+    {
+      "id": "mc_hard_082",
+      "difficulty": "hard",
+      "question": "요한계시록에서 새 예루살렘의 벽은 몇 개의 기초석으로 세워졌는가?",
+      "options": [
+        "7개",
+        "12개",
+        "14개",
+        "10개"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 21:14",
+      "explanation": "새 예루살렘의 벽은 12개의 기초석으로 세워졌다."
+    },
+    {
+      "id": "mc_hard_083",
+      "difficulty": "hard",
+      "question": "예레미야가 ‘유다의 포로’를 예언할 때, 주요 원인으로 지적한 것은 무엇인가?",
+      "options": [
+        "왕의 지혜 부족",
+        "백성의 죄와 우상숭배",
+        "이방 민족의 침략",
+        "기후 변화"
+      ],
+      "correctIndex": 1,
+      "reference": "예레미야 25:4-7",
+      "explanation": "유다의 포로는 백성의 죄와 우상숭배로 인해 발생한다고 예언했다."
+    },
+    {
+      "id": "mc_hard_084",
+      "difficulty": "hard",
+      "question": "에스겔서에서 성전의 회복과 영적 재생을 보여주는 상징적 장면은 무엇인가?",
+      "options": [
+        "마른 뼈의 부활",
+        "홍해 건넘",
+        "가나안 땅 정복",
+        "방주 건축"
+      ],
+      "correctIndex": 0,
+      "reference": "에스겔 37:1-14",
+      "explanation": "마른 뼈가 살아나는 환상은 이스라엘의 회복과 재생을 상징한다."
+    },
+    {
+      "id": "mc_hard_085",
+      "difficulty": "hard",
+      "question": "요한계시록에서 일곱 대접 재앙이 내릴 때, 첫 번째 재앙은 무엇과 관련이 있는가?",
+      "options": [
+        "바다",
+        "강과 물",
+        "하늘",
+        "땅"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 16:1-2",
+      "explanation": "첫 대접은 강과 물에 부어져 악인들에게 재앙이 내린다."
+    },
+    {
+      "id": "mc_hard_086",
+      "difficulty": "hard",
+      "question": "요셉이 꿈에서 형제들을 다스리는 장면을 해석했을 때, 어떤 결과가 나타났는가?",
+      "options": [
+        "형제들은 요셉을 배척했다",
+        "형제들이 이집트로 이주했다",
+        "형제들이 요셉에게 절했다",
+        "형제들이 전쟁을 일으켰다"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 42:6-7",
+      "explanation": "형제들은 요셉을 알아보고 절했다."
+    },
+    {
+      "id": "mc_hard_087",
+      "difficulty": "hard",
+      "question": "열왕기상에서 엘리야가 갈멜산에서 바알의 선지자와 대결한 후, 백성들은 무엇을 결심했는가?",
+      "options": [
+        "바알을 섬기기로 했다",
+        "여호와를 따르기로 했다",
+        "엘리야를 배척했다",
+        "다른 신을 만들었다"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 18:39",
+      "explanation": "백성들은 하나님 여호와를 따르기로 결심했다."
+    },
+    {
+      "id": "mc_hard_088",
+      "difficulty": "hard",
+      "question": "스바냐가 예언한 여호와의 날의 특징 중 하나는 무엇인가?",
+      "options": [
+        "즐거움과 축제",
+        "심판과 공의",
+        "평화와 화해",
+        "왕권 강화"
+      ],
+      "correctIndex": 1,
+      "reference": "스바냐 1:14-18",
+      "explanation": "여호와의 날은 심판과 공의를 강조한다."
+    },
+    {
+      "id": "mc_hard_089",
+      "difficulty": "hard",
+      "question": "아모스가 비판한 이스라엘 사회의 문제 중 하나는 무엇인가?",
+      "options": [
+        "부정과 억압",
+        "농업 부족",
+        "전쟁 실패",
+        "왕의 폭정"
+      ],
+      "correctIndex": 0,
+      "reference": "아모스 5:11-12",
+      "explanation": "아모스는 부정과 억압, 정의의 부재를 비판했다."
+    },
+    {
+      "id": "mc_hard_090",
+      "difficulty": "hard",
+      "question": "예레미야가 유다의 멸망을 예언하면서 사용한 상징물은 무엇인가?",
+      "options": [
+        "항아리",
+        "성문",
+        "보리",
+        "돌"
+      ],
+      "correctIndex": 0,
+      "reference": "예레미야 19:1-11",
+      "explanation": "깨진 항아리는 유다와 예루살렘의 멸망을 상징한다."
+    },
+    {
+      "id": "mc_hard_091",
+      "difficulty": "hard",
+      "question": "스가랴서에서 네 가지 병거의 색깔 중 하나가 검은색인데, 이것은 무엇을 의미하는가?",
+      "options": [
+        "전쟁",
+        "굶주림",
+        "평화",
+        "승리"
+      ],
+      "correctIndex": 1,
+      "reference": "스가랴 6:2",
+      "explanation": "검은 병거는 굶주림과 기근을 상징한다."
+    },
+    {
+      "id": "mc_hard_092",
+      "difficulty": "hard",
+      "question": "말라기서에서 여호와는 어떤 방식으로 백성에게 경고하시는가?",
+      "options": [
+        "제사를 흠 없게 드리지 않으면 심판",
+        "왕을 죽이신다",
+        "성전을 파괴한다",
+        "왕국을 외적에 맡긴다"
+      ],
+      "correctIndex": 0,
+      "reference": "말라기 1:6-8",
+      "explanation": "제사장이 흠 있는 제물을 드리면 하나님의 심판을 받는다고 경고한다."
+    },
+    {
+      "id": "mc_hard_093",
+      "difficulty": "hard",
+      "question": "요한계시록에서 어린 양이 가진 일곱 뿔과 일곱 눈은 무엇을 상징하는가?",
+      "options": [
+        "왕권과 능력",
+        "예언과 심판",
+        "이스라엘 회복",
+        "천사의 명령"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 5:6",
+      "explanation": "일곱 눈은 온 땅에 보내는 하나님의 예언과 심판을 상징한다."
+    },
+    {
+      "id": "mc_hard_094",
+      "difficulty": "hard",
+      "question": "에스겔서에서 하나님이 사람에게 말씀하시며 뼈를 살아나게 하신 장면은 어떤 교훈을 주는가?",
+      "options": [
+        "이스라엘의 회복과 소망",
+        "왕의 권위 강화",
+        "제사장의 역할",
+        "이방 민족과의 동맹"
+      ],
+      "correctIndex": 0,
+      "reference": "에스겔 37:1-14",
+      "explanation": "마른 뼈가 살아나는 환상은 이스라엘의 회복과 소망을 의미한다."
+    },
+    {
+      "id": "mc_hard_095",
+      "difficulty": "hard",
+      "question": "요한계시록에서 짐승과 거짓 선지자가 나타나는 이유는 무엇인가?",
+      "options": [
+        "왕국 건설",
+        "세상의 유혹과 시험",
+        "이스라엘 승리",
+        "천사의 사명"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 13장",
+      "explanation": "짐승과 거짓 선지자는 세상의 유혹과 시험을 상징한다."
+    },
+    {
+      "id": "mc_hard_096",
+      "difficulty": "hard",
+      "question": "사도 바울이 로마서에서 강조한 핵심 교리는 무엇인가?",
+      "options": [
+        "믿음으로 의롭게 됨",
+        "율법으로 구원됨",
+        "왕권 강화",
+        "제사장 중심"
+      ],
+      "correctIndex": 0,
+      "reference": "로마서 3:28",
+      "explanation": "바울은 믿음을 통해 의롭게 된다고 강조했다."
+    },
+    {
+      "id": "mc_hard_097",
+      "difficulty": "hard",
+      "question": "에스더가 하만의 음모를 폭로한 후, 유대인들은 무엇을 할 수 있게 되었는가?",
+      "options": [
+        "하만을 처벌하고 자신을 방어",
+        "왕에게 봉사",
+        "성전을 재건",
+        "나라를 떠남"
+      ],
+      "correctIndex": 0,
+      "reference": "에스더 8:11-14",
+      "explanation": "유대인들은 자신과 민족을 방어할 수 있는 권한을 얻었다."
+    },
+    {
+      "id": "mc_hard_098",
+      "difficulty": "hard",
+      "question": "사도행전에서 성령이 강림한 날, 제자들이 행한 중요한 행동은 무엇인가?",
+      "options": [
+        "다른 민족에게 복음을 전함",
+        "성전을 떠남",
+        "왕에게 항복",
+        "배교"
+      ],
+      "correctIndex": 0,
+      "reference": "사도행전 2:1-4",
+      "explanation": "성령이 임하자 제자들은 각 나라 사람들에게 복음을 전했다."
+    },
+    {
+      "id": "mc_hard_099",
+      "difficulty": "hard",
+      "question": "요한계시록에서 천사가 일곱 대접을 부을 때, 마지막 대접의 결과는 무엇인가?",
+      "options": [
+        "왕국의 평화",
+        "하나님의 심판 완성",
+        "이스라엘 회복",
+        "천사의 승리"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 16:17-21",
+      "explanation": "마지막 대접은 하나님의 심판을 완성한다."
+    },
+    {
+      "id": "mc_hard_100",
+      "difficulty": "hard",
+      "question": "에스겔서에서 하나님이 주신 새 마음과 새 영의 약속은 무엇을 의미하는가?",
+      "options": [
+        "이스라엘의 내적 회복과 순종",
+        "왕의 권력 강화",
+        "이방 민족 정복",
+        "성전 건축"
+      ],
+      "correctIndex": 0,
+      "reference": "에스겔 36:26-27",
+      "explanation": "하나님은 새 마음과 새 영으로 이스라엘을 내적으로 회복시키고 순종하게 하신다."
+    }
+  ]
+}

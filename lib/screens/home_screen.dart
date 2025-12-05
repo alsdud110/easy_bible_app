@@ -375,15 +375,14 @@ class _BentoGridState extends State<_BentoGrid>
                   ).animate(_cardAnimations[2]),
                   child: RepaintBoundary(
                     child: _BentoCard(
-                      title: '어성경',
-                      subtitle: 'Coming',
-                      icon: Icons.book_online_rounded,
+                      title: '성경퀴즈',
+                      subtitle: '재미있게',
+                      icon: Icons.quiz_rounded,
                       gradient: widget.isDark
-                          ? _CachedGradients.darkGrayGradient
-                          : _CachedGradients.lightGrayGradient,
+                          ? _CachedGradients.darkTertiaryGradient
+                          : _CachedGradients.lightTertiaryGradient,
                       height: 140,
-                      isGrayCard: true,
-                      onTap: () => _showComingSoonDialog(context),
+                      onTap: () => Navigator.of(context).pushNamed('/quiz'),
                     ),
                   ),
                 ),
@@ -410,49 +409,6 @@ class _BentoGridState extends State<_BentoGrid>
       ],
     );
   }
-
-  void _showComingSoonDialog(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: cs.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        title: Row(
-          children: [
-            Icon(Icons.construction_rounded, color: cs.primary),
-            const SizedBox(width: 12),
-            Text(
-              '준비 중',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: cs.onSurface,
-              ),
-            ),
-          ],
-        ),
-        content: Text(
-          '해당 메뉴는 준비 중입니다!',
-          style: TextStyle(color: cs.onSurface),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              '확인',
-              style: TextStyle(
-                color: cs.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 // 그래디언트 캐싱 (매번 생성하지 않음)
@@ -469,8 +425,8 @@ class _CachedGradients {
     end: Alignment.bottomRight,
   );
 
-  static final lightGrayGradient = LinearGradient(
-    colors: [Color(0xFFF3F4F6), Color(0xFFE5E7EB)],
+  static final lightTertiaryGradient = LinearGradient(
+    colors: [Color(0xFFEC4899), Color(0xFFF59E0B)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -487,8 +443,8 @@ class _CachedGradients {
     end: Alignment.bottomRight,
   );
 
-  static final darkGrayGradient = LinearGradient(
-    colors: [DarkColors.surface, DarkColors.card],
+  static final darkTertiaryGradient = LinearGradient(
+    colors: [Color(0xFFDB2777), Color(0xFFDC2626)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -514,7 +470,6 @@ class _BentoCard extends StatelessWidget {
   final Gradient gradient;
   final double height;
   final VoidCallback onTap;
-  final bool isGrayCard;
 
   const _BentoCard({
     required this.title,
@@ -523,14 +478,12 @@ class _BentoCard extends StatelessWidget {
     required this.gradient,
     required this.height,
     required this.onTap,
-    this.isGrayCard = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isGrayCard && !isDark ? LightColors.onSurface : Colors.white;
-    final iconColor = isGrayCard && !isDark ? LightColors.bodyMedium : Colors.white;
+    final textColor = Colors.white;
+    final iconColor = Colors.white;
 
     return Material(
       color: Colors.transparent,

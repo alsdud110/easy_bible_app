@@ -1,0 +1,804 @@
+{
+    "questions": [
+        {
+            "id": "ox_medium_001",
+            "difficulty": "medium",
+            "question": "모세는 가나안 땅에 들어가지 못했다.",
+            "answer": true,
+            "reference": "신명기 34:4-5",
+            "explanation": "모세는 느보 산에서 가나안을 바라만 보고 죽었습니다."
+        },
+        {
+            "id": "ox_medium_002",
+            "difficulty": "medium",
+            "question": "사무엘은 엘리 제사장에게서 자라며 하나님을 섬겼다.",
+            "answer": true,
+            "reference": "사무엘상 2:11",
+            "explanation": "한나가 사무엘을 엘리에게 맡겨 하나님을 섬기게 했습니다."
+        },
+        {
+            "id": "ox_medium_003",
+            "difficulty": "medium",
+            "question": "솔로몬의 아버지는 사울 왕이다.",
+            "answer": false,
+            "reference": "사무엘하 12:24",
+            "explanation": "솔로몬의 아버지는 다윗입니다."
+        },
+        {
+            "id": "ox_medium_004",
+            "difficulty": "medium",
+            "question": "요셉은 애굽에서 총리가 되었다.",
+            "answer": true,
+            "reference": "창세기 41:41",
+            "explanation": "바로가 요셉을 애굽의 총리로 세웠습니다."
+        },
+        {
+            "id": "ox_medium_005",
+            "difficulty": "medium",
+            "question": "다니엘의 세 친구는 풀무불에서 죽었다.",
+            "answer": false,
+            "reference": "다니엘 3:25",
+            "explanation": "하나님의 보호로 아무 상하지 않고 살아났습니다."
+        },
+        {
+            "id": "ox_medium_006",
+            "difficulty": "medium",
+            "question": "룻은 다윗 왕의 증조모이다.",
+            "answer": true,
+            "reference": "룻기 4:17",
+            "explanation": "룻은 오벳의 어머니이며 다윗의 증조모입니다."
+        },
+        {
+            "id": "ox_medium_007",
+            "difficulty": "medium",
+            "question": "엘리야는 바알 선지자들과 갈멜산에서 대결했다.",
+            "answer": true,
+            "reference": "열왕기상 18:19-40",
+            "explanation": "엘리야가 바알 선지자 450명과 대결했습니다."
+        },
+        {
+            "id": "ox_medium_008",
+            "difficulty": "medium",
+            "question": "사울 왕은 기름부음을 받은 첫 번째 이스라엘 왕이다.",
+            "answer": true,
+            "reference": "사무엘상 10:1",
+            "explanation": "사무엘이 사울에게 기름을 부어 첫 왕으로 세웠습니다."
+        },
+        {
+            "id": "ox_medium_009",
+            "difficulty": "medium",
+            "question": "에스더는 모세의 시대에 활동한 여인이다.",
+            "answer": false,
+            "reference": "에스더기 전체",
+            "explanation": "에스더는 페르시아 시대 인물로 모세 시대와 다릅니다."
+        },
+        {
+            "id": "ox_medium_010",
+            "difficulty": "medium",
+            "question": "여호수아는 모세 후에 이스라엘의 지도자가 되었다.",
+            "answer": true,
+            "reference": "여호수아 1:1-2",
+            "explanation": "모세의 후계자로 여호수아가 세워졌습니다."
+        },
+        {
+            "id": "ox_medium_011",
+            "difficulty": "medium",
+            "question": "삼손은 나실인으로 하나님께 구별된 사람이었다.",
+            "answer": true,
+            "reference": "사사기 13:5",
+            "explanation": "삼손은 태어나면서부터 나실인으로 구별되었습니다."
+        },
+        {
+            "id": "ox_medium_012",
+            "difficulty": "medium",
+            "question": "가인이 아벨을 죽인 이유는 질투 때문이었다.",
+            "answer": true,
+            "reference": "창세기 4:4-8",
+            "explanation": "하나님이 아벨의 제사를 받으시자 가인이 분노했습니다."
+        },
+        {
+            "id": "ox_medium_013",
+            "difficulty": "medium",
+            "question": "이스라엘 열두 지파 중 레위 지파는 기업을 분배받지 못했다.",
+            "answer": true,
+            "reference": "민수기 18:20",
+            "explanation": "레위 지파는 하나님이 기업이며, 땅의 분깃을 받지 않았습니다."
+        },
+        {
+            "id": "ox_medium_014",
+            "difficulty": "medium",
+            "question": "요한은 '사랑의 사도'로 불린다.",
+            "answer": true,
+            "reference": "요한일서 전체",
+            "explanation": "요한은 사랑을 강조하여 사랑의 사도라고 불립니다."
+        },
+        {
+            "id": "ox_medium_015",
+            "difficulty": "medium",
+            "question": "바나바는 '위로의 아들'이라는 뜻의 별명을 가진 인물이다.",
+            "answer": true,
+            "reference": "사도행전 4:36",
+            "explanation": "바나바는 위로의 아들이라는 뜻입니다."
+        },
+        {
+            "id": "ox_medium_016",
+            "difficulty": "medium",
+            "question": "솔로몬은 성전을 짓는 대신 성막을 보수하였다.",
+            "answer": false,
+            "reference": "열왕기상 6:1",
+            "explanation": "솔로몬은 성전을 건축한 왕입니다."
+        },
+        {
+            "id": "ox_medium_017",
+            "difficulty": "medium",
+            "question": "하나님은 아브라함에게 이삭을 제물로 바치라고 명령하셨다.",
+            "answer": true,
+            "reference": "창세기 22:2",
+            "explanation": "하나님은 아브라함의 믿음을 시험하기 위해 이삭을 바치라 하셨습니다."
+        },
+        {
+            "id": "ox_medium_018",
+            "difficulty": "medium",
+            "question": "야곱은 형 에서의 장자권을 팥죽과 교환했다.",
+            "answer": true,
+            "reference": "창세기 25:33-34",
+            "explanation": "에서가 팥죽을 먹기 위해 장자권을 팔았습니다."
+        },
+        {
+            "id": "ox_medium_019",
+            "difficulty": "medium",
+            "question": "예수님은 33세에 승천하셨다.",
+            "answer": false,
+            "reference": "사도행전 1:9",
+            "explanation": "정확한 나이는 기록되지 않았으며 전승으로 약 33세라 알려졌을 뿐입니다."
+        },
+        {
+            "id": "ox_medium_020",
+            "difficulty": "medium",
+            "question": "요나는 니느웨를 피하려다 다시스로 가는 배를 탔다.",
+            "answer": true,
+            "reference": "요나 1:3",
+            "explanation": "요나는 다시스로 도망가려다 풍랑을 만났습니다."
+        },
+        {
+            "id": "ox_medium_021",
+            "difficulty": "medium",
+            "question": "베드로는 예수님을 세 번 부인했다.",
+            "answer": true,
+            "reference": "마태복음 26:69-75",
+            "explanation": "예수님이 잡히시던 날 베드로는 예수님을 세 번 부인했습니다."
+        },
+        {
+            "id": "ox_medium_022",
+            "difficulty": "medium",
+            "question": "다니엘은 바벨론에서 높은 관직을 맡았다.",
+            "answer": true,
+            "reference": "다니엘 2:48",
+            "explanation": "왕이 다니엘에게 높은 직책을 주어 바벨론을 다스리게 했습니다."
+        },
+        {
+            "id": "ox_medium_023",
+            "difficulty": "medium",
+            "question": "엘리야는 불수레를 타고 하늘로 올라갔고, 엘리사는 그 뒤를 이었다.",
+            "answer": true,
+            "reference": "열왕기하 2:11-15",
+            "explanation": "엘리야가 하늘로 승천한 후 엘리사가 그의 사역을 이어갔습니다."
+        },
+        {
+            "id": "ox_medium_024",
+            "difficulty": "medium",
+            "question": "십계명은 하나님이 여호수아에게 주신 법이다.",
+            "answer": false,
+            "reference": "출애굽기 20장",
+            "explanation": "십계명은 모세에게 주어졌습니다."
+        },
+        {
+            "id": "ox_medium_025",
+            "difficulty": "medium",
+            "question": "솔로몬의 지혜는 하나님께서 그에게 특별히 주신 것이다.",
+            "answer": true,
+            "reference": "열왕기상 3:12",
+            "explanation": "하나님이 솔로몬에게 지혜를 주셨다고 기록되어 있습니다."
+        },
+        {
+            "id": "ox_medium_026",
+            "difficulty": "medium",
+            "question": "사도행전은 예수님의 공생애와 병 고치는 사역을 주로 기록한 책이다.",
+            "answer": false,
+            "reference": "사도행전 전체",
+            "explanation": "사도행전은 초대교회의 시작과 사도들의 사역을 기록합니다."
+        },
+        {
+            "id": "ox_medium_027",
+            "difficulty": "medium",
+            "question": "바울과 바나바는 함께 첫 번째 전도 여행을 떠났다.",
+            "answer": true,
+            "reference": "사도행전 13장",
+            "explanation": "바울과 바나바는 함께 1차 선교 여행을 시작했습니다."
+        },
+        {
+            "id": "ox_medium_028",
+            "difficulty": "medium",
+            "question": "요한계시록은 사도 바울이 기록하였다.",
+            "answer": false,
+            "reference": "요한계시록 1:1",
+            "explanation": "요한계시록은 전통적으로 사도 요한이 기록한 것으로 알려져 있습니다."
+        },
+        {
+            "id": "ox_medium_029",
+            "difficulty": "medium",
+            "question": "에스더는 유대 민족을 구하는 데 중요한 역할을 했다.",
+            "answer": true,
+            "reference": "에스더 4~7장",
+            "explanation": "에스더는 왕에게 나아가 유대 민족을 구했습니다."
+        },
+        {
+            "id": "ox_medium_030",
+            "difficulty": "medium",
+            "question": "야곱은 하나님의 축복을 받은 후 '이스라엘'이라는 새 이름을 받았다.",
+            "answer": true,
+            "reference": "창세기 32:28",
+            "explanation": "하나님이 야곱에게 이스라엘이라는 이름을 주셨습니다."
+        },
+        {
+            "id": "ox_medium_031",
+            "difficulty": "medium",
+            "question": "사무엘상에는 사무엘, 사울, 다윗의 이야기가 모두 등장한다.",
+            "answer": true,
+            "reference": "사무엘상 전체",
+            "explanation": "사무엘상은 세 인물의 초기 이야기들을 다룹니다."
+        },
+        {
+            "id": "ox_medium_032",
+            "difficulty": "medium",
+            "question": "다윗은 솔로몬의 아들이다.",
+            "answer": false,
+            "reference": "열왕기상 1:11-12",
+            "explanation": "솔로몬이 다윗의 아들입니다. (반대)"
+        },
+        {
+            "id": "ox_medium_033",
+            "difficulty": "medium",
+            "question": "전통적으로 요한복음과 요한계시록은 같은 저자가 기록한 것으로 여겨진다.",
+            "answer": true,
+            "reference": "초기 교회 전통",
+            "explanation": "전통적으로 사도 요한이 두 책을 기록한 것으로 알려져 있습니다."
+        },
+        {
+            "id": "ox_medium_034",
+            "difficulty": "medium",
+            "question": "예수의 양부 요셉은 다윗의 후손으로 기록된다.",
+            "answer": true,
+            "reference": "마태복음 1장",
+            "explanation": "족보에서 요셉은 다윗의 후손으로 나옵니다."
+        },
+        {
+            "id": "ox_medium_035",
+            "difficulty": "medium",
+            "question": "요한 마가는 바울과 바나바의 전도여행에 참여한 적이 있다.",
+            "answer": true,
+            "reference": "사도행전 13:5, 13",
+            "explanation": "요한 마가가 사역에 함께 했다가 도중에 돌아갔습니다."
+        },
+        {
+            "id": "ox_medium_036",
+            "difficulty": "medium",
+            "question": "가인은 야곱의 형으로, 동생을 시기하여 죽였다.",
+            "answer": false,
+            "reference": "창세기 4장",
+            "explanation": "가인은 아벨의 형이며 야곱과는 시대가 다릅니다."
+        },
+        {
+            "id": "ox_medium_037",
+            "difficulty": "medium",
+            "question": "이스라엘의 첫 번째 왕은 사울이다.",
+            "answer": true,
+            "reference": "사무엘상 9~10장",
+            "explanation": "사울이 이스라엘의 첫 왕으로 세워졌습니다."
+        },
+        {
+            "id": "ox_medium_038",
+            "difficulty": "medium",
+            "question": "요셉은 애굽으로 팔려간 뒤 곧바로 총리가 되었다.",
+            "answer": false,
+            "reference": "창세기 39~41장",
+            "explanation": "요셉은 노예 → 감옥 → 총리 순으로 오랜 세월을 거쳤습니다."
+        },
+        {
+            "id": "ox_medium_039",
+            "difficulty": "medium",
+            "question": "엘리야는 갈멜산에서 바알 선지자들과 대결한 적이 있다.",
+            "answer": true,
+            "reference": "열왕기상 18장",
+            "explanation": "엘리야는 갈멜산에서 바알 선지자 450명과 대결했습니다."
+        },
+        {
+            "id": "ox_medium_040",
+            "difficulty": "medium",
+            "question": "모세는 이집트의 바로의 딸에게 입양되어 왕궁에서 자랐다.",
+            "answer": true,
+            "reference": "출애굽기 2:5-10",
+            "explanation": "모세는 바로의 딸에게 길러졌습니다."
+        },
+        {
+            "id": "ox_medium_041",
+            "difficulty": "medium",
+            "question": "요나가 도망가려 탈려고 했던 배는 다시스로 가는 배였다.",
+            "answer": true,
+            "reference": "요나 1:3",
+            "explanation": "요나는 여호와의 얼굴을 피하려고 다시스로 도망가려 했습니다."
+        },
+        {
+            "id": "ox_medium_042",
+            "difficulty": "medium",
+            "question": "룻은 다윗의 증조모가 된다.",
+            "answer": true,
+            "reference": "룻기 4:17",
+            "explanation": "룻의 아들 오벳이 이새의 아버지이며, 다윗의 조상입니다."
+        },
+        {
+            "id": "ox_medium_043",
+            "difficulty": "medium",
+            "question": "예수님을 끝까지 버리지 않은 제자는 도마였다.",
+            "answer": false,
+            "reference": "요한복음 20장",
+            "explanation": "도마는 의심한 제자로 유명하며, 버리지 않은 제자는 요한이었습니다."
+        },
+        {
+            "id": "ox_medium_044",
+            "difficulty": "medium",
+            "question": "사울 왕은 다윗을 처음 볼 때부터 미워하였다.",
+            "answer": false,
+            "reference": "사무엘상 16~18장",
+            "explanation": "처음에는 다윗을 총애했으나 후에 시기하여 미워했습니다."
+        },
+        {
+            "id": "ox_medium_045",
+            "difficulty": "medium",
+            "question": "예수님은 광야에서 40일 동안 금식하셨다.",
+            "answer": true,
+            "reference": "마태복음 4:1-2",
+            "explanation": "예수님은 시험을 받으시기 전 40일 금식하셨습니다."
+        },
+        {
+            "id": "ox_medium_046",
+            "difficulty": "medium",
+            "question": "에돔 사람 에서는 야곱의 형이다.",
+            "answer": true,
+            "reference": "창세기 25:25-26",
+            "explanation": "에서는 먼저 태어나 야곱의 형입니다."
+        },
+        {
+            "id": "ox_medium_047",
+            "difficulty": "medium",
+            "question": "바울은 감옥에 갇힌 적이 없었다.",
+            "answer": false,
+            "reference": "사도행전 16:23-26 등",
+            "explanation": "바울은 여러 차례 감옥에 갇힌 경험이 있습니다."
+        },
+        {
+            "id": "ox_medium_048",
+            "difficulty": "medium",
+            "question": "솔로몬 성전은 모세가 광야에서 만든 성막을 그대로 확장한 것이다.",
+            "answer": false,
+            "reference": "열왕기상 6장",
+            "explanation": "솔로몬 성전은 완전히 새로운 건축물로 지어졌습니다."
+        },
+        {
+            "id": "ox_medium_049",
+            "difficulty": "medium",
+            "question": "아브라함은 롯의 삼촌이다.",
+            "answer": true,
+            "reference": "창세기 11:27",
+            "explanation": "롯은 아브라함의 조카입니다."
+        },
+        {
+            "id": "ox_medium_050",
+            "difficulty": "medium",
+            "question": "모세는 요단강을 건너 약속의 땅에 들어갔다.",
+            "answer": false,
+            "reference": "신명기 34:4-5",
+            "explanation": "모세는 약속의 땅에 들어가지 못하고 느보 산에서 죽었습니다."
+        },
+        {
+            "id": "ox_medium_051",
+            "difficulty": "medium",
+            "question": "삼손의 힘은 그의 머리카락이 잘리지 않는 데서 비롯되었다.",
+            "answer": true,
+            "reference": "사사기 16장",
+            "explanation": "삼손은 나실인으로 머리카락이 힘의 상징이었습니다."
+        },
+        {
+            "id": "ox_medium_052",
+            "difficulty": "medium",
+            "question": "엘리 제사장의 두 아들은 하나님을 경외하고 성전 봉사를 충성스럽게 했다.",
+            "answer": false,
+            "reference": "사무엘상 2:12",
+            "explanation": "엘리의 아들들은 행실이 나빠 하나님의 벌을 받았습니다."
+        },
+        {
+            "id": "ox_medium_053",
+            "difficulty": "medium",
+            "question": "드보라는 이스라엘의 사사로 활동한 인물이다.",
+            "answer": true,
+            "reference": "사사기 4장",
+            "explanation": "드보라는 여사사로서 이스라엘을 다스렸습니다."
+        },
+        {
+            "id": "ox_medium_054",
+            "difficulty": "medium",
+            "question": "요셉은 바로의 꿈을 해석한 후 애굽의 총리가 되었다.",
+            "answer": true,
+            "reference": "창세기 41장",
+            "explanation": "요셉은 꿈 해석 후 애굽의 총리로 임명되었습니다."
+        },
+        {
+            "id": "ox_medium_055",
+            "difficulty": "medium",
+            "question": "사무엘은 사울을 왕으로 세우는 기름부음을 한 인물이다.",
+            "answer": true,
+            "reference": "사무엘상 10:1",
+            "explanation": "사무엘이 사울에게 기름을 부었습니다."
+        },
+        {
+            "id": "ox_medium_056",
+            "difficulty": "medium",
+            "question": "요한은 예수님을 소개하며 '보라 하나님의 어린양이로다'라고 말했다.",
+            "answer": true,
+            "reference": "요한복음 1:29",
+            "explanation": "세례 요한이 예수님을 이렇게 소개했습니다."
+        },
+        {
+            "id": "ox_medium_057",
+            "difficulty": "medium",
+            "question": "이스라엘이 홍해를 건널 때 물이 갈라진 기적이 있었다.",
+            "answer": true,
+            "reference": "출애굽기 14장",
+            "explanation": "하나님이 홍해를 갈라 이스라엘이 건넜습니다."
+        },
+        {
+            "id": "ox_medium_058",
+            "difficulty": "medium",
+            "question": "요나가 큰 물고기에게 삼켜져 있었던 기간은 5일이다.",
+            "answer": false,
+            "reference": "요나 1:17",
+            "explanation": "요나는 3일 밤낮 물고기 뱃속에 있었습니다."
+        },
+        {
+            "id": "ox_medium_059",
+            "difficulty": "medium",
+            "question": "예수님이 행하신 첫 번째 기적은 맹인의 눈을 뜨게 한 것이다.",
+            "answer": false,
+            "reference": "요한복음 2:1-11",
+            "explanation": "예수님의 첫 기적은 가나 혼인잔치에서 물을 포도주로 바꾼 것입니다."
+        },
+        {
+            "id": "ox_medium_060",
+            "difficulty": "medium",
+            "question": "요한계시록은 신약성경의 마지막 책이다.",
+            "answer": true,
+            "reference": "요한계시록 전체",
+            "explanation": "성경 배열에서 요한계시록이 마지막 책입니다."
+        },
+        {
+            "id": "ox_medium_061",
+            "difficulty": "medium",
+            "question": "사도 바울은 원래 바리새인이었다.",
+            "answer": true,
+            "reference": "빌립보서 3:5",
+            "explanation": "바울은 회심 이전 바리새인으로 열심 있는 사람이었습니다."
+        },
+        {
+            "id": "ox_medium_062",
+            "difficulty": "medium",
+            "question": "야곱은 형 에서에게 장자의 명분을 거저 주었다.",
+            "answer": false,
+            "reference": "창세기 25:29-34",
+            "explanation": "에서가 팥죽 한 그릇에 장자의 명분을 판 것입니다."
+        },
+        {
+            "id": "ox_medium_063",
+            "difficulty": "medium",
+            "question": "바울과 바나바는 1차 선교 여행 후에도 계속 함께 동행했다.",
+            "answer": false,
+            "reference": "사도행전 15:39-40",
+            "explanation": "마가 요한 문제로 다투어 바울과 바나바가 헤어졌습니다."
+        },
+        {
+            "id": "ox_medium_064",
+            "difficulty": "medium",
+            "question": "솔로몬이 지은 성전은 바벨론에 의해 파괴되었다.",
+            "answer": true,
+            "reference": "열왕기하 25장",
+            "explanation": "바벨론이 예루살렘을 침략할 때 솔로몬 성전이 파괴되었습니다."
+        },
+        {
+            "id": "ox_medium_065",
+            "difficulty": "medium",
+            "question": "요나가 니느웨에서 전한 메시지는 '회개하라, 70일 후에 무너진다'였다.",
+            "answer": false,
+            "reference": "요나 3:4",
+            "explanation": "요나는 '사십 일이 지나면 니느웨가 무너진다'라고 선포했습니다."
+        },
+        {
+            "id": "ox_medium_066",
+            "difficulty": "medium",
+            "question": "아브라함은 소돔과 고모라에 대한 하나님의 심판을 듣고 중보기도 했다.",
+            "answer": true,
+            "reference": "창세기 18:22-33",
+            "explanation": "아브라함은 의인 10명만 있어도 멸망시키지 말아달라고 하나님께 간구했습니다."
+        },
+        {
+            "id": "ox_medium_067",
+            "difficulty": "medium",
+            "question": "예수님의 제자 마태는 세리 출신이었다.",
+            "answer": true,
+            "reference": "마태복음 9:9",
+            "explanation": "마태는 세관에 앉아 있던 세리였습니다."
+        },
+        {
+            "id": "ox_medium_068",
+            "difficulty": "medium",
+            "question": "요셉의 아버지는 야곱이며, 요셉은 그의 첫째 아들이다.",
+            "answer": false,
+            "reference": "창세기 29–30장",
+            "explanation": "요셉은 야곱의 열한 번째 아들이며 라헬의 첫째 아들입니다."
+        },
+        {
+            "id": "ox_medium_069",
+            "difficulty": "medium",
+            "question": "다윗은 사울왕을 피하여 블레셋 지역으로 도망간 적이 있다.",
+            "answer": true,
+            "reference": "사무엘상 27:1",
+            "explanation": "사울의 추격을 피해 아기스 왕에게로 도망갔습니다."
+        },
+        {
+            "id": "ox_medium_070",
+            "difficulty": "medium",
+            "question": "엘리야는 갈멜산에서 800명의 바알 선지자와 싸웠다.",
+            "answer": false,
+            "reference": "열왕기상 18:19-40",
+            "explanation": "바알 선지자 450명, 아세라 선지자 400명으로 총 850명입니다."
+        },
+        {
+            "id": "ox_medium_071",
+            "difficulty": "medium",
+            "question": "야곱은 벧엘에서 하나님을 만나 이름이 '이스라엘'로 바뀌었다.",
+            "answer": true,
+            "reference": "창세기 32:28",
+            "explanation": "야곱은 하나님과 씨름한 후 '이스라엘'이라는 이름을 받았습니다."
+        },
+        {
+            "id": "ox_medium_072",
+            "difficulty": "medium",
+            "question": "사도행전의 저자는 누가이다.",
+            "answer": true,
+            "reference": "사도행전 전체",
+            "explanation": "누가복음과 사도행전을 같은 저자가 기록했습니다."
+        },
+        {
+            "id": "ox_medium_073",
+            "difficulty": "medium",
+            "question": "솔로몬은 하나님께 부귀와 장수만을 구했다.",
+            "answer": false,
+            "reference": "열왕기상 3:9-13",
+            "explanation": "솔로몬은 지혜를 구했고, 하나님이 부와 영광은 추가로 주셨습니다."
+        },
+        {
+            "id": "ox_medium_074",
+            "difficulty": "medium",
+            "question": "요한계시록은 사도 요한이 밧모섬에서 기록한 책이다.",
+            "answer": true,
+            "reference": "요한계시록 1:9",
+            "explanation": "사도 요한이 밧모섬에서 환상을 보고 기록한 책입니다."
+        },
+        {
+            "id": "ox_medium_075",
+            "difficulty": "medium",
+            "question": "에서는 야곱보다 먼저 태어난 쌍둥이 동생이다.",
+            "answer": false,
+            "reference": "창세기 25:24-26",
+            "explanation": "에서는 쌍둥이 중 첫째이며, 야곱이 둘째입니다."
+        },
+        {
+            "id": "ox_medium_076",
+            "difficulty": "medium",
+            "question": "사도 바울의 로마서, 고린도전후서 등은 옥중서신이다.",
+            "answer": false,
+            "reference": "에베소서/골로새서/빌립보서/빌레몬서",
+            "explanation": "옥중서신은 에베소서·골로새서·빌립보서·빌레몬서입니다."
+        },
+        {
+            "id": "ox_medium_077",
+            "difficulty": "medium",
+            "question": "삼손은 블레셋 여인 들릴라에게 속아 힘의 비밀이 드러났다.",
+            "answer": true,
+            "reference": "사사기 16장",
+            "explanation": "들릴라가 은을 받고 삼손을 배신했습니다."
+        },
+        {
+            "id": "ox_medium_078",
+            "difficulty": "medium",
+            "question": "요한복음은 공관복음서에 포함된다.",
+            "answer": false,
+            "reference": "복음서 구조",
+            "explanation": "공관복음은 마태·마가·누가복음이며 요한은 포함되지 않습니다."
+        },
+        {
+            "id": "ox_medium_079",
+            "difficulty": "medium",
+            "question": "이스라엘 백성이 광야에서 만나와 메추라기를 먹었다.",
+            "answer": true,
+            "reference": "출애굽기 16장",
+            "explanation": "하나님께서 만나와 메추라기를 내려주셨습니다."
+        },
+        {
+            "id": "ox_medium_080",
+            "difficulty": "medium",
+            "question": "예수님은 제자 도마를 처음 만나자마자 '사울아 사울아'라고 불렀다.",
+            "answer": false,
+            "reference": "요한복음 20장, 사도행전 9장",
+            "explanation": "‘사울아 사울아’는 예수님이 바울에게 하신 말씀입니다."
+        },
+        {
+            "id": "ox_medium_081",
+            "difficulty": "medium",
+            "question": "요셉은 꿈을 해석하는 능력 때문에 애굽의 총리가 되었다.",
+            "answer": true,
+            "reference": "창세기 41장",
+            "explanation": "요셉은 바로의 꿈을 해석함으로써 총리로 임명되었습니다."
+        },
+        {
+            "id": "ox_medium_082",
+            "difficulty": "medium",
+            "question": "아브라함은 이삭을 번제로 드리려고 할 때 마지막 순간에 하나님이 말리셨다.",
+            "answer": true,
+            "reference": "창세기 22:11-12",
+            "explanation": "하나님이 아브라함을 불러 이삭을 죽이지 않게 하셨습니다."
+        },
+        {
+            "id": "ox_medium_083",
+            "difficulty": "medium",
+            "question": "예수님께서 무리 5천 명을 먹이신 기적은 빵 다섯 개와 생선 다섯 마리로 이루어졌다.",
+            "answer": false,
+            "reference": "마태복음 14:17-21",
+            "explanation": "오병이어는 '떡 다섯 개와 물고기 두 마리'입니다."
+        },
+        {
+            "id": "ox_medium_084",
+            "difficulty": "medium",
+            "question": "예레미야는 '눈물의 선지자'로 불린다.",
+            "answer": true,
+            "reference": "예레미야서 전체",
+            "explanation": "이스라엘을 향한 하나님의 심판을 예언하며 많이 슬피 울었기에 붙여진 별칭입니다."
+        },
+        {
+            "id": "ox_medium_085",
+            "difficulty": "medium",
+            "question": "바울은 로마에서 순교하기 전 예루살렘에서 2년 동안 감금되어 있었다.",
+            "answer": true,
+            "reference": "사도행전 24:27",
+            "explanation": "벨릭스 총독이 바울을 2년간 가두어 두었습니다."
+        },
+        {
+            "id": "ox_medium_086",
+            "difficulty": "medium",
+            "question": "요한복음을 기록한 요한은 세례 요한이다.",
+            "answer": false,
+            "reference": "요한복음 전체",
+            "explanation": "요한복음의 저자는 예수님의 제자 요한(사도 요한)입니다."
+        },
+        {
+            "id": "ox_medium_087",
+            "difficulty": "medium",
+            "question": "솔로몬은 성전뿐 아니라 왕궁과 여러 건축 사업까지 수행했다.",
+            "answer": true,
+            "reference": "열왕기상 9:1",
+            "explanation": "솔로몬은 성전 외에도 왕궁과 여러 도시를 건설했습니다."
+        },
+        {
+            "id": "ox_medium_088",
+            "difficulty": "medium",
+            "question": "야곱이 사랑한 아내는 최초에 레아였다.",
+            "answer": false,
+            "reference": "창세기 29장",
+            "explanation": "야곱이 사랑한 사람은 라헬이었고, 라반이 속여 레아를 먼저 주었습니다."
+        },
+        {
+            "id": "ox_medium_089",
+            "difficulty": "medium",
+            "question": "이스라엘 백성은 홍해를 건널 때 요단강도 동시에 갈라졌다.",
+            "answer": false,
+            "reference": "출애굽기 14장 / 여호수아 3장",
+            "explanation": "홍해와 요단강은 서로 다른 시기, 다른 기적입니다."
+        },
+        {
+            "id": "ox_medium_090",
+            "difficulty": "medium",
+            "question": "사무엘은 엘리 제사장의 아들이다.",
+            "answer": false,
+            "reference": "사무엘상 1장",
+            "explanation": "사무엘의 아버지는 엘가나입니다. 사무엘은 엘리 밑에서 자랐습니다."
+        },
+        {
+            "id": "ox_medium_091",
+            "difficulty": "medium",
+            "question": "엘리사는 엘리야의 겉옷을 받고 그의 뒤를 이어 선지자가 되었다.",
+            "answer": true,
+            "reference": "열왕기하 2:13-15",
+            "explanation": "엘리야가 승천하면서 겉옷이 엘리사에게 넘어갔습니다."
+        },
+        {
+            "id": "ox_medium_092",
+            "difficulty": "medium",
+            "question": "바벨론 포로 기간은 정확히 100년이었다.",
+            "answer": false,
+            "reference": "예레미야 25:11-12",
+            "explanation": "바벨론 포로 기간은 약 70년입니다."
+        },
+        {
+            "id": "ox_medium_093",
+            "difficulty": "medium",
+            "question": "요한계시록에는 일곱 교회에 보내는 편지가 포함되어 있다.",
+            "answer": true,
+            "reference": "요한계시록 2-3장",
+            "explanation": "에베소, 서머나 등 일곱 교회에게 주신 메시지가 기록되어 있습니다."
+        },
+        {
+            "id": "ox_medium_094",
+            "difficulty": "medium",
+            "question": "예수님을 배반한 제자 가룟 유다는 세리 출신이다.",
+            "answer": false,
+            "reference": "마태복음 10장",
+            "explanation": "세리 출신은 마태입니다. 유다는 돈궤를 맡았던 제자입니다."
+        },
+        {
+            "id": "ox_medium_095",
+            "difficulty": "medium",
+            "question": "요셉의 형제 베냐민은 요셉보다 나이가 많다.",
+            "answer": false,
+            "reference": "창세기 35:18",
+            "explanation": "베냐민은 요셉의 친동생이며 요셉보다 어립니다."
+        },
+        {
+            "id": "ox_medium_096",
+            "difficulty": "medium",
+            "question": "예수님을 십자가에 못 박으라고 외친 무리는 유월절 다음날 모인 사람들이다.",
+            "answer": false,
+            "reference": "마태복음 27장",
+            "explanation": "그 무리는 유월절 동안 모여 있던 사람들입니다."
+        },
+        {
+            "id": "ox_medium_097",
+            "difficulty": "medium",
+            "question": "예수님이 부활하신 후 가장 먼저 나타난 제자는 베드로이다.",
+            "answer": false,
+            "reference": "요한복음 20장",
+            "explanation": "예수님을 가장 먼저 본 사람은 막달라 마리아입니다."
+        },
+        {
+            "id": "ox_medium_098",
+            "difficulty": "medium",
+            "question": "모세는 홍해가 갈라지기 전 지팡이를 들어 물 위로 내밀었다.",
+            "answer": true,
+            "reference": "출애굽기 14:16",
+            "explanation": "하나님의 명령에 따라 지팡이를 들어 바다 위로 내밀었습니다."
+        },
+        {
+            "id": "ox_medium_099",
+            "difficulty": "medium",
+            "question": "예수님은 세례 요한보다 나이가 많다.",
+            "answer": false,
+            "reference": "누가복음 1:36",
+            "explanation": "성경에 따르면 세례 요한은 예수님보다 약 6개월 먼저 태어났습니다."
+        },
+        {
+            "id": "ox_medium_100",
+            "difficulty": "medium",
+            "question": "다윗은 골리앗을 단 한 번의 돌팔매로 쓰러뜨렸다.",
+            "answer": true,
+            "reference": "사무엘상 17:49",
+            "explanation": "다윗이 던진 돌이 골리앗의 이마에 박혀 쓰러졌습니다."
+        }
+    ]
+}

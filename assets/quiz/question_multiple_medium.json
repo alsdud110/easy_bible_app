@@ -1,0 +1,1404 @@
+{
+  "questions": [
+    {
+      "id": "mc_medium_001",
+      "difficulty": "medium",
+      "question": "다윗이 사울을 피하여 먹을 것을 구하며 제사장에게서 받은 떡은 무엇인가?",
+      "options": [
+        "무교병",
+        "진설병",
+        "보리떡",
+        "기름떡"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 21:6",
+      "explanation": "제사장은 다윗에게 진설병을 주었습니다."
+    },
+    {
+      "id": "mc_medium_002",
+      "difficulty": "medium",
+      "question": "솔로몬의 성전 건축 기간은 몇 년인가?",
+      "options": [
+        "3년",
+        "5년",
+        "7년",
+        "10년"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 6:38",
+      "explanation": "솔로몬의 성전 건축은 7년 걸렸습니다."
+    },
+    {
+      "id": "mc_medium_003",
+      "difficulty": "medium",
+      "question": "사무엘의 어머니 한나는 누구에게 쫓기듯 억울한 마음을 토로했는가?",
+      "options": [
+        "브나하",
+        "나아마",
+        "라헬",
+        "빌하"
+      ],
+      "correctIndex": 0,
+      "reference": "사무엘상 1:6",
+      "explanation": "브나하가 한나를 괴롭혔습니다."
+    },
+    {
+      "id": "mc_medium_004",
+      "difficulty": "medium",
+      "question": "요셉이 해석한 떡 굽는 관원의 꿈은 어떤 결말을 맞는가?",
+      "options": [
+        "석방됨",
+        "파라오의 측근으로 승진",
+        "사형 당함",
+        "타국으로 망명"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 40:19",
+      "explanation": "사흘 후 관원장은 사형을 당합니다."
+    },
+    {
+      "id": "mc_medium_005",
+      "difficulty": "medium",
+      "question": "모세가 ‘반석을 쳐서’ 물을 낸 장소는?",
+      "options": [
+        "르비딤",
+        "시내산",
+        "여리고 평지",
+        "가나안 남부"
+      ],
+      "correctIndex": 0,
+      "reference": "출애굽기 17:6",
+      "explanation": "모세는 르비딤에서 반석을 쳐 물을 냈습니다."
+    },
+    {
+      "id": "mc_medium_006",
+      "difficulty": "medium",
+      "question": "룻이 처음으로 보아스를 만난 장소는?",
+      "options": [
+        "성문 앞",
+        "보아스의 집",
+        "보리밭",
+        "포도원"
+      ],
+      "correctIndex": 2,
+      "reference": "룻기 2:3",
+      "explanation": "룻은 보아스의 밭에서 이삭을 주우며 그를 만났습니다."
+    },
+    {
+      "id": "mc_medium_007",
+      "difficulty": "medium",
+      "question": "엘리야가 갈멜산에서 대결한 우상의 이름은?",
+      "options": [
+        "다곤",
+        "바알",
+        "몰렉",
+        "아세라"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 18:19",
+      "explanation": "엘리야는 바알과 아세라 선지자들과 대결했습니다."
+    },
+    {
+      "id": "mc_medium_008",
+      "difficulty": "medium",
+      "question": "예수님의 첫 번째 기적은 무엇인가?",
+      "options": [
+        "오병이어",
+        "죽은 자 살림",
+        "바다 위 걸음",
+        "물로 포도주 만듦"
+      ],
+      "correctIndex": 3,
+      "reference": "요한복음 2:1-11",
+      "explanation": "가나 혼인잔치에서 물로 포도주를 만드신 것이 첫 기적입니다."
+    },
+    {
+      "id": "mc_medium_009",
+      "difficulty": "medium",
+      "question": "요한계시록에서 언급되는 네 생물 중 등장하지 않는 특징은?",
+      "options": [
+        "사자 같은 모습",
+        "송아지 같은 모습",
+        "사람 같은 모습",
+        "늑대 같은 모습"
+      ],
+      "correctIndex": 3,
+      "reference": "요한계시록 4:7",
+      "explanation": "늑대 모습의 생물은 언급되지 않습니다."
+    },
+    {
+      "id": "mc_medium_010",
+      "difficulty": "medium",
+      "question": "엘리사가 바알 선지자들을 조롱할 때 사용한 말은?",
+      "options": [
+        "그가 잠들었다",
+        "그가 여행 중이다",
+        "그가 바쁘다",
+        "그가 병들었다"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 18:27",
+      "explanation": "엘리야는 ‘그가 잠시 길을 갔는지’ 조롱했습니다."
+    },
+    {
+      "id": "mc_medium_011",
+      "difficulty": "medium",
+      "question": "다니엘이 사자굴에 던져진 이유는 무엇인가?",
+      "options": [
+        "왕에게 복종하지 않아서",
+        "금지된 기도를 했기 때문에",
+        "우상을 부쉈기 때문에",
+        "밀고를 당해 도망쳤기 때문에"
+      ],
+      "correctIndex": 1,
+      "reference": "다니엘 6:10",
+      "explanation": "다니엘은 금지된 기도를 드렸다가 사자굴에 던져졌습니다."
+    },
+    {
+      "id": "mc_medium_012",
+      "difficulty": "medium",
+      "question": "스데반이 순교할 때 돌을 던진 사람들의 증인 옷을 지킨 청년은?",
+      "options": [
+        "바나바",
+        "사울",
+        "빌립",
+        "베드로"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 7:58",
+      "explanation": "사울이 그들의 옷을 지키고 있었습니다."
+    },
+    {
+      "id": "mc_medium_013",
+      "difficulty": "medium",
+      "question": "하나님이 여호수아에게 강하고 담대하라고 반복적으로 명령하신 이유는?",
+      "options": [
+        "전쟁에서 패했기 때문에",
+        "홍해를 건너야 해서",
+        "모세가 죽었기 때문에",
+        "백성이 반란을 일으켜서"
+      ],
+      "correctIndex": 2,
+      "reference": "여호수아 1:1-9",
+      "explanation": "모세가 죽고 여호수아가 이스라엘을 이끌 책임을 맡았습니다."
+    },
+    {
+      "id": "mc_medium_014",
+      "difficulty": "medium",
+      "question": "아브라함이 하나님께 드리려 했던 아들의 이름은?",
+      "options": [
+        "요셉",
+        "이스마엘",
+        "이삭",
+        "에서"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 22:2",
+      "explanation": "하나님은 이삭을 번제로 드리라고 하셨습니다."
+    },
+    {
+      "id": "mc_medium_015",
+      "difficulty": "medium",
+      "question": "요한복음에서 예수님이 자신을 '선한 목자'라고 부르신 장은?",
+      "options": [
+        "요한복음 6장",
+        "요한복음 8장",
+        "요한복음 10장",
+        "요한복음 15장"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 10:11",
+      "explanation": "10장에서 예수님은 자신을 선한 목자라고 하십니다."
+    },
+    {
+      "id": "mc_medium_016",
+      "difficulty": "medium",
+      "question": "사무엘이 처음 하나님 음성을 들은 장소는?",
+      "options": [
+        "길가래",
+        "실로",
+        "베들레헴",
+        "헤브론"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 3:1-4",
+      "explanation": "사무엘은 실로에서 하나님 음성을 들었습니다."
+    },
+    {
+      "id": "mc_medium_017",
+      "difficulty": "medium",
+      "question": "예수님이 광야에서 시험받으신 기간은?",
+      "options": [
+        "20일",
+        "30일",
+        "40일",
+        "50일"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 4:2",
+      "explanation": "예수님은 40일 동안 금식하시며 시험 받으셨습니다."
+    },
+    {
+      "id": "mc_medium_018",
+      "difficulty": "medium",
+      "question": "사울이 다윗을 질투한 이유는?",
+      "options": [
+        "다윗이 왕위를 주장했기 때문",
+        "다윗이 골리앗을 죽이고 칭송받아서",
+        "다윗이 제사장에게 도움을 받아서",
+        "다윗이 무기를 숨겨서"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 18:7-9",
+      "explanation": "백성들의 칭송 때문에 사울은 다윗을 질투했습니다."
+    },
+    {
+      "id": "mc_medium_019",
+      "difficulty": "medium",
+      "question": "요나가 도망하려고 탔던 배의 목적지는?",
+      "options": [
+        "두로",
+        "다메섹",
+        "다시스",
+        "요빠"
+      ],
+      "correctIndex": 2,
+      "reference": "요나 1:3",
+      "explanation": "요나는 다시스로 가는 배를 탔습니다."
+    },
+    {
+      "id": "mc_medium_020",
+      "difficulty": "medium",
+      "question": "베드로가 예수를 세 번 부인한 후 예수와 눈이 마주친 장면이 기록된 복음서는?",
+      "options": [
+        "마태복음",
+        "마가복음",
+        "누가복음",
+        "요한복음"
+      ],
+      "correctIndex": 2,
+      "reference": "누가복음 22:61",
+      "explanation": "누가복음에서 예수께서 베드로를 돌아보십니다."
+    },
+    {
+      "id": "mc_medium_021",
+      "difficulty": "medium",
+      "question": "요셉이 보디발의 아내의 유혹을 뿌리치고 도망할 때, 아내가 잡았던 것은?",
+      "options": [
+        "팔",
+        "겉옷",
+        "허리띠",
+        "신발"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 39:12",
+      "explanation": "보디발의 아내는 요셉의 옷을 잡았습니다."
+    },
+    {
+      "id": "mc_medium_022",
+      "difficulty": "medium",
+      "question": "모세가 금송아지를 본 후 깨뜨린 두 돌판은 어디서 받은 돌판인가?",
+      "options": [
+        "시내산",
+        "가데스 바네아",
+        "호렙산",
+        "느보산"
+      ],
+      "correctIndex": 0,
+      "reference": "출애굽기 32:19",
+      "explanation": "모세는 시내산에서 받은 돌판을 깨뜨렸습니다."
+    },
+    {
+      "id": "mc_medium_023",
+      "difficulty": "medium",
+      "question": "룻이 모압에서 데리고 온 가족은 누구인가?",
+      "options": [
+        "아버지",
+        "어머니",
+        "시어머니",
+        "여동생"
+      ],
+      "correctIndex": 2,
+      "reference": "룻기 1:22",
+      "explanation": "룻은 시어머니 나오미와 함께 베들레헴으로 돌아왔습니다."
+    },
+    {
+      "id": "mc_medium_024",
+      "difficulty": "medium",
+      "question": "요나가 니느웨에 전한 메시지는 몇 일 후에 성이 무너진다는 내용인가?",
+      "options": [
+        "20일",
+        "30일",
+        "40일",
+        "50일"
+      ],
+      "correctIndex": 2,
+      "reference": "요나 3:4",
+      "explanation": "40일 후 니느웨가 무너진다고 전했습니다."
+    },
+    {
+      "id": "mc_medium_025",
+      "difficulty": "medium",
+      "question": "사도 바울이 유대인임을 증명하기 위해 말한 출신 지파는?",
+      "options": [
+        "유다 지파",
+        "베냐민 지파",
+        "레위 지파",
+        "에브라임 지파"
+      ],
+      "correctIndex": 1,
+      "reference": "로마서 11:1",
+      "explanation": "바울은 베냐민 지파 출신임을 밝힙니다."
+    },
+    {
+      "id": "mc_medium_026",
+      "difficulty": "medium",
+      "question": "솔로몬이 재판한 두 여인 사건에서 진짜 엄마의 반응은 무엇이었는가?",
+      "options": [
+        "아이를 나누자는 제안 지지",
+        "아이를 포기함",
+        "아이를 살려달라고 요청",
+        "왕에게 다른 증인을 부름"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 3:26",
+      "explanation": "진짜 어머니는 아이를 살려달라고 요청했습니다."
+    },
+    {
+      "id": "mc_medium_027",
+      "difficulty": "medium",
+      "question": "삼손의 힘이 사라진 결정적 이유는?",
+      "options": [
+        "먹지 말라는 음식 섭취",
+        "포도주를 마심",
+        "나실인 머리를 깎임",
+        "블레셋과 혼인"
+      ],
+      "correctIndex": 2,
+      "reference": "사사기 16:17",
+      "explanation": "머리털이 잘리며 힘이 떠났습니다."
+    },
+    {
+      "id": "mc_medium_028",
+      "difficulty": "medium",
+      "question": "예수님이 죽으셨을 때 성전 휘장이 어떻게 되었는가?",
+      "options": [
+        "위에서 아래로 찢어짐",
+        "불타 없어짐",
+        "떨어져 나감",
+        "색이 변함"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 27:51",
+      "explanation": "성전 휘장은 위에서 아래로 찢어졌습니다."
+    },
+    {
+      "id": "mc_medium_029",
+      "difficulty": "medium",
+      "question": "요한계시록에서 일곱 교회 중 ‘뜨겁지도 않고 차갑지도 않은’ 교회로 책망받은 곳은?",
+      "options": [
+        "에베소",
+        "서머나",
+        "빌라델비아",
+        "라오디게아"
+      ],
+      "correctIndex": 3,
+      "reference": "요한계시록 3:15-16",
+      "explanation": "라오디게아 교회가 미지근함으로 책망받았습니다."
+    },
+    {
+      "id": "mc_medium_030",
+      "difficulty": "medium",
+      "question": "바울이 감옥에서 찬양하고 기도하자 지진이 일어난 장소는?",
+      "options": [
+        "고린도",
+        "빌립보",
+        "에베소",
+        "가이사랴"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 16:25-26",
+      "explanation": "빌립보 감옥에서 지진이 일어났습니다."
+    },
+    {
+      "id": "mc_medium_031",
+      "difficulty": "medium",
+      "question": "이삭이 결혼한 나이는?",
+      "options": [
+        "20세",
+        "30세",
+        "40세",
+        "50세"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 25:20",
+      "explanation": "이삭은 40세에 리브가와 결혼했습니다."
+    },
+    {
+      "id": "mc_medium_032",
+      "difficulty": "medium",
+      "question": "아론의 지팡이가 싹이 났을 때 피어난 꽃은?",
+      "options": [
+        "장미",
+        "백합",
+        "살구꽃",
+        "올리브꽃"
+      ],
+      "correctIndex": 2,
+      "reference": "민수기 17:8",
+      "explanation": "아론의 지팡이에서는 살구꽃이 피었습니다."
+    },
+    {
+      "id": "mc_medium_033",
+      "difficulty": "medium",
+      "question": "예수님이 부활하신 후 처음 나타나신 사람은 누구인가?",
+      "options": [
+        "베드로",
+        "요한",
+        "막달라 마리아",
+        "야고보"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 20:14-16",
+      "explanation": "막달라 마리아에게 먼저 나타나셨습니다."
+    },
+    {
+      "id": "mc_medium_034",
+      "difficulty": "medium",
+      "question": "사도 바울의 본래 이름은?",
+      "options": [
+        "요셉",
+        "바나바",
+        "사울",
+        "야이로"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 13:9",
+      "explanation": "사울이 바울로 불리게 되었습니다."
+    },
+    {
+      "id": "mc_medium_035",
+      "difficulty": "medium",
+      "question": "솔로몬이 왕위에 올랐을 때 하나님께 구한 것은?",
+      "options": [
+        "부",
+        "권력",
+        "장수",
+        "지혜"
+      ],
+      "correctIndex": 3,
+      "reference": "열왕기상 3:9",
+      "explanation": "솔로몬은 지혜로운 마음을 구했습니다."
+    },
+    {
+      "id": "mc_medium_036",
+      "difficulty": "medium",
+      "question": "이스라엘 백성이 광야에서 원망할 때 불뱀에게 물린 사건이 일어난 곳은?",
+      "options": [
+        "가데스",
+        "호르마",
+        "에돔 경계",
+        "느보산"
+      ],
+      "correctIndex": 2,
+      "reference": "민수기 21:4-6",
+      "explanation": "에돔 땅 근처에서 불뱀이 나타났습니다."
+    },
+    {
+      "id": "mc_medium_037",
+      "difficulty": "medium",
+      "question": "여호수아가 지휘한 유명한 전투 중 ‘해가 멈춘’ 기적이 일어난 전투는?",
+      "options": [
+        "아이성 전투",
+        "여리고 전투",
+        "기브온 전투",
+        "막게다 전투"
+      ],
+      "correctIndex": 2,
+      "reference": "여호수아 10:12-13",
+      "explanation": "기브온 전투에서 해와 달이 멈추었습니다."
+    },
+    {
+      "id": "mc_medium_038",
+      "difficulty": "medium",
+      "question": "다윗이 골리앗을 쓰러뜨릴 때 사용한 것은?",
+      "options": [
+        "칼",
+        "창",
+        "물매돌",
+        "활"
+      ],
+      "correctIndex": 2,
+      "reference": "사무엘상 17:49",
+      "explanation": "다윗은 물매로 골리앗의 이마를 맞췄습니다."
+    },
+    {
+      "id": "mc_medium_039",
+      "difficulty": "medium",
+      "question": "엘리사 시대에 수리아 군대 장관 나아만이 고침받은 병은?",
+      "options": [
+        "실명",
+        "나병",
+        "불치열병",
+        "피부종기"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기하 5:1-14",
+      "explanation": "나아만은 나병을 고침받았습니다."
+    },
+    {
+      "id": "mc_medium_040",
+      "difficulty": "medium",
+      "question": "예수님이 성전에 드려진 과부의 헌금을 칭찬하신 이유는?",
+      "options": [
+        "금액이 가장 컸기 때문에",
+        "순금 동전을 드렸기 때문에",
+        "생활비 전부를 드렸기 때문에",
+        "대제사장이 추천했기 때문에"
+      ],
+      "correctIndex": 2,
+      "reference": "막 12:44",
+      "explanation": "과부는 자기의 생활비 전부를 드렸기 때문입니다."
+    },
+    {
+      "id": "mc_medium_041",
+      "difficulty": "medium",
+      "question": "아브라함이 하나님께 번제로 바치려 했던 아들의 이름은?",
+      "options": [
+        "요셉",
+        "이삭",
+        "야곱",
+        "에서"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 22:2",
+      "explanation": "하나님은 아브라함에게 이삭을 번제로 바치라고 명령하셨습니다."
+    },
+    {
+      "id": "mc_medium_042",
+      "difficulty": "medium",
+      "question": "야곱이 천사와 씨름한 장소의 이름은?",
+      "options": [
+        "브엘세바",
+        "벧엘",
+        "억브롯",
+        "야뽁"
+      ],
+      "correctIndex": 3,
+      "reference": "창세기 32:22-30",
+      "explanation": "야곱은 야뽁 나루에서 천사와 씨름했습니다."
+    },
+    {
+      "id": "mc_medium_043",
+      "difficulty": "medium",
+      "question": "요셉의 형제들이 요셉을 팔아넘긴 금액은 몇 개의 은인가?",
+      "options": [
+        "10개",
+        "20개",
+        "30개",
+        "40개"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 37:28",
+      "explanation": "요셉은 은 20개에 팔렸습니다."
+    },
+    {
+      "id": "mc_medium_044",
+      "difficulty": "medium",
+      "question": "모세가 시내산에 올라가 40일 동안 금식할 때 먹거나 마시지 않은 것은?",
+      "options": [
+        "음식만 금함",
+        "물만 금함",
+        "음식과 물 모두 금함",
+        "둘 다 먹음"
+      ],
+      "correctIndex": 2,
+      "reference": "출애굽기 34:28",
+      "explanation": "모세는 40일 동안 먹지도 마시지도 않았습니다."
+    },
+    {
+      "id": "mc_medium_045",
+      "difficulty": "medium",
+      "question": "여호수아가 여리고 성을 함락시키기 위해 성을 돈 횟수는 총 몇 바퀴인가?",
+      "options": [
+        "6바퀴",
+        "7바퀴",
+        "13바퀴",
+        "14바퀴"
+      ],
+      "correctIndex": 2,
+      "reference": "여호수아 6:3-5",
+      "explanation": "6일간 하루 1바퀴, 7일째 7바퀴로 총 13바퀴입니다."
+    },
+    {
+      "id": "mc_medium_046",
+      "difficulty": "medium",
+      "question": "삼손의 마지막 죽음은 어디에서 일어났는가?",
+      "options": [
+        "여리고",
+        "가사",
+        "소레크 골짜기",
+        "브엘세바"
+      ],
+      "correctIndex": 1,
+      "reference": "사사기 16:21-30",
+      "explanation": "삼손은 블레셋 사람들 앞에서 가사에서 죽었습니다."
+    },
+    {
+      "id": "mc_medium_047",
+      "difficulty": "medium",
+      "question": "사무엘이 어린 시절 하나님의 음성을 들었을 때, 몇 번 부르심을 받았는가?",
+      "options": [
+        "1번",
+        "2번",
+        "3번",
+        "4번"
+      ],
+      "correctIndex": 3,
+      "reference": "사무엘상 3:1-10",
+      "explanation": "하나님은 사무엘을 4번 부르셨습니다."
+    },
+    {
+      "id": "mc_medium_048",
+      "difficulty": "medium",
+      "question": "다윗이 사울을 피하여 도망쳤을 때 장검(골리앗의 칼)을 받았던 장소는?",
+      "options": [
+        "길갈",
+        "노브",
+        "헤브론",
+        "브엘세바"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 21:9",
+      "explanation": "골리앗의 칼은 노브 제사장 아히멜렉이 보관하고 있었습니다."
+    },
+    {
+      "id": "mc_medium_049",
+      "difficulty": "medium",
+      "question": "솔로몬이 성전을 건축하는 데 걸린 기간은?",
+      "options": [
+        "3년",
+        "5년",
+        "7년",
+        "10년"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 6:38",
+      "explanation": "성전 건축은 7년이 걸렸습니다."
+    },
+    {
+      "id": "mc_medium_050",
+      "difficulty": "medium",
+      "question": "엘리야가 바알 선지자들과 대결했던 산의 이름은?",
+      "options": [
+        "시내산",
+        "헐몬산",
+        "갈멜산",
+        "모리아산"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 18:19",
+      "explanation": "엘리야는 갈멜산에서 바알 선지자들과 대결했습니다."
+    },
+    {
+      "id": "mc_medium_051",
+      "difficulty": "medium",
+      "question": "엘리사가 엘리야로부터 받은 능력의 상징은?",
+      "options": [
+        "왕관",
+        "지팡이",
+        "겉옷",
+        "돌판"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기하 2:13",
+      "explanation": "엘리야의 겉옷을 물려받았습니다."
+    },
+    {
+      "id": "mc_medium_052",
+      "difficulty": "medium",
+      "question": "요나가 도망치기 위해 탔던 배가 향하던 목적지는?",
+      "options": [
+        "두로",
+        "다메섹",
+        "니느웨",
+        "다시스"
+      ],
+      "correctIndex": 3,
+      "reference": "요나 1:3",
+      "explanation": "요나는 다시스로 도망치려고 했습니다."
+    },
+    {
+      "id": "mc_medium_053",
+      "difficulty": "medium",
+      "question": "다니엘이 기도하던 횟수는 하루에 몇 번인가?",
+      "options": [
+        "1번",
+        "2번",
+        "3번",
+        "4번"
+      ],
+      "correctIndex": 2,
+      "reference": "다니엘 6:10",
+      "explanation": "다니엘은 하루 세 번 기도했습니다."
+    },
+    {
+      "id": "mc_medium_054",
+      "difficulty": "medium",
+      "question": "에스더의 본래 이름은?",
+      "options": [
+        "하닷사",
+        "미리암",
+        "나오미",
+        "오르바"
+      ],
+      "correctIndex": 0,
+      "reference": "에스더 2:7",
+      "explanation": "에스더의 히브리 이름은 하닷사입니다."
+    },
+    {
+      "id": "mc_medium_055",
+      "difficulty": "medium",
+      "question": "바벨론 왕 느부갓네살이 세운 거대한 신상은 어떤 재질이었는가?",
+      "options": [
+        "금",
+        "은",
+        "동",
+        "철"
+      ],
+      "correctIndex": 0,
+      "reference": "다니엘 3:1",
+      "explanation": "금 신상을 세웠습니다."
+    },
+    {
+      "id": "mc_medium_056",
+      "difficulty": "medium",
+      "question": "예수님이 잡히시던 날 밤, 베드로가 끊은 사람의 신체 부위는?",
+      "options": [
+        "손",
+        "발",
+        "귀",
+        "코"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 18:10",
+      "explanation": "베드로는 말고의 오른쪽 귀를 잘랐습니다."
+    },
+    {
+      "id": "mc_medium_057",
+      "difficulty": "medium",
+      "question": "예수님이 광야에서 시험받은 기간은?",
+      "options": [
+        "20일",
+        "30일",
+        "40일",
+        "50일"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 4:2",
+      "explanation": "예수님은 40일 동안 금식하며 시험을 받으셨습니다."
+    },
+    {
+      "id": "mc_medium_058",
+      "difficulty": "medium",
+      "question": "사도행전에서 최초의 순교자는 누구인가?",
+      "options": [
+        "베드로",
+        "야고보",
+        "스데반",
+        "바나바"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 7장",
+      "explanation": "스데반이 첫 순교자입니다."
+    },
+    {
+      "id": "mc_medium_059",
+      "difficulty": "medium",
+      "question": "바울이 드로아에서 설교할 때 창문에서 떨어졌던 청년의 이름은?",
+      "options": [
+        "유두고",
+        "아가보",
+        "오네시모",
+        "드루비아"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 20:9",
+      "explanation": "정답은 유두고입니다."
+    },
+    {
+      "id": "mc_medium_060",
+      "difficulty": "medium",
+      "question": "요한계시록에서 새 하늘과 새 땅이 등장하는 장은?",
+      "options": [
+        "19장",
+        "20장",
+        "21장",
+        "22장"
+      ],
+      "correctIndex": 2,
+      "reference": "요한계시록 21:1",
+      "explanation": "21장에서 새 하늘과 새 땅이 나타납니다."
+    },
+    {
+      "id": "mc_medium_061",
+      "difficulty": "medium",
+      "question": "요한계시록에서 일곱 금촛대는 무엇을 의미하는가?",
+      "options": [
+        "일곱 재앙",
+        "일곱 교회",
+        "일곱 천사",
+        "일곱 혼"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록 1:20",
+      "explanation": "일곱 금촛대는 일곱 교회입니다."
+    },
+    {
+      "id": "mc_medium_062",
+      "difficulty": "medium",
+      "question": "예수님이 변화산에서 누구와 함께 영광 중에 나타났는가?",
+      "options": [
+        "아브라함과 다윗",
+        "모세와 다윗",
+        "모세와 엘리야",
+        "엘리야와 에녹"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 17:3",
+      "explanation": "변화산에서는 모세와 엘리야가 함께 나타났습니다."
+    },
+    {
+      "id": "mc_medium_063",
+      "difficulty": "medium",
+      "question": "히브리서에서 예수님을 무엇에 비유하며 대제사장 직분을 설명하는가?",
+      "options": [
+        "멜기세덱의 반차",
+        "아론의 반차",
+        "엘리의 반차",
+        "사무엘의 반차"
+      ],
+      "correctIndex": 0,
+      "reference": "히브리서 7:17",
+      "explanation": "예수님의 제사장직은 멜기세덱의 반차를 따른다고 설명합니다."
+    },
+    {
+      "id": "mc_medium_064",
+      "difficulty": "medium",
+      "question": "다니엘이 환상 가운데 본 '네 짐승'은 무엇을 상징하는가?",
+      "options": [
+        "네 천사",
+        "네 나라",
+        "네 대제사장",
+        "네 지파"
+      ],
+      "correctIndex": 1,
+      "reference": "다니엘 7:17",
+      "explanation": "네 짐승은 네 나라를 상징합니다."
+    },
+    {
+      "id": "mc_medium_065",
+      "difficulty": "medium",
+      "question": "사도행전에서 고넬료는 어떤 직업(신분)을 가진 사람이었는가?",
+      "options": [
+        "유대 제사장",
+        "백부장",
+        "세리장",
+        "바리새인"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 10:1",
+      "explanation": "고넬료는 로마 군대의 백부장이었습니다."
+    },
+    {
+      "id": "mc_medium_066",
+      "difficulty": "medium",
+      "question": "야고보서에서 '혀'는 무엇에 비유되는가?",
+      "options": [
+        "도끼",
+        "불",
+        "칼",
+        "독"
+      ],
+      "correctIndex": 1,
+      "reference": "야고보서 3:6",
+      "explanation": "혀는 '불'과 같다고 말합니다."
+    },
+    {
+      "id": "mc_medium_067",
+      "difficulty": "medium",
+      "question": "바울이 '고린도전서'를 쓴 주된 목적 중 하나는 무엇인가?",
+      "options": [
+        "성막 제작법 설명",
+        "성도의 은사 문제와 교회 분쟁 해결",
+        "십일조 제도 강화",
+        "성전 재건 촉구"
+      ],
+      "correctIndex": 1,
+      "reference": "고린도전서 전체",
+      "explanation": "고린도 교회의 은사 문제, 분쟁, 윤리 문제 등을 다루기 위해 기록되었습니다."
+    },
+    {
+      "id": "mc_medium_068",
+      "difficulty": "medium",
+      "question": "룻기는 사사 시대의 어떤 배경 속에서 일어나는가?",
+      "options": [
+        "기근",
+        "전쟁",
+        "포로 귀환",
+        "왕조 성립"
+      ],
+      "correctIndex": 0,
+      "reference": "룻기 1:1",
+      "explanation": "룻기는 사사 시대에 베들레헴에 기근이 들면서 이야기가 시작됩니다."
+    },
+    {
+      "id": "mc_medium_069",
+      "difficulty": "medium",
+      "question": "요한복음에서 '나는 생명의 떡'이라고 말씀하신 장은?",
+      "options": [
+        "요한복음 4장",
+        "요한복음 5장",
+        "요한복음 6장",
+        "요한복음 7장"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 6:35",
+      "explanation": "예수님은 요한복음 6장에서 '생명의 떡'이라 선언하셨습니다."
+    },
+    {
+      "id": "mc_medium_070",
+      "difficulty": "medium",
+      "question": "아브라함이 가나안에 처음 도착했을 때 하나님께 제단을 쌓은 장소는?",
+      "options": [
+        "벧엘",
+        "세겜의 모레 상수리나무",
+        "브엘세바",
+        "여리고 평지"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 12:6-7",
+      "explanation": "아브라함은 세겜의 모레 상수리나무 곁에서 제단을 쌓았습니다."
+    },
+    {
+      "id": "mc_medium_071",
+      "difficulty": "medium",
+      "question": "바울의 첫 번째 전도여행에 동행한 사람은 누구인가?",
+      "options": [
+        "누가",
+        "아볼로",
+        "바나바",
+        "디모데"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 13:2",
+      "explanation": "바울의 첫 전도여행에는 바나바가 함께했습니다."
+    },
+    {
+      "id": "mc_medium_072",
+      "difficulty": "medium",
+      "question": "엘리사가 수넴 여인의 아들을 살릴 때 사용한 행동은?",
+      "options": [
+        "오병이어와 같은 이적",
+        "기름병 채우기",
+        "아이 위에 몸을 포갬",
+        "순간 이동"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기하 4:34",
+      "explanation": "엘리사는 아이 위에 눈, 입, 손을 맞대고 몸을 포갰습니다."
+    },
+    {
+      "id": "mc_medium_073",
+      "difficulty": "medium",
+      "question": "요한일서에서 강조하는 핵심 주제는 무엇인가?",
+      "options": [
+        "믿음",
+        "소망",
+        "사랑",
+        "지혜"
+      ],
+      "correctIndex": 2,
+      "reference": "요한일서 전체",
+      "explanation": "요한일서는 ‘사랑’을 핵심 주제로 반복적으로 강조합니다."
+    },
+    {
+      "id": "mc_medium_074",
+      "difficulty": "medium",
+      "question": "욥기의 주된 내용은 무엇인가?",
+      "options": [
+        "이스라엘의 출애굽",
+        "지혜문학적 고난의 문제",
+        "다윗의 왕위 계승",
+        "솔로몬의 성전 건축"
+      ],
+      "correctIndex": 1,
+      "reference": "욥기 전체",
+      "explanation": "욥기는 의인의 고난과 하나님의 주권에 대한 지혜문학입니다."
+    },
+    {
+      "id": "mc_medium_075",
+      "difficulty": "medium",
+      "question": "나봇의 포도원을 빼앗기 위해 거짓 증언을 꾸민 사람은?",
+      "options": [
+        "아합",
+        "이세벨",
+        "하사엘",
+        "예후"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 21:7-10",
+      "explanation": "아합의 아내 이세벨이 나봇을 죽이기 위한 음모를 꾸몄습니다."
+    },
+    {
+      "id": "mc_medium_076",
+      "difficulty": "medium",
+      "question": "예수님이 태어난 때에 동방박사들이 따라온 표적은?",
+      "options": [
+        "붉은 달",
+        "큰 지진",
+        "별",
+        "불기둥"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 2:2",
+      "explanation": "동방박사들은 별을 보고 예수님의 탄생을 알고 찾아왔습니다."
+    },
+    {
+      "id": "mc_medium_077",
+      "difficulty": "medium",
+      "question": "요셉이 바로의 꿈을 해석했을 때 예언한 기간은?",
+      "options": [
+        "풍년 3년, 흉년 3년",
+        "풍년 5년, 흉년 5년",
+        "풍년 7년, 흉년 7년",
+        "풍년 10년, 흉년 10년"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 41:26-30",
+      "explanation": "요셉은 7년 풍년과 7년 흉년을 예언했습니다."
+    },
+    {
+      "id": "mc_medium_078",
+      "difficulty": "medium",
+      "question": "예수님이 광야에서 시험받으실 때 마지막 세 번째 시험은?",
+      "options": [
+        "돌을 떡으로 만들라",
+        "성전 꼭대기에서 뛰어내리라",
+        "천하 만국과 그 영광을 주겠다",
+        "금식 시간을 단축하라"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 4:8-9",
+      "explanation": "사탄은 예수님에게 세상의 모든 영광을 주겠다고 시험했습니다."
+    },
+    {
+      "id": "mc_medium_079",
+      "difficulty": "medium",
+      "question": "노아의 방주가 머무른 산은 어디인가?",
+      "options": [
+        "시내산",
+        "에발산",
+        "아라랏산",
+        "갈멜산"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 8:4",
+      "explanation": "방주는 아라랏 산에 머물렀습니다."
+    },
+    {
+      "id": "mc_medium_080",
+      "difficulty": "medium",
+      "question": "에베소서는 바울이 어디에 있을 때 기록한 서신으로 알려져 있는가?",
+      "options": [
+        "안디옥",
+        "고린도",
+        "감옥(옥중서신)",
+        "예루살렘 성전"
+      ],
+      "correctIndex": 2,
+      "reference": "에베소서 전체",
+      "explanation": "에베소서는 바울의 옥중서신으로 분류됩니다."
+    },
+    {
+      "id": "mc_medium_081",
+      "difficulty": "medium",
+      "question": "예수님이 부활하신 후 처음 나타난 사람은 누구인가?",
+      "options": [
+        "베드로",
+        "요한",
+        "막달라 마리아",
+        "야고보"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 20:14-16",
+      "explanation": "예수님은 먼저 막달라 마리아에게 나타나셨습니다."
+    },
+    {
+      "id": "mc_medium_082",
+      "difficulty": "medium",
+      "question": "요나가 니느웨로 가지 않고 도망치기 위해 탄 배는 어디로 가는 배였는가?",
+      "options": [
+        "두로",
+        "다마스쿠스",
+        "다시스",
+        "가나안"
+      ],
+      "correctIndex": 2,
+      "reference": "요나 1:3",
+      "explanation": "요나는 여호와의 얼굴을 피하려고 다시스로 가는 배를 탔습니다."
+    },
+    {
+      "id": "mc_medium_083",
+      "difficulty": "medium",
+      "question": "아브라함의 아내 사라는 몇 세에 이삭을 낳았는가?",
+      "options": [
+        "70세",
+        "80세",
+        "90세",
+        "100세"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 17:17",
+      "explanation": "사라는 90세에 이삭을 낳았습니다."
+    },
+    {
+      "id": "mc_medium_084",
+      "difficulty": "medium",
+      "question": "예수님이 '나는 선한 목자라'고 말씀하신 장은 어디인가?",
+      "options": [
+        "요한복음 8장",
+        "요한복음 9장",
+        "요한복음 10장",
+        "요한복음 11장"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 10:11",
+      "explanation": "요한복음 10장에서 예수님은 선한 목자로 자신을 소개하셨습니다."
+    },
+    {
+      "id": "mc_medium_085",
+      "difficulty": "medium",
+      "question": "바울이 감옥에서 간수에게 외친 말은 무엇인가?",
+      "options": [
+        "“우리는 여기 있다!”",
+        "“도망가라!”",
+        "“문을 닫아라!”",
+        "“내게 물을 달라!”"
+      ],
+      "correctIndex": 0,
+      "reference": "사도행전 16:28",
+      "explanation": "지진 이후 간수가 자결하려 할 때 바울이 '우리가 다 여기 있다'고 외쳤습니다."
+    },
+    {
+      "id": "mc_medium_086",
+      "difficulty": "medium",
+      "question": "솔로몬이 하나님께 구한 것은 무엇인가?",
+      "options": [
+        "부와 명예",
+        "장수",
+        "지혜",
+        "평안"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 3:9",
+      "explanation": "솔로몬은 백성을 올바르게 재판할 지혜를 구했습니다."
+    },
+    {
+      "id": "mc_medium_087",
+      "difficulty": "medium",
+      "question": "사도행전에서 스데반이 죽임을 당할 때 옆에서 맡겨둔 옷을 지키고 있던 사람은?",
+      "options": [
+        "바울(사울)",
+        "베드로",
+        "야고보",
+        "빌립"
+      ],
+      "correctIndex": 0,
+      "reference": "사도행전 7:58",
+      "explanation": "스데반의 순교 때 젊은 사울(바울)이 사람들의 옷을 맡아 두었습니다."
+    },
+    {
+      "id": "mc_medium_088",
+      "difficulty": "medium",
+      "question": "야곱이 자신의 이름이 이스라엘로 바뀌게 된 이유는?",
+      "options": [
+        "천사를 이김",
+        "가나안 땅에 들어감",
+        "형 에서를 용서함",
+        "요셉을 다시 만남"
+      ],
+      "correctIndex": 0,
+      "reference": "창세기 32:28",
+      "explanation": "야곱은 하나님과 씨름하여 이겼기에 '이스라엘'이라는 이름을 받았습니다."
+    },
+    {
+      "id": "mc_medium_089",
+      "difficulty": "medium",
+      "question": "누가복음에서 선한 사마리아인의 비유는 누구의 질문으로 시작되는가?",
+      "options": [
+        "부자 청년",
+        "율법교사",
+        "바리새인",
+        "세리장"
+      ],
+      "correctIndex": 1,
+      "reference": "누가복음 10:25",
+      "explanation": "율법교사가 '누가 내 이웃입니까?'라고 묻으며 비유가 시작됩니다."
+    },
+    {
+      "id": "mc_medium_090",
+      "difficulty": "medium",
+      "question": "다윗이 사울을 죽일 기회가 있었으나 죽이지 않은 이유는?",
+      "options": [
+        "사울이 너무 강했기 때문에",
+        "사울을 불쌍히 여겨서",
+        "여호와의 기름 부음을 받은 자이기 때문에",
+        "백성들이 반대했기 때문에"
+      ],
+      "correctIndex": 2,
+      "reference": "사무엘상 24:6",
+      "explanation": "다윗은 사울이 여호와의 기름 부음 받은 자라는 이유로 손대지 않았습니다."
+    },
+    {
+      "id": "mc_medium_091",
+      "difficulty": "medium",
+      "question": "바벨탑 사건이 일어난 장소 이름은?",
+      "options": [
+        "바란",
+        "바벨",
+        "시날 평지",
+        "갈대아 우르"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 11:2-9",
+      "explanation": "바벨탑은 시날 평지에서 쌓아 올렸습니다."
+    },
+    {
+      "id": "mc_medium_092",
+      "difficulty": "medium",
+      "question": "예수님이 광야에서 40일 금식하신 이유는?",
+      "options": [
+        "요단강을 건너기 위해",
+        "세례 요한을 기다리기 위해",
+        "성령에게 이끌려 시험받기 위해",
+        "제자들을 만나기 위해"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 4:1-2",
+      "explanation": "성령에 이끌려 마귀에게 시험받기 위해 광야로 가셨습니다."
+    },
+    {
+      "id": "mc_medium_093",
+      "difficulty": "medium",
+      "question": "바울이 다메섹 도상에서 예수님을 만났을 때 동행한 사람들은 어떤 반응을 했는가?",
+      "options": [
+        "모두 도망갔다",
+        "아무것도 듣지 못했다",
+        "소리는 들었으나 아무도 보지 못했다",
+        "예수님을 직접 보았다"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 9:7",
+      "explanation": "사울과 함께한 사람들은 소리는 들었으나 모습을 보지 못했습니다."
+    },
+    {
+      "id": "mc_medium_094",
+      "difficulty": "medium",
+      "question": "예수님의 비유 중 '씨 뿌리는 자의 비유'는 무엇을 설명하는가?",
+      "options": [
+        "기도의 중요성",
+        "천국의 가치",
+        "말씀을 듣는 사람들의 마음 상태",
+        "으뜸 되는 계명의 의미"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 13:18-23",
+      "explanation": "네 종류의 밭은 말씀을 듣는 자들의 마음 상태를 의미합니다."
+    },
+    {
+      "id": "mc_medium_095",
+      "difficulty": "medium",
+      "question": "성막에서 제사장이 향을 피우는 곳은 어디인가?",
+      "options": [
+        "번제단",
+        "물두멍",
+        "금향단",
+        "지성소"
+      ],
+      "correctIndex": 2,
+      "reference": "출애굽기 30:1",
+      "explanation": "금향단에서 향을 피웠습니다."
+    },
+    {
+      "id": "mc_medium_096",
+      "difficulty": "medium",
+      "question": "요셉의 형제들 중 그를 구덩이에서 꺼내어 팔자고 제안한 사람은?",
+      "options": [
+        "르우벤",
+        "시므온",
+        "레위",
+        "유다"
+      ],
+      "correctIndex": 3,
+      "reference": "창세기 37:26-27",
+      "explanation": "유다가 요셉을 이스마엘 사람에게 팔자고 제안했습니다."
+    },
+    {
+      "id": "mc_medium_097",
+      "difficulty": "medium",
+      "question": "이스라엘 왕 중 '가장 악한 왕'으로 자주 언급되는 사람은?",
+      "options": [
+        "사울",
+        "요람",
+        "아합",
+        "시드기야"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 16:30",
+      "explanation": "아합은 이전 어느 왕보다 악을 많이 행했다고 평가받습니다."
+    },
+    {
+      "id": "mc_medium_098",
+      "difficulty": "medium",
+      "question": "예수님이 십자가에서 하신 말씀 중 마지막 말씀은?",
+      "options": [
+        "“엘리 엘리 라마 사박다니”",
+        "“아버지여 저들을 사하여 주옵소서”",
+        "“다 이루었다”",
+        "“내 영혼을 아버지 손에 부탁하나이다”"
+      ],
+      "correctIndex": 3,
+      "reference": "누가복음 23:46",
+      "explanation": "예수님의 마지막 말씀은 ‘아버지여 내 영혼을 아버지 손에 부탁하나이다’입니다."
+    },
+    {
+      "id": "mc_medium_099",
+      "difficulty": "medium",
+      "question": "모세가 레위 지파에게 맡긴 특별한 역할은?",
+      "options": [
+        "왕권 유지",
+        "제사장과 성막 봉사",
+        "군대 지휘",
+        "세금 징수"
+      ],
+      "correctIndex": 1,
+      "reference": "민수기 3:6-9",
+      "explanation": "레위인은 성막 봉사와 제사장 보조 역할을 맡았습니다."
+    },
+    {
+      "id": "mc_medium_100",
+      "difficulty": "medium",
+      "question": "베드로가 예수님을 세 번 부인한 후 곧바로 일어난 일은?",
+      "options": [
+        "천사가 나타남",
+        "닭이 울었다",
+        "지진이 일어남",
+        "유다가 나타남"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 26:74-75",
+      "explanation": "베드로가 세 번째 부인하자 즉시 닭이 울었습니다."
+    }
+  ]
+}

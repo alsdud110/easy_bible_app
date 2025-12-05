@@ -1,0 +1,804 @@
+{
+  "questions": [
+    {
+      "id": "ox_easy_001",
+      "difficulty": "easy",
+      "question": "예수님은 베들레헴에서 태어나셨다.",
+      "answer": true,
+      "reference": "마태복음 2:1",
+      "explanation": "예수께서 유대 베들레헴에서 나셨습니다."
+    },
+    {
+      "id": "ox_easy_002",
+      "difficulty": "easy",
+      "question": "노아의 방주에는 각 동물을 한 쌍씩만 태웠다.",
+      "answer": false,
+      "reference": "창세기 7:2-3",
+      "explanation": "정결한 짐승은 일곱 쌍, 부정한 짐승은 한 쌍씩 태웠습니다."
+    },
+    {
+      "id": "ox_easy_003",
+      "difficulty": "easy",
+      "question": "모세는 십계명을 시내산에서 받았다.",
+      "answer": true,
+      "reference": "출애굽기 19:20",
+      "explanation": "모세는 시내산에서 하나님께 십계명을 받았습니다."
+    },
+    {
+      "id": "ox_easy_004",
+      "difficulty": "easy",
+      "question": "아담과 하와는 에덴동산에서 쫓겨났다.",
+      "answer": true,
+      "reference": "창세기 3:23",
+      "explanation": "죄를 짓고 에덴동산에서 쫓겨났습니다."
+    },
+    {
+      "id": "ox_easy_005",
+      "difficulty": "easy",
+      "question": "예수님의 열두 제자 중에는 베드로가 있다.",
+      "answer": true,
+      "reference": "마태복음 10:2",
+      "explanation": "베드로는 열두 제자 중 첫 번째로 언급됩니다."
+    },
+    {
+      "id": "ox_easy_006",
+      "difficulty": "easy",
+      "question": "창세기에서는 하나님이 세상을 7일 동안 창조했다고 기록되어 있다.",
+      "answer": false,
+      "reference": "창세기 2:2",
+      "explanation": "세상은 6일 동안 창조하시고 7일째에 안식하셨습니다."
+    },
+    {
+      "id": "ox_easy_007",
+      "difficulty": "easy",
+      "question": "요나는 큰 물고기 속에서 3일 동안 있었다.",
+      "answer": true,
+      "reference": "요나 1:17",
+      "explanation": "요나는 큰 물고기 뱃속에서 사흘 밤낮을 지냈습니다."
+    },
+    {
+      "id": "ox_easy_008",
+      "difficulty": "easy",
+      "question": "다윗은 골리앗을 칼로 죽였다.",
+      "answer": false,
+      "reference": "사무엘상 17:50",
+      "explanation": "다윗은 물매와 돌로 골리앗을 쓰러뜨렸습니다."
+    },
+    {
+      "id": "ox_easy_009",
+      "difficulty": "easy",
+      "question": "예수님은 물 위를 걸으셨다.",
+      "answer": true,
+      "reference": "마태복음 14:25",
+      "explanation": "예수님이 바다 위로 걸어 제자들에게 오셨습니다."
+    },
+    {
+      "id": "ox_easy_010",
+      "difficulty": "easy",
+      "question": "예수님은 공생애 동안 3번 금식하셨다.",
+      "answer": false,
+      "reference": "마태복음 4:2",
+      "explanation": "성경에는 40일 금식하신 기록만 있습니다."
+    },
+    {
+      "id": "ox_easy_011",
+      "difficulty": "easy",
+      "question": "아브라함은 믿음의 조상이라고 불린다.",
+      "answer": true,
+      "reference": "로마서 4:16",
+      "explanation": "아브라함은 믿음의 조상으로 불립니다."
+    },
+    {
+      "id": "ox_easy_012",
+      "difficulty": "easy",
+      "question": "예수님의 직업은 목수였다.",
+      "answer": true,
+      "reference": "마가복음 6:3",
+      "explanation": "예수님은 ‘목수’라고 불렸습니다."
+    },
+    {
+      "id": "ox_easy_013",
+      "difficulty": "easy",
+      "question": "엘리야는 불수레를 타고 하늘로 올라갔다.",
+      "answer": true,
+      "reference": "열왕기하 2:11",
+      "explanation": "엘리야는 회오리바람과 불수레에 의해 하늘로 올라갔습니다."
+    },
+    {
+      "id": "ox_easy_014",
+      "difficulty": "easy",
+      "question": "성경의 첫 번째 책은 출애굽기이다.",
+      "answer": false,
+      "reference": "창세기 1:1",
+      "explanation": "성경의 첫 책은 창세기입니다."
+    },
+    {
+      "id": "ox_easy_015",
+      "difficulty": "easy",
+      "question": "예수님은 물을 포도주로 바꾸는 기적을 행하셨다.",
+      "answer": true,
+      "reference": "요한복음 2:7-9",
+      "explanation": "가나 혼인잔치에서 물이 포도주로 변했습니다."
+    },
+    {
+      "id": "ox_easy_016",
+      "difficulty": "easy",
+      "question": "요한복음은 신약성경의 첫 번째 책이다.",
+      "answer": false,
+      "reference": "마태복음 1:1",
+      "explanation": "신약의 첫 책은 마태복음입니다."
+    },
+    {
+      "id": "ox_easy_017",
+      "difficulty": "easy",
+      "question": "부활하신 예수님은 40일 동안 제자들과 함께하셨다.",
+      "answer": true,
+      "reference": "사도행전 1:3",
+      "explanation": "예수님은 부활 후 40일 동안 여러 증거로 제자들에게 나타나셨습니다."
+    },
+    {
+      "id": "ox_easy_018",
+      "difficulty": "easy",
+      "question": "요셉은 애굽의 총리가 되었다.",
+      "answer": true,
+      "reference": "창세기 41:40",
+      "explanation": "요셉은 바로 다음가는 총리가 되었습니다."
+    },
+    {
+      "id": "ox_easy_019",
+      "difficulty": "easy",
+      "question": "야곱은 열두 아들을 두었다.",
+      "answer": true,
+      "reference": "창세기 35:22-26",
+      "explanation": "야곱에게는 열두 아들이 있습니다."
+    },
+    {
+      "id": "ox_easy_020",
+      "difficulty": "easy",
+      "question": "삼손은 하나님의 선지자였다.",
+      "answer": false,
+      "reference": "사사기 13:24-25",
+      "explanation": "삼손은 사사였으며 선지자로 불리지는 않습니다."
+    },
+    {
+      "id": "ox_easy_021",
+      "difficulty": "easy",
+      "question": "예수님은 광야에서 시험 받으셨다.",
+      "answer": true,
+      "reference": "마태복음 4:1",
+      "explanation": "예수님은 광야에서 사탄에게 시험을 받으셨습니다."
+    },
+    {
+      "id": "ox_easy_022",
+      "difficulty": "easy",
+      "question": "사도 바울은 예수님의 열두 제자 중 한 명이었다.",
+      "answer": false,
+      "reference": "사도행전 전반",
+      "explanation": "바울은 후에 회심한 사도로 열두 제자에는 포함되지 않습니다."
+    },
+    {
+      "id": "ox_easy_023",
+      "difficulty": "easy",
+      "question": "에스더는 페르시아의 왕후가 되었다.",
+      "answer": true,
+      "reference": "에스더 2:17",
+      "explanation": "에스더는 아하수에로 왕의 왕후가 되었습니다."
+    },
+    {
+      "id": "ox_easy_024",
+      "difficulty": "easy",
+      "question": "룻은 모압 여인이다.",
+      "answer": true,
+      "reference": "룻기 1:4",
+      "explanation": "룻은 모압 출신입니다."
+    },
+    {
+      "id": "ox_easy_025",
+      "difficulty": "easy",
+      "question": "예수님은 십자가에서 죽으신 후 사흘 만에 부활하셨다.",
+      "answer": true,
+      "reference": "고린도전서 15:4",
+      "explanation": "예수님은 성경대로 사흘 만에 다시 살아나셨습니다."
+    },
+    {
+      "id": "ox_easy_026",
+      "difficulty": "easy",
+      "question": "바울은 다메섹으로 가는 길에서 예수님을 만났다.",
+      "answer": true,
+      "reference": "사도행전 9:3-5",
+      "explanation": "바울은 다메섹 도상에서 빛 가운데 예수님을 만났습니다."
+    },
+    {
+      "id": "ox_easy_027",
+      "difficulty": "easy",
+      "question": "요셉은 야곱의 첫째 아들이다.",
+      "answer": false,
+      "reference": "창세기 29:31-35, 30:22-24",
+      "explanation": "요셉은 야곱의 열한 번째 아들입니다."
+    },
+    {
+      "id": "ox_easy_028",
+      "difficulty": "easy",
+      "question": "아론은 모세의 형이다.",
+      "answer": true,
+      "reference": "출애굽기 7:7",
+      "explanation": "아론은 모세보다 세 살 많았습니다."
+    },
+    {
+      "id": "ox_easy_029",
+      "difficulty": "easy",
+      "question": "에덴동산에는 선악을 알게 하는 나무가 있었다.",
+      "answer": true,
+      "reference": "창세기 2:17",
+      "explanation": "하나님이 선악과를 먹지 말라고 명령하셨습니다."
+    },
+    {
+      "id": "ox_easy_030",
+      "difficulty": "easy",
+      "question": "예수님은 딤나에서 십자가에 못 박히셨다.",
+      "answer": false,
+      "reference": "요한복음 19:17",
+      "explanation": "예수님은 골고다에서 십자가에 못 박히셨습니다."
+    },
+    {
+      "id": "ox_easy_031",
+      "difficulty": "easy",
+      "question": "솔로몬은 지혜로운 왕으로 유명하다.",
+      "answer": true,
+      "reference": "열왕기상 3:12",
+      "explanation": "하나님이 솔로몬에게 큰 지혜를 주셨습니다."
+    },
+    {
+      "id": "ox_easy_032",
+      "difficulty": "easy",
+      "question": "예수님의 어머니는 라헬이다.",
+      "answer": false,
+      "reference": "마태복음 1:18",
+      "explanation": "예수님의 어머니는 마리아입니다."
+    },
+    {
+      "id": "ox_easy_033",
+      "difficulty": "easy",
+      "question": "가인은 아벨을 죽였다.",
+      "answer": true,
+      "reference": "창세기 4:8",
+      "explanation": "가인이 동생 아벨을 죽였습니다."
+    },
+    {
+      "id": "ox_easy_034",
+      "difficulty": "easy",
+      "question": "예수님은 공생애 동안 나병 환자를 고치신 적이 있다.",
+      "answer": true,
+      "reference": "마태복음 8:2-3",
+      "explanation": "예수님은 나병환자를 깨끗하게 하셨습니다."
+    },
+    {
+      "id": "ox_easy_035",
+      "difficulty": "easy",
+      "question": "야곱은 하나님의 천사와 씨름했다.",
+      "answer": true,
+      "reference": "창세기 32:24-28",
+      "explanation": "야곱은 하나님과 겨루어 이겼다고 기록됩니다."
+    },
+    {
+      "id": "ox_easy_036",
+      "difficulty": "easy",
+      "question": "성경의 마지막 책은 요한복음이다.",
+      "answer": false,
+      "reference": "요한계시록 1:1",
+      "explanation": "성경의 마지막 책은 요한계시록입니다."
+    },
+    {
+      "id": "ox_easy_037",
+      "difficulty": "easy",
+      "question": "아브라함의 아내 이름은 사라이다.",
+      "answer": true,
+      "reference": "창세기 17:15",
+      "explanation": "하나님이 사래의 이름을 사라로 바꾸라 하셨습니다."
+    },
+    {
+      "id": "ox_easy_038",
+      "difficulty": "easy",
+      "question": "요한은 예수님이 세례를 받게 한 세례자이다.",
+      "answer": true,
+      "reference": "마태복음 3:13-14",
+      "explanation": "세례 요한이 예수님께 세례를 베풀었습니다."
+    },
+    {
+      "id": "ox_easy_039",
+      "difficulty": "easy",
+      "question": "예수님은 광야에서 30일 동안 금식하셨다.",
+      "answer": false,
+      "reference": "마태복음 4:2",
+      "explanation": "예수님은 40일 동안 금식하셨습니다."
+    },
+    {
+      "id": "ox_easy_040",
+      "difficulty": "easy",
+      "question": "베드로는 물고기를 잡는 어부였다.",
+      "answer": true,
+      "reference": "마태복음 4:18",
+      "explanation": "베드로는 어부였으며 예수님의 제자가 되었습니다."
+    },
+    {
+      "id": "ox_easy_041",
+      "difficulty": "easy",
+      "question": "이스라엘 백성은 가나안 땅에 들어가기 전 홍해를 건넜다.",
+      "answer": true,
+      "reference": "출애굽기 14:21-22",
+      "explanation": "모세가 홍해를 가르자 백성이 마른 땅을 걸었습니다."
+    },
+    {
+      "id": "ox_easy_042",
+      "difficulty": "easy",
+      "question": "룻은 보아스를 남편으로 맞았다.",
+      "answer": true,
+      "reference": "룻기 4:13",
+      "explanation": "보아스가 룻을 아내로 맞아들였습니다."
+    },
+    {
+      "id": "ox_easy_043",
+      "difficulty": "easy",
+      "question": "시편은 신약성경에 속한다.",
+      "answer": false,
+      "reference": "시편 전체",
+      "explanation": "시편은 구약성경의 시가서입니다."
+    },
+    {
+      "id": "ox_easy_044",
+      "difficulty": "easy",
+      "question": "요한계시록은 사도 요한이 기록한 책이다.",
+      "answer": true,
+      "reference": "요한계시록 1:1",
+      "explanation": "요한계시록은 사도 요한이 본 환상을 기록한 책입니다."
+    },
+    {
+      "id": "ox_easy_045",
+      "difficulty": "easy",
+      "question": "예수님은 오병이어 기적을 행하셨다.",
+      "answer": true,
+      "reference": "마태복음 14:17-21",
+      "explanation": "떡 다섯 개와 물고기 두 마리로 오천 명을 먹이셨습니다."
+    },
+    {
+      "id": "ox_easy_046",
+      "difficulty": "easy",
+      "question": "사도 바울은 로마 시민권자였다.",
+      "answer": true,
+      "reference": "사도행전 22:27-28",
+      "explanation": "바울은 태어날 때부터 로마 시민권자였습니다."
+    },
+    {
+      "id": "ox_easy_047",
+      "difficulty": "easy",
+      "question": "야고보는 예수님의 형제 중 한 명이다.",
+      "answer": true,
+      "reference": "갈라디아서 1:19",
+      "explanation": "야고보는 주의 형제로 불립니다."
+    },
+    {
+      "id": "ox_easy_048",
+      "difficulty": "easy",
+      "question": "십계명은 아브라함에게 주어진 율법이다.",
+      "answer": false,
+      "reference": "출애굽기 20 장",
+      "explanation": "십계명은 모세에게 주어진 율법입니다."
+    },
+    {
+      "id": "ox_easy_049",
+      "difficulty": "easy",
+      "question": "이스라엘 백성은 광야에서 만나를 먹었다.",
+      "answer": true,
+      "reference": "출애굽기 16:31",
+      "explanation": "하나님은 광야에서 만나를 내려주셨습니다."
+    },
+    {
+      "id": "ox_easy_050",
+      "difficulty": "easy",
+      "question": "예수님의 제자 요한은 '사랑의 사도'라고 불린다.",
+      "answer": true,
+      "reference": "요한일서 전체",
+      "explanation": "요한은 사랑을 강조한 사도로 알려져 있습니다."
+    },
+    {
+      "id": "ox_easy_051",
+      "difficulty": "easy",
+      "question": "아브라함의 아들은 이삭이다.",
+      "answer": true,
+      "reference": "창세기 21:3",
+      "explanation": "아브라함과 사라에게서 이삭이 태어났습니다."
+    },
+    {
+      "id": "ox_easy_052",
+      "difficulty": "easy",
+      "question": "예수님은 물 위를 걸으신 적이 있다.",
+      "answer": true,
+      "reference": "마태복음 14:25",
+      "explanation": "예수님이 바다 위로 걸어 제자들에게 가셨습니다."
+    },
+    {
+      "id": "ox_easy_053",
+      "difficulty": "easy",
+      "question": "야곱은 꿈에서 사닥다리를 보았다.",
+      "answer": true,
+      "reference": "창세기 28:12",
+      "explanation": "천사가 오르락내리락하는 사닥다리 환상을 보았습니다."
+    },
+    {
+      "id": "ox_easy_054",
+      "difficulty": "easy",
+      "question": "요셉은 애굽에서 총리가 되었다.",
+      "answer": true,
+      "reference": "창세기 41:39-41",
+      "explanation": "바로가 요셉을 애굽의 총리로 세웠습니다."
+    },
+    {
+      "id": "ox_easy_055",
+      "difficulty": "easy",
+      "question": "예수님은 광야에서 마귀의 시험을 받지 않았다.",
+      "answer": false,
+      "reference": "마태복음 4:1-11",
+      "explanation": "예수님은 광야에서 마귀에게 시험을 받으셨습니다."
+    },
+    {
+      "id": "ox_easy_056",
+      "difficulty": "easy",
+      "question": "삼손은 힘이 매우 센 사사였다.",
+      "answer": true,
+      "reference": "사사기 13~16장",
+      "explanation": "삼손은 하나님의 영이 임할 때 큰 힘을 냈습니다."
+    },
+    {
+      "id": "ox_easy_057",
+      "difficulty": "easy",
+      "question": "엘리야는 하늘에서 불이 내려오게 한 적이 있다.",
+      "answer": true,
+      "reference": "열왕기상 18:38",
+      "explanation": "엘리야의 기도에 불이 내려 번제를 사르셨습니다."
+    },
+    {
+      "id": "ox_easy_058",
+      "difficulty": "easy",
+      "question": "요한복음은 신약성경의 첫 번째 책이다.",
+      "answer": false,
+      "reference": "신약 전체",
+      "explanation": "신약의 첫 번째 책은 마태복음입니다."
+    },
+    {
+      "id": "ox_easy_059",
+      "difficulty": "easy",
+      "question": "노아의 아들은 셈, 함, 야벳이다.",
+      "answer": true,
+      "reference": "창세기 6:10",
+      "explanation": "노아의 세 아들은 셈, 함, 야벳입니다."
+    },
+    {
+      "id": "ox_easy_060",
+      "difficulty": "easy",
+      "question": "예수님은 3일 만에 부활하셨다.",
+      "answer": true,
+      "reference": "누가복음 24:6-7",
+      "explanation": "예수님은 예언하신 대로 사흘 만에 부활하셨습니다."
+    },
+    {
+      "id": "ox_easy_061",
+      "difficulty": "easy",
+      "question": "엘리사는 엘리야의 제자였다.",
+      "answer": true,
+      "reference": "열왕기상 19:19",
+      "explanation": "엘리야가 엘리사를 부르면서 그의 스승이 되었습니다."
+    },
+    {
+      "id": "ox_easy_062",
+      "difficulty": "easy",
+      "question": "예수님은 나사로를 살리셨다.",
+      "answer": true,
+      "reference": "요한복음 11:43-44",
+      "explanation": "예수님이 나사로를 무덤에서 불러내어 살리셨습니다."
+    },
+    {
+      "id": "ox_easy_063",
+      "difficulty": "easy",
+      "question": "사도 바울은 감옥에 간 적이 없다.",
+      "answer": false,
+      "reference": "사도행전 16:23-25",
+      "explanation": "바울은 복음을 전하다 여러 차례 감옥에 갇혔습니다."
+    },
+    {
+      "id": "ox_easy_064",
+      "difficulty": "easy",
+      "question": "요나가 큰 물고기 뱃속에 있었던 기간은 40일이다.",
+      "answer": false,
+      "reference": "요나 1:17",
+      "explanation": "요나는 사흘 밤낮 동안 물고기 뱃속에 있었습니다."
+    },
+    {
+      "id": "ox_easy_065",
+      "difficulty": "easy",
+      "question": "에스더는 페르시아의 왕비가 되었다.",
+      "answer": true,
+      "reference": "에스더 2:17",
+      "explanation": "아하수에로 왕이 에스더를 왕비로 삼았습니다."
+    },
+    {
+      "id": "ox_easy_066",
+      "difficulty": "easy",
+      "question": "베드로는 예수님을 세 번 부인했다.",
+      "answer": true,
+      "reference": "마태복음 26:34, 69-75",
+      "explanation": "예수님의 예언대로 베드로는 세 번 부인했습니다."
+    },
+    {
+      "id": "ox_easy_067",
+      "difficulty": "easy",
+      "question": "예수님은 탕자의 비유를 말씀하셨다.",
+      "answer": true,
+      "reference": "누가복음 15:11-32",
+      "explanation": "탕자의 비유는 예수님의 대표적인 비유 중 하나입니다."
+    },
+    {
+      "id": "ox_easy_068",
+      "difficulty": "easy",
+      "question": "다윗은 골리앗과 싸울 때 칼을 사용했다.",
+      "answer": false,
+      "reference": "사무엘상 17:40",
+      "explanation": "다윗은 물매와 돌로 골리앗을 쓰러뜨렸습니다."
+    },
+    {
+      "id": "ox_easy_069",
+      "difficulty": "easy",
+      "question": "하나님은 세상을 사랑하셔서 독생자를 주셨다.",
+      "answer": true,
+      "reference": "요한복음 3:16",
+      "explanation": "하나님 사랑을 가장 잘 보여주는 말씀입니다."
+    },
+    {
+      "id": "ox_easy_070",
+      "difficulty": "easy",
+      "question": "신약성경의 첫 번째 책은 요한계시록이다.",
+      "answer": false,
+      "reference": "신약 전체",
+      "explanation": "신약 첫 책은 마태복음이고, 마지막 책이 요한계시록입니다."
+    },
+    {
+      "id": "ox_easy_071",
+      "difficulty": "easy",
+      "question": "아담은 하나님이 만드신 첫 번째 사람이다.",
+      "answer": true,
+      "reference": "창세기 2:7",
+      "explanation": "하나님이 흙으로 아담을 창조하셨습니다."
+    },
+    {
+      "id": "ox_easy_072",
+      "difficulty": "easy",
+      "question": "모세는 홍해를 가르는 기적을 행했다.",
+      "answer": true,
+      "reference": "출애굽기 14:21",
+      "explanation": "하나님이 모세를 통해 홍해를 가르셨습니다."
+    },
+    {
+      "id": "ox_easy_073",
+      "difficulty": "easy",
+      "question": "예수님의 직업은 목수였다.",
+      "answer": true,
+      "reference": "마가복음 6:3",
+      "explanation": "사람들이 예수님을 목수라고 불렀습니다."
+    },
+    {
+      "id": "ox_easy_074",
+      "difficulty": "easy",
+      "question": "성경은 모두 66권이다.",
+      "answer": true,
+      "reference": null,
+      "explanation": "구약 39권, 신약 27권으로 총 66권입니다."
+    },
+    {
+      "id": "ox_easy_075",
+      "difficulty": "easy",
+      "question": "예수님의 열두 제자 중 한 명은 야고보이다.",
+      "answer": true,
+      "reference": "마태복음 10:2",
+      "explanation": "야고보는 예수님의 열두 제자 중 한 명입니다."
+    },
+    {
+      "id": "ox_easy_076",
+      "difficulty": "easy",
+      "question": "예수님은 마리아와 요셉 사이에서 태어나셨다.",
+      "answer": false,
+      "reference": "마태복음 1:18",
+      "explanation": "예수님은 성령으로 잉태되셨고, 요셉은 법적 아버지입니다."
+    },
+    {
+      "id": "ox_easy_077",
+      "difficulty": "easy",
+      "question": "세례 요한은 예수님의 친척이다.",
+      "answer": true,
+      "reference": "누가복음 1:36",
+      "explanation": "세례 요한의 어머니 엘리사벳과 마리아는 친족 관계였습니다."
+    },
+    {
+      "id": "ox_easy_078",
+      "difficulty": "easy",
+      "question": "예수님은 광야에서 40일 동안 금식하셨다.",
+      "answer": true,
+      "reference": "마태복음 4:2",
+      "explanation": "예수님은 금식하시며 시험을 받으셨습니다."
+    },
+    {
+      "id": "ox_easy_079",
+      "difficulty": "easy",
+      "question": "예수님의 첫 번째 기적은 물 위를 걷는 것이었다.",
+      "answer": false,
+      "reference": "요한복음 2:11",
+      "explanation": "첫 번째 기적은 가나 혼인잔치에서 물을 포도주로 바꾸신 것입니다."
+    },
+    {
+      "id": "ox_easy_080",
+      "difficulty": "easy",
+      "question": "베드로는 예수님의 제자였다.",
+      "answer": true,
+      "reference": "마태복음 10:2",
+      "explanation": "베드로는 열두 제자 중 한 명입니다."
+    },
+    {
+      "id": "ox_easy_081",
+      "difficulty": "easy",
+      "question": "예수님은 총 5천 명을 먹이신 기적을 행하셨다.",
+      "answer": true,
+      "reference": "마태복음 14:21",
+      "explanation": "남자만 5천 명이었고, 여자와 아이까지 포함하면 더 많습니다."
+    },
+    {
+      "id": "ox_easy_082",
+      "difficulty": "easy",
+      "question": "예수님은 배 위에서 폭풍을 잠잠하게 하셨다.",
+      "answer": true,
+      "reference": "마가복음 4:39",
+      "explanation": "예수님은 바람과 바다를 꾸짖어 잠잠하게 하셨습니다."
+    },
+    {
+      "id": "ox_easy_083",
+      "difficulty": "easy",
+      "question": "삭개오는 세리장이었다.",
+      "answer": true,
+      "reference": "누가복음 19:2",
+      "explanation": "삭개오는 여리고의 세리장이었습니다."
+    },
+    {
+      "id": "ox_easy_084",
+      "difficulty": "easy",
+      "question": "예수님은 십자가 대신 돌에 맞아 죽으셨다.",
+      "answer": false,
+      "reference": "요한복음 19:18",
+      "explanation": "예수님은 십자가에 못 박혀 죽으셨습니다."
+    },
+    {
+      "id": "ox_easy_085",
+      "difficulty": "easy",
+      "question": "예수님은 부활하신 후 제자들에게 나타나셨다.",
+      "answer": true,
+      "reference": "요한복음 20:19",
+      "explanation": "부활 후 여러 차례 제자들에게 나타나셨습니다."
+    },
+    {
+      "id": "ox_easy_086",
+      "difficulty": "easy",
+      "question": "바울은 원래 예수님을 따르던 제자였다.",
+      "answer": false,
+      "reference": "사도행전 9:1-5",
+      "explanation": "바울은 처음에는 기독교인을 박해하다 회심했습니다."
+    },
+    {
+      "id": "ox_easy_087",
+      "difficulty": "easy",
+      "question": "성경의 첫 번째 책은 창세기이다.",
+      "answer": true,
+      "reference": "성경 전체 구조",
+      "explanation": "구약의 첫 책은 창세기입니다."
+    },
+    {
+      "id": "ox_easy_088",
+      "difficulty": "easy",
+      "question": "요한복음은 신약성경의 첫 번째 책이다.",
+      "answer": false,
+      "reference": "신약성경 순서",
+      "explanation": "신약 첫 책은 마태복음입니다."
+    },
+    {
+      "id": "ox_easy_089",
+      "difficulty": "easy",
+      "question": "시편은 노래와 기도로 이루어진 책이다.",
+      "answer": true,
+      "reference": "시편 전체",
+      "explanation": "시편은 찬양과 기도의 시들로 구성되어 있습니다."
+    },
+    {
+      "id": "ox_easy_090",
+      "difficulty": "easy",
+      "question": "욥은 많은 고난을 겪은 인물이다.",
+      "answer": true,
+      "reference": "욥기 1장",
+      "explanation": "욥은 의인이었지만 큰 고난을 겪었습니다."
+    },
+    {
+      "id": "ox_easy_091",
+      "difficulty": "easy",
+      "question": "다니엘은 사자굴에서 살아남았다.",
+      "answer": true,
+      "reference": "다니엘 6:22",
+      "explanation": "하나님이 천사를 보내 사자들의 입을 막으셨습니다."
+    },
+    {
+      "id": "ox_easy_092",
+      "difficulty": "easy",
+      "question": "요나는 큰 물고기에게 삼켜졌다.",
+      "answer": true,
+      "reference": "요나 1:17",
+      "explanation": "하나님이 큰 물고기를 예비하셔서 요나가 그 안에 있었습니다."
+    },
+    {
+      "id": "ox_easy_093",
+      "difficulty": "easy",
+      "question": "요한계시록은 구약 마지막 책이다.",
+      "answer": false,
+      "reference": "성경 구조",
+      "explanation": "요한계시록은 신약 마지막 책입니다."
+    },
+    {
+      "id": "ox_easy_094",
+      "difficulty": "easy",
+      "question": "아브라함은 믿음의 조상이라고 불린다.",
+      "answer": true,
+      "reference": "로마서 4:11",
+      "explanation": "아브라함은 믿음의 조상으로 인정받습니다."
+    },
+    {
+      "id": "ox_easy_095",
+      "difficulty": "easy",
+      "question": "이스라엘의 첫 번째 왕은 다윗이다.",
+      "answer": false,
+      "reference": "사무엘상 10:1",
+      "explanation": "이스라엘의 첫 왕은 사울입니다."
+    },
+    {
+      "id": "ox_easy_096",
+      "difficulty": "easy",
+      "question": "다윗은 골리앗을 물매로 쓰러뜨렸다.",
+      "answer": true,
+      "reference": "사무엘상 17:50",
+      "explanation": "다윗은 돌과 물매로 골리앗을 이겼습니다."
+    },
+    {
+      "id": "ox_easy_097",
+      "difficulty": "easy",
+      "question": "솔로몬은 매우 지혜로운 왕으로 알려져 있다.",
+      "answer": true,
+      "reference": "열왕기상 3:12",
+      "explanation": "하나님이 그에게 큰 지혜를 주셨습니다."
+    },
+    {
+      "id": "ox_easy_098",
+      "difficulty": "easy",
+      "question": "엘리야는 불 수레를 타고 하늘로 올려졌다.",
+      "answer": true,
+      "reference": "열왕기하 2:11",
+      "explanation": "엘리야는 회오리바람과 불 수레로 승천했습니다."
+    },
+    {
+      "id": "ox_easy_099",
+      "difficulty": "easy",
+      "question": "예수님은 요단강에서 세례를 받으셨다.",
+      "answer": true,
+      "reference": "마태복음 3:13",
+      "explanation": "예수님은 요한에게 요단강에서 세례를 받으셨습니다."
+    },
+    {
+      "id": "ox_easy_100",
+      "difficulty": "easy",
+      "question": "성령 강림 사건은 오순절에 일어났다.",
+      "answer": true,
+      "reference": "사도행전 2:1-4",
+      "explanation": "오순절 날 성령이 급하고 강한 바람처럼 임했습니다."
+    }
+  ]
+}

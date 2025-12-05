@@ -392,7 +392,6 @@ class _SearchResultTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final languageProvider = context.watch<LanguageProvider>();
 
     return ListTile(
       onTap: onTap,

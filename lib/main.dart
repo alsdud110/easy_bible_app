@@ -10,12 +10,14 @@ import 'screens/biblePlan/day60_screen.dart';
 import 'screens/biblePlan/day120_screen.dart';
 import 'screens/biblePlan/day180_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
+import 'screens/quiz/quiz_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/highlight_provider.dart';
 import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
 import 'providers/plan_progress_provider.dart';
 import 'providers/font_size_provider.dart';
+import 'providers/quiz_provider.dart';
 import 'services/notification_service.dart';
 import 'services/bible_subtitle_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -174,6 +176,7 @@ void main() async {
         ChangeNotifierProvider.value(
             value: planFontSizeProvider), // ✅ Plan FontSize 추가!
         ChangeNotifierProvider.value(value: planProgressProvider),
+        ChangeNotifierProvider(create: (_) => QuizProvider()),
       ],
       child: MyApp(initDark: isDark),
     ),
@@ -402,6 +405,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             break;
           case '/easyBible':
             builder = (context) => const EasyBibleHomeScreen();
+            break;
+          case '/quiz':
+            builder = (context) => const QuizHomeScreen();
             break;
           // 추가 route는 여기에서 처리
           default:
