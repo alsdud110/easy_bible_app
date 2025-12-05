@@ -58,54 +58,6 @@ class CustomDrawer extends StatelessWidget {
     }
   }
 
-  void _showComingSoonDialog(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    Navigator.of(context).pop(); // Drawer 먼저 닫기
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: cs.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Row(
-          children: [
-            Icon(Icons.construction_rounded, color: cs.primary),
-            const SizedBox(width: 12),
-            Text(
-              '준비 중',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: cs.onSurface,
-              ),
-            ),
-          ],
-        ),
-        content: Text(
-          '해당 메뉴는 준비 중입니다!',
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: cs.onSurface,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              '확인',
-              style: TextStyle(
-                color: cs.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -191,18 +143,19 @@ class CustomDrawer extends StatelessWidget {
                           isDark: isDark,
                         )),
                   ),
-                  // 메뉴: 어성경 바이블(홈)
-                  _DrawerButton(
-                    icon: Icons.home_rounded,
-                    label: '어성경 바이블',
-                    color: cs.primary,
-                    onTap: () => _showComingSoonDialog(context),
-                  ),
 
                   // 성경일독(플랜) - 펼침/접기
                   _PlanExpansionMenu(
                     color: cs.secondary,
                     navigateToScreen: (screen) => _navigateToScreen(context, screen),
+                  ),
+
+                  // 메뉴: 성경퀴즈
+                  _DrawerButton(
+                    icon: Icons.quiz_rounded,
+                    label: '성경퀴즈',
+                    color: Color(0xFFEC4899),
+                    onTap: () => Navigator.of(context).pushNamed('/quiz'),
                   ),
 
                   _DrawerButton(
@@ -273,15 +226,15 @@ class _DrawerButton extends StatelessWidget {
   }
 }
 
-// 숫자 뱃지 버튼
+// 아이콘 버튼 (성경일독 플랜용)
 class _DrawerNumberButton extends StatelessWidget {
-  final String number;
+  final IconData icon;
   final String label;
   final Color color;
   final VoidCallback onTap;
 
   const _DrawerNumberButton({
-    required this.number,
+    required this.icon,
     required this.label,
     required this.color,
     required this.onTap,
@@ -293,23 +246,9 @@ class _DrawerNumberButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0, bottom: 4),
       child: ListTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.13),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(
-              number,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
+        leading: CircleAvatar(
+          backgroundColor: color.withValues(alpha: 0.13),
+          child: Icon(icon, color: color, size: 24),
         ),
         title: Text(
           label,
@@ -319,8 +258,8 @@ class _DrawerNumberButton extends StatelessWidget {
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        hoverColor: color.withOpacity(0.10),
-        splashColor: color.withOpacity(0.16),
+        hoverColor: color.withValues(alpha: 0.10),
+        splashColor: color.withValues(alpha: 0.16),
       ),
     );
   }
@@ -384,7 +323,7 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: widget.color.withOpacity(0.13),
-              child: Icon(Icons.flight_takeoff_rounded,
+              child: Icon(Icons.calendar_month_rounded,
                   color: widget.color, size: 24),
             ),
             title: Text(
@@ -421,11 +360,23 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
               padding: const EdgeInsets.only(left: 34, right: 18),
               child: Column(
                 children: [
-                  _buildAnimatedButton(0, '60', 'DAY60 플랜',
+                  _buildAnimatedButton(
+                      0,
+                      Icons.flash_on_rounded,
+                      'DAY60 플랜',
+                      const Color(0xFF10B981),
                       () => widget.navigateToScreen(const Day60Screen())),
-                  _buildAnimatedButton(1, '120', 'DAY120 플랜',
+                  _buildAnimatedButton(
+                      1,
+                      Icons.trending_up_rounded,
+                      'DAY120 플랜',
+                      const Color(0xFF3B82F6),
                       () => widget.navigateToScreen(const Day120Screen())),
-                  _buildAnimatedButton(2, '180', 'DAY180 플랜',
+                  _buildAnimatedButton(
+                      2,
+                      Icons.nature_people_rounded,
+                      'DAY180 플랜',
+                      const Color(0xFF8B5CF6),
                       () => widget.navigateToScreen(const Day180Screen())),
                 ],
               ),
@@ -437,7 +388,7 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
   }
 
   Widget _buildAnimatedButton(
-      int index, String number, String label, VoidCallback onTap) {
+      int index, IconData icon, String label, Color color, VoidCallback onTap) {
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -451,9 +402,9 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
           child: Transform.translate(
             offset: Offset(0, (1 - progress) * 10),
             child: _DrawerNumberButton(
-              number: number,
+              icon: icon,
               label: label,
-              color: widget.color,
+              color: color,
               onTap: onTap,
             ),
           ),
