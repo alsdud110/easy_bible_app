@@ -224,10 +224,10 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: color, width: 1.5),
           ),
           child: Row(
@@ -235,13 +235,13 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
             children: [
               Text(
                 difficulty.emoji,
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 14),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               Text(
                 difficulty.displayName,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: color,
                 ),
@@ -255,19 +255,19 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
 
   Widget _buildQuestionCard(QuizQuestion question, ColorScheme cs) {
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [cs.primary, cs.secondary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: cs.primary.withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -277,23 +277,23 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.help_outline_rounded,
                   color: Colors.white,
-                  size: 28,
+                  size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               const Expanded(
                 child: Text(
                   '문제',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -301,14 +301,14 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Text(
             question.question,
             style: const TextStyle(
-              fontSize: 22,
+              fontSize: 19,
               fontWeight: FontWeight.w800,
               color: Colors.white,
-              height: 1.5,
+              height: 1.4,
               letterSpacing: -0.5,
             ),
           ),
@@ -357,13 +357,26 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
 
     return Column(
       children: List.generate(options.length, (index) {
+        // 피드백 표시 로직: 정답이거나 선택한 답만 표시
+        bool? isCorrect;
+        if (_showFeedback) {
+          if (index == question.correctIndex) {
+            // 정답은 항상 O 표시
+            isCorrect = true;
+          } else if (index == _selectedAnswer) {
+            // 선택한 답이 오답이면 X 표시
+            isCorrect = false;
+          }
+          // 그 외의 답은 null (표시 안 함)
+        }
+
         return Padding(
           padding: EdgeInsets.only(bottom: index < options.length - 1 ? 12 : 0),
           child: _AnswerButton(
             label: labels[index],
             subtitle: options[index],
             isSelected: _selectedAnswer == index,
-            isCorrect: _showFeedback ? question.correctIndex == index : null,
+            isCorrect: isCorrect,
             onTap: _showFeedback ? null : () => _handleAnswer(context, index),
           ),
         );
@@ -400,22 +413,22 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           // Sparkle animation for correct answer
           if (isCorrect)
             Positioned(
-              top: -40,
+              top: -30,
               child: Lottie.asset(
                 'assets/lottie/sparkle.json',
-                width: 100,
-                height: 100,
+                width: 80,
+                height: 80,
                 fit: BoxFit.contain,
                 repeat: true,
               ),
             ),
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: isCorrect
                   ? const Color(0xFF10B981).withValues(alpha: 0.1)
                   : const Color(0xFFEF4444).withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
                 width: 2,
@@ -429,13 +442,13 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                     Icon(
                       isCorrect ? Icons.check_circle_rounded : Icons.cancel_rounded,
                       color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
-                      size: 32,
+                      size: 28,
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
                     Text(
                       isCorrect ? '정답입니다!' : '아쉬워요!',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: isCorrect ? const Color(0xFF10B981) : const Color(0xFFEF4444),
                       ),
@@ -443,25 +456,25 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   ],
                 ),
                 if (question.reference != null) ...[
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: cs.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.menu_book_rounded,
                           color: cs.primary,
-                          size: 20,
+                          size: 18,
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
                         Text(
                           question.reference!,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: cs.primary,
                           ),
@@ -471,13 +484,13 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   ),
                 ],
                 if (question.explanation != null) ...[
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Text(
                     question.explanation!,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       color: cs.onSurface.withValues(alpha: 0.8),
-                      height: 1.5,
+                      height: 1.4,
                     ),
                   ),
                 ],
@@ -633,13 +646,13 @@ class _AnswerButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: backgroundColor ?? cs.surface,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: borderColor ?? cs.outline.withValues(alpha: 0.2),
               width: borderColor != null ? 2 : 1,
@@ -648,8 +661,8 @@ class _AnswerButton extends StatelessWidget {
                 ? [
                     BoxShadow(
                       color: (borderColor ?? cs.primary).withValues(alpha: 0.2),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
                     ),
                   ]
                 : null,
@@ -657,29 +670,29 @@ class _AnswerButton extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: (textColor ?? cs.onSurface).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w900,
                       color: textColor ?? cs.onSurface,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   subtitle,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: textColor ?? cs.onSurface,
                   ),
@@ -689,7 +702,7 @@ class _AnswerButton extends StatelessWidget {
                 Icon(
                   isCorrect! ? Icons.check_circle_rounded : Icons.cancel_rounded,
                   color: isCorrect! ? const Color(0xFF10B981) : const Color(0xFFEF4444),
-                  size: 28,
+                  size: 24,
                 ),
             ],
           ),
