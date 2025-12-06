@@ -5,6 +5,7 @@ import '../../models/quiz_question.dart';
 import '../../providers/quiz_provider.dart';
 import '../../theme/colors.dart';
 import 'quiz_play_screen.dart';
+import 'quiz_history_screen.dart';
 
 /// 퀴즈 홈 화면 - 난이도 및 유형 선택
 class QuizHomeScreen extends StatefulWidget {
@@ -61,6 +62,20 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
         centerTitle: true,
         elevation: 0,
         backgroundColor: cs.surface,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history_rounded),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const QuizHistoryScreen(),
+                ),
+              );
+            },
+            tooltip: '퀴즈 기록',
+          ),
+        ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,

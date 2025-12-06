@@ -45,6 +45,14 @@ class _QuizResultScreenState extends State<QuizResultScreen>
     );
 
     _animController.forward();
+
+    // 퀴즈 결과를 히스토리에 저장
+    _saveResultToHistory();
+  }
+
+  Future<void> _saveResultToHistory() async {
+    final provider = context.read<QuizProvider>();
+    await provider.saveResultToHistory();
   }
 
   @override

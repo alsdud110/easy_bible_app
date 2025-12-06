@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import '../models/quiz_question.dart';
 import '../models/quiz_result.dart';
 import '../services/quiz_service.dart';
+import '../services/quiz_history_service.dart';
 
 /// 퀴즈 상태 관리 Provider
 class QuizProvider with ChangeNotifier {
   final QuizService _quizService = QuizService();
+  final QuizHistoryService _historyService = QuizHistoryService();
 
   // 퀴즈 설정
   QuizType? _selectedType;
@@ -116,6 +118,12 @@ class QuizProvider with ChangeNotifier {
       difficulty: _selectedDifficulty ?? Difficulty.easy,
       completedAt: DateTime.now(),
     );
+  }
+
+  /// 퀴즈 결과를 히스토리에 저장
+  Future<void> saveResultToHistory() async {
+    final result = getResult();
+    await _historyService.saveQuizResult(result);
   }
 
   /// 퀴즈 리셋
