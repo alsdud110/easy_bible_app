@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/quiz_provider.dart';
+import '../../theme/colors.dart';
 import 'quiz_home_screen.dart';
 import 'quiz_play_screen.dart';
 
@@ -280,8 +281,8 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           colors: const [
-                            Color(0xFFFBBF24),
-                            Color(0xFFFBBF24),
+                            QuizColors.star,
+                            QuizColors.star,
                             Colors.transparent,
                             Colors.transparent,
                           ],
@@ -291,7 +292,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                       child: const Icon(
                         Icons.star_rounded,
                         size: 48,
-                        color: Color(0xFFFBBF24),
+                        color: QuizColors.star,
                       ),
                     ),
                   ],
@@ -357,14 +358,14 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             icon: Icons.check_circle_rounded,
             label: '정답',
             value: '${result.correctCount}개',
-            color: const Color(0xFF10B981),
+            color: QuizColors.correct,
           ),
           const SizedBox(height: 12),
           _StatRow(
             icon: Icons.cancel_rounded,
             label: '오답',
             value: '${result.incorrectCount}개',
-            color: const Color(0xFFEF4444),
+            color: QuizColors.incorrect,
           ),
           const SizedBox(height: 12),
           _StatRow(
@@ -599,11 +600,11 @@ class _DifficultyStatRow extends StatelessWidget {
   Color _getColor() {
     switch (difficulty) {
       case Difficulty.easy:
-        return const Color(0xFF10B981);
+        return QuizColors.difficultyEasy;
       case Difficulty.medium:
-        return const Color(0xFF3B82F6);
+        return QuizColors.difficultyMedium;
       case Difficulty.hard:
-        return const Color(0xFFEF4444);
+        return QuizColors.difficultyHard;
     }
   }
 

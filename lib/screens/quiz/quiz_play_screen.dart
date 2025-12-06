@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
 import '../../models/quiz_question.dart';
 import '../../providers/quiz_provider.dart';
+import '../../theme/colors.dart';
 import 'quiz_result_screen.dart';
 
 /// 퀴즈 진행 화면
@@ -227,13 +228,13 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     Color color;
     switch (difficulty) {
       case Difficulty.easy:
-        color = const Color(0xFF10B981);
+        color = QuizColors.difficultyEasy;
         break;
       case Difficulty.medium:
-        color = const Color(0xFF3B82F6);
+        color = QuizColors.difficultyMedium;
         break;
       case Difficulty.hard:
-        color = const Color(0xFFEF4444);
+        color = QuizColors.difficultyHard;
         break;
     }
 
@@ -429,13 +430,11 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: isCorrect
-                  ? const Color(0xFF10B981).withValues(alpha: 0.1)
-                  : const Color(0xFFEF4444).withValues(alpha: 0.1),
+                  ? QuizColors.correct.withValues(alpha: 0.1)
+                  : QuizColors.incorrect.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: isCorrect
-                    ? const Color(0xFF10B981)
-                    : const Color(0xFFEF4444),
+                color: isCorrect ? QuizColors.correct : QuizColors.incorrect,
                 width: 2,
               ),
             ),
@@ -448,9 +447,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                       isCorrect
                           ? Icons.check_circle_rounded
                           : Icons.cancel_rounded,
-                      color: isCorrect
-                          ? const Color(0xFF10B981)
-                          : const Color(0xFFEF4444),
+                      color:
+                          isCorrect ? QuizColors.correct : QuizColors.incorrect,
                       size: 26,
                     ),
                     const SizedBox(width: 9),
@@ -460,8 +458,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                         fontSize: 17,
                         fontWeight: FontWeight.w800,
                         color: isCorrect
-                            ? const Color(0xFF10B981)
-                            : const Color(0xFFEF4444),
+                            ? QuizColors.correct
+                            : QuizColors.incorrect,
                       ),
                     ),
                   ],
@@ -480,7 +478,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                       children: [
                         Icon(
                           Icons.lightbulb_rounded,
-                          color: const Color(0xFF10B981),
+                          color: QuizColors.correct,
                           size: 18,
                         ),
                         const SizedBox(width: 8),
@@ -493,7 +491,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF10B981),
+                                  color: QuizColors.correct,
                                 ),
                               ),
                               const SizedBox(height: 3),
@@ -746,7 +744,7 @@ class _AnswerButton extends StatelessWidget {
     // 배경색: 정답일 때만 초록색, 나머지는 기본
     Color backgroundColor;
     if (isCorrect == true) {
-      backgroundColor = const Color(0xFF10B981).withValues(alpha: 0.15);
+      backgroundColor = QuizColors.correct.withValues(alpha: 0.15);
     } else {
       backgroundColor = cs.surface;
     }
@@ -754,7 +752,7 @@ class _AnswerButton extends StatelessWidget {
     // Border 색상: 선택되었을 때만 표시
     Color borderColor;
     if (isCorrect == true) {
-      borderColor = const Color(0xFF10B981);
+      borderColor = QuizColors.correct;
     } else if (isSelected) {
       borderColor = cs.primary;
     } else {

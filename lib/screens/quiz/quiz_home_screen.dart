@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
 import '../../models/quiz_question.dart';
 import '../../providers/quiz_provider.dart';
+import '../../theme/colors.dart';
 import 'quiz_play_screen.dart';
 
 /// 퀴즈 홈 화면 - 난이도 및 유형 선택
@@ -432,7 +433,7 @@ class _DifficultyCard extends StatelessWidget {
               if (isSelected)
                 const Icon(
                   Icons.check_circle,
-                  color: Color(0xFF10B981),
+                  color: QuizColors.correct,
                   size: 22,
                 )
               else

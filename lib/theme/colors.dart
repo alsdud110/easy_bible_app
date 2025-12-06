@@ -9,6 +9,16 @@ class CommonColors {
   static const transparent = Colors.transparent;
 }
 
+/// 퀴즈 전용 컬러
+class QuizColors {
+  static const correct = Color(0xFF10B981); // 정답 (초록색)
+  static const incorrect = Color(0xFFEF4444); // 오답 (빨간색)
+  static const difficultyEasy = Color(0xFF10B981); // 쉬움 (초록색)
+  static const difficultyMedium = Color(0xFF3B82F6); // 보통 (파란색)
+  static const difficultyHard = Color(0xFFEF4444); // 어려움 (빨간색)
+  static const star = Color(0xFFFBBF24); // 별점 (노란색)
+}
+
 /// 라이트 테마 - 2025 트렌드 (부드러운 베이지 + 바이올렛 포인트)
 class LightColors {
   // 배경 - 따뜻한 화이트/베이지 톤
