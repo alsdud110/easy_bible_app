@@ -1399,6 +1399,706 @@
       "correctIndex": 1,
       "reference": "마태복음 26:74-75",
       "explanation": "베드로가 세 번째 부인하자 즉시 닭이 울었습니다."
+    },
+    {
+      "id": "mc_medium_101",
+      "difficulty": "medium",
+      "question": "사무엘을 하나님께 드리기로 서원한 사람은?",
+      "options": [
+        "한나",
+        "사라",
+        "리브가",
+        "라헬"
+      ],
+      "correctIndex": 0,
+      "reference": "사무엘상 1:11",
+      "explanation": "한나는 아들을 얻으면 평생 하나님께 드리겠다고 서원했습니다."
+    },
+    {
+      "id": "mc_medium_102",
+      "difficulty": "medium",
+      "question": "다윗이 밧세바와의 죄를 지적받고 회개한 후 지은 시편은?",
+      "options": [
+        "시편 23편",
+        "시편 51편",
+        "시편 91편",
+        "시편 119편"
+      ],
+      "correctIndex": 1,
+      "reference": "시편 51편 표제",
+      "explanation": "시편 51편은 다윗의 회개 시편입니다."
+    },
+    {
+      "id": "mc_medium_103",
+      "difficulty": "medium",
+      "question": "이스라엘의 12지파 중 제사장 지파는?",
+      "options": [
+        "유다",
+        "레위",
+        "베냐민",
+        "에브라임"
+      ],
+      "correctIndex": 1,
+      "reference": "민수기 3:6",
+      "explanation": "레위 지파는 제사장 직분을 맡았습니다."
+    },
+    {
+      "id": "mc_medium_104",
+      "difficulty": "medium",
+      "question": "예수님께서 물 위를 걸으실 때 함께 물 위를 걸으려 한 제자는?",
+      "options": [
+        "요한",
+        "베드로",
+        "야고보",
+        "안드레"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 14:28-29",
+      "explanation": "베드로가 물 위로 걸어 예수님께 나아갔습니다."
+    },
+    {
+      "id": "mc_medium_105",
+      "difficulty": "medium",
+      "question": "야곱이 형 에서를 피해 도망간 곳은?",
+      "options": [
+        "이집트",
+        "하란",
+        "가나안",
+        "바벨론"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 28:10",
+      "explanation": "야곱은 외삼촌 라반이 있는 하란으로 피신했습니다."
+    },
+    {
+      "id": "mc_medium_106",
+      "difficulty": "medium",
+      "question": "므낫세와 에브라임의 아버지는?",
+      "options": [
+        "야곱",
+        "요셉",
+        "유다",
+        "르우벤"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 48:1",
+      "explanation": "므낫세와 에브라임은 요셉의 두 아들입니다."
+    },
+    {
+      "id": "mc_medium_107",
+      "difficulty": "medium",
+      "question": "엘리야가 바알 선지자들과 대결한 후 도망쳐 간 곳은?",
+      "options": [
+        "광야",
+        "호렙 산",
+        "시내 산",
+        "모리아 산"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 19:8",
+      "explanation": "엘리야는 이세벨을 피해 호렙 산까지 도망갔습니다."
+    },
+    {
+      "id": "mc_medium_108",
+      "difficulty": "medium",
+      "question": "예수님이 승천하신 후 제자들이 모여 기도하던 곳은?",
+      "options": [
+        "성전",
+        "다락방",
+        "감람산",
+        "갈릴리"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 1:13",
+      "explanation": "제자들은 다락방에 모여 기도했습니다."
+    },
+    {
+      "id": "mc_medium_109",
+      "difficulty": "medium",
+      "question": "요셉을 애굽 총리로 세운 왕은?",
+      "options": [
+        "바로",
+        "느부갓네살",
+        "다리오",
+        "고레스"
+      ],
+      "correctIndex": 0,
+      "reference": "창세기 41:40-41",
+      "explanation": "애굽의 바로 왕이 요셉을 총리로 임명했습니다."
+    },
+    {
+      "id": "mc_medium_110",
+      "difficulty": "medium",
+      "question": "사도 바울이 다메섹 도상에서 만난 분은?",
+      "options": [
+        "천사",
+        "모세",
+        "예수님",
+        "세례 요한"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 9:5",
+      "explanation": "바울은 부활하신 예수님을 만났습니다."
+    },
+    {
+      "id": "mc_medium_111",
+      "difficulty": "medium",
+      "question": "솔로몬이 재판한 두 여인이 다툰 이유는?",
+      "options": [
+        "땅 문제",
+        "아기의 소유권",
+        "금은보화",
+        "남편 문제"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 3:16-28",
+      "explanation": "두 여인이 살아있는 아기가 누구의 것인지 다투었습니다."
+    },
+    {
+      "id": "mc_medium_112",
+      "difficulty": "medium",
+      "question": "기드온이 하나님의 뜻을 확인하기 위해 사용한 것은?",
+      "options": [
+        "돌",
+        "양털",
+        "나무",
+        "물"
+      ],
+      "correctIndex": 1,
+      "reference": "사사기 6:37",
+      "explanation": "기드온은 양털에 이슬이 맺히는 것으로 하나님의 뜻을 확인했습니다."
+    },
+    {
+      "id": "mc_medium_113",
+      "difficulty": "medium",
+      "question": "예수님께서 나사로를 살리신 곳은?",
+      "options": [
+        "베다니",
+        "베들레헴",
+        "나사렛",
+        "가버나움"
+      ],
+      "correctIndex": 0,
+      "reference": "요한복음 11:1",
+      "explanation": "나사로는 베다니에 살았고 그곳에서 살아났습니다."
+    },
+    {
+      "id": "mc_medium_114",
+      "difficulty": "medium",
+      "question": "이삭이 아들들에게 속임을 당한 이유는?",
+      "options": [
+        "귀가 멀어서",
+        "눈이 어두워서",
+        "병들어서",
+        "나이가 많아서"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 27:1",
+      "explanation": "이삭이 나이가 들어 눈이 어두워졌습니다."
+    },
+    {
+      "id": "mc_medium_115",
+      "difficulty": "medium",
+      "question": "다윗의 아들 압살롬이 반역할 때 다윗에게 충성한 사람은?",
+      "options": [
+        "요압",
+        "아히도벨",
+        "후새",
+        "압살롬"
+      ],
+      "correctIndex": 2,
+      "reference": "사무엘하 15:32",
+      "explanation": "후새는 다윗의 친구로 다윗에게 충성했습니다."
+    },
+    {
+      "id": "mc_medium_116",
+      "difficulty": "medium",
+      "question": "베드로가 환상 중에 본 것은?",
+      "options": [
+        "불기둥",
+        "천사",
+        "각종 짐승이 든 보자기",
+        "사다리"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 10:11-12",
+      "explanation": "베드로는 각종 짐승이 담긴 보자기가 내려오는 환상을 보았습니다."
+    },
+    {
+      "id": "mc_medium_117",
+      "difficulty": "medium",
+      "question": "삼손이 블레셋 신전을 무너뜨릴 때 기댄 것은?",
+      "options": [
+        "벽",
+        "문",
+        "기둥",
+        "지붕"
+      ],
+      "correctIndex": 2,
+      "reference": "사사기 16:29",
+      "explanation": "삼손은 신전을 지탱하는 두 기둥을 밀어 무너뜨렸습니다."
+    },
+    {
+      "id": "mc_medium_118",
+      "difficulty": "medium",
+      "question": "아브라함이 이삭 대신 제물로 드린 것은?",
+      "options": [
+        "양",
+        "소",
+        "염소",
+        "비둘기"
+      ],
+      "correctIndex": 0,
+      "reference": "창세기 22:13",
+      "explanation": "아브라함은 수풀에 걸린 숫양을 제물로 드렸습니다."
+    },
+    {
+      "id": "mc_medium_119",
+      "difficulty": "medium",
+      "question": "바울과 바나바가 첫 번째 전도여행을 시작한 곳은?",
+      "options": [
+        "예루살렘",
+        "안디옥",
+        "다메섹",
+        "고린도"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 13:1-3",
+      "explanation": "안디옥 교회에서 바울과 바나바를 파송했습니다."
+    },
+    {
+      "id": "mc_medium_120",
+      "difficulty": "medium",
+      "question": "예수님께서 변화산에서 만나신 구약의 인물은?",
+      "options": [
+        "아브라함과 이삭",
+        "모세와 엘리야",
+        "다윗과 솔로몬",
+        "이사야와 예레미야"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 17:3",
+      "explanation": "모세와 엘리야가 예수님과 함께 나타났습니다."
+    },
+    {
+      "id": "mc_medium_121",
+      "difficulty": "medium",
+      "question": "욥의 친구들 중 한 명이 아닌 사람은?",
+      "options": [
+        "엘리바스",
+        "빌닷",
+        "소발",
+        "다니엘"
+      ],
+      "correctIndex": 3,
+      "reference": "욥기 2:11",
+      "explanation": "욥의 친구는 엘리바스, 빌닷, 소발입니다."
+    },
+    {
+      "id": "mc_medium_122",
+      "difficulty": "medium",
+      "question": "예수님께서 겟세마네 동산에서 특별히 가까이 데리고 가신 제자는?",
+      "options": [
+        "베드로, 야고보, 요한",
+        "안드레, 빌립, 도마",
+        "마태, 마가, 누가",
+        "바돌로매, 시몬, 유다"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 26:37",
+      "explanation": "베드로와 세베대의 두 아들을 데리고 가셨습니다."
+    },
+    {
+      "id": "mc_medium_123",
+      "difficulty": "medium",
+      "question": "다윗이 골리앗을 물리칠 때 사용한 물매돌은 몇 개였나?",
+      "options": [
+        "1개",
+        "3개",
+        "5개 중 1개",
+        "7개"
+      ],
+      "correctIndex": 2,
+      "reference": "사무엘상 17:40",
+      "explanation": "다윗은 5개의 돌을 집었고 그 중 하나로 골리앗을 쓰러뜨렸습니다."
+    },
+    {
+      "id": "mc_medium_124",
+      "difficulty": "medium",
+      "question": "니느웨로 가라는 하나님의 명령을 거역하고 도망간 선지자는?",
+      "options": [
+        "이사야",
+        "예레미야",
+        "요나",
+        "에스겔"
+      ],
+      "correctIndex": 2,
+      "reference": "요나 1:3",
+      "explanation": "요나는 니느웨로 가기를 거부하고 다시스로 도망갔습니다."
+    },
+    {
+      "id": "mc_medium_125",
+      "difficulty": "medium",
+      "question": "바울이 옥중에서 쓴 편지가 아닌 것은?",
+      "options": [
+        "빌립보서",
+        "골로새서",
+        "갈라디아서",
+        "에베소서"
+      ],
+      "correctIndex": 2,
+      "reference": "바울 서신 전체",
+      "explanation": "갈라디아서는 옥중서신이 아닙니다."
+    },
+    {
+      "id": "mc_medium_126",
+      "difficulty": "medium",
+      "question": "예수님의 열두 제자 중 세금을 걷는 세리였던 사람은?",
+      "options": [
+        "베드로",
+        "마태",
+        "안드레",
+        "빌립"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 9:9",
+      "explanation": "마태는 세리였다가 예수님의 부르심을 받았습니다."
+    },
+    {
+      "id": "mc_medium_127",
+      "difficulty": "medium",
+      "question": "시므온과 레위가 보복한 성읍 이름은?",
+      "options": [
+        "소돔",
+        "고모라",
+        "세겜",
+        "여리고"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 34:25",
+      "explanation": "그들은 여동생 디나를 위해 세겜 성읍을 공격했습니다."
+    },
+    {
+      "id": "mc_medium_128",
+      "difficulty": "medium",
+      "question": "예수님이 잡히시던 밤 베드로가 칼로 귀를 자른 사람은?",
+      "options": [
+        "말고",
+        "말고의 종",
+        "대제사장의 종",
+        "바리새인"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 18:10",
+      "explanation": "베드로가 대제사장의 종 말고의 귀를 잘랐습니다."
+    },
+    {
+      "id": "mc_medium_129",
+      "difficulty": "medium",
+      "question": "야곱이 밤새 씨름한 대상은?",
+      "options": [
+        "천사",
+        "하나님",
+        "에서",
+        "라반"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 32:24-28",
+      "explanation": "야곱이 하나님과 씨름하여 이스라엘이라는 이름을 받았습니다."
+    },
+    {
+      "id": "mc_medium_130",
+      "difficulty": "medium",
+      "question": "예수님이 십자가에 달리실 때 옷을 나눈 사람들은?",
+      "options": [
+        "제사장들",
+        "군인들",
+        "바리새인들",
+        "군중들"
+      ],
+      "correctIndex": 1,
+      "reference": "요한복음 19:23",
+      "explanation": "군인들이 예수님의 옷을 나누어 가졌습니다."
+    },
+    {
+      "id": "mc_medium_131",
+      "difficulty": "medium",
+      "question": "예수님이 태어나실 때 경배하러 온 동방박사들의 수는?",
+      "options": [
+        "2명",
+        "3명",
+        "4명",
+        "정확한 수 미기록"
+      ],
+      "correctIndex": 3,
+      "reference": "마태복음 2:1",
+      "explanation": "성경에는 박사들의 정확한 수가 기록되지 않았습니다."
+    },
+    {
+      "id": "mc_medium_132",
+      "difficulty": "medium",
+      "question": "모세가 이집트에서 행한 첫 번째 재앙은?",
+      "options": [
+        "물이 피로 변함",
+        "개구리",
+        "이",
+        "파리"
+      ],
+      "correctIndex": 0,
+      "reference": "출애굽기 7:20",
+      "explanation": "나일강 물이 피로 변한 것이 첫 재앙이었습니다."
+    },
+    {
+      "id": "mc_medium_133",
+      "difficulty": "medium",
+      "question": "엘리사가 40명 이상을 먹인 빵의 개수는?",
+      "options": [
+        "5개",
+        "12개",
+        "20개",
+        "100개"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기하 4:42-44",
+      "explanation": "엘리사는 보리떡 20개로 100명을 먹였습니다."
+    },
+    {
+      "id": "mc_medium_134",
+      "difficulty": "medium",
+      "question": "다윗과 요나단의 우정의 증표로 주고받은 것이 아닌 것은?",
+      "options": [
+        "겉옷",
+        "칼",
+        "활",
+        "방패"
+      ],
+      "correctIndex": 3,
+      "reference": "사무엘상 18:4",
+      "explanation": "요나단이 겉옷, 칼, 활, 띠를 다윗에게 주었습니다."
+    },
+    {
+      "id": "mc_medium_135",
+      "difficulty": "medium",
+      "question": "예수님께서 마지막 만찬 때 제자들에게 하신 일은?",
+      "options": [
+        "발을 씻김",
+        "머리에 기름 부음",
+        "옷을 갈아입힘",
+        "손을 씻김"
+      ],
+      "correctIndex": 0,
+      "reference": "요한복음 13:5",
+      "explanation": "예수님은 제자들의 발을 씻기셨습니다."
+    },
+    {
+      "id": "mc_medium_136",
+      "difficulty": "medium",
+      "question": "다윗이 밧세바의 남편을 죽이기 위해 보낸 곳은?",
+      "options": [
+        "전쟁터 최전방",
+        "광야",
+        "외국",
+        "감옥"
+      ],
+      "correctIndex": 0,
+      "reference": "사무엘하 11:15",
+      "explanation": "다윗은 우리아를 전쟁터 최전방에 보내 죽게 했습니다."
+    },
+    {
+      "id": "mc_medium_137",
+      "difficulty": "medium",
+      "question": "바울이 고린도에서 만난 동역자 부부는?",
+      "options": [
+        "아굴라와 브리스길라",
+        "안드로니고와 유니아",
+        "빌레몬과 압비아",
+        "바나바와 마리아"
+      ],
+      "correctIndex": 0,
+      "reference": "사도행전 18:2",
+      "explanation": "아굴라와 브리스길라는 바울의 동역자였습니다."
+    },
+    {
+      "id": "mc_medium_138",
+      "difficulty": "medium",
+      "question": "예수님이 채찍으로 성전을 깨끗하게 하실 때 내쫓은 대상이 아닌 것은?",
+      "options": [
+        "소 파는 자",
+        "양 파는 자",
+        "비둘기 파는 자",
+        "음식 파는 자"
+      ],
+      "correctIndex": 3,
+      "reference": "요한복음 2:14-15",
+      "explanation": "소, 양, 비둘기 파는 자들과 환전하는 자들을 내쫓으셨습니다."
+    },
+    {
+      "id": "mc_medium_139",
+      "difficulty": "medium",
+      "question": "룻이 이삭을 줍던 밭의 주인은?",
+      "options": [
+        "보아스",
+        "엘리멜렉",
+        "기업 무를 자",
+        "나오미"
+      ],
+      "correctIndex": 0,
+      "reference": "룻기 2:3",
+      "explanation": "룻은 보아스의 밭에서 이삭을 주웠습니다."
+    },
+    {
+      "id": "mc_medium_140",
+      "difficulty": "medium",
+      "question": "예수님이 부활하신 후 가장 먼저 나타나신 사람은?",
+      "options": [
+        "베드로",
+        "요한",
+        "막달라 마리아",
+        "도마"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 20:14-16",
+      "explanation": "막달라 마리아가 부활하신 예수님을 처음 만났습니다."
+    },
+    {
+      "id": "mc_medium_141",
+      "difficulty": "medium",
+      "question": "하나님이 아브라함에게 처음 나타나신 곳은?",
+      "options": [
+        "하란",
+        "갈대아 우르",
+        "가나안",
+        "애굽"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 15:7, 사도행전 7:2",
+      "explanation": "하나님은 아브라함이 갈대아 우르에 있을 때 나타나셨습니다."
+    },
+    {
+      "id": "mc_medium_142",
+      "difficulty": "medium",
+      "question": "빌립보 감옥의 간수가 구원받은 후 한 일은?",
+      "options": [
+        "직장을 그만둠",
+        "가족과 함께 세례받음",
+        "바울을 석방함",
+        "성전에 감"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 16:33",
+      "explanation": "간수는 온 가족과 함께 세례를 받았습니다."
+    },
+    {
+      "id": "mc_medium_143",
+      "difficulty": "medium",
+      "question": "요셉이 형들에게 자신을 밝힌 곳은?",
+      "options": [
+        "감옥",
+        "왕궁",
+        "애굽의 곡간",
+        "야곱의 집"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 45:1-4",
+      "explanation": "요셉은 곡식을 주던 중 형들에게 자신을 밝혔습니다."
+    },
+    {
+      "id": "mc_medium_144",
+      "difficulty": "medium",
+      "question": "예수님이 어린 시절 가족과 피신한 나라는?",
+      "options": [
+        "바벨론",
+        "앗수르",
+        "애굽",
+        "페르시아"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 2:14",
+      "explanation": "요셉이 예수님과 마리아를 데리고 애굽으로 피신했습니다."
+    },
+    {
+      "id": "mc_medium_145",
+      "difficulty": "medium",
+      "question": "사울 왕이 다윗을 질투하게 된 계기는?",
+      "options": [
+        "다윗의 용맹",
+        "여인들의 노래",
+        "사무엘의 예언",
+        "요나단의 사랑"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 18:7-8",
+      "explanation": "여인들이 '사울은 천천, 다윗은 만만'이라 노래하자 질투했습니다."
+    },
+    {
+      "id": "mc_medium_146",
+      "difficulty": "medium",
+      "question": "바울이 로마로 가던 중 난파한 섬의 이름은?",
+      "options": [
+        "구브로",
+        "멜리데",
+        "밧모",
+        "로도"
+      ],
+      "correctIndex": 1,
+      "reference": "사도행전 28:1",
+      "explanation": "바울 일행은 멜리데 섬에서 3개월을 보냈습니다."
+    },
+    {
+      "id": "mc_medium_147",
+      "difficulty": "medium",
+      "question": "예수님이 5병 2어로 먹이신 사람의 수는?",
+      "options": [
+        "3000명",
+        "4000명",
+        "5000명",
+        "7000명"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 14:21",
+      "explanation": "여자와 어린이 외에 5000명을 먹이셨습니다."
+    },
+    {
+      "id": "mc_medium_148",
+      "difficulty": "medium",
+      "question": "에스더가 왕후가 되기 전 이름은?",
+      "options": [
+        "하닷사",
+        "사라",
+        "르비가",
+        "와스디"
+      ],
+      "correctIndex": 0,
+      "reference": "에스더 2:7",
+      "explanation": "에스더의 원래 이름은 하닷사였습니다."
+    },
+    {
+      "id": "mc_medium_149",
+      "difficulty": "medium",
+      "question": "예수님께서 삭개오를 만나신 곳은?",
+      "options": [
+        "예루살렘",
+        "여리고",
+        "나사렛",
+        "가버나움"
+      ],
+      "correctIndex": 1,
+      "reference": "누가복음 19:1",
+      "explanation": "예수님은 여리고에서 뽕나무에 올라간 삭개오를 만나셨습니다."
+    },
+    {
+      "id": "mc_medium_150",
+      "difficulty": "medium",
+      "question": "노아 홍수 이후 하나님이 다시는 홍수로 심판하지 않으시겠다는 언약의 표징은?",
+      "options": [
+        "별",
+        "무지개",
+        "구름",
+        "태양"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 9:13",
+      "explanation": "하나님은 무지개를 언약의 표징으로 주셨습니다."
     }
   ]
 }

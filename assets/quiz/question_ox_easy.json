@@ -123,10 +123,10 @@
     {
       "id": "ox_easy_016",
       "difficulty": "easy",
-      "question": "요한복음은 신약성경의 첫 번째 책이다.",
-      "answer": false,
-      "reference": "마태복음 1:1",
-      "explanation": "신약의 첫 책은 마태복음입니다."
+      "question": "창세기는 구약성경의 첫 번째 책이다.",
+      "answer": true,
+      "reference": "창세기 1:1",
+      "explanation": "구약의 첫 책은 창세기입니다.."
     },
     {
       "id": "ox_easy_017",
@@ -747,10 +747,10 @@
     {
       "id": "ox_easy_094",
       "difficulty": "easy",
-      "question": "아브라함은 믿음의 조상이라고 불린다.",
+      "question": "구약시대의 요셉은 보디발의 집에서 종으로 일했다.",
       "answer": true,
-      "reference": "로마서 4:11",
-      "explanation": "아브라함은 믿음의 조상으로 인정받습니다."
+      "reference": "창세기 39:1-2",
+      "explanation": "요셉은 애굽으로 팔려가 보디발의 집에서 종으로 일했습니다."
     },
     {
       "id": "ox_easy_095",
@@ -799,6 +799,406 @@
       "answer": true,
       "reference": "사도행전 2:1-4",
       "explanation": "오순절 날 성령이 급하고 강한 바람처럼 임했습니다."
+    },
+    {
+      "id": "ox_easy_101",
+      "difficulty": "easy",
+      "question": "가인은 아벨의 동생이다.",
+      "answer": false,
+      "reference": "창세기 4:1-2",
+      "explanation": "가인은 아벨의 형입니다."
+    },
+    {
+      "id": "ox_easy_102",
+      "difficulty": "easy",
+      "question": "예수님은 12살 때 성전에서 선생들과 문답하셨다.",
+      "answer": true,
+      "reference": "누가복음 2:42-46",
+      "explanation": "예수님은 12세에 성전에서 율법교사들과 대화하셨습니다."
+    },
+    {
+      "id": "ox_easy_103",
+      "difficulty": "easy",
+      "question": "이스라엘 백성은 애굽에서 노예 생활을 했다.",
+      "answer": true,
+      "reference": "출애굽기 1:11-14",
+      "explanation": "이스라엘 자손이 애굽에서 종살이를 했습니다."
+    },
+    {
+      "id": "ox_easy_104",
+      "difficulty": "easy",
+      "question": "솔로몬은 다윗의 형이다.",
+      "answer": false,
+      "reference": "사무엘하 12:24",
+      "explanation": "솔로몬은 다윗의 아들입니다."
+    },
+    {
+      "id": "ox_easy_105",
+      "difficulty": "easy",
+      "question": "세례 요한은 광야에서 외치는 자의 소리였다.",
+      "answer": true,
+      "reference": "마태복음 3:3",
+      "explanation": "세례 요한은 광야에서 외치는 자로 예언되었습니다."
+    },
+    {
+      "id": "ox_easy_106",
+      "difficulty": "easy",
+      "question": "십자가에 못 박히신 예수님 양옆에는 두 강도가 있었다.",
+      "answer": true,
+      "reference": "누가복음 23:32-33",
+      "explanation": "예수님 좌우에 두 행악자가 십자가에 달렸습니다."
+    },
+    {
+      "id": "ox_easy_107",
+      "difficulty": "easy",
+      "question": "라헬은 야곱의 첫 번째 아내이다.",
+      "answer": false,
+      "reference": "창세기 29:23-25",
+      "explanation": "야곱의 첫 아내는 레아이고, 라헬은 둘째 아내입니다."
+    },
+    {
+      "id": "ox_easy_108",
+      "difficulty": "easy",
+      "question": "시편은 찬양과 기도의 책이다.",
+      "answer": true,
+      "reference": "시편 전체",
+      "explanation": "시편은 하나님께 드리는 찬양과 기도로 가득한 책입니다."
+    },
+    {
+      "id": "ox_easy_109",
+      "difficulty": "easy",
+      "question": "기드온은 300명의 용사로 미디안을 물리쳤다.",
+      "answer": true,
+      "reference": "사사기 7:7",
+      "explanation": "하나님은 기드온에게 300명만으로 승리하게 하셨습니다."
+    },
+    {
+      "id": "ox_easy_110",
+      "difficulty": "easy",
+      "question": "예수님은 안식일에 병자를 고치지 않으셨다.",
+      "answer": false,
+      "reference": "누가복음 6:6-10",
+      "explanation": "예수님은 안식일에도 병자를 고치셨습니다."
+    },
+    {
+      "id": "ox_easy_111",
+      "difficulty": "easy",
+      "question": "하나님은 빛이 있으라 하시매 빛이 있었다.",
+      "answer": true,
+      "reference": "창세기 1:3",
+      "explanation": "하나님의 첫 창조 명령은 빛이었습니다."
+    },
+    {
+      "id": "ox_easy_112",
+      "difficulty": "easy",
+      "question": "사도 바울은 배를 타고 로마로 갔다.",
+      "answer": true,
+      "reference": "사도행전 27:1-2",
+      "explanation": "바울은 죄수로서 배를 타고 로마로 호송되었습니다."
+    },
+    {
+      "id": "ox_easy_113",
+      "difficulty": "easy",
+      "question": "성경은 총 100권으로 이루어져 있다.",
+      "answer": false,
+      "reference": "성경 전체",
+      "explanation": "성경은 구약 39권, 신약 27권 총 66권입니다."
+    },
+    {
+      "id": "ox_easy_114",
+      "difficulty": "easy",
+      "question": "여호수아는 태양을 멈추게 한 적이 있다.",
+      "answer": true,
+      "reference": "여호수아 10:12-13",
+      "explanation": "여호수아가 기도하자 태양이 중천에 머물렀습니다."
+    },
+    {
+      "id": "ox_easy_115",
+      "difficulty": "easy",
+      "question": "빌립보 감옥에서 지진이 일어났다.",
+      "answer": true,
+      "reference": "사도행전 16:26",
+      "explanation": "바울과 실라가 찬양할 때 큰 지진이 일어났습니다."
+    },
+    {
+      "id": "ox_easy_116",
+      "difficulty": "easy",
+      "question": "예수님은 제자들의 발을 씻기셨다.",
+      "answer": true,
+      "reference": "요한복음 13:5",
+      "explanation": "예수님은 겸손의 본을 보이시며 제자들의 발을 씻기셨습니다."
+    },
+    {
+      "id": "ox_easy_117",
+      "difficulty": "easy",
+      "question": "이삭은 에서와 야곱의 아버지이다.",
+      "answer": true,
+      "reference": "창세기 25:21-26",
+      "explanation": "이삭과 리브가에게서 쌍둥이 에서와 야곱이 태어났습니다."
+    },
+    {
+      "id": "ox_easy_118",
+      "difficulty": "easy",
+      "question": "성경의 마지막 단어는 '아멘'이다.",
+      "answer": true,
+      "reference": "요한계시록 22:21",
+      "explanation": "요한계시록은 '아멘'으로 끝납니다."
+    },
+    {
+      "id": "ox_easy_119",
+      "difficulty": "easy",
+      "question": "다윗은 이스라엘의 첫 번째 왕이었다.",
+      "answer": false,
+      "reference": "사무엘상 10:1",
+      "explanation": "이스라엘의 첫 왕은 사울이고, 다윗은 두 번째 왕입니다."
+    },
+    {
+      "id": "ox_easy_120",
+      "difficulty": "easy",
+      "question": "예수님은 나귀를 타고 예루살렘에 입성하셨다.",
+      "answer": true,
+      "reference": "마태복음 21:7",
+      "explanation": "예수님은 나귀 새끼를 타고 예루살렘에 들어가셨습니다."
+    },
+    {
+      "id": "ox_easy_121",
+      "difficulty": "easy",
+      "question": "성경에는 사복음서가 있다.",
+      "answer": true,
+      "reference": "마태, 마가, 누가, 요한복음",
+      "explanation": "마태, 마가, 누가, 요한복음을 사복음서라고 합니다."
+    },
+    {
+      "id": "ox_easy_122",
+      "difficulty": "easy",
+      "question": "사도행전은 구약성경에 속한다.",
+      "answer": false,
+      "reference": "사도행전 전체",
+      "explanation": "사도행전은 신약성경에 속합니다."
+    },
+    {
+      "id": "ox_easy_123",
+      "difficulty": "easy",
+      "question": "하나님은 일곱째 날에 안식하셨다.",
+      "answer": true,
+      "reference": "창세기 2:2",
+      "explanation": "하나님은 창조를 마치시고 일곱째 날에 안식하셨습니다."
+    },
+    {
+      "id": "ox_easy_124",
+      "difficulty": "easy",
+      "question": "베드로는 세리 출신이다.",
+      "answer": false,
+      "reference": "마태복음 4:18",
+      "explanation": "베드로는 어부였고, 세리는 마태입니다."
+    },
+    {
+      "id": "ox_easy_125",
+      "difficulty": "easy",
+      "question": "선한 사마리아인의 비유는 누가복음에 나온다.",
+      "answer": true,
+      "reference": "누가복음 10:30-37",
+      "explanation": "선한 사마리아인 비유는 누가복음에만 기록되어 있습니다."
+    },
+    {
+      "id": "ox_easy_126",
+      "difficulty": "easy",
+      "question": "바벨탑은 하나님께서 기뻐하신 건축물이었다.",
+      "answer": false,
+      "reference": "창세기 11:4-7",
+      "explanation": "바벨탑은 인간의 교만으로 지어졌고 하나님이 언어를 흩으셨습니다."
+    },
+    {
+      "id": "ox_easy_127",
+      "difficulty": "easy",
+      "question": "탕자의 비유에서 아버지는 돌아온 아들을 반갑게 맞았다.",
+      "answer": true,
+      "reference": "누가복음 15:20",
+      "explanation": "아버지는 돌아온 탕자를 달려가 안고 기뻐했습니다."
+    },
+    {
+      "id": "ox_easy_128",
+      "difficulty": "easy",
+      "question": "삭개오는 키가 작았다.",
+      "answer": true,
+      "reference": "누가복음 19:3",
+      "explanation": "삭개오는 키가 작아서 뽕나무에 올라가 예수님을 보았습니다."
+    },
+    {
+      "id": "ox_easy_129",
+      "difficulty": "easy",
+      "question": "여리고 성벽은 나팔 소리에 무너졌다.",
+      "answer": true,
+      "reference": "여호수아 6:20",
+      "explanation": "제사장들이 나팔을 불고 백성이 외치자 성벽이 무너졌습니다."
+    },
+    {
+      "id": "ox_easy_130",
+      "difficulty": "easy",
+      "question": "요셉의 형제들은 12명이었다.",
+      "answer": false,
+      "reference": "창세기 35:22-26",
+      "explanation": "야곱에게는 12명의 아들이 있었고, 요셉은 그 중 하나입니다."
+    },
+    {
+      "id": "ox_easy_131",
+      "difficulty": "easy",
+      "question": "예수님은 33세에 십자가에 못 박히셨다.",
+      "answer": true,
+      "reference": "전통적 견해",
+      "explanation": "전통적으로 예수님은 약 33세에 십자가에 달리신 것으로 여겨집니다."
+    },
+    {
+      "id": "ox_easy_132",
+      "difficulty": "easy",
+      "question": "니고데모는 밤에 예수님을 찾아왔다.",
+      "answer": true,
+      "reference": "요한복음 3:2",
+      "explanation": "니고데모는 바리새인으로 밤에 예수님을 찾아왔습니다."
+    },
+    {
+      "id": "ox_easy_133",
+      "difficulty": "easy",
+      "question": "하나님은 모세에게 불타는 떨기나무 가운데서 나타나셨다.",
+      "answer": true,
+      "reference": "출애굽기 3:2",
+      "explanation": "모세는 불붙은 떨기나무 가운데서 하나님의 음성을 들었습니다."
+    },
+    {
+      "id": "ox_easy_134",
+      "difficulty": "easy",
+      "question": "예수님의 옷을 만진 여인은 열두 해 동안 혈루증을 앓았다.",
+      "answer": true,
+      "reference": "마가복음 5:25",
+      "explanation": "열두 해 동안 혈루증을 앓던 여인이 예수님의 옷을 만져 나았습니다."
+    },
+    {
+      "id": "ox_easy_135",
+      "difficulty": "easy",
+      "question": "예수님은 물고기 뱃속에서 돈을 얻으신 적이 있다.",
+      "answer": true,
+      "reference": "마태복음 17:27",
+      "explanation": "베드로가 낚시를 하여 물고기 입에서 세금 낼 돈을 얻었습니다."
+    },
+    {
+      "id": "ox_easy_136",
+      "difficulty": "easy",
+      "question": "사마리아 여인은 우물가에서 예수님을 만났다.",
+      "answer": true,
+      "reference": "요한복음 4:7",
+      "explanation": "예수님은 야곱의 우물가에서 사마리아 여인과 대화하셨습니다."
+    },
+    {
+      "id": "ox_easy_137",
+      "difficulty": "easy",
+      "question": "도마는 예수님의 부활을 처음부터 믿었다.",
+      "answer": false,
+      "reference": "요한복음 20:25",
+      "explanation": "도마는 의심하다가 나중에 예수님을 직접 보고 믿었습니다."
+    },
+    {
+      "id": "ox_easy_138",
+      "difficulty": "easy",
+      "question": "예수님은 승천하실 때 감람산에서 올라가셨다.",
+      "answer": true,
+      "reference": "사도행전 1:12",
+      "explanation": "예수님은 감람산에서 승천하셨습니다."
+    },
+    {
+      "id": "ox_easy_139",
+      "difficulty": "easy",
+      "question": "하나님은 노아에게 방주를 만들라고 하셨다.",
+      "answer": true,
+      "reference": "창세기 6:14",
+      "explanation": "하나님은 홍수 심판 전에 노아에게 방주를 만들라 명하셨습니다."
+    },
+    {
+      "id": "ox_easy_140",
+      "difficulty": "easy",
+      "question": "예수님은 나사렛에서 자라셨다.",
+      "answer": true,
+      "reference": "누가복음 2:51",
+      "explanation": "예수님은 나사렛으로 돌아가 자라셨습니다."
+    },
+    {
+      "id": "ox_easy_141",
+      "difficulty": "easy",
+      "question": "바울은 로마 황제였다.",
+      "answer": false,
+      "reference": "사도행전 전체",
+      "explanation": "바울은 사도이지 황제가 아닙니다."
+    },
+    {
+      "id": "ox_easy_142",
+      "difficulty": "easy",
+      "question": "예수님은 어린이들을 축복하셨다.",
+      "answer": true,
+      "reference": "마가복음 10:16",
+      "explanation": "예수님은 어린이들을 안고 축복하셨습니다."
+    },
+    {
+      "id": "ox_easy_143",
+      "difficulty": "easy",
+      "question": "골리앗은 블레셋 거인이었다.",
+      "answer": true,
+      "reference": "사무엘상 17:4",
+      "explanation": "골리앗은 키가 약 3미터에 달하는 블레셋 장수였습니다."
+    },
+    {
+      "id": "ox_easy_144",
+      "difficulty": "easy",
+      "question": "여호와는 이스라엘의 하나님이시다.",
+      "answer": true,
+      "reference": "출애굽기 20:2",
+      "explanation": "여호와는 이스라엘을 애굽에서 인도하신 하나님이십니다."
+    },
+    {
+      "id": "ox_easy_145",
+      "difficulty": "easy",
+      "question": "예수님은 죄가 있으셨다.",
+      "answer": false,
+      "reference": "히브리서 4:15",
+      "explanation": "예수님은 죄 없으신 분이십니다."
+    },
+    {
+      "id": "ox_easy_146",
+      "difficulty": "easy",
+      "question": "예수님은 세상의 빛이라고 하셨다.",
+      "answer": true,
+      "reference": "요한복음 8:12",
+      "explanation": "예수님은 자신을 세상의 빛이라고 말씀하셨습니다."
+    },
+    {
+      "id": "ox_easy_147",
+      "difficulty": "easy",
+      "question": "마르다와 마리아는 자매였다.",
+      "answer": true,
+      "reference": "누가복음 10:38-39",
+      "explanation": "마르다와 마리아는 나사로의 자매들입니다."
+    },
+    {
+      "id": "ox_easy_148",
+      "difficulty": "easy",
+      "question": "천국은 하나님의 나라이다.",
+      "answer": true,
+      "reference": "마태복음 전체",
+      "explanation": "천국과 하나님의 나라는 같은 의미입니다."
+    },
+    {
+      "id": "ox_easy_149",
+      "difficulty": "easy",
+      "question": "예수님은 목자 없는 양 같은 무리를 불쌍히 여기셨다.",
+      "answer": true,
+      "reference": "마태복음 9:36",
+      "explanation": "예수님은 목자 없는 양처럼 고생하는 무리를 보고 불쌍히 여기셨습니다."
+    },
+    {
+      "id": "ox_easy_150",
+      "difficulty": "easy",
+      "question": "성령은 보혜사이시다.",
+      "answer": true,
+      "reference": "요한복음 14:26",
+      "explanation": "성령은 우리의 보혜사, 즉 위로자이십니다."
     }
   ]
 }

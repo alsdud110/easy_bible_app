@@ -1399,6 +1399,706 @@
       "correctIndex": 2,
       "reference": "마태복음 3:16",
       "explanation": "예수님이 세례 받으실 때 성령이 비둘기 같이 임하셨습니다."
+    },
+    {
+      "id": "mc_easy_101",
+      "difficulty": "easy",
+      "question": "하나님이 세상을 창조하신 기간은?",
+      "options": [
+        "3일",
+        "7일",
+        "10일",
+        "40일"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 1:1-2:3",
+      "explanation": "하나님께서 6일 동안 창조하시고 7일째 안식하셨습니다."
+    },
+    {
+      "id": "mc_easy_102",
+      "difficulty": "easy",
+      "question": "아브라함의 고향은 어디인가?",
+      "options": [
+        "이집트",
+        "갈대아 우르",
+        "가나안",
+        "바벨론"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 11:31",
+      "explanation": "아브라함은 갈대아 우르에서 태어났습니다."
+    },
+    {
+      "id": "mc_easy_103",
+      "difficulty": "easy",
+      "question": "예수님의 양부 이름은?",
+      "options": [
+        "요셉",
+        "사가랴",
+        "시므온",
+        "요한"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 1:18-19",
+      "explanation": "요셉은 예수님의 양부입니다."
+    },
+    {
+      "id": "mc_easy_104",
+      "difficulty": "easy",
+      "question": "예수님을 배반한 제자는 누구인가?",
+      "options": [
+        "베드로",
+        "유다",
+        "도마",
+        "마태"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 26:14-16",
+      "explanation": "가룟 유다가 은 30에 예수님을 팔았습니다."
+    },
+    {
+      "id": "mc_easy_105",
+      "difficulty": "easy",
+      "question": "성경에서 가장 긴 책은?",
+      "options": [
+        "창세기",
+        "시편",
+        "이사야",
+        "예레미야"
+      ],
+      "correctIndex": 1,
+      "reference": "시편",
+      "explanation": "시편은 150편으로 구성된 성경에서 가장 긴 책입니다."
+    },
+    {
+      "id": "mc_easy_106",
+      "difficulty": "easy",
+      "question": "노아의 방주에서 홍수 후 처음 내보낸 새는?",
+      "options": [
+        "비둘기",
+        "까마귀",
+        "독수리",
+        "참새"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 8:7",
+      "explanation": "노아가 까마귀를 먼저 내보냈습니다."
+    },
+    {
+      "id": "mc_easy_107",
+      "difficulty": "easy",
+      "question": "예수님이 태어난 도시는?",
+      "options": [
+        "예루살렘",
+        "나사렛",
+        "베들레헴",
+        "여리고"
+      ],
+      "correctIndex": 2,
+      "reference": "누가복음 2:4-7",
+      "explanation": "예수님은 베들레헴에서 태어나셨습니다."
+    },
+    {
+      "id": "mc_easy_108",
+      "difficulty": "easy",
+      "question": "성경의 첫 번째 책은?",
+      "options": [
+        "출애굽기",
+        "창세기",
+        "레위기",
+        "민수기"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기",
+      "explanation": "창세기는 성경의 첫 번째 책입니다."
+    },
+    {
+      "id": "mc_easy_109",
+      "difficulty": "easy",
+      "question": "하나님께서 모세에게 십계명을 주신 산은?",
+      "options": [
+        "갈멜 산",
+        "올리브 산",
+        "시내 산",
+        "아라랏 산"
+      ],
+      "correctIndex": 2,
+      "reference": "출애굽기 19:20",
+      "explanation": "하나님께서 시내 산에서 십계명을 주셨습니다."
+    },
+    {
+      "id": "mc_easy_110",
+      "difficulty": "easy",
+      "question": "다윗과 싸워 이긴 거인의 이름은?",
+      "options": [
+        "사울",
+        "골리앗",
+        "압살롬",
+        "삼손"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 17:4",
+      "explanation": "다윗은 블레셋 거인 골리앗을 물매돌로 쓰러뜨렸습니다."
+    },
+    {
+      "id": "mc_easy_111",
+      "difficulty": "easy",
+      "question": "주기도문은 어느 복음서에 나오는가?",
+      "options": [
+        "마태복음",
+        "마가복음",
+        "요한복음",
+        "사도행전"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 6:9-13",
+      "explanation": "주기도문은 마태복음 6장에 기록되어 있습니다."
+    },
+    {
+      "id": "mc_easy_112",
+      "difficulty": "easy",
+      "question": "예수님의 첫 번째 기적은?",
+      "options": [
+        "병자를 고치심",
+        "물을 포도주로 바꾸심",
+        "오병이어의 기적",
+        "물 위를 걸으심"
+      ],
+      "correctIndex": 1,
+      "reference": "요한복음 2:1-11",
+      "explanation": "가나 혼인잔치에서 물을 포도주로 바꾸신 것이 첫 기적입니다."
+    },
+    {
+      "id": "mc_easy_113",
+      "difficulty": "easy",
+      "question": "아담과 하와가 살던 곳은?",
+      "options": [
+        "에덴동산",
+        "바벨탑",
+        "광야",
+        "가나안"
+      ],
+      "correctIndex": 0,
+      "reference": "창세기 2:8",
+      "explanation": "하나님께서 아담과 하와를 에덴동산에 두셨습니다."
+    },
+    {
+      "id": "mc_easy_114",
+      "difficulty": "easy",
+      "question": "성경에서 가장 짧은 절은 어느 복음서에 있는가?",
+      "options": [
+        "마태복음",
+        "마가복음",
+        "누가복음",
+        "요한복음"
+      ],
+      "correctIndex": 3,
+      "reference": "요한복음 11:35",
+      "explanation": "예수께서 눈물을 흘리시니라는 가장 짧은 절입니다."
+    },
+    {
+      "id": "mc_easy_115",
+      "difficulty": "easy",
+      "question": "이스라엘 백성이 홍해를 건넌 지도자는?",
+      "options": [
+        "아론",
+        "모세",
+        "여호수아",
+        "아브라함"
+      ],
+      "correctIndex": 1,
+      "reference": "출애굽기 14:21-22",
+      "explanation": "모세가 홍해를 가르고 이스라엘 백성을 인도했습니다."
+    },
+    {
+      "id": "mc_easy_116",
+      "difficulty": "easy",
+      "question": "예수님의 제자는 몇 명인가?",
+      "options": [
+        "10명",
+        "12명",
+        "24명",
+        "40명"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 10:1-4",
+      "explanation": "예수님께서 열두 제자를 택하셨습니다."
+    },
+    {
+      "id": "mc_easy_117",
+      "difficulty": "easy",
+      "question": "구약성경과 신약성경을 합한 책의 수는?",
+      "options": [
+        "39권",
+        "27권",
+        "50권",
+        "66권"
+      ],
+      "correctIndex": 3,
+      "reference": "성경",
+      "explanation": "구약 39권과 신약 27권을 합하여 66권입니다."
+    },
+    {
+      "id": "mc_easy_118",
+      "difficulty": "easy",
+      "question": "예수님을 세 번 부인한 제자는?",
+      "options": [
+        "베드로",
+        "요한",
+        "야고보",
+        "안드레"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 26:69-75",
+      "explanation": "베드로가 예수님을 세 번 부인했습니다."
+    },
+    {
+      "id": "mc_easy_119",
+      "difficulty": "easy",
+      "question": "삼손의 힘의 비밀은?",
+      "options": [
+        "긴 머리카락",
+        "큰 키",
+        "많은 음식",
+        "특별한 무기"
+      ],
+      "correctIndex": 0,
+      "reference": "사사기 16:17",
+      "explanation": "삼손은 머리털이 밀리면 힘을 잃었습니다."
+    },
+    {
+      "id": "mc_easy_120",
+      "difficulty": "easy",
+      "question": "성경에서 가장 오래 산 사람은?",
+      "options": [
+        "노아",
+        "아브라함",
+        "므두셀라",
+        "아담"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 5:27",
+      "explanation": "므두셀라는 969세까지 살았습니다."
+    },
+    {
+      "id": "mc_easy_121",
+      "difficulty": "easy",
+      "question": "예수님이 십자가에 못 박히신 장소는?",
+      "options": [
+        "베들레헴",
+        "골고다",
+        "갈릴리",
+        "나사렛"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음 27:33",
+      "explanation": "골고다라는 곳에서 십자가에 못 박히셨습니다."
+    },
+    {
+      "id": "mc_easy_122",
+      "difficulty": "easy",
+      "question": "세례 요한의 아버지는?",
+      "options": [
+        "시므온",
+        "사가랴",
+        "요셉",
+        "나단"
+      ],
+      "correctIndex": 1,
+      "reference": "누가복음 1:13",
+      "explanation": "사가랴는 세례 요한의 아버지입니다."
+    },
+    {
+      "id": "mc_easy_123",
+      "difficulty": "easy",
+      "question": "예수님께서 부활하신 날은?",
+      "options": [
+        "금요일",
+        "토요일",
+        "일요일",
+        "월요일"
+      ],
+      "correctIndex": 2,
+      "reference": "마가복음 16:9",
+      "explanation": "안식 후 첫날, 즉 일요일에 부활하셨습니다."
+    },
+    {
+      "id": "mc_easy_124",
+      "difficulty": "easy",
+      "question": "이스라엘의 첫 번째 왕은?",
+      "options": [
+        "다윗",
+        "사울",
+        "솔로몬",
+        "사무엘"
+      ],
+      "correctIndex": 1,
+      "reference": "사무엘상 10:1",
+      "explanation": "사울이 이스라엘의 첫 번째 왕이 되었습니다."
+    },
+    {
+      "id": "mc_easy_125",
+      "difficulty": "easy",
+      "question": "모세의 형은?",
+      "options": [
+        "아론",
+        "여호수아",
+        "갈렙",
+        "미리암"
+      ],
+      "correctIndex": 0,
+      "reference": "출애굽기 4:14",
+      "explanation": "아론은 모세의 형입니다."
+    },
+    {
+      "id": "mc_easy_126",
+      "difficulty": "easy",
+      "question": "성전을 건축한 왕은?",
+      "options": [
+        "다윗",
+        "솔로몬",
+        "사울",
+        "르호보암"
+      ],
+      "correctIndex": 1,
+      "reference": "열왕기상 6:1",
+      "explanation": "솔로몬 왕이 성전을 건축했습니다."
+    },
+    {
+      "id": "mc_easy_127",
+      "difficulty": "easy",
+      "question": "다윗의 아들이 아닌 사람은?",
+      "options": [
+        "솔로몬",
+        "압살롬",
+        "사울",
+        "아도니야"
+      ],
+      "correctIndex": 2,
+      "reference": "사무엘상 9:1-2",
+      "explanation": "사울은 다윗의 아들이 아니라 다윗 이전의 왕입니다."
+    },
+    {
+      "id": "mc_easy_128",
+      "difficulty": "easy",
+      "question": "선한 사마리아인 비유는 어느 복음서에 있는가?",
+      "options": [
+        "마태복음",
+        "마가복음",
+        "누가복음",
+        "요한복음"
+      ],
+      "correctIndex": 2,
+      "reference": "누가복음 10:30-37",
+      "explanation": "선한 사마리아인의 비유는 누가복음에 기록되어 있습니다."
+    },
+    {
+      "id": "mc_easy_129",
+      "difficulty": "easy",
+      "question": "십계명에서 첫 번째 계명은?",
+      "options": [
+        "살인하지 말라",
+        "나 외에 다른 신을 섬기지 말라",
+        "안식일을 지켜라",
+        "부모를 공경하라"
+      ],
+      "correctIndex": 1,
+      "reference": "출애굽기 20:3",
+      "explanation": "나 외에 다른 신들을 네게 두지 말라가 첫 계명입니다."
+    },
+    {
+      "id": "mc_easy_130",
+      "difficulty": "easy",
+      "question": "요나를 삼킨 생물은?",
+      "options": [
+        "상어",
+        "큰 물고기",
+        "고래",
+        "악어"
+      ],
+      "correctIndex": 1,
+      "reference": "요나 1:17",
+      "explanation": "여호와께서 큰 물고기를 예비하사 요나를 삼키게 하셨습니다."
+    },
+    {
+      "id": "mc_easy_131",
+      "difficulty": "easy",
+      "question": "최초의 인간은?",
+      "options": [
+        "가인",
+        "노아",
+        "아담",
+        "아벨"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 2:7",
+      "explanation": "하나님께서 아담을 최초로 창조하셨습니다."
+    },
+    {
+      "id": "mc_easy_132",
+      "difficulty": "easy",
+      "question": "다니엘이 던져진 곳은?",
+      "options": [
+        "감옥",
+        "우물",
+        "사자 굴",
+        "풀무불"
+      ],
+      "correctIndex": 2,
+      "reference": "다니엘 6:16",
+      "explanation": "다니엘은 사자 굴에 던져졌습니다."
+    },
+    {
+      "id": "mc_easy_133",
+      "difficulty": "easy",
+      "question": "신약성경의 첫 번째 책은?",
+      "options": [
+        "마가복음",
+        "마태복음",
+        "누가복음",
+        "요한복음"
+      ],
+      "correctIndex": 1,
+      "reference": "마태복음",
+      "explanation": "마태복음이 신약성경의 첫 번째 책입니다."
+    },
+    {
+      "id": "mc_easy_134",
+      "difficulty": "easy",
+      "question": "성경의 마지막 책은?",
+      "options": [
+        "유다서",
+        "요한계시록",
+        "요한삼서",
+        "히브리서"
+      ],
+      "correctIndex": 1,
+      "reference": "요한계시록",
+      "explanation": "요한계시록이 성경의 마지막 책입니다."
+    },
+    {
+      "id": "mc_easy_135",
+      "difficulty": "easy",
+      "question": "바울의 원래 이름은?",
+      "options": [
+        "사울",
+        "시몬",
+        "요셉",
+        "베드로"
+      ],
+      "correctIndex": 0,
+      "reference": "사도행전 13:9",
+      "explanation": "바울은 원래 사울이라고 불렸습니다."
+    },
+    {
+      "id": "mc_easy_136",
+      "difficulty": "easy",
+      "question": "예수님이 자라난 고향은?",
+      "options": [
+        "베들레헴",
+        "예루살렘",
+        "나사렛",
+        "갈릴리"
+      ],
+      "correctIndex": 2,
+      "reference": "누가복음 2:39-40",
+      "explanation": "예수님은 나사렛에서 자라셨습니다."
+    },
+    {
+      "id": "mc_easy_137",
+      "difficulty": "easy",
+      "question": "이집트에 노예로 팔린 요셉의 형제 수는?",
+      "options": [
+        "10명",
+        "11명",
+        "12명",
+        "13명"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 37:9",
+      "explanation": "요셉을 제외한 11명의 형제가 있었습니다."
+    },
+    {
+      "id": "mc_easy_138",
+      "difficulty": "easy",
+      "question": "가인이 죽인 사람은?",
+      "options": [
+        "아담",
+        "셋",
+        "아벨",
+        "에녹"
+      ],
+      "correctIndex": 2,
+      "reference": "창세기 4:8",
+      "explanation": "가인이 그의 아우 아벨을 쳐죽였습니다."
+    },
+    {
+      "id": "mc_easy_139",
+      "difficulty": "easy",
+      "question": "예수님께서 걸으셨던 바다는?",
+      "options": [
+        "지중해",
+        "홍해",
+        "갈릴리 바다",
+        "사해"
+      ],
+      "correctIndex": 2,
+      "reference": "마태복음 14:25",
+      "explanation": "예수님께서 갈릴리 바다 위를 걸으셨습니다."
+    },
+    {
+      "id": "mc_easy_140",
+      "difficulty": "easy",
+      "question": "모세가 받은 돌판은 몇 개인가?",
+      "options": [
+        "1개",
+        "2개",
+        "3개",
+        "10개"
+      ],
+      "correctIndex": 1,
+      "reference": "출애굽기 31:18",
+      "explanation": "하나님께서 두 돌판에 십계명을 기록하셨습니다."
+    },
+    {
+      "id": "mc_easy_141",
+      "difficulty": "easy",
+      "question": "예수님의 어머니는?",
+      "options": [
+        "마르다",
+        "마리아",
+        "엘리사벳",
+        "한나"
+      ],
+      "correctIndex": 1,
+      "reference": "누가복음 1:26-27",
+      "explanation": "마리아는 예수님의 어머니입니다."
+    },
+    {
+      "id": "mc_easy_142",
+      "difficulty": "easy",
+      "question": "솔로몬이 구한 것은?",
+      "options": [
+        "재물",
+        "명예",
+        "지혜",
+        "장수"
+      ],
+      "correctIndex": 2,
+      "reference": "열왕기상 3:9",
+      "explanation": "솔로몬은 하나님께 지혜를 구했습니다."
+    },
+    {
+      "id": "mc_easy_143",
+      "difficulty": "easy",
+      "question": "이스라엘을 이집트에서 구출한 지도자는?",
+      "options": [
+        "아브라함",
+        "이삭",
+        "야곱",
+        "모세"
+      ],
+      "correctIndex": 3,
+      "reference": "출애굽기 3:10",
+      "explanation": "모세가 이스라엘 백성을 이집트에서 인도했습니다."
+    },
+    {
+      "id": "mc_easy_144",
+      "difficulty": "easy",
+      "question": "예수님을 죽이려고 어린 아기들을 죽인 왕은?",
+      "options": [
+        "헤롯",
+        "빌라도",
+        "가이사",
+        "아굽바"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 2:16",
+      "explanation": "헤롯 왕이 베들레헴의 어린 아기들을 다 죽였습니다."
+    },
+    {
+      "id": "mc_easy_145",
+      "difficulty": "easy",
+      "question": "사도 바울의 직업은?",
+      "options": [
+        "어부",
+        "목수",
+        "천막 만드는 사람",
+        "세리"
+      ],
+      "correctIndex": 2,
+      "reference": "사도행전 18:3",
+      "explanation": "바울은 천막 만드는 사람이었습니다."
+    },
+    {
+      "id": "mc_easy_146",
+      "difficulty": "easy",
+      "question": "성경에 등장하는 최초의 형제는?",
+      "options": [
+        "야곱과 에서",
+        "가인과 아벨",
+        "요셉과 베냐민",
+        "모세와 아론"
+      ],
+      "correctIndex": 1,
+      "reference": "창세기 4:1-2",
+      "explanation": "가인과 아벨은 아담과 하와의 아들들입니다."
+    },
+    {
+      "id": "mc_easy_147",
+      "difficulty": "easy",
+      "question": "나사로를 죽음에서 살리신 분은?",
+      "options": [
+        "베드로",
+        "바울",
+        "예수님",
+        "엘리야"
+      ],
+      "correctIndex": 2,
+      "reference": "요한복음 11:43-44",
+      "explanation": "예수님께서 나사로를 살리셨습니다."
+    },
+    {
+      "id": "mc_easy_148",
+      "difficulty": "easy",
+      "question": "세리였던 예수님의 제자는?",
+      "options": [
+        "마태",
+        "요한",
+        "베드로",
+        "안드레"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 9:9",
+      "explanation": "마태는 세리였다가 예수님의 제자가 되었습니다."
+    },
+    {
+      "id": "mc_easy_149",
+      "difficulty": "easy",
+      "question": "탕자의 비유에서 돌아온 아들을 맞이한 사람은?",
+      "options": [
+        "형",
+        "아버지",
+        "어머니",
+        "종"
+      ],
+      "correctIndex": 1,
+      "reference": "누가복음 15:20",
+      "explanation": "아버지가 달려가 아들을 안고 입맞추었습니다."
+    },
+    {
+      "id": "mc_easy_150",
+      "difficulty": "easy",
+      "question": "오병이어 기적에서 사용된 물고기는 몇 마리인가?",
+      "options": [
+        "2마리",
+        "5마리",
+        "7마리",
+        "12마리"
+      ],
+      "correctIndex": 0,
+      "reference": "마태복음 14:17",
+      "explanation": "떡 다섯 개와 물고기 두 마리로 오천 명을 먹이셨습니다."
     }
   ]
 }
