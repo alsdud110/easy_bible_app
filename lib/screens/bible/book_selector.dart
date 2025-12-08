@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
 import '../../services/bible_search_service.dart';
+import '../../services/bible_search_history_service.dart';
 import '../../widgets/banner_ad_widget.dart';
 import 'verse_list_view.dart';
 
@@ -77,6 +78,10 @@ class _BookSelectorState extends State<BookSelector>
   bool _isSearching = false;
   int _totalWordSearchCount = 0;
 
+  // 검색 기록 관련
+  final BibleSearchHistoryService _searchHistoryService = BibleSearchHistoryService();
+  List<BibleSearchHistory> _searchHistory = [];
+
   @override
   void initState() {
     super.initState();
@@ -96,6 +101,11 @@ class _BookSelectorState extends State<BookSelector>
       curve: Curves.easeOutCubic,
     ));
     _animationController.forward();
+
+    // 비동기로 검색 기록 로드 (UI 차단 방지)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSearchHistory();
+    });
   }
 
   @override
@@ -109,6 +119,34 @@ class _BookSelectorState extends State<BookSelector>
     _searchController.dispose();
     _animationController.dispose();
     super.dispose();
+  }
+
+  /// 검색 기록 로드
+  Future<void> _loadSearchHistory() async {
+    final history = await _searchHistoryService.getHistory();
+    if (mounted) {
+      setState(() {
+        _searchHistory = history;
+      });
+    }
+  }
+
+  /// 검색 기록 저장
+  Future<void> _saveSearchHistory(String query) async {
+    await _searchHistoryService.saveSearchQuery(query);
+    await _loadSearchHistory();
+  }
+
+  /// 검색 기록 삭제
+  Future<void> _deleteSearchHistory(String query) async {
+    await _searchHistoryService.deleteHistory(query);
+    await _loadSearchHistory();
+  }
+
+  /// 검색 기록 전체 삭제
+  Future<void> _clearSearchHistory() async {
+    await _searchHistoryService.clearHistory();
+    await _loadSearchHistory();
   }
 
   List<BibleData> _filterBooks(List<BibleData> books) {
@@ -166,6 +204,7 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   void _handleVerseSearch(String bookName, int chapter, int verse) {
+    final languageProvider = context.read<LanguageProvider>();
     final bookNameLower = bookName.toLowerCase();
     final matchedBooks = widget.books
         .where(
@@ -178,11 +217,20 @@ class _BookSelectorState extends State<BookSelector>
         .toList();
 
     if (matchedBooks.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('해당 성경책을 찾을 수 없습니다'),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(
+            languageProvider.isKorean
+                ? '해당 성경책을 찾을 수 없습니다'
+                : 'Book not found',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(languageProvider.isKorean ? '확인' : 'OK'),
+            ),
+          ],
         ),
       );
       return;
@@ -212,6 +260,7 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   void _handleChapterSearch(String bookName, int chapter) {
+    final languageProvider = context.read<LanguageProvider>();
     final bookNameLower = bookName.toLowerCase();
     final matchedBooks = widget.books
         .where(
@@ -224,11 +273,20 @@ class _BookSelectorState extends State<BookSelector>
         .toList();
 
     if (matchedBooks.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('해당 성경책을 찾을 수 없습니다'),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(
+            languageProvider.isKorean
+                ? '해당 성경책을 찾을 수 없습니다'
+                : 'Book not found',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(languageProvider.isKorean ? '확인' : 'OK'),
+            ),
+          ],
         ),
       );
       return;
@@ -262,13 +320,16 @@ class _BookSelectorState extends State<BookSelector>
     int chapter,
     int verse,
   ) {
+    final languageProvider = context.read<LanguageProvider>();
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('성경책을 선택하세요'),
+        title: Text(
+          languageProvider.isKorean ? '성경책을 선택하세요' : 'Select a book',
+        ),
         content: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
@@ -288,8 +349,12 @@ class _BookSelectorState extends State<BookSelector>
                   ),
                   subtitle: Text(
                     hasChapter
-                        ? '총 ${book.chapters}장'
-                        : '총 ${book.chapters}장 ($chapter장 없음)',
+                        ? (languageProvider.isKorean
+                            ? '총 ${book.chapters}장'
+                            : 'Total ${book.chapters} chapters')
+                        : (languageProvider.isKorean
+                            ? '총 ${book.chapters}장 ($chapter장 없음)'
+                            : 'Total ${book.chapters} chapters (Chapter $chapter not available)'),
                     style: TextStyle(
                       fontSize: 12,
                       color: hasChapter
@@ -313,7 +378,9 @@ class _BookSelectorState extends State<BookSelector>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('취소'),
+            child: Text(
+              languageProvider.isKorean ? '취소' : 'Cancel',
+            ),
           ),
         ],
       ),
@@ -324,13 +391,16 @@ class _BookSelectorState extends State<BookSelector>
     List<BibleData> books,
     int chapter,
   ) {
+    final languageProvider = context.read<LanguageProvider>();
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('성경책을 선택하세요'),
+        title: Text(
+          languageProvider.isKorean ? '성경책을 선택하세요' : 'Select a book',
+        ),
         content: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
@@ -350,8 +420,12 @@ class _BookSelectorState extends State<BookSelector>
                   ),
                   subtitle: Text(
                     hasChapter
-                        ? '총 ${book.chapters}장'
-                        : '총 ${book.chapters}장 ($chapter장 없음)',
+                        ? (languageProvider.isKorean
+                            ? '총 ${book.chapters}장'
+                            : 'Total ${book.chapters} chapters')
+                        : (languageProvider.isKorean
+                            ? '총 ${book.chapters}장 ($chapter장 없음)'
+                            : 'Total ${book.chapters} chapters (Chapter $chapter not available)'),
                     style: TextStyle(
                       fontSize: 12,
                       color: hasChapter
@@ -375,7 +449,9 @@ class _BookSelectorState extends State<BookSelector>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('취소'),
+            child: Text(
+              languageProvider.isKorean ? '취소' : 'Cancel',
+            ),
           ),
         ],
       ),
@@ -383,12 +459,22 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   void _navigateToVerse(int bookIndex, BibleData book, int chapter, int verse) {
+    final languageProvider = context.read<LanguageProvider>();
     if (chapter < 1 || chapter > book.chapters) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${book.fullName}은(는) ${book.chapters}장까지 있습니다'),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(
+            languageProvider.isKorean
+                ? '${book.fullName}은(는) ${book.chapters}장까지 있습니다'
+                : '${book.fullName} has ${book.chapters} chapters',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(languageProvider.isKorean ? '확인' : 'OK'),
+            ),
+          ],
         ),
       );
       return;
@@ -398,23 +484,26 @@ class _BookSelectorState extends State<BookSelector>
       widget.onDirectNavigate!(bookIndex, chapter, verse);
     } else {
       widget.onSelect(bookIndex);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${book.fullName} $chapter장 $verse절로 이동'),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
     }
   }
 
   void _navigateToChapter(int bookIndex, BibleData book, int chapter) {
+    final languageProvider = context.read<LanguageProvider>();
     if (chapter < 1 || chapter > book.chapters) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${book.fullName}은(는) ${book.chapters}장까지 있습니다'),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(
+            languageProvider.isKorean
+                ? '${book.fullName}은(는) ${book.chapters}장까지 있습니다'
+                : '${book.fullName} has ${book.chapters} chapters',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(languageProvider.isKorean ? '확인' : 'OK'),
+            ),
+          ],
         ),
       );
       return;
@@ -661,12 +750,12 @@ class _BookSelectorState extends State<BookSelector>
                           setState(() {
                             _searchQuery = value;
                           });
-                          // 단어 검색 모드일 때 자동 검색 (디바운싱)
+                          // 단어 검색 모드일 때 자동 검색 (디바운싱, 히스토리 저장 안 함)
                           if (_searchMode == SearchMode.wordSearch) {
                             Future.delayed(const Duration(milliseconds: 500),
                                 () {
                               if (_searchController.text == value && mounted) {
-                                _performWordSearch(value);
+                                _performWordSearch(value, saveToHistory: false);
                               }
                             });
                           }
@@ -675,7 +764,14 @@ class _BookSelectorState extends State<BookSelector>
                           if (_searchMode == SearchMode.quickFind) {
                             _handleSearch(value);
                           } else {
-                            _performWordSearch(value);
+                            // Enter 키를 눌렀을 때만 히스토리에 저장
+                            _performWordSearch(value, saveToHistory: true);
+                          }
+                        },
+                        onTap: () {
+                          // 검색 기록 다시 로드
+                          if (_searchMode == SearchMode.wordSearch) {
+                            _loadSearchHistory();
                           }
                         },
                       ),
@@ -684,15 +780,21 @@ class _BookSelectorState extends State<BookSelector>
                 ),
               ),
 
+              // 단어 검색 모드일 때 검색 기록 표시
+              if (_searchMode == SearchMode.wordSearch &&
+                  _searchHistory.isNotEmpty &&
+                  _searchQuery.isEmpty)
+                _buildCompactSearchHistory(theme, languageProvider),
+
               // 검색 결과 또는 전체 목록
               Expanded(
                 child: _searchMode == SearchMode.wordSearch &&
-                        _searchQuery.isNotEmpty
-                    ? _buildWordSearchResults(theme, languageProvider)
-                    : _searchQuery.isNotEmpty &&
-                            oldBooks.isEmpty &&
-                            newBooks.isEmpty
-                        ? Center(
+                            _searchQuery.isNotEmpty
+                        ? _buildWordSearchResults(theme, languageProvider)
+                        : _searchQuery.isNotEmpty &&
+                                oldBooks.isEmpty &&
+                                newBooks.isEmpty
+                            ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -777,7 +879,7 @@ class _BookSelectorState extends State<BookSelector>
   }
 
   // 단어 검색 수행
-  Future<void> _performWordSearch(String query) async {
+  Future<void> _performWordSearch(String query, {bool saveToHistory = false}) async {
     if (query.trim().isEmpty) {
       setState(() {
         _wordSearchResults = [];
@@ -798,11 +900,156 @@ class _BookSelectorState extends State<BookSelector>
 
     if (!mounted) return;
 
+    // 검색 기록에 저장 (saveToHistory가 true이고, 결과가 있을 때만)
+    if (saveToHistory && response.results.isNotEmpty) {
+      await _saveSearchHistory(query.trim());
+    }
+
     setState(() {
       _wordSearchResults = response.results;
       _totalWordSearchCount = response.totalCount;
       _isSearching = false;
     });
+  }
+
+  // 검색창 아래에 표시되는 간단한 검색 기록 (태그 형태)
+  Widget _buildCompactSearchHistory(ThemeData theme, LanguageProvider languageProvider) {
+    final cs = theme.colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        border: Border(
+          bottom: BorderSide(
+            color: theme.colorScheme.outline.withOpacity(0.2),
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  languageProvider.isKorean ? '최근 검색어' : 'Recent Searches',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: cs.onSurface.withOpacity(0.6),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(
+                          languageProvider.isKorean
+                              ? '검색 기록 삭제'
+                              : 'Clear Search History',
+                        ),
+                        content: Text(
+                          languageProvider.isKorean
+                              ? '모든 검색 기록을 삭제하시겠습니까?'
+                              : 'Are you sure you want to clear all search history?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(
+                              languageProvider.isKorean ? '취소' : 'Cancel',
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: Text(
+                              languageProvider.isKorean ? '삭제' : 'Clear',
+                              style: TextStyle(color: cs.error),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (confirmed == true) {
+                      await _clearSearchHistory();
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    child: Text(
+                      languageProvider.isKorean ? '전체삭제' : 'Clear All',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: cs.error,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 3),
+          SizedBox(
+            height: 32,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _searchHistory.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 6),
+              itemBuilder: (context, index) {
+                final history = _searchHistory[index];
+                return Material(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(16),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _searchController.text = history.query;
+                        _searchQuery = history.query;
+                      });
+                      _performWordSearch(history.query, saveToHistory: false);
+                    },
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            history.query,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: () => _deleteSearchHistory(history.query),
+                            child: const Icon(
+                              Icons.close,
+                              size: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // 단어 검색 결과 표시
