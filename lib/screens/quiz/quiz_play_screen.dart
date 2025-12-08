@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import '../../models/quiz_question.dart';
 import '../../providers/quiz_provider.dart';
 import '../../theme/colors.dart';
+import '../../widgets/banner_ad_widget.dart';
 import 'quiz_result_screen.dart';
 
 /// 퀴즈 진행 화면
@@ -189,6 +190,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                             ),
                           ),
                         ),
+                        // 배너 광고 - 항상 표시
+                        const BannerAdWidget(),
                         // 다음 버튼
                         if (_showFeedback)
                           _buildNextButton(context, provider, cs),
@@ -567,7 +570,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         provider.currentQuestionIndex >= provider.totalQuestions - 1;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
       decoration: BoxDecoration(
         color: cs.surface,
         boxShadow: [
@@ -582,7 +585,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         top: false,
         child: SizedBox(
           width: double.infinity,
-          height: 50,
+          height: 54,
           child: ElevatedButton(
             onPressed: () => _handleNext(context),
             style: ElevatedButton.styleFrom(
@@ -592,6 +595,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                 borderRadius: BorderRadius.circular(14),
               ),
               elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 14),
             ),
             child: Text(
               isLastQuestion ? '결과 보기' : '다음 문제',
