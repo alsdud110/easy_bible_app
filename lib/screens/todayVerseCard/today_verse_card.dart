@@ -1220,15 +1220,18 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                 : 'Play 스토어';
 
                                             final shareMessage = '''
-오늘의 말씀을 공유합니다 📖✨
+                                            오늘의 말씀을 공유합니다 📖✨
 
-올인바이블(All in Bible) 앱에서 매일 새로운 말씀을 받아보세요!
+                                            올인바이블(All in Bible) 앱에서 매일 새로운 말씀을 받아보세요!
 
-📱 $storeName에서 다운로드:
-$appLink''';
+                                            📱 $storeName에서 다운로드:
+                                            $appLink''';
 
+                                            // Android에서 텍스트와 이미지를 함께 공유
                                             await Share.shareXFiles(
                                               [XFile(file.path)],
+                                              subject:
+                                                  '오늘의 말씀 - 올인바이블(All in Bible)',
                                               text: shareMessage,
                                               sharePositionOrigin: box != null
                                                   ? box.localToGlobal(
