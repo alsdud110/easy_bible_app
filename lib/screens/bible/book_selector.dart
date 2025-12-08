@@ -982,11 +982,12 @@ class _BookSelectorState extends State<BookSelector>
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     child: Text(
                       languageProvider.isKorean ? '전체삭제' : 'Clear All',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 11,
                         color: cs.error,
                       ),
                     ),
