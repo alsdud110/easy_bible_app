@@ -15,6 +15,7 @@ import '../../models/bible_card_theme.dart';
 import '../../models/today_verse_model.dart';
 import '../../services/rewarded_ad_manager.dart';
 import '../../services/verse_history_service.dart';
+import '../../utils/responsive_utils.dart';
 import '../../widgets/beautiful_bible_card.dart';
 
 class TodayVerseCard extends StatefulWidget {
@@ -133,19 +134,22 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                         repeat: true,
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        "오늘의 구절",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 21,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.93),
-                            ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          "오늘의 구절",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: ResponsiveUtils.titleFontSize(context),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.93),
+                              ),
+                        ),
                       ),
                       const SizedBox(height: 14),
                       Container(
@@ -158,33 +162,39 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               .withValues(alpha: 0.09),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Text(
-                          todayVerses[idx].ref,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: 15.2,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'ChosunCentennial',
-                              ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            todayVerses[idx].ref,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'ChosunCentennial',
+                                ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Text(
-                        todayVerses[idx].text,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 16.7,
-                              height: 1.7,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'ChosunCentennial',
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.98),
-                            ),
-                        textAlign: TextAlign.center,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          todayVerses[idx].text,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontSize: ResponsiveUtils.bodyFontSize(context),
+                                height: 1.7,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'ChosunCentennial',
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.98),
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       const SizedBox(height: 18),
                       Align(
@@ -231,8 +241,12 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             ),
                             elevation: 0,
                           ),
-                          child:
-                              const Text('확인', style: TextStyle(fontSize: 16)),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('확인',
+                                style: TextStyle(
+                                    fontSize: ResponsiveUtils.bodyFontSize(context))),
+                          ),
                         ),
                       ),
                     ],
@@ -310,12 +324,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             size: 24,
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            '오늘의 말씀 히스토리',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 18,
-                                ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '오늘의 말씀 히스토리',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                                  ),
+                            ),
                           ),
                           const Spacer(),
                           IconButton(
@@ -345,14 +362,18 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                       .withValues(alpha: 0.3),
                                 ),
                                 const SizedBox(height: 16),
-                                Text(
-                                  '아직 히스토리가 없습니다',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withValues(alpha: 0.6),
-                                      ),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '아직 히스토리가 없습니다',
+                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                          fontSize: ResponsiveUtils.bodyFontSize(context),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.6),
+                                        ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -594,12 +615,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                 repeat: true,
               ),
               const SizedBox(height: 16),
-              Text(
-                '로딩 중',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
-                    ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '로딩 중',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: ResponsiveUtils.buttonFontSize(context),
+                      ),
+                ),
               ),
             ],
           ),
@@ -630,12 +654,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                 repeat: true,
               ),
               const SizedBox(height: 16),
-              Text(
-                '말씀카드 생성중',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
-                    ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '말씀카드 생성중',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: ResponsiveUtils.buttonFontSize(context),
+                      ),
+                ),
               ),
             ],
           ),
@@ -716,14 +743,17 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        message,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 17,
-                                ),
-                        textAlign: TextAlign.center,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          message,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                                  ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ],
                   ),
@@ -821,12 +851,17 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             child: Row(
                               children: [
-                                Text('오늘의 말씀 카드',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.w800)),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text('오늘의 말씀 카드',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                              fontSize:
+                                                  ResponsiveUtils.bodyFontSize(context),
+                                              fontWeight: FontWeight.w800)),
+                                ),
                                 const Spacer(),
                                 // 텍스트 색상 토글 버튼 (흰색/검정색 직관적 표시)
                                 Container(
@@ -880,11 +915,12 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                               ),
                                               if (useWhiteText) ...[
                                                 const SizedBox(width: 4),
-                                                const Text(
+                                                Text(
                                                   '흰색',
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 12,
+                                                    fontSize: ResponsiveUtils.captionFontSize(
+                                                        context),
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
@@ -933,11 +969,12 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                               ),
                                               if (!useWhiteText) ...[
                                                 const SizedBox(width: 4),
-                                                const Text(
+                                                Text(
                                                   '검정',
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 12,
+                                                    fontSize: ResponsiveUtils.captionFontSize(
+                                                        context),
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
@@ -1094,15 +1131,21 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                       repeat: true,
                                                     ),
                                                     const SizedBox(height: 16),
-                                                    Text('이미지 생성 중...',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .titleMedium
-                                                            ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                            )),
+                                                    FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      child: Text('이미지 생성 중...',
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .titleMedium
+                                                              ?.copyWith(
+                                                                fontSize: ResponsiveUtils
+                                                                    .bodyFontSize(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              )),
+                                                    ),
                                                   ],
                                                 ),
                                               ),
@@ -1173,16 +1216,22 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                       ),
                                                       const SizedBox(
                                                           height: 16),
-                                                      Text('이미지 생성 중...',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                  )),
+                                                      FittedBox(
+                                                        fit: BoxFit.scaleDown,
+                                                        child: Text('이미지 생성 중...',
+                                                            style:
+                                                                Theme.of(context)
+                                                                    .textTheme
+                                                                    .titleMedium
+                                                                    ?.copyWith(
+                                                                      fontSize: ResponsiveUtils
+                                                                          .bodyFontSize(
+                                                                              context),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                    )),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -1515,21 +1564,29 @@ class _TodayVerseEmptyCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 14),
-            Text(
-              '오늘의 구절 뽑기',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.2,
-                  color: cs.primary),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '오늘의 구절 뽑기',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                    color: cs.primary),
+              ),
             ),
             const SizedBox(height: 7),
-            Text(
-              '하루에 한 번, 하나님이 주시는 말씀을 받아보세요!',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: cs.onSurface.withValues(alpha: 0.75)),
-              textAlign: TextAlign.center,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '하루에 한 번, 하나님이 주시는 말씀을 받아보세요!',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(
+                        fontSize: ResponsiveUtils.bodyFontSize(context),
+                        color: cs.onSurface.withValues(alpha: 0.75)),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),
@@ -1575,24 +1632,30 @@ class _TodayVerseShowCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 13),
-            Text(
-              verse ?? "",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontFamily: 'ChosunCentennial',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    height: 1.7,
-                  ),
-              textAlign: TextAlign.center,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                verse ?? "",
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontFamily: 'ChosunCentennial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: ResponsiveUtils.buttonFontSize(context),
+                      height: 1.7,
+                    ),
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 13),
-            Text(
-              '내일이 되면 새롭게 받을 수 있어요!',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: cs.onSurface.withValues(alpha: 0.72),
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w500,
-                  ),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '내일이 되면 새롭게 받을 수 있어요!',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: cs.onSurface.withValues(alpha: 0.72),
+                      fontSize: ResponsiveUtils.captionFontSize(context),
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ],
         ),

@@ -10,6 +10,7 @@ import '../../providers/highlight_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/font_size_provider.dart';
 import '../../services/bible_subtitle_service.dart';
+import '../../utils/responsive_utils.dart';
 import '../../widgets/breadcrumb_bar.dart';
 
 class VerseListView extends StatefulWidget {
@@ -399,11 +400,14 @@ class _VerseListViewState extends State<VerseListView>
                       size: 24,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
-                      '하이라이트',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '하이라이트',
+                        style: TextStyle(
+                          fontSize: ResponsiveUtils.titleFontSize(context),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -708,12 +712,15 @@ class _VerseListViewState extends State<VerseListView>
           children: [
             Icon(icon, size: 22, color: color),
             const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: color,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
               ),
             ),
           ],
@@ -771,7 +778,7 @@ class _VerseListViewState extends State<VerseListView>
                           : fontSize.nextEnglishLabel,
                       key: ValueKey(fontSize),
                       style: TextStyle(
-                        fontSize: languageProvider.isKorean ? 16.0 : 18.0,
+                        fontSize: ResponsiveUtils.buttonFontSize(context),
                         fontWeight: FontWeight.bold,
                         color:
                             theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
@@ -803,7 +810,7 @@ class _VerseListViewState extends State<VerseListView>
                         languageProvider.isKorean ? 'Eng' : '한',
                         key: ValueKey(languageProvider.isKorean),
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: ResponsiveUtils.buttonFontSize(context),
                           fontWeight: FontWeight.bold,
                           color:
                               theme.appBarTheme.iconTheme?.color ?? cs.onSurface,

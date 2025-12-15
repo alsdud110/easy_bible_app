@@ -112,14 +112,19 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
   }
 
   Widget _buildHeader(ColorScheme cs) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final titleFontSize = screenWidth < 380 ? 20.0 : 22.0;
+    final subtitleFontSize = screenWidth < 380 ? 12.0 : 13.0;
+    final lottieSize = screenWidth < 380 ? 110.0 : 130.0;
+
     return Column(
       children: [
         Transform.translate(
           offset: const Offset(0, -16),
           child: Lottie.asset(
             'assets/lottie/bible_book.json',
-            width: 130,
-            height: 130,
+            width: lottieSize,
+            height: lottieSize,
             fit: BoxFit.contain,
             repeat: true,
           ),
@@ -128,22 +133,28 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
           offset: const Offset(0, -24),
           child: Column(
             children: [
-              Text(
-                '성경 퀴즈',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: cs.onSurface,
-                  letterSpacing: -0.5,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '성경 퀴즈',
+                  style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w900,
+                    color: cs.onSurface,
+                    letterSpacing: -0.5,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '당신의 성경 지식을 확인해보세요',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: cs.onSurface.withValues(alpha: 0.6),
-                  height: 1.4,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '당신의 성경 지식을 확인해보세요',
+                  style: TextStyle(
+                    fontSize: subtitleFontSize,
+                    color: cs.onSurface.withValues(alpha: 0.6),
+                    height: 1.4,
+                  ),
                 ),
               ),
             ],
@@ -154,6 +165,10 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
   }
 
   Widget _buildSectionTitle(String title, IconData icon, ColorScheme cs) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final fontSize = screenWidth < 380 ? 16.0 : 17.0;
+    final iconSize = screenWidth < 380 ? 16.0 : 18.0;
+
     return Row(
       children: [
         Container(
@@ -165,15 +180,21 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
           ),
         ),
         const SizedBox(width: 10),
-        Icon(icon, color: cs.primary, size: 18),
+        Icon(icon, color: cs.primary, size: iconSize),
         const SizedBox(width: 6),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w800,
-            color: cs.onSurface,
-            letterSpacing: -0.5,
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.w800,
+                color: cs.onSurface,
+                letterSpacing: -0.5,
+              ),
+            ),
           ),
         ),
       ],
@@ -248,6 +269,8 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
 
   Widget _buildStartButton(BuildContext context, ColorScheme cs) {
     final isEnabled = _selectedDifficulty != null && _selectedType != null;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final fontSize = screenWidth < 380 ? 16.0 : 18.0;
 
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: isEnabled ? 1.0 : 0.0),
@@ -292,15 +315,18 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
               onTap: isEnabled ? () => _startQuiz(context) : null,
               borderRadius: BorderRadius.circular(16),
               child: Center(
-                child: Text(
-                  '퀴즈 시작하기',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: isEnabled
-                        ? Colors.white
-                        : cs.onSurface.withValues(alpha: 0.35),
-                    letterSpacing: -0.5,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '퀴즈 시작하기',
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.w800,
+                      color: isEnabled
+                          ? Colors.white
+                          : cs.onSurface.withValues(alpha: 0.35),
+                      letterSpacing: -0.5,
+                    ),
                   ),
                 ),
               ),
@@ -385,7 +411,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
   }
 }
 
-// 난이도 카드
+// 난이도 카드 (반응형)
 class _DifficultyCard extends StatelessWidget {
   final Difficulty difficulty;
   final bool isSelected;
@@ -400,6 +426,11 @@ class _DifficultyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final fontSize = screenWidth < 380 ? 14.0 : 15.0;
+    final emojiSize = screenWidth < 380 ? 16.0 : 18.0;
+    final iconSize = screenWidth < 380 ? 34.0 : 36.0;
+    final checkSize = screenWidth < 380 ? 20.0 : 22.0;
 
     return Material(
       color: Colors.transparent,
@@ -421,8 +452,8 @@ class _DifficultyCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: iconSize,
+                height: iconSize,
                 decoration: BoxDecoration(
                   color: cs.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(9),
@@ -430,31 +461,35 @@ class _DifficultyCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     difficulty.emoji,
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: emojiSize),
                   ),
                 ),
               ),
               const SizedBox(width: 11),
               Expanded(
-                child: Text(
-                  difficulty.displayName,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: cs.onSurface,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    difficulty.displayName,
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface,
+                    ),
                   ),
                 ),
               ),
               if (isSelected)
-                const Icon(
+                Icon(
                   Icons.check_circle,
                   color: QuizColors.correct,
-                  size: 22,
+                  size: checkSize,
                 )
               else
                 Container(
-                  width: 22,
-                  height: 22,
+                  width: checkSize,
+                  height: checkSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
@@ -471,7 +506,7 @@ class _DifficultyCard extends StatelessWidget {
   }
 }
 
-// 퀴즈 유형 카드
+// 퀴즈 유형 카드 (반응형)
 class _QuizTypeCard extends StatelessWidget {
   final QuizType type;
   final bool isSelected;
@@ -486,6 +521,9 @@ class _QuizTypeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconFontSize = screenWidth < 380 ? 28.0 : 32.0;
+    final textFontSize = screenWidth < 380 ? 13.0 : 14.0;
 
     return Material(
       color: Colors.transparent,
@@ -508,15 +546,18 @@ class _QuizTypeCard extends StatelessWidget {
             children: [
               Text(
                 type.icon,
-                style: const TextStyle(fontSize: 32),
+                style: TextStyle(fontSize: iconFontSize),
               ),
               const SizedBox(height: 6),
-              Text(
-                type.displayName,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: cs.onSurface,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  type.displayName,
+                  style: TextStyle(
+                    fontSize: textFontSize,
+                    fontWeight: FontWeight.w700,
+                    color: cs.onSurface,
+                  ),
                 ),
               ),
             ],

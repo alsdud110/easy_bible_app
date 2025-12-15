@@ -6,6 +6,7 @@ import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
 import '../../services/bible_search_service.dart';
 import '../../services/bible_search_history_service.dart';
+import '../../utils/responsive_utils.dart';
 import '../../widgets/banner_ad_widget.dart';
 import 'verse_list_view.dart';
 
@@ -568,7 +569,7 @@ class _BookSelectorState extends State<BookSelector>
                 languageProvider.isKorean ? 'Eng' : '한',
                 key: ValueKey(languageProvider.isKorean),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: ResponsiveUtils.buttonFontSize(context),
                   fontWeight: FontWeight.bold,
                   color: theme.appBarTheme.iconTheme?.color ??
                       theme.colorScheme.onSurface,
@@ -676,7 +677,7 @@ class _BookSelectorState extends State<BookSelector>
                                   : 'Word search (e.g., love, faith)'),
                           hintStyle: TextStyle(
                             color: theme.colorScheme.onSurface.withOpacity(0.5),
-                            fontSize: 13,
+                            fontSize: ResponsiveUtils.captionFontSize(context),
                           ),
                           prefixIcon: Icon(
                             _searchMode == SearchMode.quickFind
@@ -936,12 +937,15 @@ class _BookSelectorState extends State<BookSelector>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  languageProvider.isKorean ? '최근 검색어' : 'Recent Searches',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: cs.onSurface.withOpacity(0.6),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    languageProvider.isKorean ? '최근 검색어' : 'Recent Searches',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface.withOpacity(0.6),
+                    ),
                   ),
                 ),
                 InkWell(
@@ -1099,15 +1103,19 @@ class _BookSelectorState extends State<BookSelector>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            languageProvider.isKorean
-                ? '$_totalWordSearchCount개의 결과'
-                : '$_totalWordSearchCount result${_totalWordSearchCount > 1 ? 's' : ''}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: cs.onSurface.withOpacity(0.7),
+          padding: EdgeInsets.all(ResponsiveUtils.padding(context, 16)),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              languageProvider.isKorean
+                  ? '$_totalWordSearchCount개의 결과'
+                  : '$_totalWordSearchCount result${_totalWordSearchCount > 1 ? 's' : ''}',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.bodyFontSize(context),
+                fontWeight: FontWeight.w600,
+                color: cs.onSurface.withOpacity(0.7),
+              ),
             ),
           ),
         ),
@@ -1171,14 +1179,18 @@ class _BookSelectorState extends State<BookSelector>
       onTap: () => _navigateToVerseFromSearch(result),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       title: Padding(
-        padding: const EdgeInsets.only(bottom: 4),
-        child: Text(
-          result.reference,
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-            color: cs.primary,
-            letterSpacing: 0.2,
+        padding: EdgeInsets.only(bottom: ResponsiveUtils.padding(context, 4)),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            result.reference,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: ResponsiveUtils.bodyFontSize(context),
+              color: cs.primary,
+              letterSpacing: 0.2,
+            ),
           ),
         ),
       ),
@@ -1347,13 +1359,16 @@ class _BookSelectorState extends State<BookSelector>
               color: isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
             ),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color:
-                    isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.captionFontSize(context),
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color:
+                      isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
+                ),
               ),
             ),
           ],
@@ -1401,13 +1416,16 @@ class _SectionTitle extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(
-          title,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 15.5,
-            letterSpacing: 1.2,
-            color: theme.colorScheme.primary,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            title,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: ResponsiveUtils.bodyFontSize(context),
+              letterSpacing: 1.2,
+              color: theme.colorScheme.primary,
+            ),
           ),
         ),
       ),
@@ -1469,13 +1487,16 @@ class _BookGrid extends StatelessWidget {
                     color: theme.colorScheme.secondary.withOpacity(0.32)),
               ),
               alignment: Alignment.center,
-              child: Text(
-                book.getLocalizedName(isKorean),
-                style: theme.textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: theme.colorScheme.primary,
-                  letterSpacing: 0.2,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  book.getLocalizedName(isKorean),
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                    color: theme.colorScheme.primary,
+                    letterSpacing: 0.2,
+                  ),
                 ),
               ),
             ),
@@ -1526,12 +1547,16 @@ class _BookList extends StatelessWidget {
           },
           child: ListTile(
             onTap: () => onSelect(originalIndex),
-            title: Text(
-              book.getLocalizedFullName(isKorean),
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                letterSpacing: 0.2,
+            title: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                book.getLocalizedFullName(isKorean),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: ResponsiveUtils.buttonFontSize(context),
+                  letterSpacing: 0.2,
+                ),
               ),
             ),
             trailing: Icon(Icons.chevron_right,

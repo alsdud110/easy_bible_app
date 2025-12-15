@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
+import '../../utils/responsive_utils.dart';
 
 class VerseListView extends StatefulWidget {
   final BibleData book;
@@ -130,20 +131,23 @@ class _VerseListViewState extends State<VerseListView> {
                   // 누를 때는 중앙으로 스크롤 안함! (초기 진입/절 변경만)
                 });
               },
-              leading: Text(
-                '$verseNum',
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  fontSize: isSelected ? 15.05 : 15,
-                  color:
-                      isSelected ? Theme.of(context).colorScheme.primary : null,
+              leading: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '$verseNum',
+                  style: TextStyle(
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                    color:
+                        isSelected ? Theme.of(context).colorScheme.primary : null,
+                  ),
                 ),
               ),
               title: Text(
                 text,
                 style: TextStyle(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  fontSize: isSelected ? 15.05 : 15,
+                  fontSize: ResponsiveUtils.bodyFontSize(context),
                   color:
                       isSelected ? Theme.of(context).colorScheme.primary : null,
                 ),

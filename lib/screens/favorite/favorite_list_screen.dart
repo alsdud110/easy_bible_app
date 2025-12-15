@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../providers/favorite_provider.dart';
 import 'favorite_detail_screen.dart';
+import '../../utils/responsive_utils.dart';
 
 class FavoriteListScreen extends StatefulWidget {
   const FavoriteListScreen({super.key});
@@ -185,22 +186,30 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                     color: cs.onSurface.withOpacity(0.3),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    '아직 마음에 드는\n성경 구절을 찾지 못했어요.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: cs.onSurface.withOpacity(0.6),
-                      height: 1.4,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '아직 마음에 드는\n성경 구절을 찾지 못했어요.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.buttonFontSize(context),
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurface.withOpacity(0.6),
+                        height: 1.4,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    '구절을 길게 눌러 북마크에 추가해보세요',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: cs.onSurface.withOpacity(0.4),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '구절을 길게 눌러 북마크에 추가해보세요',
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.bodyFontSize(context),
+                        color: cs.onSurface.withOpacity(0.4),
+                      ),
                     ),
                   ),
                 ],
@@ -274,12 +283,16 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                               ),
                           ],
                         ),
-                  title: Text(
-                    favorite.reference,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: cs.onSurface,
+                  title: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      favorite.reference,
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.bodyFontSize(context),
+                        fontWeight: FontWeight.bold,
+                        color: cs.onSurface,
+                      ),
                     ),
                   ),
                   subtitle: Column(
@@ -317,12 +330,16 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                                 color: cs.primary,
                               ),
                               const SizedBox(width: 4),
-                              Text(
-                                '메모 ${favorite.memos.length}개',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: cs.primary,
-                                  fontWeight: FontWeight.w600,
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '메모 ${favorite.memos.length}개',
+                                  style: TextStyle(
+                                    fontSize: ResponsiveUtils.captionFontSize(context),
+                                    color: cs.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],

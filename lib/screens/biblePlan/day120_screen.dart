@@ -7,6 +7,7 @@ import '../../models/bible_json_loader.dart';
 import '../../models/plan_progress.dart';
 import '../../utils/extract_verses.dart';
 import '../../utils/pretty_range_label.dart';
+import '../../utils/responsive_utils.dart';
 import '../../providers/plan_progress_provider.dart';
 import '../../services/notification_service.dart';
 import 'plan_verse_list_view.dart';
@@ -186,11 +187,14 @@ class _Day120ScreenState extends State<Day120Screen>
                         foregroundColor: cs.onSurface.withOpacity(0.7),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text(
-                        '취소',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '취소',
+                          style: TextStyle(
+                            fontSize: ResponsiveUtils.buttonFontSize(context),
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
@@ -203,11 +207,14 @@ class _Day120ScreenState extends State<Day120Screen>
                         foregroundColor: cs.primary,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text(
-                        '초기화',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '초기화',
+                          style: TextStyle(
+                            fontSize: ResponsiveUtils.buttonFontSize(context),
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
@@ -311,11 +318,14 @@ class _Day120ScreenState extends State<Day120Screen>
                     foregroundColor: cs.primary,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text(
-                    '확인',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '확인',
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.buttonFontSize(context),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -568,30 +578,36 @@ class _Day120ScreenState extends State<Day120Screen>
                                             ]
                                           : [],
                                     ),
-                                    child: Text(
-                                      dayLabel,
-                                      style:
-                                          theme.textTheme.bodyLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: cs.onPrimary,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        dayLabel,
+                                        style:
+                                            theme.textTheme.bodyLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: ResponsiveUtils.buttonFontSize(context),
+                                          color: cs.onPrimary,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   const SizedBox(width: 12),
                                   Expanded(
-                                    child: Text(
-                                      prettyRangeLabel(rangeLabel),
-                                      style:
-                                          theme.textTheme.bodyMedium?.copyWith(
-                                        fontSize: 15,
-                                        color: canAccess
-                                            ? cs.onSurface
-                                            : cs.onSurface.withOpacity(0.5),
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        prettyRangeLabel(rangeLabel),
+                                        style:
+                                            theme.textTheme.bodyMedium?.copyWith(
+                                          fontSize: ResponsiveUtils.bodyFontSize(context),
+                                          color: canAccess
+                                              ? cs.onSurface
+                                              : cs.onSurface.withOpacity(0.5),
+                                        ),
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   if (isCompleted)
@@ -1013,11 +1029,14 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  '저장',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '저장',
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.titleFontSize(context),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -1063,14 +1082,17 @@ class _DayButton extends StatelessWidget {
           ),
         ),
         child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isSelected
-                  ? cs.onPrimary
-                  : (isSunday ? Colors.red : cs.onSurface.withOpacity(0.6)),
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              fontSize: 13,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              style: TextStyle(
+                color: isSelected
+                    ? cs.onPrimary
+                    : (isSunday ? Colors.red : cs.onSurface.withOpacity(0.6)),
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                fontSize: ResponsiveUtils.captionFontSize(context),
+              ),
             ),
           ),
         ),

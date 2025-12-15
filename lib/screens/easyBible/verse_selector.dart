@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../utils/responsive_utils.dart';
 
 class VerseSelector extends StatelessWidget {
   final String bookFullName; // ← 책 이름
@@ -62,12 +63,15 @@ class VerseSelector extends StatelessWidget {
               ],
             ),
             alignment: Alignment.center,
-            child: Text(
-              '${i + 1}',
-              style: theme.textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: cs.primary,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '${i + 1}',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                  color: cs.primary,
+                ),
               ),
             ),
           ),

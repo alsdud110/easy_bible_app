@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
+import '../../utils/responsive_utils.dart';
 
 class ChapterSelector extends StatelessWidget {
   final BibleData book;
@@ -59,12 +60,15 @@ class ChapterSelector extends StatelessWidget {
               ],
             ),
             alignment: Alignment.center,
-            child: Text(
-              '${i + 1}',
-              style: theme.textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: cs.primary,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '${i + 1}',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                  color: cs.primary,
+                ),
               ),
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../utils/responsive_utils.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -125,13 +126,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 로고 또는 앱 이름
-                  Text(
-                    'All in Bible',
-                    style: GoogleFonts.dancingScript(
-                      color: theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 26,
-                      letterSpacing: -0.5,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'All in Bible',
+                      style: GoogleFonts.dancingScript(
+                        color: theme.colorScheme.onSurface,
+                        fontWeight: FontWeight.w900,
+                        fontSize: ResponsiveUtils.fontSize(context, 26),
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ),
                   // Skip 버튼 (공간 유지를 위해 Opacity 사용)
@@ -141,13 +145,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       onPressed: _currentPage < _pages.length - 1
                           ? _skipOnboarding
                           : null,
-                      child: Text(
-                        '건너뛰기',
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.6),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '건너뛰기',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
+                            fontSize: ResponsiveUtils.bodyFontSize(context),
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
@@ -225,12 +232,15 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            _currentPage < _pages.length - 1 ? '다음' : '시작하기',
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              _currentPage < _pages.length - 1 ? '다음' : '시작하기',
+                              style: TextStyle(
+                                fontSize: ResponsiveUtils.buttonFontSize(context),
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -345,14 +355,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       ),
                     );
                   },
-                  child: Text(
-                    page.title,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
-                      color: theme.colorScheme.onSurface,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      page.title,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ResponsiveUtils.fontSize(context, 28),
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
 
@@ -372,14 +385,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       ),
                     );
                   },
-                  child: Text(
-                    page.description,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontSize: 16,
-                      height: 1.6,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      page.description,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontSize: ResponsiveUtils.bodyFontSize(context),
+                        height: 1.6,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ],

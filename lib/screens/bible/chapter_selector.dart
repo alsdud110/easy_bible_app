@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
+import '../../utils/responsive_utils.dart';
 import '../../widgets/breadcrumb_bar.dart';
 import '../../widgets/banner_ad_widget.dart';
 
@@ -101,7 +102,7 @@ class _ChapterSelectorState extends State<ChapterSelector>
                 languageProvider.isKorean ? 'Eng' : '한',
                 key: ValueKey(languageProvider.isKorean),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: ResponsiveUtils.buttonFontSize(context),
                   fontWeight: FontWeight.bold,
                   color: theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                 ),
@@ -178,12 +179,15 @@ class _ChapterSelectorState extends State<ChapterSelector>
                             ],
                           ),
                           alignment: Alignment.center,
-                          child: Text(
-                            '${i + 1}',
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: cs.primary,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${i + 1}',
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: ResponsiveUtils.bodyFontSize(context),
+                                color: cs.primary,
+                              ),
                             ),
                           ),
                         ),

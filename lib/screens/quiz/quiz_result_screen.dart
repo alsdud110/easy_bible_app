@@ -5,6 +5,7 @@ import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/quiz_provider.dart';
 import '../../theme/colors.dart';
+import '../../utils/responsive_utils.dart';
 import 'quiz_home_screen.dart';
 import 'quiz_play_screen.dart';
 
@@ -73,11 +74,16 @@ class _QuizResultScreenState extends State<QuizResultScreen>
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            title: const Text(
-              '퀴즈 완료',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 22,
+            title: Builder(
+              builder: (context) => FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '퀴즈 완료',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: ResponsiveUtils.titleFontSize(context),
+                  ),
+                ),
               ),
             ),
             centerTitle: true,
@@ -212,12 +218,17 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
-            '최종 점수',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+          Builder(
+            builder: (context) => FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '최종 점수',
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.buttonFontSize(context),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -238,12 +249,17 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             },
           ),
           const SizedBox(height: 6),
-          Text(
-            '${result.correctCount}개 정답 / ${result.totalQuestions}문제',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withValues(alpha: 0.9),
+          Builder(
+            builder: (context) => FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '${result.correctCount}개 정답 / ${result.totalQuestions}문제',
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+              ),
             ),
           ),
         ],
@@ -314,14 +330,17 @@ class _QuizResultScreenState extends State<QuizResultScreen>
   }
 
   Widget _buildFeedbackMessage(QuizResult result, ColorScheme cs) {
-    return Text(
-      result.feedbackMessage,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: cs.onSurface.withValues(alpha: 0.7),
-        height: 1.5,
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        result.feedbackMessage,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: ResponsiveUtils.buttonFontSize(context),
+          fontWeight: FontWeight.w700,
+          color: cs.onSurface.withValues(alpha: 0.7),
+          height: 1.5,
+        ),
       ),
     );
   }
@@ -350,13 +369,16 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                '상세 결과',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: cs.onSurface,
-                  letterSpacing: -0.5,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '상세 결과',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.titleFontSize(context),
+                    fontWeight: FontWeight.w800,
+                    color: cs.onSurface,
+                    letterSpacing: -0.5,
+                  ),
                 ),
               ),
             ],

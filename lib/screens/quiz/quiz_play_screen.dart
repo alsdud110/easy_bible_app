@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import '../../models/quiz_question.dart';
 import '../../providers/quiz_provider.dart';
 import '../../theme/colors.dart';
+import '../../utils/responsive_utils.dart';
 import '../../widgets/banner_ad_widget.dart';
 import 'quiz_result_screen.dart';
 
@@ -129,11 +130,14 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            title: Text(
-              '${provider.currentQuestionIndex + 1} / ${provider.totalQuestions}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 20,
+            title: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '${provider.currentQuestionIndex + 1} / ${provider.totalQuestions}',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: ResponsiveUtils.appBarTitleFontSize(context),
+                ),
               ),
             ),
             centerTitle: true,
@@ -253,17 +257,23 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                difficulty.emoji,
-                style: const TextStyle(fontSize: 14),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  difficulty.emoji,
+                  style: TextStyle(fontSize: ResponsiveUtils.bodyFontSize(context)),
+                ),
               ),
               const SizedBox(width: 6),
-              Text(
-                difficulty.displayName,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: color,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  difficulty.displayName,
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.captionFontSize(context),
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
                 ),
               ),
             ],
@@ -295,26 +305,32 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   color: cs.primaryContainer,
                   borderRadius: BorderRadius.circular(7),
                 ),
-                child: Text(
-                  'Q',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                    color: cs.onPrimaryContainer,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    'Q',
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.bodyFontSize(context),
+                      fontWeight: FontWeight.w900,
+                      color: cs.onPrimaryContainer,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            question.question,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: cs.onSurface,
-              height: 1.5,
-              letterSpacing: -0.3,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              question.question,
+              style: TextStyle(
+                fontSize: ResponsiveUtils.buttonFontSize(context),
+                fontWeight: FontWeight.w700,
+                color: cs.onSurface,
+                height: 1.5,
+                letterSpacing: -0.3,
+              ),
             ),
           ),
         ],
@@ -455,14 +471,17 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                       size: 26,
                     ),
                     const SizedBox(width: 9),
-                    Text(
-                      isCorrect ? '정답이에요!' : '아쉬워요!',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w800,
-                        color: isCorrect
-                            ? QuizColors.correct
-                            : QuizColors.incorrect,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        isCorrect ? '정답이에요!' : '아쉬워요!',
+                        style: TextStyle(
+                          fontSize: ResponsiveUtils.buttonFontSize(context),
+                          fontWeight: FontWeight.w800,
+                          color: isCorrect
+                              ? QuizColors.correct
+                              : QuizColors.incorrect,
+                        ),
                       ),
                     ),
                   ],
@@ -489,22 +508,28 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                '정답',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                  color: QuizColors.correct,
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  '정답',
+                                  style: TextStyle(
+                                    fontSize: ResponsiveUtils.captionFontSize(context),
+                                    fontWeight: FontWeight.w800,
+                                    color: QuizColors.correct,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 3),
-                              Text(
-                                correctAnswerText,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: cs.onSurface,
-                                  height: 1.3,
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  correctAnswerText,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveUtils.captionFontSize(context),
+                                    fontWeight: FontWeight.w600,
+                                    color: cs.onSurface,
+                                    height: 1.3,
+                                  ),
                                 ),
                               ),
                             ],
@@ -530,12 +555,15 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                           size: 17,
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          question.reference!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: cs.primary,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            question.reference!,
+                            style: TextStyle(
+                              fontSize: ResponsiveUtils.captionFontSize(context),
+                              fontWeight: FontWeight.w700,
+                              color: cs.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -544,12 +572,15 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                 ],
                 if (question.explanation != null) ...[
                   const SizedBox(height: 9),
-                  Text(
-                    question.explanation!,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: cs.onSurface.withValues(alpha: 0.75),
-                      height: 1.4,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      question.explanation!,
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.captionFontSize(context),
+                        color: cs.onSurface.withValues(alpha: 0.75),
+                        height: 1.4,
+                      ),
                     ),
                   ),
                 ],
@@ -597,12 +628,15 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
-            child: Text(
-              isLastQuestion ? '결과 보기' : '다음 문제',
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -0.5,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                isLastQuestion ? '결과 보기' : '다음 문제',
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.buttonFontSize(context),
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.5,
+                ),
               ),
             ),
           ),
@@ -707,12 +741,15 @@ class _OXButton extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: Text(
-                    isTrue ? 'O' : 'X',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      color: cs.onSurface,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      isTrue ? 'O' : 'X',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                        color: cs.onSurface,
+                      ),
                     ),
                   ),
                 ),
@@ -802,24 +839,30 @@ class _AnswerButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Center(
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: textColor,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.buttonFontSize(context),
+                        fontWeight: FontWeight.w900,
+                        color: textColor,
+                      ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(width: 11),
               Expanded(
-                child: Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.bodyFontSize(context),
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
                   ),
                 ),
               ),

@@ -462,7 +462,7 @@ class _CachedGradients {
   );
 }
 
-// Bento 카드 (최적화)
+// Bento 카드 (최적화 + 반응형)
 class _BentoCard extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -484,6 +484,13 @@ class _BentoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor = Colors.white;
     final iconColor = Colors.white;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // 화면 크기에 따라 동적으로 폰트 크기 조절
+    final titleFontSize = screenWidth < 380 ? 18.0 : 20.0;
+    final subtitleFontSize = screenWidth < 380 ? 12.0 : 13.0;
+    final iconSize = screenWidth < 380 ? 28.0 : 32.0;
+    final padding = screenWidth < 380 ? 16.0 : 20.0;
 
     return Material(
       color: Colors.transparent,
@@ -517,30 +524,43 @@ class _BentoCard extends StatelessWidget {
               ),
               // 텍스트 콘텐츠
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(padding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(icon, color: iconColor, size: 32),
+                    Icon(icon, color: iconColor, size: iconSize),
                     const SizedBox(height: 8),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: textColor,
-                        letterSpacing: -0.5,
+                    // FittedBox로 텍스트 자동 조절
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.w800,
+                          color: textColor,
+                          letterSpacing: -0.5,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.visible,
                       ),
                     ),
                     if (subtitle.isNotEmpty) ...[
                       const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: textColor.withValues(alpha: 0.7),
-                          fontWeight: FontWeight.w500,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          subtitle,
+                          style: TextStyle(
+                            fontSize: subtitleFontSize,
+                            color: textColor.withValues(alpha: 0.7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     ],
@@ -555,7 +575,7 @@ class _BentoCard extends StatelessWidget {
   }
 }
 
-// 성경일독 플랜 카드 (Provider 최적화)
+// 성경일독 플랜 카드 (Provider 최적화 + 반응형)
 class _PlanBentoCard extends StatelessWidget {
   final bool isDark;
 
@@ -570,6 +590,15 @@ class _PlanBentoCard extends StatelessWidget {
     final planCount = context.select<PlanProgressProvider, int>(
       (provider) => provider.plans.length,
     );
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // 화면 크기에 따라 동적으로 조절
+    final titleFontSize = screenWidth < 380 ? 18.0 : 20.0;
+    final subtitleFontSize = screenWidth < 380 ? 12.0 : 13.0;
+    final iconSize = screenWidth < 380 ? 28.0 : 32.0;
+    final badgeFontSize = screenWidth < 380 ? 11.0 : 12.0;
+    final padding = screenWidth < 380 ? 16.0 : 20.0;
 
     return Material(
       color: Colors.transparent,
@@ -610,7 +639,7 @@ class _PlanBentoCard extends StatelessWidget {
               ),
               // 콘텐츠
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(padding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -619,27 +648,32 @@ class _PlanBentoCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.calendar_month_rounded,
                           color: Colors.white,
-                          size: 32,
+                          size: iconSize,
                         ),
                         if (hasAnyPlan)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.25),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              '$planCount개 진행 중',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
+                          Flexible(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth < 380 ? 10 : 12,
+                                vertical: screenWidth < 380 ? 5 : 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.25),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  '$planCount개 진행 중',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: badgeFontSize,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -649,22 +683,34 @@ class _PlanBentoCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '성경일독',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            letterSpacing: -0.5,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '성경일독',
+                            style: TextStyle(
+                              fontSize: titleFontSize,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          !hasAnyPlan ? '플랜 시작하기' : '진행 중인 플랜 보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.white.withValues(alpha: 0.9),
-                            fontWeight: FontWeight.w500,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            !hasAnyPlan ? '플랜 시작하기' : '진행 중인 플랜 보기',
+                            style: TextStyle(
+                              fontSize: subtitleFontSize,
+                              color: Colors.white.withValues(alpha: 0.9),
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
                           ),
                         ),
                       ],

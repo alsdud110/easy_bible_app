@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/quiz_history.dart';
+import '../../utils/responsive_utils.dart';
 
 /// 퀴즈 히스토리 상세 화면 - 각 문제별 정답/오답 보기
 class QuizHistoryDetailScreen extends StatefulWidget {
@@ -39,11 +40,14 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          '퀴즈 상세 결과',
-          style: TextStyle(
-            fontWeight: FontWeight.w800,
-            fontSize: 22,
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '퀴즈 상세 결과',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: ResponsiveUtils.appBarTitleFontSize(context),
+            ),
           ),
         ),
         centerTitle: true,
@@ -53,10 +57,16 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
           controller: _tabController,
           labelColor: cs.primary,
           unselectedLabelColor: cs.onSurface.withValues(alpha: 0.6),
-          indicatorColor: cs.primary,
-          labelStyle: const TextStyle(
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicator: UnderlineTabIndicator(
+            borderSide: BorderSide(
+              color: cs.primary,
+              width: 2.0,
+            ),
+          ),
+          labelStyle: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: 14,
+            fontSize: ResponsiveUtils.bodyFontSize(context),
           ),
           tabs: [
             Tab(
@@ -108,22 +118,28 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '점수',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: cs.onSurface.withValues(alpha: 0.6),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '점수',
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.captionFontSize(context),
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface.withValues(alpha: 0.6),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  '${item.score}점',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800,
-                    color: cs.onSurface,
-                    height: 1.1,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '${item.score}점',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                      color: cs.onSurface,
+                      height: 1.1,
+                    ),
                   ),
                 ),
               ],
@@ -165,19 +181,25 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            color: cs.onSurface.withValues(alpha: 0.6),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: ResponsiveUtils.captionFontSize(context),
+              color: cs.onSurface.withValues(alpha: 0.6),
+            ),
           ),
         ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: cs.onSurface,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: ResponsiveUtils.bodyFontSize(context),
+              fontWeight: FontWeight.w700,
+              color: cs.onSurface,
+            ),
           ),
         ),
       ],
@@ -199,12 +221,15 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
                 color: cs.outline.withValues(alpha: 0.3),
               ),
               const SizedBox(height: 16),
-              Text(
-                '문제가 없습니다',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: cs.onSurface.withValues(alpha: 0.6),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '문제가 없습니다',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                    fontWeight: FontWeight.w600,
+                    color: cs.onSurface.withValues(alpha: 0.6),
+                  ),
                 ),
               ),
             ],
@@ -271,24 +296,30 @@ class _QuestionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                    child: Text(
-                      '$questionNumber',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: cs.onSurface,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '$questionNumber',
+                        style: TextStyle(
+                          fontSize: ResponsiveUtils.bodyFontSize(context),
+                          fontWeight: FontWeight.w800,
+                          color: cs.onSurface,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 // Difficulty
-                Text(
-                  question.difficulty.displayName,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: cs.onSurface.withValues(alpha: 0.5),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    question.difficulty.displayName,
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.captionFontSize(context),
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface.withValues(alpha: 0.5),
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -314,14 +345,17 @@ class _QuestionCard extends StatelessWidget {
                             : cs.error,
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        record.isCorrect ? '정답' : '오답',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: record.isCorrect
-                              ? cs.onSurface.withValues(alpha: 0.6)
-                              : cs.error,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          record.isCorrect ? '정답' : '오답',
+                          style: TextStyle(
+                            fontSize: ResponsiveUtils.captionFontSize(context),
+                            fontWeight: FontWeight.w700,
+                            color: record.isCorrect
+                                ? cs.onSurface.withValues(alpha: 0.6)
+                                : cs.error,
+                          ),
                         ),
                       ),
                     ],
@@ -345,13 +379,16 @@ class _QuestionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Question
-                Text(
-                  question.question,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: cs.onSurface,
-                    height: 1.5,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    question.question,
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.bodyFontSize(context),
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface,
+                      height: 1.5,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -362,6 +399,7 @@ class _QuestionCard extends StatelessWidget {
                   record.userAnswerText,
                   record.isCorrect,
                   cs,
+                  context,
                 ),
 
                 // Correct answer if wrong
@@ -372,6 +410,7 @@ class _QuestionCard extends StatelessWidget {
                     record.correctAnswerText,
                     true,
                     cs,
+                    context,
                   ),
                 ],
 
@@ -386,12 +425,15 @@ class _QuestionCard extends StatelessWidget {
                         size: 16,
                       ),
                       const SizedBox(width: 6),
-                      Text(
-                        question.reference!,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: cs.onSurface.withValues(alpha: 0.6),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          question.reference!,
+                          style: TextStyle(
+                            fontSize: ResponsiveUtils.captionFontSize(context),
+                            fontWeight: FontWeight.w600,
+                            color: cs.onSurface.withValues(alpha: 0.6),
+                          ),
                         ),
                       ),
                     ],
@@ -417,12 +459,15 @@ class _QuestionCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Text(
-                            question.explanation!,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: cs.onSurface.withValues(alpha: 0.7),
-                              height: 1.5,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              question.explanation!,
+                              style: TextStyle(
+                                fontSize: ResponsiveUtils.captionFontSize(context),
+                                color: cs.onSurface.withValues(alpha: 0.7),
+                                height: 1.5,
+                              ),
                             ),
                           ),
                         ),
@@ -439,29 +484,35 @@ class _QuestionCard extends StatelessWidget {
   }
 
   Widget _buildAnswerRow(
-      String label, String answer, bool isCorrect, ColorScheme cs) {
+      String label, String answer, bool isCorrect, ColorScheme cs, BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 60,
           padding: const EdgeInsets.only(top: 2),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: cs.onSurface.withValues(alpha: 0.5),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: ResponsiveUtils.captionFontSize(context),
+                fontWeight: FontWeight.w600,
+                color: cs.onSurface.withValues(alpha: 0.5),
+              ),
             ),
           ),
         ),
         Expanded(
-          child: Text(
-            answer,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: cs.onSurface,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              answer,
+              style: TextStyle(
+                fontSize: ResponsiveUtils.bodyFontSize(context),
+                fontWeight: FontWeight.w600,
+                color: cs.onSurface,
+              ),
             ),
           ),
         ),

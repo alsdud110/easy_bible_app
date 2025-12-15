@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/quiz_history.dart';
 import '../../services/quiz_history_service.dart';
+import '../../utils/responsive_utils.dart';
 import 'quiz_history_detail_screen.dart';
 
 /// 퀴즈 히스토리 화면
@@ -49,11 +50,14 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          '퀴즈 기록',
-          style: TextStyle(
-            fontWeight: FontWeight.w800,
-            fontSize: 22,
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '퀴즈 기록',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: ResponsiveUtils.appBarTitleFontSize(context),
+            ),
           ),
         ),
         centerTitle: true,
@@ -99,22 +103,28 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
               color: cs.outline.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 16),
-            Text(
-              '퀴즈 기록이 없습니다',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: cs.onSurface.withValues(alpha: 0.6),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '퀴즈 기록이 없습니다',
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.buttonFontSize(context),
+                  fontWeight: FontWeight.w700,
+                  color: cs.onSurface.withValues(alpha: 0.6),
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              '퀴즈를 완료하면 여기에 기록이 표시됩니다',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: cs.onSurface.withValues(alpha: 0.5),
-                height: 1.5,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '퀴즈를 완료하면 여기에 기록이 표시됩니다',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                  color: cs.onSurface.withValues(alpha: 0.5),
+                  height: 1.5,
+                ),
               ),
             ),
           ],
@@ -288,12 +298,15 @@ class _QuizHistoryCard extends StatelessWidget {
                       color: cs.surfaceContainerHighest,
                     ),
                     child: Center(
-                      child: Text(
-                        '${item.score}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: cs.onSurface,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '${item.score}',
+                          style: TextStyle(
+                            fontSize: ResponsiveUtils.appBarTitleFontSize(context),
+                            fontWeight: FontWeight.w800,
+                            color: cs.onSurface,
+                          ),
                         ),
                       ),
                     ),
@@ -307,12 +320,15 @@ class _QuizHistoryCard extends StatelessWidget {
                         // Quiz type and difficulty
                         Row(
                           children: [
-                            Text(
-                              item.quizType.displayName,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: cs.onSurface.withValues(alpha: 0.6),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                item.quizType.displayName,
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.captionFontSize(context),
+                                  fontWeight: FontWeight.w600,
+                                  color: cs.onSurface.withValues(alpha: 0.6),
+                                ),
                               ),
                             ),
                             Container(
@@ -324,12 +340,15 @@ class _QuizHistoryCard extends StatelessWidget {
                                 color: cs.onSurface.withValues(alpha: 0.3),
                               ),
                             ),
-                            Text(
-                              item.difficulty.displayName,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: cs.onSurface.withValues(alpha: 0.6),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                item.difficulty.displayName,
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.captionFontSize(context),
+                                  fontWeight: FontWeight.w600,
+                                  color: cs.onSurface.withValues(alpha: 0.6),
+                                ),
                               ),
                             ),
                           ],
@@ -338,37 +357,49 @@ class _QuizHistoryCard extends StatelessWidget {
                         // Results
                         Row(
                           children: [
-                            Text(
-                              '정답 ',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: cs.onSurface.withValues(alpha: 0.5),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '정답 ',
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  color: cs.onSurface.withValues(alpha: 0.5),
+                                ),
                               ),
                             ),
-                            Text(
-                              '${item.correctCount}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: cs.onSurface,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${item.correctCount}',
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  fontWeight: FontWeight.w700,
+                                  color: cs.onSurface,
+                                ),
                               ),
                             ),
-                            Text(
-                              ' / ${item.totalQuestions}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: cs.onSurface.withValues(alpha: 0.5),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                ' / ${item.totalQuestions}',
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  color: cs.onSurface.withValues(alpha: 0.5),
+                                ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         // Date
-                        Text(
-                          dateFormat.format(item.completedAt),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: cs.onSurface.withValues(alpha: 0.4),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            dateFormat.format(item.completedAt),
+                            style: TextStyle(
+                              fontSize: ResponsiveUtils.captionFontSize(context),
+                              color: cs.onSurface.withValues(alpha: 0.4),
+                            ),
                           ),
                         ),
                       ],

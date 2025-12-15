@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
 import '../../services/bible_search_service.dart';
+import '../../utils/responsive_utils.dart';
 import 'verse_list_view.dart';
 
 class BibleSearchScreen extends StatefulWidget {
@@ -176,7 +177,7 @@ class _BibleSearchScreenState extends State<BibleSearchScreen> {
                     : 'Enter search term (e.g., love, faith)',
                 hintStyle: TextStyle(
                   color: cs.onSurface.withOpacity(0.5),
-                  fontSize: 14,
+                  fontSize: ResponsiveUtils.bodyFontSize(context),
                 ),
                 prefixIcon: Icon(
                   Icons.search,
@@ -250,13 +251,16 @@ class _BibleSearchScreenState extends State<BibleSearchScreen> {
                               color: cs.onSurface.withOpacity(0.3),
                             ),
                             const SizedBox(height: 16),
-                            Text(
-                              languageProvider.isKorean
-                                  ? '검색어를 입력하세요'
-                                  : 'Enter a search term',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: cs.onSurface.withOpacity(0.6),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                languageProvider.isKorean
+                                    ? '검색어를 입력하세요'
+                                    : 'Enter a search term',
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  color: cs.onSurface.withOpacity(0.6),
+                                ),
                               ),
                             ),
                           ],
@@ -273,23 +277,29 @@ class _BibleSearchScreenState extends State<BibleSearchScreen> {
                                   color: cs.onSurface.withOpacity(0.3),
                                 ),
                                 const SizedBox(height: 16),
-                                Text(
-                                  languageProvider.isKorean
-                                      ? '검색 결과가 없습니다'
-                                      : 'No results found',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: cs.onSurface.withOpacity(0.6),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    languageProvider.isKorean
+                                        ? '검색 결과가 없습니다'
+                                        : 'No results found',
+                                    style: TextStyle(
+                                      fontSize: ResponsiveUtils.bodyFontSize(context),
+                                      color: cs.onSurface.withOpacity(0.6),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  languageProvider.isKorean
-                                      ? '다른 검색어를 시도해보세요'
-                                      : 'Try different search terms',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: cs.onSurface.withOpacity(0.4),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    languageProvider.isKorean
+                                        ? '다른 검색어를 시도해보세요'
+                                        : 'Try different search terms',
+                                    style: TextStyle(
+                                      fontSize: ResponsiveUtils.bodyFontSize(context),
+                                      color: cs.onSurface.withOpacity(0.4),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -300,14 +310,17 @@ class _BibleSearchScreenState extends State<BibleSearchScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: Text(
-                                  languageProvider.isKorean
-                                      ? '$_totalResultCount개의 결과'
-                                      : '$_totalResultCount result${_totalResultCount > 1 ? 's' : ''}',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: cs.onSurface.withOpacity(0.7),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    languageProvider.isKorean
+                                        ? '$_totalResultCount개의 결과'
+                                        : '$_totalResultCount result${_totalResultCount > 1 ? 's' : ''}',
+                                    style: TextStyle(
+                                      fontSize: ResponsiveUtils.bodyFontSize(context),
+                                      fontWeight: FontWeight.w600,
+                                      color: cs.onSurface.withOpacity(0.7),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -398,31 +411,38 @@ class _SearchResultTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       title: Padding(
         padding: const EdgeInsets.only(bottom: 4),
-        child: Text(
-          result.reference,
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-            color: cs.primary,
-            letterSpacing: 0.2,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            result.reference,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: ResponsiveUtils.bodyFontSize(context),
+              color: cs.primary,
+              letterSpacing: 0.2,
+            ),
           ),
         ),
       ),
-      subtitle: RichText(
-        text: TextSpan(
-          style: TextStyle(
-            fontFamily: 'ChosunCentennial',
-            fontSize: 15,
-            height: 1.5,
-            color: cs.onSurface,
-          ),
-          children: [
-            _highlightSearchTerm(
-              result.text,
-              searchQuery,
-              Colors.yellow.withOpacity(0.5),
+      subtitle: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: RichText(
+          text: TextSpan(
+            style: TextStyle(
+              fontFamily: 'ChosunCentennial',
+              fontSize: ResponsiveUtils.bodyFontSize(context),
+              height: 1.5,
+              color: cs.onSurface,
             ),
-          ],
+            children: [
+              _highlightSearchTerm(
+                result.text,
+                searchQuery,
+                Colors.yellow.withOpacity(0.5),
+              ),
+            ],
+          ),
         ),
       ),
       trailing: Icon(

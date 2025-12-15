@@ -354,189 +354,268 @@ class _PlanStartScreenState extends State<PlanStartScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 플랜 타입 카드
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        cs.primary,
-                        cs.primary.withOpacity(0.7),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: cs.primary.withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.auto_stories,
-                        size: 48,
-                        color: cs.onPrimary,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        '${widget.planType.totalDays}일 통독 플랜',
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          color: cs.onPrimary,
-                          fontWeight: FontWeight.bold,
+                Builder(
+                  builder: (context) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final iconSize = screenWidth < 380 ? 40.0 : 48.0;
+                    final titleFontSize = screenWidth < 380 ? 22.0 : 24.0;
+                    final bodyFontSize = screenWidth < 380 ? 14.0 : 16.0;
+                    final padding = screenWidth < 380 ? 20.0 : 24.0;
+
+                    return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(padding),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            cs.primary,
+                            cs.primary.withOpacity(0.7),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: cs.primary.withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '하루하루 성경을 읽으며\n말씀과 함께하는 ${widget.planType.totalDays}일',
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: cs.onPrimary.withOpacity(0.9),
-                          height: 1.5,
-                        ),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.auto_stories,
+                            size: iconSize,
+                            color: cs.onPrimary,
+                          ),
+                          const SizedBox(height: 12),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${widget.planType.totalDays}일 통독 플랜',
+                              style: TextStyle(
+                                fontSize: titleFontSize,
+                                color: cs.onPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '하루하루 성경을 읽으며\n말씀과 함께하는 ${widget.planType.totalDays}일',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: bodyFontSize,
+                                color: cs.onPrimary.withOpacity(0.9),
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 32),
 
                 // 플랜명 입력
-                Text(
-                  '플랜명 (필수사항)',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: cs.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _planNameController,
-                  decoration: InputDecoration(
-                    hintText: widget.planType.defaultName,
-                    filled: true,
-                    fillColor: cs.surface,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: cs.outline),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide:
-                          BorderSide(color: cs.outline.withOpacity(0.5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: cs.primary, width: 2),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: cs.onSurface,
-                  ),
+                Builder(
+                  builder: (context) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final labelFontSize = screenWidth < 380 ? 15.0 : 16.0;
+                    final textFontSize = screenWidth < 380 ? 15.0 : 16.0;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '플랜명 (필수사항)',
+                            style: TextStyle(
+                              fontSize: labelFontSize,
+                              fontWeight: FontWeight.bold,
+                              color: cs.onSurface,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _planNameController,
+                          decoration: InputDecoration(
+                            hintText: widget.planType.defaultName,
+                            filled: true,
+                            fillColor: cs.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: cs.outline),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide:
+                                  BorderSide(color: cs.outline.withOpacity(0.5)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: cs.primary, width: 2),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                          ),
+                          style: TextStyle(
+                            fontSize: textFontSize,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 32),
 
                 // 알림 시간 설정
-                Text(
-                  '알림 시간 (선택사항)',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: cs.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                InkWell(
-                  onTap: _selectTime,
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: cs.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: cs.outline.withOpacity(0.5),
-                      ),
-                    ),
-                    child: Row(
+                Builder(
+                  builder: (context) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final labelFontSize = screenWidth < 380 ? 15.0 : 16.0;
+                    final textFontSize = screenWidth < 380 ? 15.0 : 16.0;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.alarm,
-                          color: cs.primary,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
                           child: Text(
-                            _selectedTime != null
-                                ? '${_selectedTime!.hour.toString().padLeft(2, '0')}:${_selectedTime!.minute.toString().padLeft(2, '0')}'
-                                : '알림 시간 선택',
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: _selectedTime != null
-                                  ? cs.onSurface
-                                  : cs.onSurface.withOpacity(0.5),
+                            '알림 시간 (선택사항)',
+                            style: TextStyle(
+                              fontSize: labelFontSize,
+                              fontWeight: FontWeight.bold,
+                              color: cs.onSurface,
                             ),
                           ),
                         ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: cs.onSurface.withOpacity(0.5),
+                        const SizedBox(height: 12),
+                        InkWell(
+                          onTap: _selectTime,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: cs.surface,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: cs.outline.withOpacity(0.5),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.alarm,
+                                  color: cs.primary,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      _selectedTime != null
+                                          ? '${_selectedTime!.hour.toString().padLeft(2, '0')}:${_selectedTime!.minute.toString().padLeft(2, '0')}'
+                                          : '알림 시간 선택',
+                                      style: TextStyle(
+                                        fontSize: textFontSize,
+                                        color: _selectedTime != null
+                                            ? cs.onSurface
+                                            : cs.onSurface.withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                  color: cs.onSurface.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
-                    ),
-                  ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 48),
 
                 // 시작하기 버튼
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _startPlan,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cs.primary,
-                      foregroundColor: cs.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 3,
-                      shadowColor: cs.primary.withOpacity(0.4),
-                    ),
-                    child: const Text(
-                      '시작하기',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                Builder(
+                  builder: (context) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final buttonFontSize = screenWidth < 380 ? 16.0 : 18.0;
+                    final hintFontSize = screenWidth < 380 ? 12.0 : 13.0;
 
-                const SizedBox(height: 16),
+                    return Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _startPlan,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: cs.primary,
+                              foregroundColor: cs.onPrimary,
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 3,
+                              shadowColor: cs.primary.withOpacity(0.4),
+                            ),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '시작하기',
+                                style: TextStyle(
+                                  fontSize: buttonFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
 
-                // 안내 텍스트
-                Center(
-                  child: Text(
-                    '시작하기 버튼을 누르면\n플랜이 시작됩니다',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: cs.onSurface.withOpacity(0.6),
-                      height: 1.5,
-                    ),
-                  ),
+                        const SizedBox(height: 16),
+
+                        // 안내 텍스트
+                        Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '시작하기 버튼을 누르면\n플랜이 시작됩니다',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: hintFontSize,
+                                color: cs.onSurface.withOpacity(0.6),
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),

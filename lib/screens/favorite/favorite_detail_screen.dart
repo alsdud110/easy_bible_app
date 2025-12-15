@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../models/favorite_verse.dart';
 import '../../providers/favorite_provider.dart';
+import '../../utils/responsive_utils.dart';
 
 class FavoriteDetailScreen extends StatefulWidget {
   final FavoriteVerse favorite;
@@ -273,19 +274,27 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '북마크',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: cs.primary,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '북마크',
+                          style: TextStyle(
+                            fontSize: ResponsiveUtils.captionFontSize(context),
+                            fontWeight: FontWeight.w600,
+                            color: cs.primary,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        '추가일: ${_formatDateTime(currentFavorite.createdAt)}',
-                        style: TextStyle(
-                            fontSize: 11, color: cs.onSurface.withOpacity(0.6)),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '추가일: ${_formatDateTime(currentFavorite.createdAt)}',
+                          style: TextStyle(
+                              fontSize: ResponsiveUtils.captionFontSize(context), color: cs.onSurface.withOpacity(0.6)),
+                        ),
                       ),
                     ],
                   ),
@@ -298,10 +307,14 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
           Expanded(
             child: verses.isEmpty
                 ? Center(
-                    child: Text(
-                      '구절을 불러올 수 없습니다',
-                      style: TextStyle(
-                          fontSize: 14, color: cs.onSurface.withOpacity(0.5)),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '구절을 불러올 수 없습니다',
+                        style: TextStyle(
+                            fontSize: ResponsiveUtils.bodyFontSize(context), color: cs.onSurface.withOpacity(0.5)),
+                      ),
                     ),
                   )
                 : ListView.builder(
@@ -318,13 +331,17 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                           leading: Stack(
                             clipBehavior: Clip.none,
                             children: [
-                              Text(
-                                '$verseNum',
-                                style: TextStyle(
-                                  fontFamily: 'ChosunCentennial',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: cs.onSurface,
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '$verseNum',
+                                  style: TextStyle(
+                                    fontFamily: 'ChosunCentennial',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                                    color: cs.onSurface,
+                                  ),
                                 ),
                               ),
                               Positioned(
@@ -335,13 +352,17 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                               ),
                             ],
                           ),
-                          title: Text(
-                            text,
-                            style: TextStyle(
-                                fontFamily: 'ChosunCentennial',
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15,
-                                color: cs.onSurface),
+                          title: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              text,
+                              style: TextStyle(
+                                  fontFamily: 'ChosunCentennial',
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  color: cs.onSurface),
+                            ),
                           ),
                           dense: true,
                         ),
@@ -373,14 +394,18 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                       minWidth: 18,
                       minHeight: 18,
                     ),
-                    child: Text(
-                      '${currentFavorite.memos.length}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${currentFavorite.memos.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -486,12 +511,16 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                   children: [
                     Icon(Icons.sticky_note_2, size: 24, color: cs.primary),
                     const SizedBox(width: 8),
-                    Text(
-                      '메모',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: cs.onSurface,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '메모',
+                        style: TextStyle(
+                          fontSize: ResponsiveUtils.titleFontSize(context),
+                          fontWeight: FontWeight.bold,
+                          color: cs.onSurface,
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -575,11 +604,15 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                             Icon(Icons.sticky_note_2_outlined,
                                 size: 64, color: cs.onSurface.withOpacity(0.2)),
                             const SizedBox(height: 16),
-                            Text(
-                              '작성된 메모가 없습니다',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: cs.onSurface.withOpacity(0.5)),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.center,
+                              child: Text(
+                                '작성된 메모가 없습니다',
+                                style: TextStyle(
+                                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                                    color: cs.onSurface.withOpacity(0.5)),
+                              ),
                             ),
                           ],
                         ),
@@ -605,12 +638,16 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: Text(
-                                          memo.content,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: cs.onSurface,
-                                            height: 1.5,
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            memo.content,
+                                            style: TextStyle(
+                                              fontSize: ResponsiveUtils.bodyFontSize(context),
+                                              color: cs.onSurface,
+                                              height: 1.5,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -658,22 +695,30 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                                           size: 12,
                                           color: cs.onSurface.withOpacity(0.5)),
                                       const SizedBox(width: 4),
-                                      Text(
-                                        widget.formatDateTime(memo.createdAt),
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color:
-                                                cs.onSurface.withOpacity(0.5)),
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          widget.formatDateTime(memo.createdAt),
+                                          style: TextStyle(
+                                              fontSize: ResponsiveUtils.captionFontSize(context),
+                                              color:
+                                                  cs.onSurface.withOpacity(0.5)),
+                                        ),
                                       ),
                                       if (memo.updatedAt != null) ...[
                                         const SizedBox(width: 6),
-                                        Text(
-                                          '(수정됨)',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color:
-                                                cs.onSurface.withOpacity(0.4),
-                                            fontStyle: FontStyle.italic,
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            '(수정됨)',
+                                            style: TextStyle(
+                                              fontSize: ResponsiveUtils.captionFontSize(context),
+                                              color:
+                                                  cs.onSurface.withOpacity(0.4),
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
                                         ),
                                       ],

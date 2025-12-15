@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
 import '../../utils/pretty_range_label.dart';
+import '../../utils/responsive_utils.dart';
 import '../../providers/favorite_provider.dart';
 import '../../providers/highlight_provider.dart';
 import '../../providers/plan_progress_provider.dart';
@@ -370,11 +371,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       size: 24,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
-                      '하이라이트',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '하이라이트',
+                        style: TextStyle(
+                          fontSize: ResponsiveUtils.titleFontSize(context),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -697,12 +701,15 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
           children: [
             Icon(icon, size: 22, color: color),
             const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: color,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.captionFontSize(context),
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
               ),
             ),
           ],
@@ -955,11 +962,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         isCompleted ? Icons.check_circle : Icons.check,
                         size: 20,
                       ),
-                      label: Text(
-                        isCompleted ? '일독 완료' : '일독 완료',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                      label: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          isCompleted ? '일독 완료' : '일독 완료',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: ResponsiveUtils.bodyFontSize(context),
+                          ),
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -1141,13 +1151,16 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                 ),
               ),
               const SizedBox(height: 16),
-              Text(
-                '$elapsedDays일 만에\n성경 $totalDays일 통독을 완주하셨네요!',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: cs.onSurface.withValues(alpha: 0.8),
-                  height: 1.6,
-                  fontSize: 16,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '$elapsedDays일 만에\n성경 $totalDays일 통독을 완주하셨네요!',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: cs.onSurface.withValues(alpha: 0.8),
+                    height: 1.6,
+                    fontSize: ResponsiveUtils.titleFontSize(context),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -1175,11 +1188,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     ),
                     elevation: 2,
                   ),
-                  child: const Text(
-                    '확인',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '확인',
+                      style: TextStyle(
+                        fontSize: ResponsiveUtils.titleFontSize(context),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -1294,11 +1310,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                               ),
                               elevation: 1,
                             ),
-                            child: const Text(
-                              '확인',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '확인',
+                                style: TextStyle(
+                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -1323,11 +1342,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                                 elevation: 1,
                               ),
                               icon: const Icon(Icons.arrow_forward, size: 18),
-                              label: const Text(
-                                '다음일차',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                              label: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  '다음일차',
+                                  style: TextStyle(
+                                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),

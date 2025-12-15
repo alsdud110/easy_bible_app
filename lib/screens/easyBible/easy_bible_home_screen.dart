@@ -1,5 +1,6 @@
 // screens/easyBible/easy_bible_screen.dart
 import 'package:flutter/material.dart';
+import '../../utils/responsive_utils.dart';
 
 class EasyBibleHomeScreen extends StatelessWidget {
   const EasyBibleHomeScreen({super.key});

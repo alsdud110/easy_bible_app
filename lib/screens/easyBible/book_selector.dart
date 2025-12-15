@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/bible_data.dart';
+import '../../utils/responsive_utils.dart';
 
 // (ChapterSelector 등 필요한 import 추가)
 
@@ -122,13 +123,16 @@ class _BookSelectorState extends State<BookSelector> {
               color: selected ? cs.primary : cs.secondary.withOpacity(0.65),
               width: 1.1),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: selected ? cs.onPrimary : cs.primary,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-            letterSpacing: -0.3,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            style: TextStyle(
+              color: selected ? cs.onPrimary : cs.primary,
+              fontWeight: FontWeight.w600,
+              fontSize: ResponsiveUtils.bodyFontSize(context),
+              letterSpacing: -0.3,
+            ),
           ),
         ),
       ),
@@ -158,13 +162,16 @@ class _SectionTitle extends StatelessWidget {
           ),
         ],
       ),
-      child: Text(
-        title,
-        style: theme.textTheme.headlineSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: 15.5,
-          letterSpacing: 1.2,
-          color: theme.colorScheme.primary,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          title,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: ResponsiveUtils.bodyFontSize(context),
+            letterSpacing: 1.2,
+            color: theme.colorScheme.primary,
+          ),
         ),
       ),
     );
@@ -205,13 +212,16 @@ class _BookGrid extends StatelessWidget {
                 color: theme.colorScheme.secondary.withOpacity(0.32)),
           ),
           alignment: Alignment.center,
-          child: Text(
-            books[i].name,
-            style: theme.textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              fontSize: 14.5,
-              color: theme.colorScheme.primary,
-              letterSpacing: 0.2,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              books[i].name,
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: ResponsiveUtils.bodyFontSize(context),
+                color: theme.colorScheme.primary,
+                letterSpacing: 0.2,
+              ),
             ),
           ),
         ),
@@ -241,12 +251,16 @@ class _BookList extends StatelessWidget {
           Divider(height: 1, color: theme.dividerColor, thickness: 1.0),
       itemBuilder: (context, i) => ListTile(
         onTap: () => onSelect(i + offset),
-        title: Text(
-          books[i].fullName,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-            letterSpacing: 0.2,
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            books[i].fullName,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: ResponsiveUtils.buttonFontSize(context),
+              letterSpacing: 0.2,
+            ),
           ),
         ),
         trailing: Icon(Icons.chevron_right,
