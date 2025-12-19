@@ -12,11 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:screenshot/screenshot.dart';
 
 import '../../models/bible_card_theme.dart';
+import '../../models/bible_card_layout.dart';
 import '../../models/today_verse_model.dart';
-import '../../services/rewarded_ad_manager.dart';
+import '../../services/interstitial_ad_manager.dart';
 import '../../services/verse_history_service.dart';
 import '../../utils/responsive_utils.dart';
-import '../../widgets/beautiful_bible_card.dart';
+import '../../widgets/multi_layout_bible_card.dart';
+import '../bible_card_preview_screen.dart';
 
 class TodayVerseCard extends StatefulWidget {
   const TodayVerseCard({super.key});
@@ -37,8 +39,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   late AnimationController _shineCtrl;
 
   final ScreenshotController _screenshotController = ScreenshotController();
-  final RewardedAdManager _adManager = RewardedAdManager();
-  bool _hasWatchedAdForCurrentVerse = false;
+  final InterstitialAdManager _interstitialAdManager = InterstitialAdManager();
 
   @override
   void initState() {
@@ -59,7 +60,21 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     )..repeat();
 
     _loadTodayVerse();
-    _adManager.loadAd();
+    _interstitialAdManager.loadAd();
+  }
+
+  String _verseAdKey(String verse, String ref) {
+    return 'adViewed_${ref.hashCode}_${verse.hashCode}';
+  }
+
+  Future<bool> _hasViewedAdForVerse(String verse, String ref) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_verseAdKey(verse, ref)) ?? false;
+  }
+
+  Future<void> _markAdViewedForVerse(String verse, String ref) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_verseAdKey(verse, ref), true);
   }
 
   Future<void> _loadTodayVerse() async {
@@ -68,7 +83,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     final lastPickDate = prefs.getString('lastVerseDate');
     final verseIdx = prefs.getInt('todayVerseIdx');
 
-    debugPrint('📖 _loadTodayVerse - lastPickDate: $lastPickDate, verseIdx: $verseIdx');
+    debugPrint(
+        '📖 _loadTodayVerse - lastPickDate: $lastPickDate, verseIdx: $verseIdx');
 
     if (lastPickDate == '${today.year}-${today.month}-${today.day}' &&
         verseIdx != null) {
@@ -143,7 +159,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               .headlineMedium
                               ?.copyWith(
                                 fontWeight: FontWeight.w700,
-                                fontSize: ResponsiveUtils.titleFontSize(context),
+                                fontSize:
+                                    ResponsiveUtils.titleFontSize(context),
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
@@ -171,7 +188,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                 .labelLarge
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
-                                  fontSize: ResponsiveUtils.bodyFontSize(context),
+                                  fontSize:
+                                      ResponsiveUtils.bodyFontSize(context),
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'ChosunCentennial',
                                 ),
@@ -179,22 +197,20 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                         ),
                       ),
                       const SizedBox(height: 12),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          todayVerses[idx].text,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontSize: ResponsiveUtils.bodyFontSize(context),
-                                height: 1.7,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'ChosunCentennial',
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withValues(alpha: 0.98),
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
+                      Text(
+                        todayVerses[idx].text,
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontSize: ResponsiveUtils.bodyFontSize(context),
+                              height: 1.7,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'ChosunCentennial',
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.98),
+                            ),
                       ),
                       const SizedBox(height: 18),
                       Align(
@@ -210,7 +226,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             await prefs.setInt('todayVerseIdx', idx);
 
                             // Save to history
-                            debugPrint('💾 새 말씀 히스토리에 저장: ${todayVerses[idx].ref}');
+                            debugPrint(
+                                '💾 새 말씀 히스토리에 저장: ${todayVerses[idx].ref}');
                             final historyService = VerseHistoryService();
                             await historyService.saveVerse(VerseHistoryItem(
                               reference: todayVerses[idx].ref,
@@ -218,15 +235,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               date: today,
                             ));
 
-                            final savedHistory = await historyService.getHistory();
-                            debugPrint('✅ 저장 후 히스토리 개수: ${savedHistory.length}');
+                            final savedHistory =
+                                await historyService.getHistory();
+                            debugPrint(
+                                '✅ 저장 후 히스토리 개수: ${savedHistory.length}');
 
                             setState(() {
                               verse = todayVerses[idx].text;
                               ref = todayVerses[idx].ref;
                               pendingIdx = null;
-                              _hasWatchedAdForCurrentVerse =
-                                  false; // 새 말씀을 받으면 광고 시청 상태 초기화
                             });
                             await _fadeCtrl.forward();
                           },
@@ -245,7 +262,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             fit: BoxFit.scaleDown,
                             child: Text('확인',
                                 style: TextStyle(
-                                    fontSize: ResponsiveUtils.bodyFontSize(context))),
+                                    fontSize:
+                                        ResponsiveUtils.bodyFontSize(context))),
                           ),
                         ),
                       ),
@@ -263,13 +281,19 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   Future<void> _resetVerse() async {
     await _fadeCtrl.reverse();
     final prefs = await SharedPreferences.getInstance();
+
+    if (verse != null && ref != null) {
+      await prefs.remove(_verseAdKey(verse!, ref!));
+    }
+
     await prefs.remove('todayVerseIdx');
     await prefs.remove('lastVerseDate');
+
     setState(() {
       verse = null;
       ref = null;
-      _hasWatchedAdForCurrentVerse = false;
     });
+
     await _fadeCtrl.forward();
   }
 
@@ -300,12 +324,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
         return FadeTransition(
           opacity: curvedAnimation,
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.92, end: 1.0).animate(curvedAnimation),
+            scale:
+                Tween<double>(begin: 0.92, end: 1.0).animate(curvedAnimation),
             child: Dialog(
               backgroundColor: Colors.transparent,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 420, maxHeight: 600),
+                constraints:
+                    const BoxConstraints(maxWidth: 420, maxHeight: 600),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(24),
@@ -328,9 +355,13 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             fit: BoxFit.scaleDown,
                             child: Text(
                               '오늘의 말씀 히스토리',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                                    fontSize:
+                                        ResponsiveUtils.buttonFontSize(context),
                                   ),
                             ),
                           ),
@@ -366,8 +397,13 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                   fit: BoxFit.scaleDown,
                                   child: Text(
                                     '아직 히스토리가 없습니다',
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          fontSize: ResponsiveUtils.bodyFontSize(context),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          fontSize:
+                                              ResponsiveUtils.bodyFontSize(
+                                                  context),
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface
@@ -424,7 +460,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                 .colorScheme
                                                 .primary
                                                 .withValues(alpha: 0.15),
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           child: Text(
                                             item.reference,
@@ -436,14 +473,16 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                       .colorScheme
                                                       .primary,
                                                   fontWeight: FontWeight.w700,
-                                                  fontFamily: 'ChosunCentennial',
+                                                  fontFamily:
+                                                      'ChosunCentennial',
                                                 ),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 dateStr,
@@ -454,8 +493,10 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .onSurface
-                                                          .withValues(alpha: 0.5),
-                                                      fontWeight: FontWeight.w600,
+                                                          .withValues(
+                                                              alpha: 0.5),
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                               ),
                                               Text(
@@ -467,7 +508,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .onSurface
-                                                          .withValues(alpha: 0.4),
+                                                          .withValues(
+                                                              alpha: 0.4),
                                                       fontSize: 11,
                                                     ),
                                               ),
@@ -480,7 +522,9 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                           icon: Icon(
                                             Icons.share_rounded,
                                             size: 20,
-                                            color: Theme.of(context).colorScheme.primary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                           onPressed: () async {
                                             // 히스토리 다이얼로그는 닫지 않고 공유 다이얼로그 열기
@@ -499,12 +543,14 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                     const SizedBox(height: 10),
                                     Text(
                                       item.text,
-                                      style:
-                                          Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                height: 1.5,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: 'ChosunCentennial',
-                                              ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            height: 1.5,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'ChosunCentennial',
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -523,149 +569,35 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     );
   }
 
-  Future<void> _handleShareButton({String? customVerse, String? customRef}) async {
-    // 이미 광고를 본 경우 바로 미리보기 열기
-    if (_hasWatchedAdForCurrentVerse) {
-      if (!mounted) return;
-      debugPrint('✅ 광고 이미 시청함 - 바로 미리보기 열기');
-      await _openPreviewSaveShareDialog(
-        customVerse: customVerse,
-        customRef: customRef,
-      );
-      return;
-    }
+  Future<void> _handleShareButton({
+    String? customVerse,
+    String? customRef,
+  }) async {
+    final v = customVerse ?? verse ?? '';
+    final r = customRef ?? ref ?? '';
 
-    debugPrint('🎬 광고 시청 필요 - 광고 로드 상태: ${_adManager.isAdLoaded}');
+    if (v.isEmpty || r.isEmpty) return;
 
-    // 광고가 로드되지 않았으면 로딩 팝업 표시하며 기다림
-    if (!_adManager.isAdLoaded) {
-      _showAdLoadingDialog();
+    // 🔍 이 말씀에 대해 이미 광고를 봤는지 확인
+    final hasViewedAd = await _hasViewedAdForVerse(v, r);
 
-      // 광고 로드 시도 (최대 10초 대기)
-      final loadStartTime = DateTime.now();
-      while (!_adManager.isAdLoaded &&
-          DateTime.now().difference(loadStartTime).inSeconds < 10) {
-        await _adManager.loadAd();
-        if (!_adManager.isAdLoaded) {
-          await Future.delayed(const Duration(milliseconds: 500));
-        }
-      }
-
-      if (mounted) Navigator.of(context).pop();
-
-      // 10초 후에도 로드 실패시 에러 표시
-      if (!_adManager.isAdLoaded) {
-        debugPrint('❌ 광고 로드 실패');
-        if (mounted) _showErrorDialog('광고를 불러올 수 없습니다.\n잠시 후 다시 시도해주세요.');
-        return;
-      }
-    }
-
-    debugPrint('📺 광고 표시 시작');
-    final rewarded = await _adManager.showAd();
-    debugPrint('🎁 광고 시청 완료: $rewarded');
-
-    if (rewarded) {
-      if (!mounted) return;
-      setState(() => _hasWatchedAdForCurrentVerse = true);
-
-      // 말씀카드 생성중 다이얼로그 표시
-      debugPrint('🎨 말씀카드 생성중 다이얼로그 표시');
-      _showCardGeneratingDialog();
-      await Future.delayed(const Duration(milliseconds: 1500));
-
-      if (!mounted) return;
-      debugPrint('✅ 로딩 다이얼로그 닫기');
-      Navigator.of(context).pop(); // 로딩 닫기
-
-      // 다이얼로그가 완전히 닫힐 때까지 충분히 대기
-      await Future.delayed(const Duration(milliseconds: 300));
-
-      if (!mounted) return;
-      debugPrint('🖼️ 미리보기 다이얼로그 열기');
-      await _openPreviewSaveShareDialog(
-        customVerse: customVerse,
-        customRef: customRef,
-      );
-      debugPrint('✅ 미리보기 다이얼로그 열림');
+    if (!hasViewedAd) {
+      // 👉 아직 광고 안 봤으면 광고 1회 노출
+      await _interstitialAdManager.showAd();
+      await _markAdViewedForVerse(v, r);
     } else {
-      debugPrint('⚠️ 광고 시청 실패 또는 취소됨');
+      debugPrint('🚫 이미 광고 본 말씀 - 광고 스킵');
     }
-  }
 
-  void _showAdLoadingDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset(
-                'assets/lottie/loading.json',
-                width: 80,
-                height: 80,
-                fit: BoxFit.contain,
-                repeat: true,
-              ),
-              const SizedBox(height: 16),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  '로딩 중',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: ResponsiveUtils.buttonFontSize(context),
-                      ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    if (!mounted) return;
 
-  void _showCardGeneratingDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset(
-                'assets/lottie/loading.json',
-                width: 80,
-                height: 80,
-                fit: BoxFit.contain,
-                repeat: true,
-              ),
-              const SizedBox(height: 16),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  '말씀카드 생성중',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: ResponsiveUtils.buttonFontSize(context),
-                      ),
-                ),
-              ),
-            ],
-          ),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BibleCardPreviewScreen(
+          verse: v,
+          reference: r,
+          skipAds: true, // 공유 화면에서는 항상 광고 없음
+          shareTitle: '오늘의 말씀',
         ),
       ),
     );
@@ -750,7 +682,8 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                                    fontSize:
+                                        ResponsiveUtils.buttonFontSize(context),
                                   ),
                           textAlign: TextAlign.center,
                         ),
@@ -801,6 +734,20 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     final GlobalKey previewKey = GlobalKey();
     int selectedThemeIndex = 0;
     bool useWhiteText = true; // 텍스트 색상 토글 (true: 흰색, false: 검정)
+    CardLayoutType selectedLayout = CardLayoutType.minimal; // 선택된 레이아웃
+
+    // 저장된 설정 불러오기
+    final prefs = await SharedPreferences.getInstance();
+    selectedThemeIndex = prefs.getInt('selectedThemeIndex') ?? 0;
+    useWhiteText = prefs.getBool('useWhiteText') ?? true;
+    final savedLayoutIndex = prefs.getInt('selectedLayoutIndex') ?? 0;
+    // 저장된 인덱스가 유효한 범위인지 확인
+    if (savedLayoutIndex >= 0 &&
+        savedLayoutIndex < CardLayoutType.values.length) {
+      selectedLayout = CardLayoutType.values[savedLayoutIndex];
+    } else {
+      selectedLayout = CardLayoutType.minimal; // 기본값
+    }
 
     // 짧은 딜레이로 이전 다이얼로그가 완전히 닫힐 때까지 대기
     await Future.delayed(const Duration(milliseconds: 100));
@@ -859,133 +806,11 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                           .titleMedium
                                           ?.copyWith(
                                               fontSize:
-                                                  ResponsiveUtils.bodyFontSize(context),
+                                                  ResponsiveUtils.bodyFontSize(
+                                                      context),
                                               fontWeight: FontWeight.w800)),
                                 ),
                                 const Spacer(),
-                                // 텍스트 색상 토글 버튼 (흰색/검정색 직관적 표시)
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // 흰색 텍스트 버튼
-                                      GestureDetector(
-                                        onTap: () => setStateSB(() {
-                                          useWhiteText = true;
-                                        }),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            color: useWhiteText
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                width: 16,
-                                                height: 16,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: useWhiteText
-                                                        ? Colors.white
-                                                            .withValues(
-                                                                alpha: 0.3)
-                                                        : Colors.grey
-                                                            .withValues(
-                                                                alpha: 0.3),
-                                                    width: 1.5,
-                                                  ),
-                                                ),
-                                              ),
-                                              if (useWhiteText) ...[
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  '흰색',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ResponsiveUtils.captionFontSize(
-                                                        context),
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      // 검정색 텍스트 버튼
-                                      GestureDetector(
-                                        onTap: () => setStateSB(() {
-                                          useWhiteText = false;
-                                        }),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            color: !useWhiteText
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                width: 16,
-                                                height: 16,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black87,
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: !useWhiteText
-                                                        ? Colors.white
-                                                            .withValues(
-                                                                alpha: 0.3)
-                                                        : Colors.grey
-                                                            .withValues(
-                                                                alpha: 0.3),
-                                                    width: 1.5,
-                                                  ),
-                                                ),
-                                              ),
-                                              if (!useWhiteText) ...[
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  '검정',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ResponsiveUtils.captionFontSize(
-                                                        context),
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -1010,12 +835,14 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                       height: exportSize.height,
                                       child: Material(
                                         color: Colors.transparent,
-                                        child: BeautifulBibleCard(
+                                        child: MultiLayoutBibleCard(
                                           verse: displayVerse,
                                           reference: displayRef,
+                                          layoutType: selectedLayout,
                                           theme: BibleCardTheme
                                               .presets[selectedThemeIndex],
                                           forceWhiteText: useWhiteText,
+                                          shareTitle: '오늘의 말씀',
                                         ),
                                       ),
                                     ),
@@ -1025,76 +852,143 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                             ),
                           ),
                           const SizedBox(height: 14),
-                          SizedBox(
-                            height: 70,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 18),
-                              itemCount: BibleCardTheme.presets.length,
-                              itemBuilder: (context, index) {
-                                final th = BibleCardTheme.presets[index];
-                                final isSelected = selectedThemeIndex == index;
-                                return GestureDetector(
-                                  onTap: () => setStateSB(() {
-                                    selectedThemeIndex = index;
-                                  }),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 180),
-                                    width: isSelected ? 54 : 48,
-                                    height: isSelected ? 54 : 48,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: th.gradientColors,
-                                        stops: th.gradientStops,
-                                      ),
-                                      shape: BoxShape.circle,
-                                      border: isSelected
-                                          ? Border.all(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              width: 3,
-                                            )
-                                          : Border.all(
-                                              color: Colors.white
-                                                  .withValues(alpha: 0.3),
-                                              width: 2,
-                                            ),
-                                      boxShadow: isSelected
-                                          ? [
-                                              BoxShadow(
-                                                color: Theme.of(context)
+
+                          // 레이아웃 선택
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '레이아웃 선택',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                          fontSize:
+                                              ResponsiveUtils.captionFontSize(
+                                                  context),
+                                          fontWeight: FontWeight.w700,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.7),
+                                        ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                SizedBox(
+                                  height: 90,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: BibleCardLayout.layouts.length,
+                                    itemBuilder: (context, index) {
+                                      final layout =
+                                          BibleCardLayout.layouts[index];
+                                      final isSelected =
+                                          selectedLayout == layout.type;
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          setStateSB(() {
+                                            selectedLayout = layout.type;
+                                          });
+                                          // 선택 저장
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          await prefs.setInt(
+                                              'selectedLayoutIndex',
+                                              layout.type.index);
+                                        },
+                                        child: Container(
+                                          width: 85,
+                                          margin:
+                                              const EdgeInsets.only(right: 12),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? Theme.of(context)
                                                     .colorScheme
                                                     .primary
-                                                    .withValues(alpha: 0.4),
-                                                blurRadius: 10,
-                                                offset: const Offset(0, 3),
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: isSelected
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .outline
+                                                      .withValues(alpha: 0.3),
+                                              width: isSelected ? 2.5 : 1.5,
+                                            ),
+                                            boxShadow: isSelected
+                                                ? [
+                                                    BoxShadow(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withValues(
+                                                              alpha: 0.3),
+                                                      blurRadius: 8,
+                                                      offset:
+                                                          const Offset(0, 2),
+                                                    ),
+                                                  ]
+                                                : null,
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                layout.icon,
+                                                color: isSelected
+                                                    ? Colors.white
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(alpha: 0.6),
+                                                size: 28,
                                               ),
-                                            ]
-                                          : [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withValues(alpha: 0.15),
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 2),
+                                              const SizedBox(height: 6),
+                                              FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Text(
+                                                  layout.name,
+                                                  style: TextStyle(
+                                                    fontSize: ResponsiveUtils
+                                                            .captionFontSize(
+                                                                context) -
+                                                        1,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: isSelected
+                                                        ? Colors.white
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface
+                                                            .withValues(
+                                                                alpha: 0.7),
+                                                  ),
+                                                ),
                                               ),
                                             ],
-                                    ),
-                                    child: isSelected
-                                        ? const Icon(Icons.check_rounded,
-                                            color: Colors.white, size: 24)
-                                        : null,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 8),
+
+                          const SizedBox(height: 18),
+
                           Padding(
                             padding: const EdgeInsets.fromLTRB(18, 0, 18, 16),
                             child: Column(
@@ -1134,17 +1028,18 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                     FittedBox(
                                                       fit: BoxFit.scaleDown,
                                                       child: Text('이미지 생성 중...',
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .titleMedium
-                                                              ?.copyWith(
-                                                                fontSize: ResponsiveUtils
-                                                                    .bodyFontSize(
-                                                                        context),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                              )),
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(
+                                                                    fontSize: ResponsiveUtils
+                                                                        .bodyFontSize(
+                                                                            context),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                  )),
                                                     ),
                                                   ],
                                                 ),
@@ -1218,14 +1113,15 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                           height: 16),
                                                       FittedBox(
                                                         fit: BoxFit.scaleDown,
-                                                        child: Text('이미지 생성 중...',
-                                                            style:
-                                                                Theme.of(context)
+                                                        child:
+                                                            Text('이미지 생성 중...',
+                                                                style: Theme.of(
+                                                                        context)
                                                                     .textTheme
                                                                     .titleMedium
                                                                     ?.copyWith(
-                                                                      fontSize: ResponsiveUtils
-                                                                          .bodyFontSize(
+                                                                      fontSize:
+                                                                          ResponsiveUtils.bodyFontSize(
                                                                               context),
                                                                       fontWeight:
                                                                           FontWeight
@@ -1405,7 +1301,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     _fadeCtrl.dispose();
     _sizeCtrl.dispose();
     _shineCtrl.dispose();
-    _adManager.dispose();
+    _interstitialAdManager.dispose();
     super.dispose();
   }
 
@@ -1579,12 +1475,9 @@ class _TodayVerseEmptyCard extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 '하루에 한 번, 하나님이 주시는 말씀을 받아보세요!',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(
-                        fontSize: ResponsiveUtils.bodyFontSize(context),
-                        color: cs.onSurface.withValues(alpha: 0.75)),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                    color: cs.onSurface.withValues(alpha: 0.75)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -1632,18 +1525,16 @@ class _TodayVerseShowCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 13),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                verse ?? "",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontFamily: 'ChosunCentennial',
-                      fontWeight: FontWeight.w600,
-                      fontSize: ResponsiveUtils.buttonFontSize(context),
-                      height: 1.7,
-                    ),
-                textAlign: TextAlign.center,
-              ),
+            Text(
+              verse ?? "",
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontFamily: 'ChosunCentennial',
+                    fontWeight: FontWeight.w600,
+                    fontSize: ResponsiveUtils.buttonFontSize(context),
+                    height: 1.7,
+                  ),
             ),
             const SizedBox(height: 13),
             FittedBox(

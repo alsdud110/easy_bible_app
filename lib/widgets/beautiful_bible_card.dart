@@ -152,7 +152,7 @@ class BeautifulBibleCard extends StatelessWidget {
                       fontFamily: 'ChosunCentennial',
                       letterSpacing: 0.5,
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     maxLines: null,
                   ),
                 ),

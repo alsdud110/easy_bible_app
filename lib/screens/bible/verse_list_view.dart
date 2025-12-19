@@ -12,6 +12,7 @@ import '../../providers/font_size_provider.dart';
 import '../../services/bible_subtitle_service.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/breadcrumb_bar.dart';
+import '../bible_card_preview_screen.dart';
 
 class VerseListView extends StatefulWidget {
   final BibleData book;
@@ -586,6 +587,23 @@ class _VerseListViewState extends State<VerseListView>
     _exitSelectionMode();
   }
 
+  void _showSharePreview() {
+    final reference = _getVerseReference();
+    final text = _getSelectedVersesText();
+
+    if (!mounted) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BibleCardPreviewScreen(
+          verse: text,
+          reference: reference,
+          shareTitle: '성경 말씀', // verse_list_view에서는 "성경 말씀"
+        ),
+      ),
+    );
+  }
+
   void _exitSelectionMode() {
     _floatingActionBarController.reverse(); // ⭐ 애니메이션 역재생
 
@@ -613,12 +631,14 @@ class _VerseListViewState extends State<VerseListView>
     final cs = theme.colorScheme;
     final systemBottomPadding = MediaQuery.of(context).padding.bottom;
     // iOS는 제스처 바 영역이 크므로 절반만 사용, Android는 전체 사용
-    final bottomPadding = Platform.isIOS ? systemBottomPadding * 0.5 : systemBottomPadding;
+    final bottomPadding =
+        Platform.isIOS ? systemBottomPadding * 0.5 : systemBottomPadding;
 
     return Positioned(
       left: 16,
       right: 16,
-      bottom: 16 + bottomPadding, // 시스템 네비게이션 바 고려 (iOS 제스처 바 + Android 바텀 네비게이션)
+      bottom:
+          16 + bottomPadding, // 시스템 네비게이션 바 고려 (iOS 제스처 바 + Android 바텀 네비게이션)
       child: AnimatedBuilder(
         animation: _floatingActionBarController,
         builder: (context, child) {
@@ -675,6 +695,16 @@ class _VerseListViewState extends State<VerseListView>
                     label: '북마크',
                     onPressed: _addToFavorites,
                     color: const Color.fromARGB(255, 241, 146, 20),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 성경 공유 버튼 (맨 오른쪽)
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.share,
+                    label: '성경 공유',
+                    onPressed: _showSharePreview,
+                    color: const Color.fromARGB(255, 142, 70, 209),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -812,8 +842,8 @@ class _VerseListViewState extends State<VerseListView>
                         style: TextStyle(
                           fontSize: ResponsiveUtils.buttonFontSize(context),
                           fontWeight: FontWeight.bold,
-                          color:
-                              theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
+                          color: theme.appBarTheme.iconTheme?.color ??
+                              cs.onSurface,
                         ),
                       ),
                     ),
@@ -1042,7 +1072,10 @@ class _VerseListViewState extends State<VerseListView>
                   Positioned(
                     left: 12,
                     right: 88,
-                    bottom: 12 + (Platform.isIOS ? MediaQuery.of(context).padding.bottom * 0.5 : MediaQuery.of(context).padding.bottom),
+                    bottom: 12 +
+                        (Platform.isIOS
+                            ? MediaQuery.of(context).padding.bottom * 0.5
+                            : MediaQuery.of(context).padding.bottom),
                     child: TweenAnimationBuilder<Offset>(
                       duration: const Duration(milliseconds: 600),
                       tween: Tween(
@@ -1071,7 +1104,9 @@ class _VerseListViewState extends State<VerseListView>
                               icon: const Icon(Icons.arrow_back_ios_new,
                                   size: 18),
                               label: Text(
-                                  languageProvider.isKorean ? '이전 장' : 'Previous',
+                                  languageProvider.isKorean
+                                      ? '이전 장'
+                                      : 'Previous',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w700)),
                               style: ElevatedButton.styleFrom(
