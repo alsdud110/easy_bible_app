@@ -20,12 +20,12 @@ class InterstitialAdManager {
     // 실제 광고 단위 ID (프로덕션)
     if (Platform.isAndroid) {
       // 테스트 광고 ID (개발 중에는 이걸 사용)
-      return 'ca-app-pub-3940256099942544/1033173712';
-      // return 'ca-app-pub-7446781962805745/7065140136';
+      // return 'ca-app-pub-3940256099942544/1033173712';
+      return 'ca-app-pub-7446781962805745/7065140136';
     } else if (Platform.isIOS) {
       // 테스트 광고 ID (개발 중에는 이걸 사용)
-      return 'ca-app-pub-3940256099942544/4411468910';
-      // return 'ca-app-pub-7446781962805745/6600545202';
+      // return 'ca-app-pub-3940256099942544/4411468910';
+      return 'ca-app-pub-7446781962805745/6600545202';
     } else {
       throw UnsupportedError('Unsupported platform');
     }
