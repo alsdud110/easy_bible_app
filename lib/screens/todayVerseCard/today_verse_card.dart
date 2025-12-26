@@ -990,7 +990,12 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                           const SizedBox(height: 18),
 
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(18, 0, 18, 16),
+                            padding: EdgeInsets.fromLTRB(
+                              18,
+                              0,
+                              18,
+                              16 + MediaQuery.of(context).padding.bottom,
+                            ),
                             child: Column(
                               children: [
                                 Row(

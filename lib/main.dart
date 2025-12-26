@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'dart:io';
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
@@ -20,6 +22,8 @@ import 'providers/font_size_provider.dart';
 import 'providers/quiz_provider.dart';
 import 'services/notification_service.dart';
 import 'services/bible_subtitle_service.dart';
+import 'services/app_version_service.dart';
+import 'widgets/update_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -120,6 +124,19 @@ class NoBounceScrollBehavior extends ScrollBehavior {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Firebase 초기화
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // 앱 버전 체크 서비스 초기화
+    await AppVersionService().initialize();
+    print('✅ Firebase 초기화 완료');
+  } catch (e) {
+    // Firebase 설정이 안 되어 있을 경우 무시 (나중에 설정)
+    print('⚠️ Firebase 초기화 실패: $e');
+  }
+
   // ✅ AdMob 초기화 및 상태 확인
   final initializationStatus = await MobileAds.instance.initialize();
   print('🎯 AdMob 초기화 완료: ${initializationStatus.adapterStatuses}');
@@ -210,6 +227,37 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // 마지막 paused 시간 확인
     _checkLastPausedTime();
+
+    // 앱 버전 체크 (앱 시작 후 1초 뒤)
+    _checkAppVersion();
+  }
+
+  /// 앱 버전 체크 및 업데이트 다이얼로그 표시
+  Future<void> _checkAppVersion() async {
+    // 앱이 완전히 로드될 때까지 대기
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (!mounted) return;
+
+    try {
+      final versionService = AppVersionService();
+      final updateType = versionService.checkUpdateRequired();
+
+      if (updateType != null && mounted) {
+        // 네비게이터가 준비될 때까지 대기
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          if (mounted && navigatorKey.currentContext != null) {
+            await UpdateDialog.show(
+              navigatorKey.currentContext!,
+              versionService,
+              updateType,
+            );
+          }
+        });
+      }
+    } catch (e) {
+      print('⚠️ 버전 체크 오류: $e');
+    }
   }
 
   Future<void> _checkLastPausedTime() async {

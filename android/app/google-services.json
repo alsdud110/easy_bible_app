@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491895357026",
+    "project_id": "allinbible-43358",
+    "storage_bucket": "allinbible-43358.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491895357026:android:9ee793026a866be4ff9b3b",
+        "android_client_info": {
+          "package_name": "easy.bible.app.easy_bible_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuKnISkwCP8ftMrlbUpBJuHy674AhpnTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
