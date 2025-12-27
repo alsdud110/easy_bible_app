@@ -73,20 +73,21 @@ class UpdateDialog extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      isRequired
-                          ? Colors.red.shade400
-                          : Colors.blue.shade400,
-                      isRequired
-                          ? Colors.red.shade600
-                          : Colors.blue.shade600,
-                    ],
+                    colors: isRequired
+                        ? [
+                            Colors.red.shade400,
+                            Colors.red.shade600,
+                          ]
+                        : [
+                            Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                            Theme.of(context).colorScheme.primary,
+                          ],
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: (isRequired
                               ? Colors.red.shade400
-                              : Colors.blue.shade400)
+                              : Theme.of(context).colorScheme.primary)
                           .withOpacity(0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
@@ -187,7 +188,7 @@ class UpdateDialog extends StatelessWidget {
                             _launchStore(context);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade500,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             foregroundColor: Colors.white,
                             elevation: 2,
                             shape: RoundedRectangleBorder(

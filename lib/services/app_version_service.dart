@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -57,14 +58,18 @@ class AppVersionService {
   bool get forceUpdate => _remoteConfig?.getBool('force_update') ?? false;
 
   /// 업데이트 메시지 (선택적 업데이트)
-  String get updateMessage =>
-      _remoteConfig?.getString('update_message_ko') ??
-      '새로운 버전이 출시되었습니다.\n업데이트하시겠습니까?';
+  String get updateMessage {
+    final message = _remoteConfig?.getString('update_message_ko') ??
+        '새로운 버전이 출시되었습니다.\n업데이트하시겠습니까?';
+    return message.replaceAll('\\n', '\n');
+  }
 
   /// 강제 업데이트 메시지
-  String get forceUpdateMessage =>
-      _remoteConfig?.getString('force_update_message_ko') ??
-      '필수 업데이트가 있습니다.\n앱을 사용하려면 업데이트가 필요합니다.';
+  String get forceUpdateMessage {
+    final message = _remoteConfig?.getString('force_update_message_ko') ??
+        '필수 업데이트가 있습니다.\n앱을 사용하려면 업데이트가 필요합니다.';
+    return message.replaceAll('\\n', '\n');
+  }
 
   /// 버전 비교 (v1 > v2면 양수, v1 < v2면 음수, 같으면 0)
   int _compareVersions(String v1, String v2) {
@@ -116,7 +121,7 @@ class AppVersionService {
     if (_packageInfo == null) return '';
 
     // iOS
-    if (_packageInfo!.packageName.contains('ios')) {
+    if (Platform.isIOS) {
       return 'https://apps.apple.com/app/id6754250799';
     }
     // Android
