@@ -22,7 +22,7 @@ class AppVersionService {
       await _remoteConfig!.setConfigSettings(
         RemoteConfigSettings(
           fetchTimeout: const Duration(seconds: 10),
-          minimumFetchInterval: const Duration(hours: 1), // 1시간마다 체크
+          minimumFetchInterval: Duration.zero, // 즉시 반영
         ),
       );
 
@@ -31,8 +31,8 @@ class AppVersionService {
         'minimum_version': '1.0.0', // 최소 지원 버전
         'latest_version': '1.0.0', // 최신 버전
         'force_update': false, // 강제 업데이트 여부
-        'update_message_ko': '새로운 버전이 출시되었습니다.\n업데이트하시겠습니까?',
-        'force_update_message_ko': '필수 업데이트가 있습니다.\n앱을 사용하려면 업데이트가 필요합니다.',
+        'update_message_ko': '최신 버전({latest_version})이 필요합니다.\n\n새로운 기능이 추가되었습니다.\n업데이트하시겠습니까?',
+        'force_update_message_ko': '최소 버전({minimum_version})이 필요합니다.\n\n필수 업데이트가 있습니다.\n앱을 사용하려면 업데이트가 필요합니다.',
       });
 
       // Remote Config 가져오기
@@ -59,16 +59,28 @@ class AppVersionService {
 
   /// 업데이트 메시지 (선택적 업데이트)
   String get updateMessage {
-    final message = _remoteConfig?.getString('update_message_ko') ??
-        '새로운 버전이 출시되었습니다.\n업데이트하시겠습니까?';
-    return message.replaceAll('\\n', '\n');
+    final firebaseMessage = _remoteConfig?.getString('update_message_ko') ?? '';
+    if (firebaseMessage.isNotEmpty) {
+      // {latest_version}을 실제 버전으로 치환하고 \n을 실제 줄바꿈으로 변환
+      return firebaseMessage
+          .replaceAll('{latest_version}', latestVersion)
+          .replaceAll('\\n', '\n');
+    }
+    // Firebase에 메시지가 없으면 기본 메시지 사용
+    return '최신 버전($latestVersion)이 필요합니다.\n\n새로운 기능이 추가되었습니다.\n새해 복 많이 받으세요 🎊';
   }
 
   /// 강제 업데이트 메시지
   String get forceUpdateMessage {
-    final message = _remoteConfig?.getString('force_update_message_ko') ??
-        '필수 업데이트가 있습니다.\n앱을 사용하려면 업데이트가 필요합니다.';
-    return message.replaceAll('\\n', '\n');
+    final firebaseMessage = _remoteConfig?.getString('force_update_message_ko') ?? '';
+    if (firebaseMessage.isNotEmpty) {
+      // {minimum_version}을 실제 버전으로 치환하고 \n을 실제 줄바꿈으로 변환
+      return firebaseMessage
+          .replaceAll('{minimum_version}', minimumVersion)
+          .replaceAll('\\n', '\n');
+    }
+    // Firebase에 메시지가 없으면 기본 메시지 사용
+    return '최소 버전($minimumVersion)이 필요합니다.\n\n새로운 기능이 추가되었습니다.\n새해 복 많이 받으세요 🎊';
   }
 
   /// 버전 비교 (v1 > v2면 양수, v1 < v2면 음수, 같으면 0)
@@ -92,7 +104,8 @@ class AppVersionService {
     try {
       // 최소 버전보다 낮으면 강제 업데이트
       if (_compareVersions(currentVersion, minimumVersion) < 0) {
-        print('⚠️ 현재 버전($currentVersion)이 최소 버전($minimumVersion)보다 낮음 - 강제 업데이트 필요');
+        print(
+            '⚠️ 현재 버전($currentVersion)이 최소 버전($minimumVersion)보다 낮음 - 강제 업데이트 필요');
         return UpdateType.required;
       }
 
@@ -104,7 +117,8 @@ class AppVersionService {
 
       // 최신 버전보다 낮으면 선택적 업데이트
       if (_compareVersions(currentVersion, latestVersion) < 0) {
-        print('ℹ️ 현재 버전($currentVersion)이 최신 버전($latestVersion)보다 낮음 - 선택적 업데이트 가능');
+        print(
+            'ℹ️ 현재 버전($currentVersion)이 최신 버전($latestVersion)보다 낮음 - 선택적 업데이트 가능');
         return UpdateType.optional;
       }
 
