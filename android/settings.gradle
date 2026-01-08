@@ -25,8 +25,8 @@ pluginManagement {
 
 plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    // ⬇️ AGP 8.6.0 이상으로 업그레이드
-    id "com.android.application" version "8.6.0" apply false
+    // ⬇️ AGP 8.9.1 이상으로 업그레이드
+    id "com.android.application" version "8.9.1" apply false
 }
 
 include ":app"
