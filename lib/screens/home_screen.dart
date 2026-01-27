@@ -497,31 +497,26 @@ class _BentoCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(24),
-        child: Ink(
-          height: height,
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: gradient.colors.first.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              // 배경 패턴
-              Positioned(
-                right: -20,
-                bottom: -20,
-                child: Icon(
-                  icon,
-                  size: 120,
-                  color: iconColor.withValues(alpha: 0.1),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Ink(
+            height: height,
+            decoration: BoxDecoration(
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Stack(
+              children: [
+                // 배경 패턴
+                Positioned(
+                  right: -20,
+                  bottom: -20,
+                  child: Icon(
+                    icon,
+                    size: 120,
+                    color: iconColor.withValues(alpha: 0.1),
+                  ),
                 ),
-              ),
               // 텍스트 콘텐츠
               Padding(
                 padding: EdgeInsets.all(padding),
@@ -570,6 +565,7 @@ class _BentoCard extends StatelessWidget {
             ],
           ),
         ),
+        ),
       ),
     );
   }
@@ -608,35 +604,28 @@ class _PlanBentoCard extends StatelessWidget {
           _showPlanBottomSheet(context, provider);
         },
         borderRadius: BorderRadius.circular(24),
-        child: Ink(
-          height: 140,
-          decoration: BoxDecoration(
-            gradient: isDark
-                ? _CachedGradients.darkAccentGradient
-                : _CachedGradients.lightAccentGradient,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? Colors.black.withValues(alpha: 0.3)
-                    : LightColors.primary.withValues(alpha: 0.2),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              // 배경 패턴
-              Positioned(
-                right: -20,
-                bottom: -20,
-                child: Icon(
-                  Icons.calendar_month_rounded,
-                  size: 120,
-                  color: Colors.white.withValues(alpha: 0.1),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Ink(
+            height: 140,
+            decoration: BoxDecoration(
+              gradient: isDark
+                  ? _CachedGradients.darkAccentGradient
+                  : _CachedGradients.lightAccentGradient,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Stack(
+              children: [
+                // 배경 패턴
+                Positioned(
+                  right: -20,
+                  bottom: -20,
+                  child: Icon(
+                    Icons.calendar_month_rounded,
+                    size: 120,
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
-              ),
               // 콘텐츠
               Padding(
                 padding: EdgeInsets.all(padding),
@@ -720,6 +709,7 @@ class _PlanBentoCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
