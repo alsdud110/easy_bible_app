@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../models/favorite_verse.dart';
 import '../../providers/favorite_provider.dart';
 import '../../utils/responsive_utils.dart';
@@ -78,6 +79,14 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   void _copyToClipboard(BuildContext context) {
     final fullText = '${widget.favorite.reference}\n\n${widget.favorite.text}';
     Clipboard.setData(ClipboardData(text: fullText));
+    Fluttertoast.showToast(
+      msg: '클립보드에 복사되었습니다',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black87,
+      textColor: Colors.white,
+      fontSize: 14.0,
+    );
   }
 
   Future<void> _removeFavorite(BuildContext context) async {
@@ -293,7 +302,9 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                         child: Text(
                           '추가일: ${_formatDateTime(currentFavorite.createdAt)}',
                           style: TextStyle(
-                              fontSize: ResponsiveUtils.captionFontSize(context), color: cs.onSurface.withOpacity(0.6)),
+                              fontSize:
+                                  ResponsiveUtils.captionFontSize(context),
+                              color: cs.onSurface.withOpacity(0.6)),
                         ),
                       ),
                     ],
@@ -313,7 +324,8 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                       child: Text(
                         '구절을 불러올 수 없습니다',
                         style: TextStyle(
-                            fontSize: ResponsiveUtils.bodyFontSize(context), color: cs.onSurface.withOpacity(0.5)),
+                            fontSize: ResponsiveUtils.bodyFontSize(context),
+                            color: cs.onSurface.withOpacity(0.5)),
                       ),
                     ),
                   )
@@ -339,7 +351,8 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                                   style: TextStyle(
                                     fontFamily: 'ChosunCentennial',
                                     fontWeight: FontWeight.w600,
-                                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                                    fontSize:
+                                        ResponsiveUtils.bodyFontSize(context),
                                     color: cs.onSurface,
                                   ),
                                 ),
@@ -352,17 +365,13 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                               ),
                             ],
                           ),
-                          title: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              text,
-                              style: TextStyle(
-                                  fontFamily: 'ChosunCentennial',
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: ResponsiveUtils.bodyFontSize(context),
-                                  color: cs.onSurface),
-                            ),
+                          title: Text(
+                            text,
+                            style: TextStyle(
+                                fontFamily: 'ChosunCentennial',
+                                fontWeight: FontWeight.normal,
+                                fontSize: ResponsiveUtils.bodyFontSize(context),
+                                color: cs.onSurface),
                           ),
                           dense: true,
                         ),
@@ -373,7 +382,8 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
         ],
       ),
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
         child: FloatingActionButton.extended(
           onPressed: _toggleMemoSheet,
           icon: Stack(
@@ -411,7 +421,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                 ),
             ],
           ),
-          label: const Text('메모'),
+          label: const Text('메모하기'),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -610,7 +620,8 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                               child: Text(
                                 '작성된 메모가 없습니다',
                                 style: TextStyle(
-                                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                                    fontSize:
+                                        ResponsiveUtils.bodyFontSize(context),
                                     color: cs.onSurface.withOpacity(0.5)),
                               ),
                             ),
@@ -644,7 +655,9 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                                           child: Text(
                                             memo.content,
                                             style: TextStyle(
-                                              fontSize: ResponsiveUtils.bodyFontSize(context),
+                                              fontSize:
+                                                  ResponsiveUtils.bodyFontSize(
+                                                      context),
                                               color: cs.onSurface,
                                               height: 1.5,
                                             ),
@@ -701,9 +714,10 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                                         child: Text(
                                           widget.formatDateTime(memo.createdAt),
                                           style: TextStyle(
-                                              fontSize: ResponsiveUtils.captionFontSize(context),
-                                              color:
-                                                  cs.onSurface.withOpacity(0.5)),
+                                              fontSize: ResponsiveUtils
+                                                  .captionFontSize(context),
+                                              color: cs.onSurface
+                                                  .withOpacity(0.5)),
                                         ),
                                       ),
                                       if (memo.updatedAt != null) ...[
@@ -714,7 +728,8 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                                           child: Text(
                                             '(수정됨)',
                                             style: TextStyle(
-                                              fontSize: ResponsiveUtils.captionFontSize(context),
+                                              fontSize: ResponsiveUtils
+                                                  .captionFontSize(context),
                                               color:
                                                   cs.onSurface.withOpacity(0.4),
                                               fontStyle: FontStyle.italic,
