@@ -6,6 +6,7 @@ import '../../models/bible_data.dart';
 import '../../providers/language_provider.dart';
 import '../../utils/bible_key_converter.dart';
 import '../../widgets/banner_ad_widget.dart';
+import '../../widgets/lottie_loading.dart';
 import 'book_selector.dart';
 import 'chapter_selector.dart';
 import 'verse_selector.dart';
@@ -300,9 +301,9 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
 
   Widget _buildStepScreen() {
     if (isLoading) {
-      return const Scaffold(
-        key: ValueKey('loading'),
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        key: const ValueKey('loading'),
+        body: const LottieLoading(message: '성경 데이터 로딩 중...'),
       );
     }
 
