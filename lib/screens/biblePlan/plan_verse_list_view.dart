@@ -13,6 +13,7 @@ import '../../models/highlight_verse.dart';
 import '../../models/const/book_full_name.dart';
 import '../../models/plan_progress.dart';
 import 'package:marquee/marquee.dart';
+import '../bible_card_preview_screen.dart';
 
 class PlanVerseListView extends StatefulWidget {
   final String title;
@@ -568,6 +569,23 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     _exitSelectionMode();
   }
 
+  void _showSharePreview() {
+    final reference = _getVerseReference();
+    final text = _getSelectedVersesText();
+
+    if (!mounted) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BibleCardPreviewScreen(
+          verse: text,
+          reference: reference,
+          shareTitle: '성경 말씀',
+        ),
+      ),
+    );
+  }
+
   void _exitSelectionMode() {
     _floatingActionBarController.reverse(); // ⭐ 애니메이션 역재생
 
@@ -621,13 +639,13 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
         },
         child: Material(
           elevation: 8,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(30),
           shadowColor: Colors.black.withOpacity(0.3),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
               color: cs.surface,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: cs.outline.withOpacity(0.2),
                 width: 1,
@@ -653,17 +671,27 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     icon: Icons.format_color_fill,
                     label: '하이라이트',
                     onPressed: _showHighlightColorPicker,
-                    color: Colors.orange,
+                    color: const Color.fromARGB(255, 134, 209, 13),
                   ),
                 ),
                 const SizedBox(width: 4),
                 // 북마크 버튼
                 Expanded(
                   child: _buildActionButton(
-                    icon: Icons.star_border,
+                    icon: Icons.bookmark_add_outlined,
                     label: '북마크',
                     onPressed: _addToFavorites,
-                    color: Colors.amber.shade700,
+                    color: const Color.fromARGB(255, 241, 146, 20),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                // 성경 공유 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.share,
+                    label: '성경 공유',
+                    onPressed: _showSharePreview,
+                    color: const Color.fromARGB(255, 142, 70, 209),
                   ),
                 ),
                 const SizedBox(width: 4),
