@@ -50,6 +50,8 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
+        // 코틀린 2.1.0과 라이브러리 간의 메타데이터 버전 차이를 무시합니다.
+        freeCompilerArgs += ["-Xskip-metadata-version-check"]
     }
 
     sourceSets {
