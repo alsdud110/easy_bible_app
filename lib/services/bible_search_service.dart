@@ -73,9 +73,18 @@ class BibleSearchService {
 
   /// JSON 데이터 로드
   static Future<void> _loadBibleData(BibleLanguage language) async {
-    final String assetPath = language == BibleLanguage.korean
-        ? 'assets/bible.json'
-        : 'assets/bible_kjv.json';
+    final String assetPath;
+    switch (language) {
+      case BibleLanguage.korean:
+        assetPath = 'assets/bible.json';
+        break;
+      case BibleLanguage.snb:
+        assetPath = 'assets/bible_snb.json';
+        break;
+      case BibleLanguage.english:
+        assetPath = 'assets/bible_kjv.json';
+        break;
+    }
 
     final String data = await rootBundle.loadString(assetPath);
     _cachedBibleData = json.decode(data);
@@ -103,13 +112,11 @@ class BibleSearchService {
       if (bookIndex == -1) return null;
 
       final book = bibleBooks[bookIndex];
-      final displayBookName = language == BibleLanguage.korean
-          ? book.fullName
-          : book.eng;
+      final displayBookName = language == BibleLanguage.english
+          ? book.eng
+          : book.fullName;
 
-      final reference = language == BibleLanguage.korean
-          ? '$displayBookName $chapter:$verse'
-          : '$displayBookName $chapter:$verse';
+      final reference = '$displayBookName $chapter:$verse';
 
       return BibleSearchResult(
         reference: reference,
@@ -126,8 +133,8 @@ class BibleSearchService {
 
   /// 책 이름으로 인덱스 찾기
   static int _findBookIndex(String bookName, BibleLanguage language) {
-    if (language == BibleLanguage.korean) {
-      // 한글 책 이름으로 찾기
+    if (language == BibleLanguage.korean || language == BibleLanguage.snb) {
+      // 한글 책 이름으로 찾기 (약어)
       return bibleBooks.indexWhere((book) => book.name == bookName);
     } else {
       // 영어 책 이름으로 찾기 (BookNameConverter 사용)

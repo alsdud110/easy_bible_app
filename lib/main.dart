@@ -178,6 +178,7 @@ void main() async {
 
   // BibleSubtitleService 초기화
   await BibleSubtitleService().loadSubtitles();
+  await BibleSubtitleService().loadSnbSubtitles();
 
   final prefs = await SharedPreferences.getInstance();
   final isDark = prefs.getBool('isDarkTheme') ?? false;

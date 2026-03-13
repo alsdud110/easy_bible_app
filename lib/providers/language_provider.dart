@@ -9,7 +9,7 @@ class LanguageProvider extends ChangeNotifier {
 
   BibleLanguage get currentLanguage => _currentLanguage;
 
-  bool get isKorean => _currentLanguage == BibleLanguage.korean;
+  bool get isKorean => _currentLanguage != BibleLanguage.english;
   bool get isEnglish => _currentLanguage == BibleLanguage.english;
 
   LanguageProvider() {
@@ -49,26 +49,38 @@ class LanguageProvider extends ChangeNotifier {
     }
   }
 
-  /// 언어 토글 (한글 ↔ 영어)
+  /// 언어 토글 (한글 → 표준새번역 → 영어 → 한글)
   Future<void> toggleLanguage() async {
-    final newLanguage = _currentLanguage == BibleLanguage.korean
-        ? BibleLanguage.english
-        : BibleLanguage.korean;
+    final BibleLanguage newLanguage;
+    switch (_currentLanguage) {
+      case BibleLanguage.korean:
+        newLanguage = BibleLanguage.snb;
+        break;
+      case BibleLanguage.snb:
+        newLanguage = BibleLanguage.english;
+        break;
+      case BibleLanguage.english:
+        newLanguage = BibleLanguage.korean;
+        break;
+    }
     await setLanguage(newLanguage);
   }
 }
 
-/// 지원하는 성경 언어
+/// 지원하는 성경 버전
 enum BibleLanguage {
-  korean,
-  english,
+  korean,  // 개역개정
+  snb,     // 표준새번역개정판
+  english, // KJV
 }
 
 extension BibleLanguageExtension on BibleLanguage {
   String get displayName {
     switch (this) {
       case BibleLanguage.korean:
-        return '한글';
+        return '개역개정';
+      case BibleLanguage.snb:
+        return '표준새번역';
       case BibleLanguage.english:
         return 'English';
     }
@@ -78,6 +90,8 @@ extension BibleLanguageExtension on BibleLanguage {
     switch (this) {
       case BibleLanguage.korean:
         return 'ko';
+      case BibleLanguage.snb:
+        return 'snb';
       case BibleLanguage.english:
         return 'en';
     }

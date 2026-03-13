@@ -6,9 +6,10 @@ import '../providers/language_provider.dart';
 /// 언어별 성경 JSON 로드 및 관리
 class BibleLoader {
   static Map<String, String>? _koreanBible;
+  static Map<String, String>? _snbBible;
   static Map<String, String>? _englishBible;
 
-  /// 한글 성경 로드
+  /// 한글 성경 로드 (개역개정)
   static Future<Map<String, String>> loadKoreanBible() async {
     if (_koreanBible != null) return _koreanBible!;
 
@@ -17,6 +18,17 @@ class BibleLoader {
     _koreanBible = raw.map((k, v) => MapEntry(k, v as String));
 
     return _koreanBible!;
+  }
+
+  /// 표준새번역개정판 성경 로드
+  static Future<Map<String, String>> loadSnbBible() async {
+    if (_snbBible != null) return _snbBible!;
+
+    final jsonString = await rootBundle.loadString('assets/bible_snb.json');
+    final Map<String, dynamic> raw = json.decode(jsonString);
+    _snbBible = raw.map((k, v) => MapEntry(k, v as String));
+
+    return _snbBible!;
   }
 
   /// 영어 성경 로드
@@ -35,6 +47,8 @@ class BibleLoader {
     switch (language) {
       case BibleLanguage.korean:
         return await loadKoreanBible();
+      case BibleLanguage.snb:
+        return await loadSnbBible();
       case BibleLanguage.english:
         return await loadEnglishBible();
     }
@@ -43,6 +57,7 @@ class BibleLoader {
   /// 캐시 초기화 (메모리 절약이 필요할 경우)
   static void clearCache() {
     _koreanBible = null;
+    _snbBible = null;
     _englishBible = null;
   }
 }
@@ -56,6 +71,15 @@ class BibleVerseExtractor {
     int chapter,
   ) async {
     final bible = await BibleLoader.loadKoreanBible();
+    return _extractVerses(bible, bookName, chapter);
+  }
+
+  /// 표준새번역개정판에서 구절 추출
+  static Future<Map<int, String>> extractSnbVerses(
+    String bookName,
+    int chapter,
+  ) async {
+    final bible = await BibleLoader.loadSnbBible();
     return _extractVerses(bible, bookName, chapter);
   }
 
@@ -78,6 +102,8 @@ class BibleVerseExtractor {
     switch (language) {
       case BibleLanguage.korean:
         return await extractKoreanVerses(bookName, chapter);
+      case BibleLanguage.snb:
+        return await extractSnbVerses(bookName, chapter);
       case BibleLanguage.english:
         // 한글 책 이름이 들어올 수 있으므로 영어로 변환
         final englishBookName = BookNameConverter.koreanToEnglish(bookName);

@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 // Breadcrumb 위젯
 class BreadcrumbBar extends StatelessWidget {
   final List<BreadcrumbItem> items;
+  final String? versionLabel;
+  final VoidCallback? onVersionTap;
+
   const BreadcrumbBar({
     super.key,
     required this.items,
+    this.versionLabel,
+    this.onVersionTap,
   });
 
   @override
@@ -13,7 +18,7 @@ class BreadcrumbBar extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: cs.surface,
         border: Border(
@@ -51,13 +56,13 @@ class BreadcrumbBar extends StatelessWidget {
                         color: cs.onSurface.withOpacity(0.4),
                         size: 16,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 4),
                       GestureDetector(
                         onTap: item.onTap,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+                            horizontal: 10,
+                            vertical: 5,
                           ),
                           decoration: BoxDecoration(
                             color: item.isActive
@@ -74,18 +79,56 @@ class BreadcrumbBar extends StatelessWidget {
                               fontWeight: item.isActive
                                   ? FontWeight.w700
                                   : FontWeight.w600,
-                              fontSize: 14,
+                              fontSize: 13,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 4),
                     ],
                   );
                 }),
               ),
             ),
           ),
+          // 버전 선택 칩
+          if (versionLabel != null) ...[
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: onVersionTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: cs.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: cs.primary.withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      versionLabel!,
+                      style: TextStyle(
+                        color: cs.primary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Icon(
+                      Icons.expand_more_rounded,
+                      size: 14,
+                      color: cs.primary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

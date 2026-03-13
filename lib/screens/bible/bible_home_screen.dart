@@ -126,9 +126,18 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     final languageProvider = context.read<LanguageProvider>();
     final currentLanguage = languageProvider.currentLanguage;
 
-    final String assetPath = currentLanguage == BibleLanguage.korean
-        ? 'assets/bible.json'
-        : 'assets/bible_kjv.json';
+    final String assetPath;
+    switch (currentLanguage) {
+      case BibleLanguage.korean:
+        assetPath = 'assets/bible.json';
+        break;
+      case BibleLanguage.snb:
+        assetPath = 'assets/bible_snb.json';
+        break;
+      case BibleLanguage.english:
+        assetPath = 'assets/bible_kjv.json';
+        break;
+    }
 
     print('📖 JSON 로드: $assetPath');
 
@@ -150,11 +159,11 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     final Map<int, String> verses = {};
 
     String searchPrefix;
-    if (currentLanguage == BibleLanguage.korean) {
-      searchPrefix = '$bookName$chapter:';
-    } else {
+    if (currentLanguage == BibleLanguage.english) {
       final englishBookName = BookNameConverter.koreanToEnglish(bookName);
       searchPrefix = '$englishBookName$chapter:';
+    } else {
+      searchPrefix = '$bookName$chapter:';
     }
 
     print('🔍 검색 Prefix: $searchPrefix (언어: ${currentLanguage.displayName})');

@@ -82,7 +82,9 @@ flutter:
   assets:
     - assets/bible.json
     - assets/bible_kjv.json
+    - assets/bible_snb.json
     - assets/bible_subtitles.json
+    - assets/bible_subtitles_snb.json
     - assets/icon/app_icon.png
     - assets/icon/bible_icon.png
     - assets/splash/splash_icon.png

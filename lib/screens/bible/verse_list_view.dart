@@ -614,6 +614,101 @@ class _VerseListViewState extends State<VerseListView>
     });
   }
 
+  void _showVersionBottomSheet(BuildContext context, LanguageProvider languageProvider) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    final versions = [
+      (BibleLanguage.korean, '개역개정', '대한성서공회, 1998'),
+      (BibleLanguage.snb, '표준새번역개정판', '대한성서공회, 2001'),
+      (BibleLanguage.english, 'KJV', 'King James Version, 1769'),
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: cs.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 36,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: cs.onSurface.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                ...versions.map((v) {
+                  final (lang, name, desc) = v;
+                  final isSelected = languageProvider.currentLanguage == lang;
+                  return InkWell(
+                    onTap: () async {
+                      Navigator.pop(ctx);
+                      await languageProvider.setLanguage(lang);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      child: Row(
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            width: 22,
+                            height: 22,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isSelected ? cs.primary : Colors.transparent,
+                              border: Border.all(
+                                color: isSelected ? cs.primary : cs.onSurface.withValues(alpha: 0.3),
+                                width: 2,
+                              ),
+                            ),
+                            child: isSelected
+                                ? const Icon(Icons.check, size: 14, color: Colors.white)
+                                : null,
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                  color: isSelected ? cs.primary : cs.onSurface,
+                                ),
+                              ),
+                              Text(
+                                desc,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: cs.onSurface.withValues(alpha: 0.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   bool _isVerseInRange(int verseNum) {
     if (_rangeStart == null || _rangeEnd == null) return false;
     final start = _rangeStart! < _rangeEnd! ? _rangeStart! : _rangeEnd!;
@@ -769,8 +864,11 @@ class _VerseListViewState extends State<VerseListView>
     final languageProvider = context.watch<LanguageProvider>();
     final fontSizeProvider = context.watch<BibleFontSizeProvider>();
     final fontSize = fontSizeProvider.currentSize;
-    final subtitles = BibleSubtitleService()
-        .getSubtitlesForChapter(widget.book.fullName, widget.chapter);
+    final subtitles = languageProvider.currentLanguage == BibleLanguage.snb
+        ? BibleSubtitleService()
+            .getSnbSubtitlesForChapter(widget.book.fullName, widget.chapter)
+        : BibleSubtitleService()
+            .getSubtitlesForChapter(widget.book.fullName, widget.chapter);
 
     const minChapter = 1;
     final maxChapter = widget.book.chapters;
@@ -822,38 +920,6 @@ class _VerseListViewState extends State<VerseListView>
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
-                // 단어 검색으로 들어온 경우 언어 전환 버튼 숨김
-                if (!widget.hideLanguageToggle)
-                  IconButton(
-                    icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) {
-                        return RotationTransition(
-                          turns: animation,
-                          child: FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: Text(
-                        languageProvider.isKorean ? 'Eng' : '한',
-                        key: ValueKey(languageProvider.isKorean),
-                        style: TextStyle(
-                          fontSize: ResponsiveUtils.buttonFontSize(context),
-                          fontWeight: FontWeight.bold,
-                          color: theme.appBarTheme.iconTheme?.color ??
-                              cs.onSurface,
-                        ),
-                      ),
-                    ),
-                    tooltip: languageProvider.isKorean ? 'English' : '한글',
-                    onPressed: () async {
-                      await languageProvider.toggleLanguage();
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
                 const SizedBox(width: 2),
               ]
             : null,
@@ -890,6 +956,8 @@ class _VerseListViewState extends State<VerseListView>
                   isActive: true,
                 ),
               ],
+              versionLabel: languageProvider.currentLanguage.displayName,
+              onVersionTap: () => _showVersionBottomSheet(context, languageProvider),
             ),
           Expanded(
             child: Stack(
@@ -946,8 +1014,8 @@ class _VerseListViewState extends State<VerseListView>
                           key: idx == 0 ? _itemKey : null,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 소제목이 있으면 표시 (한글 모드일 때만)
-                            if (subtitle != null && languageProvider.isKorean)
+                            // 소제목이 있으면 표시 (한글/SNB 모드일 때)
+                            if (subtitle != null && !languageProvider.isEnglish)
                               Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(16, 20, 16, 12),
