@@ -65,7 +65,7 @@ class NotificationService {
     );
 
     await _notifications.initialize(
-      initSettings,
+      settings: initSettings,
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
 
@@ -228,14 +228,12 @@ class NotificationService {
 
     // 매일 반복 알림 예약
     await _notifications.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledDate,
-      notificationDetails,
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduledDate,
+      notificationDetails: notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time, // 매일 같은 시간에 반복
       payload: payload,
     );
@@ -263,7 +261,7 @@ class NotificationService {
 
     // 기존 알림들 취소 (baseId ~ baseId+6)
     for (int i = 0; i < 7; i++) {
-      await _notifications.cancel(baseId + i);
+      await _notifications.cancel(id: baseId + i);
     }
 
     // 선택된 요일에만 알림 스케줄링
@@ -321,14 +319,12 @@ class NotificationService {
 
       // 주간 반복 알림 예약
       await _notifications.zonedSchedule(
-        baseId + dayIndex, // 각 요일마다 고유 ID
-        title,
-        body,
-        scheduledDate,
-        notificationDetails,
+        id: baseId + dayIndex, // 각 요일마다 고유 ID
+        title: title,
+        body: body,
+        scheduledDate: scheduledDate,
+        notificationDetails: notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime, // 매주 같은 요일, 같은 시간에 반복
         payload: payload,
       );
@@ -340,7 +336,7 @@ class NotificationService {
 
   /// 특정 알림 취소
   Future<void> cancelNotification(int id) async {
-    await _notifications.cancel(id);
+    await _notifications.cancel(id: id);
   }
 
   /// 모든 알림 취소

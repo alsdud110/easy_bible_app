@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:toastification/toastification.dart';
 import '../../models/favorite_verse.dart';
 import '../../providers/favorite_provider.dart';
 import '../../utils/responsive_utils.dart';
@@ -79,13 +79,15 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
   void _copyToClipboard(BuildContext context) {
     final fullText = '${widget.favorite.reference}\n\n${widget.favorite.text}';
     Clipboard.setData(ClipboardData(text: fullText));
-    Fluttertoast.showToast(
-      msg: '클립보드에 복사되었습니다',
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
+    toastification.show(
+      context: context,
+      title: const Text('클립보드에 복사되었습니다'),
+      autoCloseDuration: const Duration(seconds: 2),
+      alignment: Alignment.bottomCenter,
+      style: ToastificationStyle.flat,
       backgroundColor: Colors.black87,
-      textColor: Colors.white,
-      fontSize: 14.0,
+      foregroundColor: Colors.white,
+      showProgressBar: false,
     );
   }
 

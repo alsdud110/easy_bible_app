@@ -1,16 +1,7 @@
-buildscript {
-    ext.kotlin_version = '2.1.0'
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "com.android.tools.build:gradle:8.9.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+// AGP/Kotlin Gradle Plugin 버전은 settings.gradle의 pluginManagement.plugins 블록에서
+// 관리합니다. 여기서 buildscript classpath로 다시 선언하면 두 버전이 충돌해
+// AGP가 감지하는 실제 Kotlin 버전이 어긋나는 문제가 생길 수 있어 제거했습니다.
+ext.kotlin_version = '2.2.20'
 
 allprojects {
     repositories {
