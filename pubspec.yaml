@@ -38,6 +38,9 @@ dependencies:
   carousel_slider: ^5.1.2
   toastification: ^3.2.0
 
+  # 정기구독(인앱결제) - 프리미엄 기능 잠금 해제용
+  in_app_purchase: ^3.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

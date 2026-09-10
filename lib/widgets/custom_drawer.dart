@@ -1,6 +1,8 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import '../config/feature_flags.dart';
 
 // 각 스크린 import 추가
 import '../../screens/bible/bible_home_screen.dart'; // 전체 성경
@@ -9,6 +11,8 @@ import '../../screens/biblePlan/day60_screen.dart';
 import '../../screens/biblePlan/day120_screen.dart';
 import '../../screens/biblePlan/day180_screen.dart';
 import '../../screens/favorite/favorite_list_screen.dart';
+import '../../screens/subscription/paywall_screen.dart';
+import '../providers/subscription_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -62,6 +66,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final isPremium = context.watch<SubscriptionProvider>().isPremium;
 
     return Drawer(
       shape: const RoundedRectangleBorder(
@@ -131,6 +136,25 @@ class CustomDrawer extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  // 메뉴: 프리미엄 (구독)
+                  // 사업자등록/통신판매업 신고 전까지 kPremiumFeatureEnabled 로 숨김
+                  if (kPremiumFeatureEnabled)
+                    _DrawerButton(
+                      icon: isPremium
+                          ? Icons.workspace_premium_rounded
+                          : Icons.workspace_premium_outlined,
+                      label: isPremium ? '프리미엄 이용 중' : '프리미엄',
+                      color: const Color(0xFFF59E0B),
+                      onTap: () {
+                        Navigator.of(context).pop(); // 드로어 먼저 닫기
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const PaywallScreen(),
+                          ),
+                        );
+                      },
+                    ),
+
                   // 메뉴: 전체 성경
                   _DrawerButton(
                     icon: Icons.menu_book_rounded,

@@ -5,6 +5,7 @@ import '../../providers/language_provider.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/breadcrumb_bar.dart';
 import '../../widgets/banner_ad_widget.dart';
+import '../../utils/premium_gate.dart';
 
 class ChapterSelector extends StatefulWidget {
   final BibleData book;
@@ -110,6 +111,9 @@ class _ChapterSelectorState extends State<ChapterSelector>
             ),
             tooltip: languageProvider.isKorean ? 'English' : '한글',
             onPressed: () async {
+              final next = languageProvider.nextLanguage;
+              final allowed = await ensureBibleLanguageUnlocked(context, next);
+              if (!allowed) return;
               await languageProvider.toggleLanguage();
             },
           ),

@@ -16,6 +16,8 @@ import '../../models/bible_card_layout.dart';
 import '../../models/today_verse_model.dart';
 import '../../services/interstitial_ad_manager.dart';
 import '../../services/verse_history_service.dart';
+import 'package:provider/provider.dart';
+import '../../providers/subscription_provider.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/multi_layout_bible_card.dart';
 import '../bible_card_preview_screen.dart';
@@ -60,7 +62,10 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     )..repeat();
 
     _loadTodayVerse();
-    _interstitialAdManager.loadAd();
+    // 프리미엄(구독) 사용자에게는 전면 광고를 아예 로드하지 않음
+    if (!context.read<SubscriptionProvider>().isPremium) {
+      _interstitialAdManager.loadAd();
+    }
   }
 
   String _verseAdKey(String verse, String ref) {
@@ -581,9 +586,13 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     // 🔍 이 말씀에 대해 이미 광고를 봤는지 확인
     final hasViewedAd = await _hasViewedAdForVerse(v, r);
 
-    if (!hasViewedAd) {
-      // 👉 아직 광고 안 봤으면 광고 1회 노출
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    if (!hasViewedAd && !isPremium) {
+      // 👉 아직 광고 안 봤고, 프리미엄이 아니면 광고 1회 노출
       await _interstitialAdManager.showAd();
+      await _markAdViewedForVerse(v, r);
+    } else if (!hasViewedAd) {
+      // 프리미엄 사용자는 광고 없이 시청 처리만 남겨둠
       await _markAdViewedForVerse(v, r);
     } else {
       debugPrint('🚫 이미 광고 본 말씀 - 광고 스킵');

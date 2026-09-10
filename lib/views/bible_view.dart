@@ -4,6 +4,7 @@ import '../../models/bible_data.dart';
 import '../../utils/bible_loader.dart';
 import '../../utils/bible_key_converter.dart';
 import '../../providers/language_provider.dart';
+import '../utils/premium_gate.dart';
 import '../screens/bible/verse_list_view.dart';
 
 /// 성경 전체를 관리하는 메인 뷰
@@ -236,6 +237,9 @@ class _BibleViewState extends State<BibleView> {
           ),
           tooltip: languageProvider.isKorean ? 'English' : '한글',
           onPressed: () async {
+            final next = languageProvider.nextLanguage;
+            final allowed = await ensureBibleLanguageUnlocked(context, next);
+            if (!allowed) return;
             await languageProvider.toggleLanguage();
           },
         );

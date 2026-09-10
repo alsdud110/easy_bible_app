@@ -1,6 +1,9 @@
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import '../providers/subscription_provider.dart';
 
 class BannerAdWidget extends StatefulWidget {
   const BannerAdWidget({super.key});
@@ -16,8 +19,17 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   static const int _maxRetries = 3;
 
   /// ✅ 플랫폼별 광고 단위 ID
+  ///
+  /// 디버그(개발) 빌드에서는 항상 Google 공식 테스트 광고 단위를 사용합니다.
+  /// 실제 광고 단위로 반복 테스트하면 AdMob에서 무효 트래픽으로 보고 계정에
+  /// 경고/제재가 갈 수 있어서, 릴리즈 빌드에서만 실제 광고 단위를 씁니다.
   static String get _adUnitId {
-    // 실제 광고 단위 ID
+    if (kDebugMode) {
+      if (Platform.isAndroid) return 'ca-app-pub-3940256099942544/6300978111';
+      if (Platform.isIOS) return 'ca-app-pub-3940256099942544/2934735716';
+    }
+
+    // 실제 광고 단위 ID (릴리즈 빌드)
     if (Platform.isAndroid) {
       return 'ca-app-pub-7446781962805745/4003972619';
     } else if (Platform.isIOS) {
@@ -30,7 +42,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   void initState() {
     super.initState();
-    _loadAd();
+    // 프리미엄(구독) 사용자에게는 애초에 광고를 요청하지 않음
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    print('🪧 BannerAdWidget.initState - isPremium: $isPremium');
+    if (!isPremium) {
+      _loadAd();
+    }
   }
 
   void _loadAd() {
@@ -83,6 +100,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // 구독 도중 프리미엄으로 전환되면 즉시 광고를 숨김
+    final isPremium = context.watch<SubscriptionProvider>().isPremium;
+    if (isPremium) {
+      return const SizedBox.shrink();
+    }
+
     final systemBottomPadding = MediaQuery.of(context).padding.bottom;
     // iOS는 제스처 바 영역이 크므로 절반만 사용, Android는 전체 사용
     final bottomPadding =

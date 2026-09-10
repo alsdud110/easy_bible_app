@@ -8,6 +8,7 @@ import '../../services/bible_search_service.dart';
 import '../../services/bible_search_history_service.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/banner_ad_widget.dart';
+import '../../utils/premium_gate.dart';
 import 'verse_list_view.dart';
 
 void pushModernTransition(BuildContext context, Widget page) {
@@ -578,6 +579,9 @@ class _BookSelectorState extends State<BookSelector>
             ),
             tooltip: languageProvider.isKorean ? 'English' : '한글',
             onPressed: () async {
+              final next = languageProvider.nextLanguage;
+              final allowed = await ensureBibleLanguageUnlocked(context, next);
+              if (!allowed) return;
               await languageProvider.toggleLanguage();
               // 단어 검색 모드일 때 언어 전환 시 검색어 초기화
               if (_searchMode == SearchMode.wordSearch) {

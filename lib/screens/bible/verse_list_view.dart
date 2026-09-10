@@ -12,6 +12,8 @@ import '../../providers/font_size_provider.dart';
 import '../../services/bible_subtitle_service.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/breadcrumb_bar.dart';
+import '../../providers/subscription_provider.dart';
+import '../../utils/premium_gate.dart';
 import '../bible_card_preview_screen.dart';
 
 class VerseListView extends StatefulWidget {
@@ -617,6 +619,7 @@ class _VerseListViewState extends State<VerseListView>
   void _showVersionBottomSheet(BuildContext context, LanguageProvider languageProvider) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
 
     final versions = [
       (BibleLanguage.korean, '개역개정', '대한성서공회, 1998'),
@@ -649,9 +652,12 @@ class _VerseListViewState extends State<VerseListView>
                 ...versions.map((v) {
                   final (lang, name, desc) = v;
                   final isSelected = languageProvider.currentLanguage == lang;
+                  final isLocked = lang.isPremiumOnly && !isPremium;
                   return InkWell(
                     onTap: () async {
                       Navigator.pop(ctx);
+                      final allowed = await ensureBibleLanguageUnlocked(context, lang);
+                      if (!allowed) return;
                       await languageProvider.setLanguage(lang);
                     },
                     child: Padding(
@@ -695,6 +701,14 @@ class _VerseListViewState extends State<VerseListView>
                               ),
                             ],
                           ),
+                          if (isLocked) ...[
+                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.workspace_premium_rounded,
+                              size: 18,
+                              color: const Color(0xFFF59E0B),
+                            ),
+                          ],
                         ],
                       ),
                     ),

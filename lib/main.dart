@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'dart:async';
 import 'dart:io';
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
@@ -20,12 +21,16 @@ import 'providers/language_provider.dart'; // ✅ 이미 import되어 있음
 import 'providers/plan_progress_provider.dart';
 import 'providers/font_size_provider.dart';
 import 'providers/quiz_provider.dart';
+import 'providers/subscription_provider.dart';
+import 'config/feature_flags.dart';
 import 'services/notification_service.dart';
 import 'services/bible_subtitle_service.dart';
+import 'services/interstitial_ad_manager.dart';
 import 'services/app_version_service.dart';
 import 'widgets/update_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/cupertino.dart';
 
 // GlobalKey for navigation
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -176,6 +181,14 @@ void main() async {
   final planProgressProvider = PlanProgressProvider();
   await planProgressProvider.loadPlan();
 
+  // 구독(정기결제) 상태 관리자
+  // - 캐시된 값으로 먼저 UI를 그리고, initialize() 내부에서 스토어와 재동기화합니다.
+  // - 스토어 왕복을 기다리느라 앱 시작이 늦어지지 않도록 await 하지 않습니다.
+  final subscriptionProvider = SubscriptionProvider();
+  if (kPremiumFeatureEnabled) {
+    unawaited(subscriptionProvider.initialize());
+  }
+
   // BibleSubtitleService 초기화
   await BibleSubtitleService().loadSubtitles();
   await BibleSubtitleService().loadSnbSubtitles();
@@ -195,6 +208,7 @@ void main() async {
             value: planFontSizeProvider), // ✅ Plan FontSize 추가!
         ChangeNotifierProvider.value(value: planProgressProvider),
         ChangeNotifierProvider(create: (_) => QuizProvider()),
+        ChangeNotifierProvider.value(value: subscriptionProvider),
       ],
       child: MyApp(initDark: isDark),
     ),
@@ -283,7 +297,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } else if (state == AppLifecycleState.resumed) {
       // 포그라운드로 돌아올 때
       print('▶️ 앱이 포그라운드로 복귀');
-      if (_lastPausedTime != null) {
+
+      // 전면 광고가 떠 있다가 닫히면서 발생한 pause/resume이면
+      // (진짜 오래 자리를 비운 게 아니므로) 홈 리셋 로직을 건너뜀
+      if (InterstitialAdManager.isAnyAdShowing) {
+        print('📺 전면 광고로 인한 전환 - 홈 리셋 건너뜀');
+      } else if (_lastPausedTime != null) {
         final duration = DateTime.now().difference(_lastPausedTime!);
         print('⏱️ 백그라운드 시간: ${duration.inMinutes}분');
 

@@ -13,6 +13,8 @@ import '../models/bible_card_layout.dart';
 import '../models/bible_card_theme.dart';
 import '../widgets/multi_layout_bible_card.dart';
 import '../services/interstitial_ad_manager.dart';
+import 'package:provider/provider.dart';
+import '../providers/subscription_provider.dart';
 
 class BibleCardPreviewScreen extends StatefulWidget {
   final String verse;
@@ -47,7 +49,10 @@ class _BibleCardPreviewScreenState extends State<BibleCardPreviewScreen> {
   void initState() {
     super.initState();
     _loadSettings();
-    _interstitialAdManager.loadAd();
+    // 프리미엄(구독) 사용자에게는 전면 광고를 아예 로드하지 않음
+    if (!context.read<SubscriptionProvider>().isPremium) {
+      _interstitialAdManager.loadAd();
+    }
   }
 
   @override
@@ -72,8 +77,9 @@ class _BibleCardPreviewScreenState extends State<BibleCardPreviewScreen> {
   }
 
   Future<void> _saveToGallery() async {
-    // skipAds가 false일 때만 전면광고 표시
-    if (!widget.skipAds) {
+    // skipAds가 false이고 프리미엄(구독)이 아닐 때만 전면광고 표시
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    if (!widget.skipAds && !isPremium) {
       await _interstitialAdManager.showAd();
     }
 
@@ -99,8 +105,9 @@ class _BibleCardPreviewScreenState extends State<BibleCardPreviewScreen> {
   }
 
   Future<void> _shareCard() async {
-    // skipAds가 false일 때만 전면광고 표시
-    if (!widget.skipAds) {
+    // skipAds가 false이고 프리미엄(구독)이 아닐 때만 전면광고 표시
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    if (!widget.skipAds && !isPremium) {
       await _interstitialAdManager.showAd();
     }
 

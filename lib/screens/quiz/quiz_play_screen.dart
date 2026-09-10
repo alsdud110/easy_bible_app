@@ -6,6 +6,8 @@ import '../../providers/quiz_provider.dart';
 import '../../theme/colors.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/banner_ad_widget.dart';
+import '../../providers/subscription_provider.dart';
+import '../../services/interstitial_ad_manager.dart';
 import 'quiz_result_screen.dart';
 
 /// 퀴즈 진행 화면
@@ -26,10 +28,16 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
   int? _selectedAnswer;
   bool _showFeedback = false;
 
+  // 마지막 문제 → 결과 화면 진입 전에 보여줄 전면 광고 (프리미엄이면 표시하지 않음)
+  final InterstitialAdManager _interstitialAdManager = InterstitialAdManager();
+
   @override
   void initState() {
     super.initState();
     _initAnimation();
+    if (!context.read<SubscriptionProvider>().isPremium) {
+      _interstitialAdManager.loadAd();
+    }
   }
 
   void _initAnimation() {
@@ -62,6 +70,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
   void dispose() {
     _questionAnimController.dispose();
     _scrollController.dispose();
+    _interstitialAdManager.dispose();
     super.dispose();
   }
 
@@ -88,7 +97,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     });
   }
 
-  void _handleNext(BuildContext context) {
+  Future<void> _handleNext(BuildContext context) async {
     final provider = context.read<QuizProvider>();
 
     if (provider.currentQuestionIndex < provider.totalQuestions - 1) {
@@ -104,6 +113,13 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
       _questionAnimController.reset();
       _questionAnimController.forward();
     } else {
+      // 결과 화면으로 이동하기 전, 프리미엄이 아니면 전면 광고 노출
+      final isPremium = context.read<SubscriptionProvider>().isPremium;
+      if (!isPremium) {
+        await _interstitialAdManager.showAd();
+      }
+      if (!context.mounted) return;
+
       // 결과 화면으로
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
