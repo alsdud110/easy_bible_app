@@ -326,6 +326,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
       barrierColor: Colors.black54,
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
         child: AnimatedBuilder(
           animation: _highlightPickerController,
           builder: (context, child) {
@@ -349,7 +350,6 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
           },
           child: Container(
             width: 280,
-            height: 320,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(24),
@@ -1248,6 +1248,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
       barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
         elevation: 0,
         child: SizedBox(
           width: 300,

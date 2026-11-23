@@ -330,6 +330,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
               backgroundColor: Colors.transparent,
               insetPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
               child: Container(
                 constraints:
                     const BoxConstraints(maxWidth: 420, maxHeight: 600),
@@ -787,6 +788,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                   backgroundColor: Colors.transparent,
                   insetPadding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                  shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 420),
                     decoration: BoxDecoration(
