@@ -1,3 +1,4 @@
+import '../widgets/themed_lottie.dart';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -201,7 +202,7 @@ $appLink''';
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.asset(
+              ThemedLottie.asset(
                 'assets/lottie/loading.json',
                 width: 80,
                 height: 80,
@@ -212,7 +213,7 @@ $appLink''';
               Text(
                 message,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
             ],
@@ -256,7 +257,7 @@ $appLink''';
               Text(
                 message,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                 textAlign: TextAlign.center,
               ),
@@ -476,7 +477,7 @@ $appLink''';
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700),
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -492,7 +493,7 @@ $appLink''';
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700),
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

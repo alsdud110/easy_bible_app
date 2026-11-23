@@ -55,7 +55,7 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
           child: Text(
             '퀴즈 기록',
             style: TextStyle(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w500,
               fontSize: ResponsiveUtils.appBarTitleFontSize(context),
             ),
           ),
@@ -109,7 +109,7 @@ class _QuizHistoryScreenState extends State<QuizHistoryScreen> {
                 '퀴즈 기록이 없습니다',
                 style: TextStyle(
                   fontSize: ResponsiveUtils.buttonFontSize(context),
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: cs.onSurface.withValues(alpha: 0.6),
                 ),
               ),
@@ -228,7 +228,7 @@ class _QuizHistoryCard extends StatelessWidget {
             const SizedBox(width: 12),
             const Text(
               '기록 삭제',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -304,7 +304,7 @@ class _QuizHistoryCard extends StatelessWidget {
                           '${item.score}',
                           style: TextStyle(
                             fontSize: ResponsiveUtils.appBarTitleFontSize(context),
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
@@ -373,7 +373,7 @@ class _QuizHistoryCard extends StatelessWidget {
                                 '${item.correctCount}',
                                 style: TextStyle(
                                   fontSize: ResponsiveUtils.bodyFontSize(context),
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                   color: cs.onSurface,
                                 ),
                               ),

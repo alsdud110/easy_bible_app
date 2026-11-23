@@ -1,4 +1,6 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
@@ -353,9 +355,9 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
@@ -378,7 +380,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         '하이라이트',
                         style: TextStyle(
                           fontSize: ResponsiveUtils.titleFontSize(context),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -436,12 +438,12 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                                 color: color.color,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.surface,
                                   width: 3,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: color.darkColor.withOpacity(0.4),
+                                    color: Colors.black.withOpacity(0.12),
                                     blurRadius: 8,
                                     offset: const Offset(0, 3),
                                   ),
@@ -478,10 +480,10 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                             width: 64,
                             height: 64,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.surface,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.grey.shade300,
+                                color: Theme.of(context).colorScheme.outline,
                                 width: 3,
                               ),
                               boxShadow: [
@@ -494,7 +496,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                             ),
                             child: Icon(
                               Icons.format_color_reset,
-                              color: Colors.grey.shade700,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                               size: 28,
                             ),
                           ),
@@ -661,7 +663,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     icon: Icons.copy,
                     label: '복사',
                     onPressed: _copyToClipboard,
-                    color: cs.primary,
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -671,7 +673,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     icon: Icons.format_color_fill,
                     label: '하이라이트',
                     onPressed: _showHighlightColorPicker,
-                    color: const Color.fromARGB(255, 134, 209, 13),
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -681,7 +683,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     icon: Icons.bookmark_add_outlined,
                     label: '북마크',
                     onPressed: _addToFavorites,
-                    color: const Color.fromARGB(255, 241, 146, 20),
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -691,7 +693,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     icon: Icons.share,
                     label: '성경 공유',
                     onPressed: _showSharePreview,
-                    color: const Color.fromARGB(255, 142, 70, 209),
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -794,7 +796,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       key: ValueKey(fontSize),
                       style: const TextStyle(
                         fontSize: 13.0,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -813,7 +815,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
             ? Text(
                 _getVerseReference(),
                 style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: cs.onSurface,
                 ),
               )
@@ -831,7 +833,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                           dayTitle,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontFamily: 'ChosunCentennial',
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
@@ -995,21 +997,21 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         child: Text(
                           isCompleted ? '일독 완료' : '일독 완료',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             fontSize: ResponsiveUtils.bodyFontSize(context),
                           ),
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        foregroundColor:
-                            isCompleted ? cs.onSurface : Colors.white,
-                        backgroundColor:
-                            isCompleted ? cs.surface : const Color(0xFF6ABAA6),
-                        elevation: isCompleted ? 0 : 2,
-                        shadowColor:
-                            isCompleted ? null : const Color(0xFF6ABAA6).withOpacity(0.5),
+                        foregroundColor: isCompleted ? cs.onSurface : cs.onPrimary,
+                        backgroundColor: isCompleted ? cs.surface : cs.primary,
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                        side: isCompleted
+                            ? BorderSide(color: cs.outline)
+                            : BorderSide.none,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
@@ -1082,7 +1084,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                   style: TextStyle(
                     fontFamily: 'ChosunCentennial',
                     fontWeight: isInRange || selected
-                        ? FontWeight.bold
+                        ? FontWeight.w600
                         : FontWeight.w600,
                     fontSize: isInRange || selected
                         ? fontSize.verseNumberSelectedSize
@@ -1097,7 +1099,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     child: Icon(
                       Icons.star,
                       size: 12,
-                      color: Colors.amber[700],
+                      color: QuizColors.star,
                     ),
                   ),
               ],
@@ -1109,7 +1111,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                 style: TextStyle(
                   fontFamily: 'ChosunCentennial',
                   fontWeight: isInRange || selected
-                      ? FontWeight.bold
+                      ? FontWeight.w600
                       : FontWeight.normal,
                   fontSize: isInRange || selected
                       ? fontSize.verseTextSelectedSize
@@ -1163,7 +1165,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
             mainAxisSize: MainAxisSize.min,
             children: [
               // 🏆 Trophy Lottie 애니메이션
-              Lottie.asset(
+              ThemedLottie.asset(
                 'assets/lottie/trophy.json',
                 width: 150,
                 height: 150,
@@ -1175,7 +1177,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                 '축하합니다!',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: cs.onSurface,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 16),
@@ -1222,7 +1224,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       '확인',
                       style: TextStyle(
                         fontSize: ResponsiveUtils.titleFontSize(context),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -1255,7 +1257,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
             children: [
               // 배경 Confetti 애니메이션
               Positioned.fill(
-                child: Lottie.asset(
+                child: ThemedLottie.asset(
                   'assets/lottie/celebration.json',
                   fit: BoxFit.cover,
                   repeat: false,
@@ -1294,13 +1296,13 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6ABAA6).withValues(alpha: 0.15),
+                          color: cs.primaryContainer,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.check_circle,
                           size: 36,
-                          color: Color(0xFF6ABAA6),
+                          color: cs.primary,
                         ),
                       ),
                     ),
@@ -1309,7 +1311,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       '${widget.dayNumber}일차 일독 완료!',
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: cs.onSurface,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -1330,13 +1332,13 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF6ABAA6),
-                              foregroundColor: Colors.white,
+                              backgroundColor: cs.primary,
+                              foregroundColor: cs.onPrimary,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              elevation: 1,
+                              elevation: 0,
                             ),
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
@@ -1344,7 +1346,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                                 '확인',
                                 style: TextStyle(
                                   fontSize: ResponsiveUtils.bodyFontSize(context),
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
@@ -1362,7 +1364,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: cs.primary,
-                                foregroundColor: Colors.white,
+                                foregroundColor: cs.onPrimary,
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -1376,7 +1378,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                                   '다음일차',
                                   style: TextStyle(
                                     fontSize: ResponsiveUtils.bodyFontSize(context),
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),

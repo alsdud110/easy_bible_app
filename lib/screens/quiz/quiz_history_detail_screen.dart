@@ -45,7 +45,7 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
           child: Text(
             '퀴즈 상세 결과',
             style: TextStyle(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w500,
               fontSize: ResponsiveUtils.appBarTitleFontSize(context),
             ),
           ),
@@ -65,7 +65,7 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
             ),
           ),
           labelStyle: TextStyle(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             fontSize: ResponsiveUtils.bodyFontSize(context),
           ),
           tabs: [
@@ -136,7 +136,7 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
                     '${item.score}점',
                     style: TextStyle(
                       fontSize: 32,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w500,
                       color: cs.onSurface,
                       height: 1.1,
                     ),
@@ -197,7 +197,7 @@ class _QuizHistoryDetailScreenState extends State<QuizHistoryDetailScreen>
             value,
             style: TextStyle(
               fontSize: ResponsiveUtils.bodyFontSize(context),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: cs.onSurface,
             ),
           ),
@@ -302,7 +302,7 @@ class _QuestionCard extends StatelessWidget {
                         '$questionNumber',
                         style: TextStyle(
                           fontSize: ResponsiveUtils.bodyFontSize(context),
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w500,
                           color: cs.onSurface,
                         ),
                       ),
@@ -351,7 +351,7 @@ class _QuestionCard extends StatelessWidget {
                           record.isCorrect ? '정답' : '오답',
                           style: TextStyle(
                             fontSize: ResponsiveUtils.captionFontSize(context),
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: record.isCorrect
                                 ? cs.onSurface.withValues(alpha: 0.6)
                                 : cs.error,

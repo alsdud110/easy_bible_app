@@ -3,12 +3,12 @@ import 'package:easy_bible_app/screens/favorite/favorite_list_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_drawer.dart';
 import 'biblePlan/plan_screens.dart';
+import '../widgets/ribbon_mark.dart';
 import 'biblePlan/plan_start_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../models/plan_progress.dart';
 import '../providers/plan_progress_provider.dart';
-import '../theme/colors.dart';
 
 /// 2025 트렌드 기반 홈 화면 - 성능 최적화 버전
 /// - Bento Grid Layout
@@ -152,9 +152,8 @@ class _HomeScreenState extends State<HomeScreen>
               'All in Bible',
               style: GoogleFonts.dancingScript(
                 color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
                 fontSize: 26,
-                letterSpacing: -0.5,
               ),
             ),
           ],
@@ -221,15 +220,15 @@ class _GreetingSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(data.icon, size: 24, color: cs.primary),
+              Icon(data.icon, size: 22, color: cs.onSurfaceVariant),
               const SizedBox(width: 8),
               Text(
                 data.text,
                 style: TextStyle(
                   fontSize: 28,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w500,
                   color: cs.onSurface,
-                  letterSpacing: -0.5,
+                  letterSpacing: 0,
                 ),
               ),
             ],
@@ -239,8 +238,8 @@ class _GreetingSection extends StatelessWidget {
             '오늘도 말씀과 함께하세요',
             style: TextStyle(
               fontSize: 15,
-              color: cs.onSurface.withValues(alpha: 0.6),
-              fontWeight: FontWeight.w500,
+              color: cs.onSurfaceVariant,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],
@@ -314,9 +313,6 @@ class _BentoGridState extends State<_BentoGrid>
                       title: '전체 성경',
                       subtitle: '66권 탐독하기',
                       icon: Icons.menu_book_rounded,
-                      gradient: widget.isDark
-                          ? _CachedGradients.darkPrimaryGradient
-                          : _CachedGradients.lightPrimaryGradient,
                       height: 160,
                       onTap: () => Navigator.of(context).pushNamed('/bible'),
                     ),
@@ -338,10 +334,7 @@ class _BentoGridState extends State<_BentoGrid>
                     child: _BentoCard(
                       title: '북마크',
                       subtitle: '',
-                      icon: Icons.bookmark_rounded,
-                      gradient: widget.isDark
-                          ? _CachedGradients.darkSecondaryGradient
-                          : _CachedGradients.lightSecondaryGradient,
+                      icon: Icons.bookmark_border_rounded,
                       height: 160,
                       onTap: () {
                         Navigator.push(
@@ -375,10 +368,7 @@ class _BentoGridState extends State<_BentoGrid>
                     child: _BentoCard(
                       title: '성경퀴즈',
                       subtitle: '재미있게',
-                      icon: Icons.quiz_rounded,
-                      gradient: widget.isDark
-                          ? _CachedGradients.darkTertiaryGradient
-                          : _CachedGradients.lightTertiaryGradient,
+                      icon: Icons.quiz_outlined,
                       height: 140,
                       onTap: () => Navigator.of(context).pushNamed('/quiz'),
                     ),
@@ -409,63 +399,18 @@ class _BentoGridState extends State<_BentoGrid>
   }
 }
 
-// 그래디언트 캐싱 (매번 생성하지 않음)
-class _CachedGradients {
-  static final lightPrimaryGradient = LinearGradient(
-    colors: [LightColors.primary, LightColors.secondary],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final lightSecondaryGradient = LinearGradient(
-    colors: [LightColors.secondary, LightColors.accent],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final lightTertiaryGradient = LinearGradient(
-    colors: [Color(0xFFEC4899), Color(0xFFF59E0B)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final darkPrimaryGradient = LinearGradient(
-    colors: [DarkColors.primary, DarkColors.secondary],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final darkSecondaryGradient = LinearGradient(
-    colors: [DarkColors.secondary, DarkColors.accent],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final darkTertiaryGradient = LinearGradient(
-    colors: [Color(0xFFDB2777), Color(0xFFDC2626)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final lightAccentGradient = LinearGradient(
-    colors: [LightColors.accent, LightColors.primary],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static final darkAccentGradient = LinearGradient(
-    colors: [DarkColors.accent, DarkColors.secondary],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-}
+/// 홈 타일 공통 외형: 종이색 카드 + 헤어라인. 색은 내용(가름끈)에만.
+BoxDecoration _tileDecoration(ColorScheme cs) => BoxDecoration(
+      color: cs.surface,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: cs.outlineVariant),
+    );
 
 // Bento 카드 (최적화 + 반응형)
 class _BentoCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final Gradient gradient;
   final double height;
   final VoidCallback onTap;
 
@@ -473,48 +418,35 @@ class _BentoCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
-    required this.gradient,
     required this.height,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Colors.white;
-    final iconColor = Colors.white;
+    final cs = Theme.of(context).colorScheme;
+    final textColor = cs.onSurface;
+    final iconColor = cs.onSurfaceVariant;
     final screenWidth = MediaQuery.of(context).size.width;
 
     // 화면 크기에 따라 동적으로 폰트 크기 조절
     final titleFontSize = screenWidth < 380 ? 18.0 : 20.0;
     final subtitleFontSize = screenWidth < 380 ? 12.0 : 13.0;
-    final iconSize = screenWidth < 380 ? 28.0 : 32.0;
+    final iconSize = screenWidth < 380 ? 24.0 : 28.0;
     final padding = screenWidth < 380 ? 16.0 : 20.0;
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(16),
           child: Ink(
             height: height,
-            decoration: BoxDecoration(
-              gradient: gradient,
-              borderRadius: BorderRadius.circular(24),
-            ),
+            decoration: _tileDecoration(cs),
             child: Stack(
               children: [
-                // 배경 패턴
-                Positioned(
-                  right: -20,
-                  bottom: -20,
-                  child: Icon(
-                    icon,
-                    size: 120,
-                    color: iconColor.withValues(alpha: 0.1),
-                  ),
-                ),
               // 텍스트 콘텐츠
               Padding(
                 padding: EdgeInsets.all(padding),
@@ -532,9 +464,8 @@ class _BentoCard extends StatelessWidget {
                         title,
                         style: TextStyle(
                           fontSize: titleFontSize,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w500,
                           color: textColor,
-                          letterSpacing: -0.5,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.visible,
@@ -549,8 +480,8 @@ class _BentoCard extends StatelessWidget {
                           subtitle,
                           style: TextStyle(
                             fontSize: subtitleFontSize,
-                            color: textColor.withValues(alpha: 0.7),
-                            fontWeight: FontWeight.w500,
+                            color: cs.onSurfaceVariant,
+                            fontWeight: FontWeight.w400,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.visible,
@@ -586,12 +517,13 @@ class _PlanBentoCard extends StatelessWidget {
     );
 
     final screenWidth = MediaQuery.of(context).size.width;
+    final cs = Theme.of(context).colorScheme;
 
     // 화면 크기에 따라 동적으로 조절
     final titleFontSize = screenWidth < 380 ? 18.0 : 20.0;
     final subtitleFontSize = screenWidth < 380 ? 12.0 : 13.0;
-    final iconSize = screenWidth < 380 ? 28.0 : 32.0;
-    final badgeFontSize = screenWidth < 380 ? 11.0 : 12.0;
+    final iconSize = screenWidth < 380 ? 24.0 : 28.0;
+    final badgeFontSize = screenWidth < 380 ? 12.0 : 13.0;
     final padding = screenWidth < 380 ? 16.0 : 20.0;
 
     return Material(
@@ -601,29 +533,21 @@ class _PlanBentoCard extends StatelessWidget {
           final provider = context.read<PlanProgressProvider>();
           _showPlanBottomSheet(context, provider);
         },
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(16),
           child: Ink(
             height: 140,
-            decoration: BoxDecoration(
-              gradient: isDark
-                  ? _CachedGradients.darkAccentGradient
-                  : _CachedGradients.lightAccentGradient,
-              borderRadius: BorderRadius.circular(24),
-            ),
+            decoration: _tileDecoration(cs),
             child: Stack(
               children: [
-                // 배경 패턴
-                Positioned(
-                  right: -20,
-                  bottom: -20,
-                  child: Icon(
-                    Icons.calendar_month_rounded,
-                    size: 120,
-                    color: Colors.white.withValues(alpha: 0.1),
+                // 진행 중인 플랜이 있으면 가름끈을 카드 위쪽에 드리운다
+                if (hasAnyPlan)
+                  Positioned(
+                    top: 0,
+                    right: padding,
+                    child: const RibbonMark(width: 12, height: 28),
                   ),
-                ),
               // 콘텐츠
               Padding(
                 padding: EdgeInsets.all(padding),
@@ -636,29 +560,26 @@ class _PlanBentoCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Icon(
-                          Icons.calendar_month_rounded,
-                          color: Colors.white,
+                          Icons.calendar_month_outlined,
+                          color: cs.onSurfaceVariant,
                           size: iconSize,
                         ),
                         if (hasAnyPlan)
                           Flexible(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth < 380 ? 10 : 12,
-                                vertical: screenWidth < 380 ? 5 : 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.25),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
+                            child: Padding(
+                              // 가름끈 자리만큼 비켜 둔다
+                              padding: EdgeInsets.only(right: 12 + 8),
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
                                   '$planCount개 진행 중',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: cs.primary,
                                     fontSize: badgeFontSize,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures()
+                                    ],
                                   ),
                                 ),
                               ),
@@ -677,9 +598,8 @@ class _PlanBentoCard extends StatelessWidget {
                             '성경일독',
                             style: TextStyle(
                               fontSize: titleFontSize,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              letterSpacing: -0.5,
+                              fontWeight: FontWeight.w500,
+                              color: cs.onSurface,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.visible,
@@ -693,8 +613,8 @@ class _PlanBentoCard extends StatelessWidget {
                             !hasAnyPlan ? '플랜 시작하기' : '진행 중인 플랜 보기',
                             style: TextStyle(
                               fontSize: subtitleFontSize,
-                              color: Colors.white.withValues(alpha: 0.9),
-                              fontWeight: FontWeight.w500,
+                              color: cs.onSurfaceVariant,
+                              fontWeight: FontWeight.w400,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.visible,
@@ -748,7 +668,7 @@ class _PlanBentoCard extends StatelessWidget {
               '성경일독 플랜',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w500,
                 color: cs.onSurface,
               ),
             ),
@@ -757,11 +677,12 @@ class _PlanBentoCard extends StatelessWidget {
               '원하는 플랜을 선택하세요',
               style: TextStyle(
                 fontSize: 15,
-                color: cs.onSurface.withValues(alpha: 0.6),
+                color: cs.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 24),
             // 플랜 옵션들 (4개라 작은 화면에서도 넘치지 않도록 스크롤 허용)
+            // 플랜마다 색을 달리하지 않고 아이콘으로만 구분한다
             Flexible(
               child: SingleChildScrollView(
                 child: Column(
@@ -769,29 +690,25 @@ class _PlanBentoCard extends StatelessWidget {
                     _PlanOption(
                       provider: provider,
                       planType: PlanType.day60,
-                      icon: Icons.flash_on_rounded,
-                      color: const Color(0xFF10B981),
+                      icon: Icons.bolt_outlined,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     _PlanOption(
                       provider: provider,
                       planType: PlanType.day120,
                       icon: Icons.trending_up_rounded,
-                      color: const Color(0xFF3B82F6),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     _PlanOption(
                       provider: provider,
                       planType: PlanType.day180,
-                      icon: Icons.nature_people_rounded,
-                      color: const Color(0xFF8B5CF6),
+                      icon: Icons.spa_outlined,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     _PlanOption(
                       provider: provider,
                       planType: PlanType.day365,
-                      icon: Icons.wb_sunny_rounded,
-                      color: const Color(0xFFF59E0B),
+                      icon: Icons.wb_sunny_outlined,
                     ),
                   ],
                 ),
@@ -810,13 +727,11 @@ class _PlanOption extends StatelessWidget {
   final PlanProgressProvider provider;
   final PlanType planType;
   final IconData icon;
-  final Color color;
 
   const _PlanOption({
     required this.provider,
     required this.planType,
     required this.icon,
-    required this.color,
   });
 
   String get title => planType.title;
@@ -849,28 +764,37 @@ class _PlanOption extends StatelessWidget {
             MaterialPageRoute(builder: (context) => page),
           );
         },
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         child: Ink(
-          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(20),
+            color: hasPlan ? cs.surface : cs.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: hasPlan ? color : Colors.transparent,
-              width: 2,
+              color: hasPlan ? cs.outline : cs.outlineVariant,
             ),
           ),
-          child: Row(
+          child: Stack(
             children: [
-              // 아이콘
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(16),
+              // 진행 중인 플랜에만 가름끈
+              if (hasPlan)
+                const Positioned(
+                  top: 0,
+                  right: 48,
+                  child: RibbonMark(width: 10, height: 22),
                 ),
-                child: Icon(icon, color: color, size: 28),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+            children: [
+              // 아이콘 (나머지 모서리: 16 - 16 패딩 → 최소값 8)
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: hasPlan ? cs.surfaceContainerHighest : cs.surface,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: cs.onSurfaceVariant, size: 22),
               ),
               const SizedBox(width: 16),
               // 텍스트
@@ -883,29 +807,21 @@ class _PlanOption extends StatelessWidget {
                         Text(
                           title,
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
                             color: cs.onSurface,
                           ),
                         ),
                         if (hasPlan || !isAvailable) ...[
                           const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              isAvailable ? '진행 중' : '준비 중',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                              ),
+                          Text(
+                            isAvailable ? '진행 중' : '준비 중',
+                            style: TextStyle(
+                              color: isAvailable
+                                  ? cs.primary
+                                  : cs.onSurfaceVariant,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
@@ -916,7 +832,7 @@ class _PlanOption extends StatelessWidget {
                       description,
                       style: TextStyle(
                         fontSize: 14,
-                        color: cs.onSurface.withValues(alpha: 0.6),
+                        color: cs.onSurfaceVariant,
                       ),
                     ),
                     if (hasPlan && progress > 0) ...[
@@ -928,9 +844,10 @@ class _PlanOption extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
                                 value: progress / 100,
-                                backgroundColor: color.withValues(alpha: 0.2),
-                                valueColor: AlwaysStoppedAnimation<Color>(color),
-                                minHeight: 6,
+                                backgroundColor: cs.surfaceContainerHighest,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(cs.primary),
+                                minHeight: 4,
                               ),
                             ),
                           ),
@@ -939,8 +856,11 @@ class _PlanOption extends StatelessWidget {
                             '${progress.toInt()}%',
                             style: TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: color,
+                              fontWeight: FontWeight.w500,
+                              color: cs.onSurfaceVariant,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures()
+                              ],
                             ),
                           ),
                         ],
@@ -951,9 +871,12 @@ class _PlanOption extends StatelessWidget {
               ),
               // 화살표
               Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: cs.onSurface.withValues(alpha: 0.3),
-                size: 20,
+                Icons.chevron_right_rounded,
+                color: cs.onSurfaceVariant,
+                size: 22,
+              ),
+            ],
+          ),
               ),
             ],
           ),
@@ -978,22 +901,12 @@ class _TodayVerseSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 4,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(width: 12),
               Text(
                 '오늘의 말씀',
                 style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w500,
                   color: colorScheme.onSurface,
-                  letterSpacing: -0.5,
                 ),
               ),
             ],

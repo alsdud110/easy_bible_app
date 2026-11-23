@@ -14,7 +14,7 @@ class SimpleLayout extends StatelessWidget {
     required this.reference,
     required this.shareTitle,
     this.backgroundColor = Colors.white,
-    this.textColor = const Color(0xFF1F2937),
+    this.textColor = const Color(0xFF1F1B16),
   });
 
   double _calculateFontSize(int length) {

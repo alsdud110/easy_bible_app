@@ -1,3 +1,4 @@
+import 'themed_lottie.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -69,7 +70,7 @@ class CustomDrawer extends StatelessWidget {
 
     return Drawer(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.horizontal(left: Radius.circular(28)),
+        borderRadius: BorderRadius.horizontal(left: Radius.circular(20)),
       ),
       backgroundColor: cs.surface,
       child: Column(
@@ -81,15 +82,8 @@ class CustomDrawer extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    cs.primary.withOpacity(0.88),
-                    cs.surface.withOpacity(0.98),
-                    cs.primary.withOpacity(0.68),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: theme.scaffoldBackgroundColor,
+                border: Border(bottom: BorderSide(color: cs.outlineVariant)),
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -119,7 +113,7 @@ class CustomDrawer extends StatelessWidget {
                       'All in Bible',
                       style: GoogleFonts.dancingScript(
                         color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w500,
                         fontSize: 24,
                       ),
                     ),
@@ -143,7 +137,7 @@ class CustomDrawer extends StatelessWidget {
                           ? Icons.workspace_premium_rounded
                           : Icons.workspace_premium_outlined,
                       label: isPremium ? '프리미엄 이용 중' : '프리미엄',
-                      color: const Color(0xFFF59E0B),
+                      color: cs.onSurfaceVariant,
                       onTap: () {
                         Navigator.of(context).pop(); // 드로어 먼저 닫기
                         Navigator.of(context).push(
@@ -158,7 +152,7 @@ class CustomDrawer extends StatelessWidget {
                   _DrawerButton(
                     icon: Icons.menu_book_rounded,
                     label: '전체 성경',
-                    color: cs.primary,
+                    color: cs.onSurfaceVariant,
                     onTap: () => _navigateToScreen(
                         context,
                         BibleHomeScreen(
@@ -169,7 +163,7 @@ class CustomDrawer extends StatelessWidget {
 
                   // 성경일독(플랜) - 펼침/접기
                   _PlanExpansionMenu(
-                    color: cs.secondary,
+                    color: cs.onSurfaceVariant,
                     navigateToScreen: (screen) => _navigateToScreen(context, screen),
                   ),
 
@@ -177,14 +171,14 @@ class CustomDrawer extends StatelessWidget {
                   _DrawerButton(
                     icon: Icons.quiz_rounded,
                     label: '성경퀴즈',
-                    color: Color(0xFFEC4899),
+                    color: cs.onSurfaceVariant,
                     onTap: () => Navigator.of(context).pushNamed('/quiz'),
                   ),
 
                   _DrawerButton(
                     icon: Icons.bookmark_added,
                     label: '북마크',
-                    color: Colors.amber.shade700,
+                    color: cs.onSurfaceVariant,
                     onTap: () => _navigateToScreen(context, const FavoriteListScreen()),
                   ),
                 ],
@@ -227,23 +221,25 @@ class _DrawerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    // 메뉴마다 색을 달리하지 않는다. 아이콘은 먹색 보조 톤 하나로
     return Padding(
-      padding: const EdgeInsets.only(left: 18.0, right: 12, bottom: 4),
+      padding: const EdgeInsets.only(left: 16.0, right: 12, bottom: 4),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.13),
-          child: Icon(icon, color: color, size: 24),
+          backgroundColor: cs.surfaceContainerHighest,
+          child: Icon(icon, color: cs.onSurfaceVariant, size: 22),
         ),
         title: Text(
           label,
-          style:
-              theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w500,
+            color: cs.onSurface,
+          ),
         ),
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        hoverColor: color.withOpacity(0.10),
-        splashColor: color.withOpacity(0.16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -266,23 +262,23 @@ class _DrawerNumberButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0, bottom: 4),
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: color.withValues(alpha: 0.13),
-          child: Icon(icon, color: color, size: 24),
-        ),
+        leading: Icon(icon, color: color, size: 20),
         title: Text(
           label,
-          style:
-              theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w400,
+            fontSize: 15,
+            color: cs.onSurface,
+          ),
         ),
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        hoverColor: color.withValues(alpha: 0.10),
-        splashColor: color.withValues(alpha: 0.16),
+        dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -339,39 +335,38 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 18.0, right: 12, bottom: 4),
+          padding: const EdgeInsets.only(left: 16.0, right: 12, bottom: 4),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: widget.color.withOpacity(0.13),
-              child: Icon(Icons.calendar_month_rounded,
-                  color: widget.color, size: 24),
+              backgroundColor: cs.surfaceContainerHighest,
+              child: Icon(Icons.calendar_month_outlined,
+                  color: cs.onSurfaceVariant, size: 22),
             ),
             title: Text(
               '성경일독(플랜)',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: cs.onSurface,
+                  ),
             ),
             trailing: AnimatedRotation(
               turns: expanded ? 0.5 : 0,
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
               child: Icon(
                 Icons.keyboard_arrow_down,
-                color: widget.color,
+                color: cs.onSurfaceVariant,
               ),
             ),
             onTap: _toggleExpansion,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            hoverColor: widget.color.withOpacity(0.10),
-            splashColor: widget.color.withOpacity(0.16),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
         SizeTransition(
@@ -380,17 +375,15 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
           child: FadeTransition(
             opacity: _animation,
             child: Padding(
-              padding: const EdgeInsets.only(left: 34, right: 18),
+              padding: const EdgeInsets.only(left: 32, right: 16),
               child: Column(
                 children: [
-                  _buildPlanButton(0, PlanType.day60, Icons.flash_on_rounded,
-                      const Color(0xFF10B981)),
-                  _buildPlanButton(1, PlanType.day120,
-                      Icons.trending_up_rounded, const Color(0xFF3B82F6)),
-                  _buildPlanButton(2, PlanType.day180,
-                      Icons.nature_people_rounded, const Color(0xFF8B5CF6)),
-                  _buildPlanButton(3, PlanType.day365, Icons.wb_sunny_rounded,
-                      const Color(0xFFF59E0B)),
+                  _buildPlanButton(0, PlanType.day60, Icons.bolt_outlined),
+                  _buildPlanButton(
+                      1, PlanType.day120, Icons.trending_up_rounded),
+                  _buildPlanButton(2, PlanType.day180, Icons.spa_outlined),
+                  _buildPlanButton(
+                      3, PlanType.day365, Icons.wb_sunny_outlined),
                 ],
               ),
             ),
@@ -400,14 +393,16 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
     );
   }
 
-  Widget _buildPlanButton(
-      int index, PlanType planType, IconData icon, Color color) {
+  Widget _buildPlanButton(int index, PlanType planType, IconData icon) {
+    final cs = Theme.of(context).colorScheme;
     final available = planType.isAvailable;
     return _buildAnimatedButton(
       index,
       icon,
       available ? planType.title : '${planType.title} (준비 중)',
-      available ? color : color.withOpacity(0.5),
+      available
+          ? cs.onSurfaceVariant
+          : cs.onSurfaceVariant.withValues(alpha: 0.5),
       () => available
           ? widget.navigateToScreen(buildPlanDayScreen(planType))
           : showPlanComingSoon(context, planType),
@@ -506,10 +501,10 @@ class _ThemeToggleLottieState extends State<_ThemeToggleLottie>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: cs.primary.withOpacity(0.1),
+            color: cs.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: cs.primary.withOpacity(0.2),
+              color: cs.outlineVariant,
               width: 1,
             ),
           ),
@@ -519,7 +514,7 @@ class _ThemeToggleLottieState extends State<_ThemeToggleLottie>
               SizedBox(
                 width: 48,
                 height: 48,
-                child: Lottie.asset(
+                child: ThemedLottie.asset(
                   'assets/lottie/theme_toggler.json',
                   controller: _controller,
                   onLoaded: (composition) {
@@ -539,7 +534,7 @@ class _ThemeToggleLottieState extends State<_ThemeToggleLottie>
                       widget.isDark ? "다크 모드" : "라이트 모드",
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: cs.onSurface,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
                     ),
@@ -556,7 +551,7 @@ class _ThemeToggleLottieState extends State<_ThemeToggleLottie>
               ),
               Icon(
                 Icons.chevron_right_rounded,
-                color: cs.primary,
+                color: cs.onSurfaceVariant,
                 size: 24,
               ),
             ],

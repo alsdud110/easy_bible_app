@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,7 +113,7 @@ class _Day120ScreenState extends State<Day120Screen>
             mainAxisSize: MainAxisSize.min,
             children: [
               // Reload Lottie 애니메이션
-              Lottie.asset(
+              ThemedLottie.asset(
                 'assets/lottie/reload.json',
                 width: 80,
                 height: 80,
@@ -147,7 +148,7 @@ class _Day120ScreenState extends State<Day120Screen>
                       '$progressPercent%',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: cs.primary,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -296,7 +297,7 @@ class _Day120ScreenState extends State<Day120Screen>
                   time.format(context),
                   style: theme.textTheme.headlineSmall?.copyWith(
                     color: cs.primary,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -436,7 +437,7 @@ class _Day120ScreenState extends State<Day120Screen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Lottie.asset(
+                  ThemedLottie.asset(
                     'assets/lottie/loading.json',
                     width: 200,
                     height: 200,
@@ -544,39 +545,12 @@ class _Day120ScreenState extends State<Day120Screen>
                                       vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: isCompleted
-                                            ? [
-                                                const Color(0xFF6ABAA6),
-                                                const Color(0xFF6ABAA6).withOpacity(0.7),
-                                              ]
-                                            : canAccess
-                                                ? [
-                                                    cs.primary,
-                                                    cs.primary.withOpacity(0.7),
-                                                  ]
-                                                : [
-                                                    Colors.grey,
-                                                    Colors.grey
-                                                        .withOpacity(0.7),
-                                                  ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
+                                      // 지금 읽을 날만 버건디, 완료/잠김은 조용한 면
+                                        color: !isCompleted && canAccess
+                                            ? cs.primary
+                                            : cs.surfaceContainerHighest,
                                       borderRadius: BorderRadius.circular(8),
-                                      boxShadow: canAccess
-                                          ? [
-                                              BoxShadow(
-                                                color: isCompleted
-                                                    ? const Color(0xFF6ABAA6)
-                                                        .withOpacity(0.3)
-                                                    : cs.primary
-                                                        .withOpacity(0.3),
-                                                blurRadius: 8,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ]
-                                          : [],
+                                      
                                     ),
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
@@ -584,9 +558,11 @@ class _Day120ScreenState extends State<Day120Screen>
                                         dayLabel,
                                         style:
                                             theme.textTheme.bodyLarge?.copyWith(
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: ResponsiveUtils.buttonFontSize(context),
-                                          color: cs.onPrimary,
+                                          color: !isCompleted && canAccess
+                                                ? cs.onPrimary
+                                                : cs.onSurfaceVariant,
                                         ),
                                       ),
                                     ),
@@ -611,9 +587,9 @@ class _Day120ScreenState extends State<Day120Screen>
                                     ),
                                   ),
                                   if (isCompleted)
-                                    const Icon(
-                                      Icons.check_circle,
-                                      color: Color(0xFF6ABAA6),
+                                    Icon(
+                                      Icons.check_circle_outline_rounded,
+                                      color: cs.onSurfaceVariant,
                                       size: 20,
                                     ),
                                 ],
@@ -803,7 +779,7 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
             Text(
               '알림 시간 설정',
               style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
               ),
             ),
@@ -903,19 +879,9 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    cs.primary.withOpacity(0.1),
-                    cs.primaryContainer.withOpacity(0.2),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: cs.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: cs.primary.withOpacity(0.3),
-                  width: 1.5,
-                ),
+                border: Border.all(color: cs.outlineVariant),
               ),
               child: Column(
                 children: [
@@ -931,7 +897,7 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
                     timeString,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       color: cs.primary,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -1035,7 +1001,7 @@ class _NotificationTimeDialogState extends State<_NotificationTimeDialog> {
                     '저장',
                     style: TextStyle(
                       fontSize: ResponsiveUtils.titleFontSize(context),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -1089,8 +1055,8 @@ class _DayButton extends StatelessWidget {
               style: TextStyle(
                 color: isSelected
                     ? cs.onPrimary
-                    : (isSunday ? Colors.red : cs.onSurface.withOpacity(0.6)),
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    : (isSunday ? cs.error : cs.onSurface.withOpacity(0.6)),
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 fontSize: ResponsiveUtils.captionFontSize(context),
               ),
             ),

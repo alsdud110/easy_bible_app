@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../models/bible_data.dart';
@@ -384,9 +385,9 @@ class _VerseListViewState extends State<VerseListView>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
@@ -409,7 +410,7 @@ class _VerseListViewState extends State<VerseListView>
                         '하이라이트',
                         style: TextStyle(
                           fontSize: ResponsiveUtils.titleFontSize(context),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -467,12 +468,12 @@ class _VerseListViewState extends State<VerseListView>
                                 color: color.color,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.surface,
                                   width: 3,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: color.darkColor.withOpacity(0.4),
+                                    color: Colors.black.withOpacity(0.12),
                                     blurRadius: 8,
                                     offset: const Offset(0, 3),
                                   ),
@@ -509,10 +510,10 @@ class _VerseListViewState extends State<VerseListView>
                             width: 64,
                             height: 64,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.surface,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.grey.shade300,
+                                color: Theme.of(context).colorScheme.outline,
                                 width: 3,
                               ),
                               boxShadow: [
@@ -525,7 +526,7 @@ class _VerseListViewState extends State<VerseListView>
                             ),
                             child: Icon(
                               Icons.format_color_reset,
-                              color: Colors.grey.shade700,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                               size: 28,
                             ),
                           ),
@@ -677,7 +678,7 @@ class _VerseListViewState extends State<VerseListView>
                               ),
                             ),
                             child: isSelected
-                                ? const Icon(Icons.check, size: 14, color: Colors.white)
+                                ? Icon(Icons.check, size: 14, color: cs.onPrimary)
                                 : null,
                           ),
                           const SizedBox(width: 16),
@@ -688,7 +689,7 @@ class _VerseListViewState extends State<VerseListView>
                                 name,
                                 style: TextStyle(
                                   fontSize: 15,
-                                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                                   color: isSelected ? cs.primary : cs.onSurface,
                                 ),
                               ),
@@ -706,7 +707,7 @@ class _VerseListViewState extends State<VerseListView>
                             Icon(
                               Icons.workspace_premium_rounded,
                               size: 18,
-                              color: const Color(0xFFF59E0B),
+                              color: QuizColors.star,
                             ),
                           ],
                         ],
@@ -783,7 +784,7 @@ class _VerseListViewState extends State<VerseListView>
                     icon: Icons.copy,
                     label: '복사',
                     onPressed: _copyToClipboard,
-                    color: cs.primary,
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -793,7 +794,7 @@ class _VerseListViewState extends State<VerseListView>
                     icon: Icons.format_color_fill,
                     label: '하이라이트',
                     onPressed: _showHighlightColorPicker,
-                    color: const Color.fromARGB(255, 134, 209, 13),
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -803,7 +804,7 @@ class _VerseListViewState extends State<VerseListView>
                     icon: Icons.bookmark_add_outlined,
                     label: '북마크',
                     onPressed: _addToFavorites,
-                    color: const Color.fromARGB(255, 241, 146, 20),
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -813,7 +814,7 @@ class _VerseListViewState extends State<VerseListView>
                     icon: Icons.share,
                     label: '성경 공유',
                     onPressed: _showSharePreview,
-                    color: const Color.fromARGB(255, 142, 70, 209),
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -921,7 +922,7 @@ class _VerseListViewState extends State<VerseListView>
                       key: ValueKey(fontSize),
                       style: TextStyle(
                         fontSize: ResponsiveUtils.buttonFontSize(context),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color:
                             theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                       ),
@@ -1038,7 +1039,7 @@ class _VerseListViewState extends State<VerseListView>
                                   style: TextStyle(
                                     fontFamily: 'ChosunCentennial',
                                     fontSize: 17,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     color: cs.onSurface,
                                   ),
                                 ),
@@ -1098,7 +1099,7 @@ class _VerseListViewState extends State<VerseListView>
                                         style: TextStyle(
                                           fontFamily: 'ChosunCentennial',
                                           fontWeight: isInRange || isSelected
-                                              ? FontWeight.bold
+                                              ? FontWeight.w600
                                               : FontWeight.w600,
                                           fontSize: isInRange || isSelected
                                               ? fontSize.verseNumberSelectedSize
@@ -1114,7 +1115,7 @@ class _VerseListViewState extends State<VerseListView>
                                           child: Icon(
                                             Icons.star,
                                             size: 12,
-                                            color: Colors.amber[700],
+                                            color: QuizColors.star,
                                           ),
                                         ),
                                     ],
@@ -1124,7 +1125,7 @@ class _VerseListViewState extends State<VerseListView>
                                     style: TextStyle(
                                       fontFamily: 'ChosunCentennial',
                                       fontWeight: isInRange || isSelected
-                                          ? FontWeight.bold
+                                          ? FontWeight.w600
                                           : FontWeight.normal,
                                       fontSize: isInRange || isSelected
                                           ? fontSize.verseTextSelectedSize
@@ -1190,10 +1191,10 @@ class _VerseListViewState extends State<VerseListView>
                                       ? '이전 장'
                                       : 'Previous',
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w700)),
+                                      fontWeight: FontWeight.w600)),
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: theme.colorScheme.primary,
-                                backgroundColor: Colors.white,
+                                backgroundColor: theme.colorScheme.surface,
                                 elevation: 1.5,
                                 shadowColor: Colors.black12,
                                 shape: RoundedRectangleBorder(
@@ -1220,10 +1221,10 @@ class _VerseListViewState extends State<VerseListView>
                               label: Text(
                                   languageProvider.isKorean ? '다음 장' : 'Next',
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w700)),
+                                      fontWeight: FontWeight.w600)),
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: theme.colorScheme.primary,
-                                backgroundColor: Colors.white,
+                                backgroundColor: theme.colorScheme.surface,
                                 elevation: 1.5,
                                 shadowColor: Colors.black12,
                                 shape: RoundedRectangleBorder(

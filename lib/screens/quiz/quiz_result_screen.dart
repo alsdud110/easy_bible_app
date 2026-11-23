@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
@@ -80,7 +81,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                 child: Text(
                   '퀴즈 완료',
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w500,
                     fontSize: ResponsiveUtils.titleFontSize(context),
                   ),
                 ),
@@ -152,20 +153,10 @@ class _QuizResultScreenState extends State<QuizResultScreen>
 
     return Container(
       padding: const EdgeInsets.all(24),
+      // 결과 카드: 화면의 주인공이라 단색 버건디 면 하나 (그라데이션·색 그림자 없음)
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [cs.primary, cs.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: cs.primary.withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        color: cs.primary,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         children: [
@@ -173,29 +164,6 @@ class _QuizResultScreenState extends State<QuizResultScreen>
           Stack(
             alignment: Alignment.center,
             children: [
-              // Glowing background
-              TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(milliseconds: 1200),
-                curve: Curves.easeOut,
-                builder: (context, value, child) {
-                  return Container(
-                    width: 100 * value,
-                    height: 100 * value,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: RadialGradient(
-                        colors: [
-                          Colors.white.withValues(alpha: 0.3 * value),
-                          Colors.white.withValues(alpha: 0.1 * value),
-                          Colors.white.withValues(alpha: 0.0),
-                        ],
-                        stops: const [0.0, 0.5, 1.0],
-                      ),
-                    ),
-                  );
-                },
-              ),
               // Lottie animation
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0.7, end: 1.0),
@@ -207,7 +175,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                     child: child,
                   );
                 },
-                child: Lottie.asset(
+                child: ThemedLottie.asset(
                   lottieAsset,
                   width: 100,
                   height: 100,
@@ -226,7 +194,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                 style: TextStyle(
                   fontSize: ResponsiveUtils.buttonFontSize(context),
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
             ),
@@ -239,11 +207,11 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             builder: (context, value, child) {
               return Text(
                 '$value점',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 48,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: -2,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  letterSpacing: 0,
                 ),
               );
             },
@@ -257,7 +225,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                 style: TextStyle(
                   fontSize: ResponsiveUtils.bodyFontSize(context),
                   fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.85),
                 ),
               ),
             ),
@@ -337,7 +305,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: ResponsiveUtils.buttonFontSize(context),
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: cs.onSurface.withValues(alpha: 0.7),
           height: 1.5,
         ),
@@ -375,9 +343,9 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                   '상세 결과',
                   style: TextStyle(
                     fontSize: ResponsiveUtils.titleFontSize(context),
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w500,
                     color: cs.onSurface,
-                    letterSpacing: -0.5,
+                    letterSpacing: 0,
                   ),
                 ),
               ),
@@ -439,9 +407,9 @@ class _QuizResultScreenState extends State<QuizResultScreen>
                 '난이도별 통계',
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w500,
                   color: cs.onSurface,
-                  letterSpacing: -0.5,
+                  letterSpacing: 0,
                 ),
               ),
             ],
@@ -493,7 +461,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: cs.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -503,8 +471,8 @@ class _QuizResultScreenState extends State<QuizResultScreen>
               '다시 하기',
               style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -0.5,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0,
               ),
             ),
           ),
@@ -548,9 +516,9 @@ class _QuizResultScreenState extends State<QuizResultScreen>
               '퀴즈 홈으로',
               style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
-                letterSpacing: -0.5,
+                letterSpacing: 0,
               ),
             ),
           ),
@@ -604,7 +572,7 @@ class _StatRow extends StatelessWidget {
           value,
           style: TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w500,
             color: color,
           ),
         ),
@@ -658,7 +626,7 @@ class _DifficultyStatRow extends StatelessWidget {
                 difficulty.displayName,
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: cs.onSurface,
                 ),
               ),
@@ -667,7 +635,7 @@ class _DifficultyStatRow extends StatelessWidget {
               '$correct / $total',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w500,
                 color: color,
               ),
             ),

@@ -110,7 +110,7 @@ class _VerseSelectorState extends State<VerseSelector>
                 key: ValueKey(languageProvider.isKorean),
                 style: TextStyle(
                   fontSize: ResponsiveUtils.buttonFontSize(context),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                 ),
               ),

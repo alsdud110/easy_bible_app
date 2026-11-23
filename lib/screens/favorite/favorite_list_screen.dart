@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../providers/favorite_provider.dart';
@@ -63,7 +64,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
+              foregroundColor: Theme.of(context).colorScheme.error,
             ),
             child: const Text('삭제'),
           ),
@@ -97,7 +98,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
+              foregroundColor: Theme.of(context).colorScheme.error,
             ),
             child: const Text('전체 삭제'),
           ),
@@ -247,7 +248,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                           children: [
                             Icon(
                               Icons.star,
-                              color: Colors.amber[700],
+                              color: QuizColors.star,
                               size: 28,
                             ),
                             if (hasMemos)
@@ -274,7 +275,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                                         : '${favorite.memos.length}',
                                     style: TextStyle(
                                       fontSize: 9,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                       color: cs.onPrimary,
                                     ),
                                     textAlign: TextAlign.center,
@@ -290,7 +291,7 @@ class _FavoriteListScreenState extends State<FavoriteListScreen> {
                       favorite.reference,
                       style: TextStyle(
                         fontSize: ResponsiveUtils.bodyFontSize(context),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: cs.onSurface,
                       ),
                     ),

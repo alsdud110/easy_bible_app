@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +7,7 @@ import '../../models/plan_progress.dart';
 import '../../providers/plan_progress_provider.dart';
 import '../../services/notification_service.dart';
 import 'plan_screens.dart';
+import '../../widgets/ribbon_mark.dart';
 
 class PlanStartScreen extends StatefulWidget {
   final PlanType planType;
@@ -236,7 +238,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               // Success Lottie 애니메이션
-              Lottie.asset(
+              ThemedLottie.asset(
                 'assets/lottie/success.json',
                 width: 120,
                 height: 120,
@@ -256,7 +258,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                 '오늘부터 시작합니다!',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: cs.onSurface,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 16),
@@ -289,7 +291,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                     '확인',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -326,7 +328,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
         title: Text(
           '플랜 시작하기',
           style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: cs.onSurface,
           ),
         ),
@@ -349,33 +351,23 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                     final bodyFontSize = screenWidth < 380 ? 14.0 : 16.0;
                     final padding = screenWidth < 380 ? 20.0 : 24.0;
 
-                    return Container(
+                    // 책 표지처럼: 종이색 면 + 명조 제목 + 가름끈
+                    return Stack(
+                      children: [
+                        Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(padding),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            cs.primary,
-                            cs.primary.withOpacity(0.7),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: cs.primary.withOpacity(0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                        color: cs.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: cs.outlineVariant),
                       ),
                       child: Column(
                         children: [
                           Icon(
-                            Icons.auto_stories,
+                            Icons.auto_stories_outlined,
                             size: iconSize,
-                            color: cs.onPrimary,
+                            color: cs.onSurfaceVariant,
                           ),
                           const SizedBox(height: 12),
                           FittedBox(
@@ -383,9 +375,9 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                             child: Text(
                               widget.planType.title,
                               style: TextStyle(
-                                fontSize: titleFontSize,
-                                color: cs.onPrimary,
-                                fontWeight: FontWeight.bold,
+                                fontSize: titleFontSize + 2,
+                                color: cs.onSurface,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -397,13 +389,20 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: bodyFontSize,
-                                color: cs.onPrimary.withOpacity(0.9),
+                                color: cs.onSurfaceVariant,
                                 height: 1.5,
                               ),
                             ),
                           ),
                         ],
                       ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: padding,
+                          child: const RibbonMark(width: 14, height: 36),
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -427,7 +426,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                             '플랜명 (필수사항)',
                             style: TextStyle(
                               fontSize: labelFontSize,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: cs.onSurface,
                             ),
                           ),
@@ -486,7 +485,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                             '알림 시간 (선택사항)',
                             style: TextStyle(
                               fontSize: labelFontSize,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: cs.onSurface,
                             ),
                           ),
@@ -563,12 +562,12 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                             style: ElevatedButton.styleFrom(
                               backgroundColor: cs.primary,
                               foregroundColor: cs.onPrimary,
-                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              elevation: 3,
-                              shadowColor: cs.primary.withOpacity(0.4),
+                              elevation: 0,
+                              shadowColor: Colors.transparent,
                             ),
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
@@ -576,7 +575,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                                 '시작하기',
                                 style: TextStyle(
                                   fontSize: buttonFontSize,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
@@ -738,7 +737,7 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
                       Text(
                         '알림 시간 설정',
                         style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: cs.onSurface,
                         ),
                       ),
@@ -845,19 +844,9 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    cs.primary.withOpacity(0.1),
-                    cs.primaryContainer.withOpacity(0.2),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: cs.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: cs.primary.withOpacity(0.3),
-                  width: 1.5,
-                ),
+                border: Border.all(color: cs.outlineVariant),
               ),
               child: Column(
                 children: [
@@ -873,7 +862,7 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
                     timeString,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       color: cs.primary,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -978,7 +967,7 @@ class _CustomTimePickerDialogState extends State<_CustomTimePickerDialog> {
                   '저장',
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -1023,18 +1012,8 @@ class _DayButton extends StatelessWidget {
             color: isSelected ? cs.primary : cs.surfaceContainerHighest,
             shape: BoxShape.circle,
             border: Border.all(
-              color: isSelected ? cs.primary : cs.outline.withOpacity(0.3),
-              width: isSelected ? 2 : 1,
+              color: isSelected ? cs.primary : cs.outlineVariant,
             ),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: cs.primary.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : [],
           ),
           child: Center(
             child: Text(
@@ -1042,8 +1021,8 @@ class _DayButton extends StatelessWidget {
               style: TextStyle(
                 color: isSelected
                     ? cs.onPrimary
-                    : (isSunday ? Colors.red : cs.onSurface.withOpacity(0.6)),
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    : (isSunday ? cs.error : cs.onSurfaceVariant),
+                fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
                 fontSize: 13,
               ),
             ),
@@ -1106,7 +1085,7 @@ class _TimePickerColumn extends StatelessWidget {
                     style: TextStyle(
                       fontSize: isSelected ? 20 : 16,
                       fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                       color: isSelected
                           ? cs.primary
                           : cs.onSurface.withOpacity(0.5),

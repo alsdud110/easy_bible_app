@@ -1,3 +1,4 @@
+import 'themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,7 +22,7 @@ class LottieLoading extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset(
+          ThemedLottie.asset(
             'assets/lottie/loading.json',
             width: size,
             height: size,

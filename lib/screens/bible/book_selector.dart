@@ -571,7 +571,7 @@ class _BookSelectorState extends State<BookSelector>
                 key: ValueKey(languageProvider.isKorean),
                 style: TextStyle(
                   fontSize: ResponsiveUtils.buttonFontSize(context),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: theme.appBarTheme.iconTheme?.color ??
                       theme.colorScheme.onSurface,
                 ),
@@ -1190,7 +1190,7 @@ class _BookSelectorState extends State<BookSelector>
           child: Text(
             result.reference,
             style: TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               fontSize: ResponsiveUtils.bodyFontSize(context),
               color: cs.primary,
               letterSpacing: 0.2,
@@ -1272,7 +1272,7 @@ class _BookSelectorState extends State<BookSelector>
           fontSize: 15,
           height: 1.5,
           backgroundColor: highlightColor,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: textColor,
         ),
       ));
@@ -1369,7 +1369,7 @@ class _BookSelectorState extends State<BookSelector>
                 label,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.captionFontSize(context),
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   color:
                       isSelected ? cs.onPrimary : cs.onSurface.withOpacity(0.6),
                 ),
@@ -1425,7 +1425,7 @@ class _SectionTitle extends StatelessWidget {
           child: Text(
             title,
             style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               fontSize: ResponsiveUtils.bodyFontSize(context),
               letterSpacing: 1.2,
               color: theme.colorScheme.primary,

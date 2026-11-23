@@ -77,7 +77,7 @@ class BreadcrumbBar extends StatelessWidget {
                                   ? cs.primary
                                   : cs.onSurface.withOpacity(0.7),
                               fontWeight: item.isActive
-                                  ? FontWeight.w700
+                                  ? FontWeight.w600
                                   : FontWeight.w600,
                               fontSize: 13,
                             ),
@@ -114,8 +114,8 @@ class BreadcrumbBar extends StatelessWidget {
                       style: TextStyle(
                         color: cs.primary,
                         fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.3,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0,
                       ),
                     ),
                     const SizedBox(width: 3),

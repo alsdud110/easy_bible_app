@@ -104,7 +104,7 @@ class _ChapterSelectorState extends State<ChapterSelector>
                 key: ValueKey(languageProvider.isKorean),
                 style: TextStyle(
                   fontSize: ResponsiveUtils.buttonFontSize(context),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: theme.appBarTheme.iconTheme?.color ?? cs.onSurface,
                 ),
               ),

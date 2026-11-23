@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
@@ -147,7 +148,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Lottie.asset(
+                      ThemedLottie.asset(
                         'assets/lottie/pray.json',
                         width: 70,
                         height: 70,
@@ -163,7 +164,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                               .textTheme
                               .headlineMedium
                               ?.copyWith(
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 fontSize:
                                     ResponsiveUtils.titleFontSize(context),
                                 color: Theme.of(context)
@@ -255,7 +256,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Theme.of(context).colorScheme.primary,
-                            foregroundColor: Colors.white,
+                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
                             padding: const EdgeInsets.symmetric(
                                 vertical: 11, horizontal: 36),
                             shape: RoundedRectangleBorder(
@@ -364,7 +365,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                   .textTheme
                                   .titleLarge
                                   ?.copyWith(
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w500,
                                     fontSize:
                                         ResponsiveUtils.buttonFontSize(context),
                                   ),
@@ -477,7 +478,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .primary,
-                                                  fontWeight: FontWeight.w700,
+                                                  fontWeight: FontWeight.w600,
                                                   fontFamily:
                                                       'ChosunCentennial',
                                                 ),
@@ -690,7 +691,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                           message,
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     fontSize:
                                         ResponsiveUtils.buttonFontSize(context),
                                   ),
@@ -817,7 +818,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                               fontSize:
                                                   ResponsiveUtils.bodyFontSize(
                                                       context),
-                                              fontWeight: FontWeight.w800)),
+                                              fontWeight: FontWeight.w500)),
                                 ),
                                 const Spacer(),
                               ],
@@ -879,7 +880,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                           fontSize:
                                               ResponsiveUtils.captionFontSize(
                                                   context),
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w600,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface
@@ -957,7 +958,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                               Icon(
                                                 layout.icon,
                                                 color: isSelected
-                                                    ? Colors.white
+                                                    ? Theme.of(context).colorScheme.onPrimary
                                                     : Theme.of(context)
                                                         .colorScheme
                                                         .onSurface
@@ -974,9 +975,9 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                             .captionFontSize(
                                                                 context) -
                                                         1,
-                                                    fontWeight: FontWeight.w700,
+                                                    fontWeight: FontWeight.w600,
                                                     color: isSelected
-                                                        ? Colors.white
+                                                        ? Theme.of(context).colorScheme.onPrimary
                                                         : Theme.of(context)
                                                             .colorScheme
                                                             .onSurface
@@ -1031,7 +1032,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    Lottie.asset(
+                                                    ThemedLottie.asset(
                                                       'assets/lottie/loading.json',
                                                       width: 80,
                                                       height: 80,
@@ -1085,7 +1086,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                           backgroundColor: Theme.of(context)
                                               .colorScheme
                                               .primary,
-                                          foregroundColor: Colors.white,
+                                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 12),
                                         ),
@@ -1116,7 +1117,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
-                                                      Lottie.asset(
+                                                      ThemedLottie.asset(
                                                         'assets/lottie/loading.json',
                                                         width: 80,
                                                         height: 80,
@@ -1205,7 +1206,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                             backgroundColor: Theme.of(context)
                                                 .colorScheme
                                                 .secondary,
-                                            foregroundColor: Colors.white,
+                                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 12),
                                           ),
@@ -1433,20 +1434,15 @@ class _TodayVerseEmptyCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              cs.primary.withValues(alpha: 0.035),
-              cs.surface.withValues(alpha: 0.98)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
+          color: cs.surface,
+          border: Border.all(color: cs.outlineVariant),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
+            // 종이 한 장이 놓인 정도의 무채색 그림자
             BoxShadow(
-              color: cs.primary.withValues(alpha: 0.43),
-              blurRadius: 9,
-              offset: const Offset(0, 3),
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
             ),
           ],
         ),
@@ -1463,7 +1459,7 @@ class _TodayVerseEmptyCard extends StatelessWidget {
                 maxHeight: double.infinity,
                 child: Transform.scale(
                   scale: 3.0,
-                  child: Lottie.asset(
+                  child: ThemedLottie.asset(
                     'assets/lottie/loading.json',
                     width: 34,
                     height: 34,
@@ -1479,7 +1475,7 @@ class _TodayVerseEmptyCard extends StatelessWidget {
               child: Text(
                 '오늘의 구절 뽑기',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     fontSize: ResponsiveUtils.buttonFontSize(context),
                     color: cs.primary),
               ),
@@ -1533,7 +1529,7 @@ class _TodayVerseShowCard extends StatelessWidget {
                 ref ?? "",
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: cs.primary,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       fontFamily: 'ChosunCentennial',
                     ),
               ),

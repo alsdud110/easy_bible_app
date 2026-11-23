@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -86,7 +87,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
       alignment: Alignment.bottomCenter,
       style: ToastificationStyle.flat,
       backgroundColor: Colors.black87,
-      foregroundColor: Colors.white,
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
       showProgressBar: false,
     );
   }
@@ -104,7 +105,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
             child: const Text('삭제'),
           ),
         ],
@@ -160,7 +161,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
             child: const Text('삭제'),
           ),
         ],
@@ -279,7 +280,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
             ),
             child: Row(
               children: [
-                Icon(Icons.star, color: Colors.amber[700], size: 20),
+                Icon(Icons.star, color: QuizColors.star, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -363,7 +364,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                                 top: -6,
                                 right: -10,
                                 child: Icon(Icons.star,
-                                    size: 12, color: Colors.amber[700]),
+                                    size: 12, color: QuizColors.star),
                               ),
                             ],
                           ),
@@ -398,8 +399,9 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                   top: -4,
                   child: Container(
                     padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
+                    decoration: BoxDecoration(
+                      // 메모 개수 배지: 오류가 아니므로 강조색(버건디)
+                      color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
                     constraints: const BoxConstraints(
@@ -411,10 +413,10 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
                       alignment: Alignment.center,
                       child: Text(
                         '${currentFavorite.memos.length}',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: 10,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -530,7 +532,7 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                         '메모',
                         style: TextStyle(
                           fontSize: ResponsiveUtils.titleFontSize(context),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: cs.onSurface,
                         ),
                       ),

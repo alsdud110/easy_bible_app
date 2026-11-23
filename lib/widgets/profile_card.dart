@@ -54,7 +54,7 @@ class _ProfileCardState extends State<ProfileCard>
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: cs.primary.withOpacity(0.22 + (_opacityAnim.value - 0.85)),
+              color: Colors.black.withOpacity(0.06),
               blurRadius: 14,
               offset: const Offset(3, 4),
             ),
@@ -76,7 +76,7 @@ class _ProfileCardState extends State<ProfileCard>
                   Text(
                     widget.empNm,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w500,
                       fontSize: 18.5,
                       color: cs.onSurface,
                     ),

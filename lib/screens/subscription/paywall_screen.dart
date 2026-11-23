@@ -155,12 +155,12 @@ class _PaywallScreenState extends State<PaywallScreen>
                       onPressed:
                           _purchasing ? null : () => _handlePurchase(provider),
                       child: _purchasing
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 22,
                               height: 22,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2.4,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
                             )
                           : const Text('구독하기'),
@@ -211,34 +211,28 @@ class _HeroBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isDark
-              ? [DarkColors.primary, DarkColors.secondary]
-              : [LightColors.primary, LightColors.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
+        color: isDark ? DarkColors.primary : LightColors.primary,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.workspace_premium_rounded,
-              color: Colors.white, size: 40),
+          Icon(Icons.workspace_premium_rounded,
+              color: Theme.of(context).colorScheme.onPrimary, size: 40),
           const SizedBox(height: 12),
           Text(
             'All in Bible 프리미엄',
             style: theme.textTheme.headlineSmall?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-              letterSpacing: -0.5,
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             '더 깊이 있는 말씀 생활을 위한 구독',
             style: theme.textTheme.bodyMedium
-                ?.copyWith(color: Colors.white.withValues(alpha: 0.9)),
+                ?.copyWith(color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.85)),
           ),
         ],
       ),
@@ -273,9 +267,9 @@ class _SectionTitle extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w500,
             color: cs.onSurface,
-            letterSpacing: -0.5,
+            letterSpacing: 0,
           ),
         ),
       ],
@@ -329,7 +323,7 @@ class _BenefitTile extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 15),
+                        ?.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -427,12 +421,12 @@ class _PlanCard extends StatelessWidget {
                     color: cs.primary,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
+                  child: Text(
                     '추천',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 11,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -440,7 +434,7 @@ class _PlanCard extends StatelessWidget {
                 plan.title,
                 style: TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: selected ? cs.primary : cs.onSurface,
                 ),
               ),
@@ -451,7 +445,7 @@ class _PlanCard extends StatelessWidget {
                   priceText,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w500,
                     color: selected ? cs.primary : cs.onSurface,
                   ),
                 ),
@@ -500,7 +494,7 @@ class _AlreadyPremiumView extends StatelessWidget {
             Text(
               '이미 프리미엄을 이용 중이에요',
               style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w800),
+                  ?.copyWith(fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),

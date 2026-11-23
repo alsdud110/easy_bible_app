@@ -13,11 +13,11 @@ class BeautifulBibleCard extends StatelessWidget {
     required this.verse,
     required this.reference,
     this.theme = const BibleCardTheme(
-      name: '보라 핑크',
+      name: '가름끈',
       gradientColors: [
-        Color(0xFF6B4CE6),
-        Color(0xFF9D50E8),
-        Color(0xFFE65C9A),
+        Color(0xFF5E1D1A),
+        Color(0xFF8C2F2B),
+        Color(0xFFB5574F),
       ],
       gradientStops: [0.0, 0.5, 1.0],
     ),
@@ -29,7 +29,7 @@ class BeautifulBibleCard extends StatelessWidget {
     if (forceWhiteText == null) {
       return theme.textColor; // 테마 기본값
     }
-    return forceWhiteText! ? Colors.white : const Color(0xFF1F2937);
+    return forceWhiteText! ? Colors.white : const Color(0xFF1F1B16);
   }
 
   // 텍스트 길이에 따라 적절한 폰트 크기 계산
@@ -118,7 +118,7 @@ class BeautifulBibleCard extends StatelessWidget {
                   '${DateTime.now().year}.${DateTime.now().month.toString().padLeft(2, '0')}.${DateTime.now().day.toString().padLeft(2, '0')}',
                   style: TextStyle(
                     fontSize: 36,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w500,
                     color: _textColor.withValues(alpha: 0.95),
                     letterSpacing: 3,
                     fontFamily: 'Pretendard',
@@ -147,7 +147,7 @@ class BeautifulBibleCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: _calculateFontSize(verse.length),
                       height: _calculateLineHeight(verse.length),
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: _textColor,
                       fontFamily: 'ChosunCentennial',
                       letterSpacing: 0.5,
@@ -173,7 +173,7 @@ class BeautifulBibleCard extends StatelessWidget {
                     reference,
                     style: TextStyle(
                       fontSize: 28,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w500,
                       color: _textColor,
                       fontFamily: 'ChosunCentennial',
                       letterSpacing: 1.5,
@@ -201,7 +201,7 @@ class BeautifulBibleCard extends StatelessWidget {
                   '올인바이블 (All in Bible)',
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w500,
                     color: _textColor.withValues(alpha: 0.95),
                     fontFamily: 'Pretendard',
                     letterSpacing: 1,
@@ -234,7 +234,7 @@ class BeautifulBibleCard extends StatelessWidget {
                     '오늘의 말씀',
                     style: TextStyle(
                       fontSize: 22,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: _textColor.withValues(alpha: 0.95),
                       fontFamily: 'Pretendard',
                     ),

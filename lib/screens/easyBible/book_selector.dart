@@ -131,7 +131,7 @@ class _BookSelectorState extends State<BookSelector> {
               color: selected ? cs.onPrimary : cs.primary,
               fontWeight: FontWeight.w600,
               fontSize: ResponsiveUtils.bodyFontSize(context),
-              letterSpacing: -0.3,
+              letterSpacing: 0,
             ),
           ),
         ),
@@ -167,7 +167,7 @@ class _SectionTitle extends StatelessWidget {
         child: Text(
           title,
           style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: ResponsiveUtils.bodyFontSize(context),
             letterSpacing: 1.2,
             color: theme.colorScheme.primary,

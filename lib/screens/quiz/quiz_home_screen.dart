@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
@@ -55,7 +56,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
         title: const Text(
           '성경 퀴즈',
           style: TextStyle(
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w500,
             fontSize: 22,
           ),
         ),
@@ -121,7 +122,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
       children: [
         Transform.translate(
           offset: const Offset(0, -16),
-          child: Lottie.asset(
+          child: ThemedLottie.asset(
             'assets/lottie/bible_book.json',
             width: lottieSize,
             height: lottieSize,
@@ -139,9 +140,9 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
                   '성경 퀴즈',
                   style: TextStyle(
                     fontSize: titleFontSize,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w500,
                     color: cs.onSurface,
-                    letterSpacing: -0.5,
+                    letterSpacing: 0,
                   ),
                 ),
               ),
@@ -190,9 +191,9 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
               title,
               style: TextStyle(
                 fontSize: fontSize,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w500,
                 color: cs.onSurface,
-                letterSpacing: -0.5,
+                letterSpacing: 0,
               ),
             ),
           ),
@@ -284,36 +285,18 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
           value,
         )!;
 
-        final gradientEndColor = Color.lerp(
-          cs.surfaceContainerHighest,
-          cs.secondary,
-          value,
-        )!;
-
+        // 단색 버튼. 켜질 때 면 → 버건디로 색만 바뀐다 (그라데이션·색 그림자 없음)
         return Container(
-          height: 50,
+          height: 48,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [backgroundColor, gradientEndColor],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: value > 0
-                ? [
-                    BoxShadow(
-                      color: cs.primary.withValues(alpha: 0.3 * value),
-                      blurRadius: 16 * value,
-                      offset: Offset(0, 8 * value),
-                    ),
-                  ]
-                : null,
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: isEnabled ? () => _startQuiz(context) : null,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(10),
               child: Center(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
@@ -321,11 +304,11 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
                     '퀴즈 시작하기',
                     style: TextStyle(
                       fontSize: fontSize,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w500,
                       color: isEnabled
-                          ? Colors.white
+                          ? cs.onPrimary
                           : cs.onSurface.withValues(alpha: 0.35),
-                      letterSpacing: -0.5,
+                      letterSpacing: 0,
                     ),
                   ),
                 ),
@@ -357,7 +340,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Lottie.asset(
+                ThemedLottie.asset(
                   'assets/lottie/loading.json',
                   width: 100,
                   height: 100,
@@ -403,7 +386,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('퀴즈 로드 실패: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -555,7 +538,7 @@ class _QuizTypeCard extends StatelessWidget {
                   type.displayName,
                   style: TextStyle(
                     fontSize: textFontSize,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: cs.onSurface,
                   ),
                 ),

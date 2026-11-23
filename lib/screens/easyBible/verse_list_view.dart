@@ -123,7 +123,7 @@ class _VerseListViewState extends State<VerseListView> {
           final isSelected = verseNum == _selectedVerse;
           return Container(
             key: idx == 0 ? _itemKey : null,
-            color: isSelected ? Colors.yellow.shade100 : null,
+            color: isSelected ? Theme.of(context).colorScheme.primaryContainer : null,
             child: ListTile(
               onTap: () {
                 setState(() {
@@ -136,7 +136,7 @@ class _VerseListViewState extends State<VerseListView> {
                 child: Text(
                   '$verseNum',
                   style: TextStyle(
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w600,
                     fontSize: ResponsiveUtils.bodyFontSize(context),
                     color:
                         isSelected ? Theme.of(context).colorScheme.primary : null,
@@ -146,7 +146,7 @@ class _VerseListViewState extends State<VerseListView> {
               title: Text(
                 text,
                 style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   fontSize: ResponsiveUtils.bodyFontSize(context),
                   color:
                       isSelected ? Theme.of(context).colorScheme.primary : null,
@@ -154,7 +154,7 @@ class _VerseListViewState extends State<VerseListView> {
               ),
               dense: true,
               selected: isSelected,
-              selectedTileColor: Colors.yellow.shade50,
+              selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
             ),
           );
         },

@@ -209,7 +209,7 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 16, horizontal: 16),
                                   textStyle: theme.textTheme.bodyLarge?.copyWith(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -223,7 +223,7 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
                                         titles[i],
                                         style:
                                             theme.textTheme.bodyLarge?.copyWith(
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 16,
                                           color: cs.primary,
                                         ),

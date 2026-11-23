@@ -16,29 +16,30 @@ class BibleCardTheme {
 
   // 텍스트 색상 반환
   Color get textColor => useDarkText
-      ? const Color(0xFF1F2937) // 다크 그레이
+      ? const Color(0xFF1F1B16) // 다크 그레이
       : Colors.white;
 
-  // 프리셋 테마들 - 2025 트렌디 컬러
+  // 프리셋 테마들. 선택은 인덱스로 하므로 개수와 순서는 유지한다.
+  // 파랑/보라 계열은 앱 팔레트(종이·가죽·가름끈)에 맞는 테마로 교체
   static const List<BibleCardTheme> presets = [
-    // 1. 퍼플 드림 (Purple Dream)
+    // 1. 가름끈 (성경책의 붉은 끈)
     BibleCardTheme(
-      name: '퍼플 드림',
+      name: '가름끈',
       gradientColors: [
-        Color(0xFF667EEA), // 소프트 퍼플
-        Color(0xFF764BA2), // 딥 퍼플
-        Color(0xFFF093FB), // 핑크 퍼플
+        Color(0xFF5E1D1A), // 짙은 버건디
+        Color(0xFF8C2F2B), // 가름끈 버건디
+        Color(0xFFB5574F), // 바랜 버건디
       ],
       gradientStops: [0.0, 0.5, 1.0],
     ),
 
-    // 2. 오션 미스트 (Ocean Mist)
+    // 2. 새벽 안개
     BibleCardTheme(
-      name: '오션 미스트',
+      name: '새벽 안개',
       gradientColors: [
-        Color(0xFF4E54C8), // 딥 블루
-        Color(0xFF8F94FB), // 소프트 블루
-        Color(0xFFA8EDEA), // 민트 블루
+        Color(0xFF3A3632), // 먹색
+        Color(0xFF6B635A), // 젖은 돌
+        Color(0xFFA89F92), // 안개
       ],
       gradientStops: [0.0, 0.5, 1.0],
     ),
@@ -77,24 +78,25 @@ class BibleCardTheme {
       gradientStops: [0.0, 0.5, 1.0],
     ),
 
-    // 6. 아쿠아 브리즈 (Aqua Breeze)
+    // 6. 양피지
     BibleCardTheme(
-      name: '아쿠아 브리즈',
+      name: '양피지',
       gradientColors: [
-        Color(0xFF2AFADF), // 밝은 시안
-        Color(0xFF4C83FF), // 오션 블루
-        Color(0xFF7B68EE), // 미디엄 슬레이트 블루
+        Color(0xFFE9DCBF), // 양피지
+        Color(0xFFE2CFA9), // 바랜 양피지
+        Color(0xFFF5EDD9), // 미색
       ],
       gradientStops: [0.0, 0.5, 1.0],
+      useDarkText: true, // 밝은 배경 - 어두운 텍스트
     ),
 
-    // 7. 라벤더 블러쉬 (Lavender Blush)
+    // 7. 가죽 표지
     BibleCardTheme(
-      name: '라벤더 블러쉬',
+      name: '가죽 표지',
       gradientColors: [
-        Color(0xFFB06AB3), // 라벤더
-        Color(0xFF4568DC), // 퍼플 블루
-        Color(0xFFD4A5FF), // 라일락
+        Color(0xFF3B2A20), // 짙은 가죽
+        Color(0xFF6B4A35), // 가죽
+        Color(0xFF9C7556), // 닳은 가죽
       ],
       gradientStops: [0.0, 0.5, 1.0],
     ),
@@ -111,16 +113,15 @@ class BibleCardTheme {
       useDarkText: true, // 밝은 배경 - 어두운 텍스트
     ),
 
-    // 9. 미스틱 민트 (Mystic Mint)
+    // 9. 올리브 동산
     BibleCardTheme(
-      name: '미스틱 민트',
+      name: '올리브 동산',
       gradientColors: [
-        Color(0xFF00C9FF), // 스카이 블루
-        Color(0xFF92FE9D), // 민트 그린
-        Color(0xFFB4FFC9), // 라이트 민트
+        Color(0xFF3E5530), // 짙은 올리브
+        Color(0xFF5F7A45), // 올리브
+        Color(0xFF8FA370), // 마른 잎
       ],
       gradientStops: [0.0, 0.5, 1.0],
-      useDarkText: true, // 밝은 배경 - 어두운 텍스트
     ),
 
     // 10. 체리 블라썸 (Cherry Blossom)
@@ -135,13 +136,13 @@ class BibleCardTheme {
       useDarkText: true, // 밝은 배경 - 어두운 텍스트
     ),
 
-    // 11. 트로피칼 파라다이스 (Tropical Paradise)
+    // 11. 밤의 등불
     BibleCardTheme(
-      name: '트로피칼 파라다이스',
+      name: '밤의 등불',
       gradientColors: [
-        Color(0xFF09203F), // 딥 네이비
-        Color(0xFF537895), // 슬레이트 블루
-        Color(0xFF96DEDA), // 아쿠아
+        Color(0xFF161513), // 밤
+        Color(0xFF2B2622), // 그늘
+        Color(0xFF6E4A2E), // 등잔 불빛
       ],
       gradientStops: [0.0, 0.5, 1.0],
     ),
@@ -181,13 +182,13 @@ class BibleCardTheme {
       gradientStops: [0.0, 0.5, 1.0],
     ),
 
-    // 15. 베리 소르베 (Berry Sorbet)
+    // 15. 포도원
     BibleCardTheme(
-      name: '베리 소르베',
+      name: '포도원',
       gradientColors: [
-        Color(0xFFD38312), // 버건디 골드
-        Color(0xFFA83279), // 베리 퍼플
-        Color(0xFFFFB6B9), // 라이트 베리
+        Color(0xFF5A1F2B), // 포도주
+        Color(0xFF7E2E3C), // 익은 포도
+        Color(0xFFB8707A), // 바랜 포도
       ],
       gradientStops: [0.0, 0.5, 1.0],
     ),

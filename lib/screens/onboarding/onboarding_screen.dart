@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description: '한글/영어 성경을 자유롭게 읽고\n성경 구절 빠른 검색과 단어 검색을 활용하세요',
       lottieAsset: 'assets/lottie/bible_book.json',
       icon: Icons.menu_book_rounded,
-      color: const Color(0xFF6366F1),
       lottieSize: 260,
     ),
     OnboardingPage(
@@ -36,7 +36,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description: '60일부터 365일까지, 나에게 맞는 속도로\n매일 꾸준히 성경을 읽어 보세요',
       lottieAsset: 'assets/lottie/calender.json',
       icon: Icons.calendar_month_rounded,
-      color: const Color(0xFF8B5CF6),
       lottieSize: 200,
     ),
     OnboardingPage(
@@ -44,7 +43,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description: '매일 새로운 성경 구절을 받아보고\n나만의 말씀 카드를 만들어 공유하세요',
       lottieAsset: 'assets/lottie/Microsoft Designer.json',
       icon: Icons.auto_awesome_rounded,
-      color: const Color.fromARGB(212, 131, 32, 224),
       lottieSize: 200,
     ),
     OnboardingPage(
@@ -52,7 +50,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description: '마음에 드는 구절을 북마크하고\n나만의 말씀 묵상을 기록해보세요',
       lottieAsset: 'assets/lottie/note.json',
       icon: Icons.edit_note_rounded,
-      color: const Color(0xFF10B981),
     ),
   ];
 
@@ -132,9 +129,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       'All in Bible',
                       style: GoogleFonts.dancingScript(
                         color: theme.colorScheme.onSurface,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w500,
                         fontSize: ResponsiveUtils.fontSize(context, 26),
-                        letterSpacing: -0.5,
+                        letterSpacing: 0,
                       ),
                     ),
                   ),
@@ -204,30 +201,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: double.infinity,
-                height: 56,
+                height: 52,
+                // 모든 페이지에서 같은 주 버튼(버건디). 페이지마다 색을 바꾸지 않는다
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      _pages[_currentPage].color,
-                      _pages[_currentPage].color.withValues(alpha: 0.8),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _pages[_currentPage].color.withValues(alpha: 0.3),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: _nextPage,
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(10),
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +223,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               style: TextStyle(
                                 fontSize: ResponsiveUtils.buttonFontSize(context),
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: theme.colorScheme.onPrimary,
                               ),
                             ),
                           ),
@@ -248,7 +232,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             _currentPage < _pages.length - 1
                                 ? Icons.arrow_forward_rounded
                                 : Icons.check_rounded,
-                            color: Colors.white,
+                            color: theme.colorScheme.onPrimary,
                             size: 20,
                           ),
                         ],
@@ -309,7 +293,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           width: 260,
                           height: 260,
                           child: Center(
-                            child: Lottie.asset(
+                            child: ThemedLottie.asset(
                               page.lottieAsset!,
                               width: page.lottieSize ?? 240,
                               height: page.lottieSize ?? 240,
@@ -321,20 +305,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           width: 160,
                           height: 160,
                           decoration: BoxDecoration(
-                            color: page.color.withValues(alpha: 0.1),
+                            color: theme.colorScheme.surfaceContainerHighest,
                             shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: page.color.withValues(alpha: 0.3),
-                                blurRadius: 30,
-                                spreadRadius: 5,
-                              ),
-                            ],
                           ),
                           child: Icon(
                             page.icon,
                             size: 80,
-                            color: page.color,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                 ),
@@ -360,7 +337,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     child: Text(
                       page.title,
                       style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontSize: ResponsiveUtils.fontSize(context, 28),
                         color: theme.colorScheme.onSurface,
                       ),
@@ -412,7 +389,7 @@ class OnboardingPage {
   final String description;
   final String? lottieAsset;
   final IconData? icon;
-  final Color color;
+  final Color? color; // 사용 안 함 (페이지별 색 제거)
   final double? lottieSize;
 
   OnboardingPage({
@@ -420,7 +397,7 @@ class OnboardingPage {
     required this.description,
     this.lottieAsset,
     this.icon,
-    required this.color,
+    this.color,
     this.lottieSize,
   });
 }

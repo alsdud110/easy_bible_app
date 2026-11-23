@@ -1,3 +1,4 @@
+import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
@@ -151,7 +152,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               child: Text(
                 '${provider.currentQuestionIndex + 1} / ${provider.totalQuestions}',
                 style: TextStyle(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w500,
                   fontSize: ResponsiveUtils.appBarTitleFontSize(context),
                 ),
               ),
@@ -238,9 +239,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         widthFactor: progress,
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [cs.primary, cs.secondary],
-            ),
+            color: cs.primary,
           ),
         ),
       ),
@@ -287,7 +286,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   difficulty.displayName,
                   style: TextStyle(
                     fontSize: ResponsiveUtils.captionFontSize(context),
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: color,
                   ),
                 ),
@@ -327,7 +326,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                     'Q',
                     style: TextStyle(
                       fontSize: ResponsiveUtils.bodyFontSize(context),
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w500,
                       color: cs.onPrimaryContainer,
                     ),
                   ),
@@ -342,10 +341,10 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               question.question,
               style: TextStyle(
                 fontSize: ResponsiveUtils.buttonFontSize(context),
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: cs.onSurface,
                 height: 1.5,
-                letterSpacing: -0.3,
+                letterSpacing: 0,
               ),
             ),
           ),
@@ -453,7 +452,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           if (isCorrect)
             Positioned(
               top: -25,
-              child: Lottie.asset(
+              child: ThemedLottie.asset(
                 'assets/lottie/sparkle.json',
                 width: 70,
                 height: 70,
@@ -493,7 +492,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                         isCorrect ? '정답이에요!' : '아쉬워요!',
                         style: TextStyle(
                           fontSize: ResponsiveUtils.buttonFontSize(context),
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w500,
                           color: isCorrect
                               ? QuizColors.correct
                               : QuizColors.incorrect,
@@ -530,7 +529,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                                   '정답',
                                   style: TextStyle(
                                     fontSize: ResponsiveUtils.captionFontSize(context),
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w500,
                                     color: QuizColors.correct,
                                   ),
                                 ),
@@ -577,7 +576,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                             question.reference!,
                             style: TextStyle(
                               fontSize: ResponsiveUtils.captionFontSize(context),
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: cs.primary,
                             ),
                           ),
@@ -637,7 +636,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
             onPressed: () => _handleNext(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: cs.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
@@ -650,8 +649,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                 isLastQuestion ? '결과 보기' : '다음 문제',
                 style: TextStyle(
                   fontSize: ResponsiveUtils.buttonFontSize(context),
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: -0.5,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0,
                 ),
               ),
             ),
@@ -677,7 +676,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
             const SizedBox(width: 12),
             const Text(
               '퀴즈 종료',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -763,7 +762,7 @@ class _OXButton extends StatelessWidget {
                       isTrue ? 'O' : 'X',
                       style: TextStyle(
                         fontSize: 32,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w500,
                         color: cs.onSurface,
                       ),
                     ),
@@ -861,7 +860,7 @@ class _AnswerButton extends StatelessWidget {
                       label,
                       style: TextStyle(
                         fontSize: ResponsiveUtils.buttonFontSize(context),
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w500,
                         color: textColor,
                       ),
                     ),

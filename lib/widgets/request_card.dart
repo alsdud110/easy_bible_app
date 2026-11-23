@@ -32,7 +32,7 @@ class RequestCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: cs.primary.withOpacity(0.08),
+            color: Colors.black.withOpacity(0.05),
             offset: const Offset(0, 4),
             blurRadius: 12,
           ),

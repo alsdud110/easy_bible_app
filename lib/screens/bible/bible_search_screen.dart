@@ -390,7 +390,7 @@ class _SearchResultTile extends StatelessWidget {
         text: text.substring(index, index + query.length),
         style: TextStyle(
           backgroundColor: highlightColor,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.black87,
         ),
       ));
@@ -416,7 +416,7 @@ class _SearchResultTile extends StatelessWidget {
           child: Text(
             result.reference,
             style: TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               fontSize: ResponsiveUtils.bodyFontSize(context),
               color: cs.primary,
               letterSpacing: 0.2,
@@ -439,7 +439,7 @@ class _SearchResultTile extends StatelessWidget {
               _highlightSearchTerm(
                 result.text,
                 searchQuery,
-                Colors.yellow.withOpacity(0.5),
+                cs.primaryContainer,
               ),
             ],
           ),

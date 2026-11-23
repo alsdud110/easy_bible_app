@@ -1,94 +1,114 @@
 import 'package:flutter/material.dart';
 
-/// 공통 컬러
+// 팔레트 방향: 오래 펼쳐 둔 성경책.
+// 배경·카드·글자는 미색 종이와 먹색 잉크의 따뜻한 무채색 하나로,
+// 강조색은 붉은 가름끈(버건디) 하나만 쓴다. 주요 버튼·선택·진행률에만.
+// 그라데이션, 형광색, 색 그림자는 쓰지 않는다.
+// (unslop by Damir Sokolovsky @heydamir, CC BY 4.0 기준으로 정리)
+
+/// 공통 의미 색 (팔레트 안에 앉도록 채도를 낮춤)
 class CommonColors {
-  static const error = Color(0xFFFF6B6B); // 부드러운 빨강
-  static const success = Color(0xFF51CF66); // 생동감 있는 초록
-  static const info = Color(0xFF4DABF7); // 밝은 파랑
-  static const warning = Color(0xFFFFB84D); // 따뜻한 노랑
+  static const error = Color(0xFFB4433D); // 오류
+  static const success = Color(0xFF4E7F5C); // 완료/정답
+  static const info = Color(0xFF4E7F74); // 안내 (깊은 청록)
+  static const warning = Color(0xFFA8792E); // 주의
   static const transparent = Colors.transparent;
 }
 
-/// 퀴즈 전용 컬러
+/// 퀴즈 의미 색
+/// 정답/오답만 색으로 말하고, 난이도는 작은 점 정도로만 구분한다.
 class QuizColors {
-  static const correct = Color(0xFF10B981); // 정답 (초록색)
-  static const incorrect = Color(0xFFEF4444); // 오답 (빨간색)
-  static const difficultyEasy = Color(0xFF10B981); // 쉬움 (초록색)
-  static const difficultyMedium = Color(0xFF3B82F6); // 보통 (파란색)
-  static const difficultyHard = Color(0xFFEF4444); // 어려움 (빨간색)
-  static const star = Color(0xFFFBBF24); // 별점 (노란색)
+  static const correct = Color(0xFF4E7F5C); // 정답 (세이지 그린)
+  static const incorrect = Color(0xFFB4433D); // 오답 (벽돌 레드)
+  static const difficultyEasy = Color(0xFF6E8B66); // 쉬움
+  static const difficultyMedium = Color(0xFFA8792E); // 보통
+  static const difficultyHard = Color(0xFFB4433D); // 어려움
+  static const star = Color(0xFFC29A45); // 별점 (바랜 금박)
 }
 
-/// 라이트 테마 - 2025 트렌드 (부드러운 베이지 + 바이올렛 포인트)
+/// 라이트 테마: 미색 종이 + 먹색 잉크 + 가름끈 버건디
 class LightColors {
-  // 배경 - 따뜻한 화이트/베이지 톤
-  static const background = Color(0xFFFAF9F6); // 크림 화이트
-  static const surface = Color(0xFFFFFFFF); // 퓨어 화이트
+  // 표면 (종이)
+  static const background = Color(0xFFF7F4EE); // 페이지 배경
+  static const surface = Color(0xFFFDFBF7); // 카드
+  static const raised = Color(0xFFEFE9DF); // 입력칸, 선택된 행
+  static const deepest = Color(0xFFEDE7DC); // 가장 깊은 면
 
-  // 메인 컬러 - 모던한 바이올렛/인디고
-  static const primary = Color(0xFF6366F1); // 인디고 (트렌디!)
-  static const secondary = Color(0xFF8B5CF6); // 바이올렛
-  static const accent = Color(0xFFEC4899); // 핑크 포인트
+  // 강조 (가름끈)
+  static const primary = Color(0xFF8C2F2B); // 버건디. 흰 글자와 대비 약 8:1
+  static const primaryContainer = Color(0xFFF2E3DE); // 버건디를 아주 옅게
+  static const onPrimaryContainer = Color(0xFF5E1D1A);
 
-  // 회색 톤 - 부드러운 그레이
-  static const divider = Color(0xFFF3F4F6);
-  static const card = Color(0xFFFFFFFF);
+  // 보조색은 따로 두지 않고 먹색의 보조 톤으로 조용히
+  static const secondary = Color(0xFF5E554A);
+  static const accent = Color(0xFF8C2F2B);
+
+  // 선
+  static const divider = Color(0xFFE6E0D5); // 헤어라인
+  static const outline = Color(0xFFD8D0C3); // 테두리
+  static const card = Color(0xFFFDFBF7);
 
   static const onPrimary = Colors.white;
   static const onSecondary = Colors.white;
-  static const onBackground = Color(0xFF1F2937);
-  static const onSurface = Color(0xFF111827);
+  static const onBackground = Color(0xFF1F1B16);
+  static const onSurface = Color(0xFF1F1B16);
 
-  // 텍스트 - 부드러운 다크 그레이
-  static const display = Color(0xFF111827); // 거의 블랙
-  static const headline = Color(0xFF1F2937); // 다크 그레이
-  static const body = Color(0xFF374151); // 미디엄 그레이
-  static const bodyMedium = Color(0xFF6B7280); // 그레이
-  static const bodySmall = Color(0xFF9CA3AF); // 라이트 그레이
-  static const label = Color(0xFF4B5563);
-  static const labelSmall = Color(0xFF9CA3AF);
+  // 글자 (먹색 3단계: 본문 / 보조 / 흐림)
+  static const display = Color(0xFF1F1B16);
+  static const headline = Color(0xFF1F1B16);
+  static const body = Color(0xFF2E2923);
+  static const bodyMedium = Color(0xFF5E554A);
+  static const bodySmall = Color(0xFF7B7266);
+  static const label = Color(0xFF5E554A);
+  static const labelSmall = Color(0xFF7B7266);
 
   // UI 요소
-  static const appBar = Color(0xFFFFFFFF);
-  static const cardBorder = Color(0xFFF3F4F6);
-  static const cardSurfaceTint = Colors.white;
-  static const fabFill = Color(0xFF6366F1);
-  static const inputFill = Color(0xFFF9FAFB);
+  static const appBar = Color(0xFFF7F4EE);
+  static const cardBorder = Color(0xFFE6E0D5);
+  static const cardSurfaceTint = Color(0xFFFDFBF7);
+  static const fabFill = Color(0xFF8C2F2B);
+  static const inputFill = Color(0xFFEFE9DF);
 }
 
-/// 다크 테마 - 2025 트렌드 (딥 다크 + 네온 포인트)
+/// 다크 테마: 밤에 켠 스탠드 아래의 책
 class DarkColors {
-  // 배경 - 순수한 다크 그레이 (중립적)
-  static const background = Color(0xFF121212); // Material Design 다크 배경
-  static const surface = Color(0xFF1E1E1E); // 네이비 그레이
+  // 표면
+  static const background = Color(0xFF161513); // 페이지 배경
+  static const surface = Color(0xFF1C1A18); // 카드
+  static const raised = Color(0xFF262421); // 입력칸, 선택된 행
+  static const deepest = Color(0xFF12110F);
 
-  // 메인 컬러 - 생동감 있는 네온 컬러
-  static const primary = Color(0xFF818CF8); // 브라이트 인디고
-  static const secondary = Color(0xFFA78BFA); // 브라이트 바이올렛
-  static const accent = Color(0xFFF472B6); // 네온 핑크
+  // 강조 (가름끈, 어두운 면에서 읽히도록 밝힘)
+  static const primary = Color(0xFFD98A80);
+  static const primaryContainer = Color(0xFF3A2623);
+  static const onPrimaryContainer = Color(0xFFF2D5CF);
 
-  // 회색 톤 - 블루 틴트 제거
-  static const divider = Color(0xFF252525);
-  static const card = Color(0xFF1A1A1A);
+  static const secondary = Color(0xFFAAA398);
+  static const accent = Color(0xFFD98A80);
 
-  static const onPrimary = Color(0xFF121212);
-  static const onSecondary = Color(0xFF121212);
-  static const onBackground = Color(0xFFF9FAFB);
-  static const onSurface = Color(0xFFE5E7EB);
+  // 선
+  static const divider = Color(0xFF2B2926);
+  static const outline = Color(0xFF3A3632);
+  static const card = Color(0xFF1C1A18);
 
-  // 텍스트 - 부드러운 화이트 그레이
-  static const display = Color(0xFFF9FAFB); // 밝은 화이트
-  static const headline = Color(0xFFE5E7EB); // 라이트 그레이
-  static const body = Color(0xFFD1D5DB); // 미디엄 라이트 그레이
-  static const bodyMedium = Color(0xFF9CA3AF); // 그레이
-  static const bodySmall = Color(0xFF6B7280); // 다크 그레이
-  static const label = Color(0xFFD1D5DB);
-  static const labelSmall = Color(0xFF6B7280);
+  static const onPrimary = Color(0xFF1F1310);
+  static const onSecondary = Color(0xFF161513);
+  static const onBackground = Color(0xFFEFE9DE);
+  static const onSurface = Color(0xFFEFE9DE);
+
+  // 글자
+  static const display = Color(0xFFEFE9DE);
+  static const headline = Color(0xFFEFE9DE);
+  static const body = Color(0xFFE2DBCF);
+  static const bodyMedium = Color(0xFFAAA398);
+  static const bodySmall = Color(0xFF8A847A);
+  static const label = Color(0xFFAAA398);
+  static const labelSmall = Color(0xFF8A847A);
 
   // UI 요소
-  static const appBar = Color(0xFF1A1A1A);
-  static const cardBorder = Color(0xFF2C2C2C);
-  static const cardSurfaceTint = Color(0xFF1E1E1E);
-  static const fabFill = Color(0xFF818CF8);
-  static const inputFill = Color(0xFF1E1E1E);
+  static const appBar = Color(0xFF161513);
+  static const cardBorder = Color(0xFF2B2926);
+  static const cardSurfaceTint = Color(0xFF1C1A18);
+  static const fabFill = Color(0xFFD98A80);
+  static const inputFill = Color(0xFF262421);
 }

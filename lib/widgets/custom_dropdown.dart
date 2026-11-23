@@ -71,7 +71,7 @@ class CustomDropdown extends StatelessWidget {
                           e,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: isSelected
-                                ? FontWeight.bold
+                                ? FontWeight.w600
                                 : FontWeight.normal,
                             color: isSelected ? cs.primary : cs.onSurface,
                             fontSize: 17,
