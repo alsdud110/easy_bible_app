@@ -18,6 +18,7 @@ import '../../models/bible_card_layout.dart';
 import '../../models/today_verse_model.dart';
 import '../../services/interstitial_ad_manager.dart';
 import '../../services/verse_history_service.dart';
+import '../../theme/colors.dart';
 import 'package:provider/provider.dart';
 import '../../providers/subscription_provider.dart';
 import '../../utils/responsive_utils.dart';
@@ -1356,7 +1357,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                       left: 8,
                       top: 8,
                       child: IconButton(
-                        icon: Icon(Icons.history_rounded, color: cs.primary),
+                        icon: Icon(Icons.history_rounded, color: _verseInk(context)),
                         tooltip: '오늘의 말씀 히스토리',
                         onPressed: _showHistory,
                         splashRadius: 22,
@@ -1367,7 +1368,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                       right: 8,
                       top: 8,
                       child: IconButton(
-                        icon: Icon(Icons.refresh_rounded, color: cs.primary),
+                        icon: Icon(Icons.refresh_rounded, color: _verseInk(context)),
                         tooltip: '오늘의 구절 다시 뽑기',
                         onPressed: _resetVerse,
                         splashRadius: 22,
@@ -1378,7 +1379,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                       right: 8,
                       bottom: 8,
                       child: IconButton(
-                        icon: Icon(Icons.share_rounded, color: cs.primary),
+                        icon: Icon(Icons.share_rounded, color: _verseInk(context)),
                         tooltip: '성경 카드 공유하기',
                         onPressed: _handleShareButton,
                         splashRadius: 22,
@@ -1393,6 +1394,12 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     );
   }
 }
+
+// 오늘의 말씀 카드 위 글자·아이콘 색 (금박 톤)
+Color _verseInk(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ? CommonColors.gold
+        : CommonColors.goldDeep;
 
 // 오늘의 구절 뽑기 카드
 class _TodayVerseEmptyCard extends StatelessWidget {
@@ -1487,7 +1494,7 @@ class _TodayVerseShowCard extends StatelessWidget {
       key: const ValueKey("verse"),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: cs.primary.withValues(alpha: 0.18),
+        color: CommonColors.gold.withValues(alpha: 0.22),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Padding(
@@ -1498,13 +1505,13 @@ class _TodayVerseShowCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 11),
               decoration: BoxDecoration(
-                color: cs.primary.withValues(alpha: 0.10),
+                color: CommonColors.gold.withValues(alpha: 0.22),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Text(
                 ref ?? "",
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: cs.primary,
+                      color: _verseInk(context),
                       fontWeight: FontWeight.w600,
                       fontFamily: 'ChosunCentennial',
                     ),

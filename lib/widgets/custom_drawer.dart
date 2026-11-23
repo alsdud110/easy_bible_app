@@ -1,4 +1,3 @@
-import 'themed_lottie.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -514,7 +513,7 @@ class _ThemeToggleLottieState extends State<_ThemeToggleLottie>
               SizedBox(
                 width: 48,
                 height: 48,
-                child: ThemedLottie.asset(
+                child: Lottie.asset( // 해·달 원래 색 그대로
                   'assets/lottie/theme_toggler.json',
                   controller: _controller,
                   onLoaded: (composition) {

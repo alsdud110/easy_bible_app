@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 
 /// 앱 팔레트에 맞춰 색을 덮어쓰는 Lottie.
 ///
-/// 에셋 파일은 그대로 두고, 렌더링할 때 파랑~보라 계열 색만
+/// 에셋 파일은 그대로 두고, 렌더링할 때 청록~파랑~보라 계열 색만
 /// 강조색(가름끈 버건디)으로 옮긴다. 밝기도 강조색 쪽으로 모아 그림마다 톤을 맞추되,
 /// 명암은 조금 남긴다. 초록·노랑 등 다른 색과 회색은 그대로.
 class ThemedLottie extends StatelessWidget {
@@ -102,13 +102,14 @@ class ThemedLottie extends StatelessWidget {
     return LottieComposition.fromBytes(utf8.encode(jsonEncode(json)));
   }
 
-  /// 파랑/보라 계열만 강조색으로 옮긴다.
+  /// 청록/파랑/보라 계열만 강조색으로 옮긴다.
   static Color Function(Color) _remapper(Color accent) {
     final target = HSLColor.fromColor(accent);
     return (Color c) {
       final hsl = HSLColor.fromColor(c);
       final isBluePurple =
-          hsl.saturation >= 0.2 && hsl.hue >= 180 && hsl.hue <= 330;
+          hsl.saturation >= 0.2 && hsl.hue >= 160 && hsl.hue <= 330;
+      // 160: reload.json의 청록(176)까지 포함. 초록(~120)은 그대로 둔다.
       if (!isBluePurple) return c;
       // 진한~중간 색은 강조색 밝기 근처로 모으고(명암은 조금 남김),
       // 0.7 이상 옅은 색은 옅은 강조색 틴트로 이어지게 해서 네 그림의 톤을 맞춘다.

@@ -12,6 +12,8 @@ class CommonColors {
   static const success = Color(0xFF4E7F5C); // 완료/정답
   static const info = Color(0xFF4E7F74); // 안내 (깊은 청록)
   static const warning = Color(0xFFA8792E); // 주의
+  static const gold = Color(0xFFC29A45); // 바랜 금박 (오늘의 말씀 카드)
+  static const goldDeep = Color(0xFF7A5A22); // 밝은 면 위 금박 글자·아이콘
   static const transparent = Colors.transparent;
 }
 

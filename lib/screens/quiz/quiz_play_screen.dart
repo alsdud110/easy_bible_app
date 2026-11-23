@@ -1,4 +1,3 @@
-import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
@@ -276,7 +275,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                 fit: BoxFit.scaleDown,
                 child: Text(
                   difficulty.emoji,
-                  style: TextStyle(fontSize: ResponsiveUtils.bodyFontSize(context)),
+                  style: TextStyle(
+                      fontSize: ResponsiveUtils.bodyFontSize(context)),
                 ),
               ),
               const SizedBox(width: 6),
@@ -448,18 +448,6 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         alignment: Alignment.topCenter,
         clipBehavior: Clip.none,
         children: [
-          // Sparkle animation for correct answer
-          if (isCorrect)
-            Positioned(
-              top: -25,
-              child: ThemedLottie.asset(
-                'assets/lottie/sparkle.json',
-                width: 70,
-                height: 70,
-                fit: BoxFit.contain,
-                repeat: true,
-              ),
-            ),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -528,7 +516,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                                 child: Text(
                                   '정답',
                                   style: TextStyle(
-                                    fontSize: ResponsiveUtils.captionFontSize(context),
+                                    fontSize: ResponsiveUtils.captionFontSize(
+                                        context),
                                     fontWeight: FontWeight.w500,
                                     color: QuizColors.correct,
                                   ),
@@ -540,7 +529,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                                 child: Text(
                                   correctAnswerText,
                                   style: TextStyle(
-                                    fontSize: ResponsiveUtils.captionFontSize(context),
+                                    fontSize: ResponsiveUtils.captionFontSize(
+                                        context),
                                     fontWeight: FontWeight.w600,
                                     color: cs.onSurface,
                                     height: 1.3,
@@ -575,7 +565,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                           child: Text(
                             question.reference!,
                             style: TextStyle(
-                              fontSize: ResponsiveUtils.captionFontSize(context),
+                              fontSize:
+                                  ResponsiveUtils.captionFontSize(context),
                               fontWeight: FontWeight.w600,
                               color: cs.primary,
                             ),
@@ -602,6 +593,27 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               ],
             ),
           ),
+          // 정답 반짝임: 상자 위에 그려야 가려지지 않는다. 금박색으로 덮어씀
+          // 가운데가 '정답이에요!' 글자쯤 오도록 (200 크기의 절반만큼 당김)
+          if (isCorrect)
+            Positioned(
+              left: 0,
+              top: -43,
+              child: IgnorePointer(
+                child: Lottie.asset(
+                  'assets/lottie/sparkle.json',
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.contain,
+                  repeat: true,
+                  delegates: LottieDelegates(values: [
+                    ValueDelegate.color(const ['**'], value: QuizColors.star),
+                    ValueDelegate.strokeColor(const ['**'],
+                        value: QuizColors.star),
+                  ]),
+                ),
+              ),
+            ),
         ],
       ),
     );
