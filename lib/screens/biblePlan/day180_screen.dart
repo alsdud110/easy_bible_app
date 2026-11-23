@@ -12,6 +12,8 @@ import '../../utils/responsive_utils.dart';
 import '../../providers/plan_progress_provider.dart';
 import '../../services/notification_service.dart';
 import 'plan_verse_list_view.dart';
+import '../../theme/colors.dart';
+import '../../widgets/plan_progress_header.dart';
 
 class Day180Screen extends StatefulWidget {
   const Day180Screen({super.key});
@@ -479,6 +481,7 @@ class _Day180ScreenState extends State<Day180Screen>
                 theme.appBarTheme.scrolledUnderElevation ?? 0,
             centerTitle: theme.appBarTheme.centerTitle ?? true,
             iconTheme: theme.appBarTheme.iconTheme,
+            bottom: const PlanProgressHeader(type: PlanType.day180),
             actions: [
               IconButton(
                 icon: const Icon(Icons.notifications_outlined),
@@ -533,7 +536,9 @@ class _Day180ScreenState extends State<Day180Screen>
                           child: Opacity(
                             opacity: canAccess ? 1.0 : 0.4,
                             child: ListTile(
-                              tileColor: cs.surface,
+                              tileColor: isCompleted
+                                  ? CommonColors.success.withOpacity(0.08)
+                                  : cs.surface,
                               enabled: canAccess,
                               title: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -547,7 +552,9 @@ class _Day180ScreenState extends State<Day180Screen>
                                       // 지금 읽을 날만 버건디, 완료/잠김은 조용한 면
                                         color: !isCompleted && canAccess
                                             ? cs.primary
-                                            : cs.surfaceContainerHighest,
+                                            : isCompleted
+                                              ? CommonColors.success.withOpacity(0.15)
+                                              : cs.surfaceContainerHighest,
                                       borderRadius: BorderRadius.circular(8),
                                       
                                     ),
@@ -561,7 +568,9 @@ class _Day180ScreenState extends State<Day180Screen>
                                           fontSize: ResponsiveUtils.buttonFontSize(context),
                                           color: !isCompleted && canAccess
                                                 ? cs.onPrimary
-                                                : cs.onSurfaceVariant,
+                                                : isCompleted
+                                                    ? CommonColors.success
+                                                    : cs.onSurfaceVariant,
                                         ),
                                       ),
                                     ),
@@ -586,10 +595,24 @@ class _Day180ScreenState extends State<Day180Screen>
                                     ),
                                   ),
                                   if (isCompleted)
-                                    Icon(
-                                      Icons.check_circle_outline_rounded,
-                                      color: cs.onSurfaceVariant,
-                                      size: 20,
+                                    const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.check_circle_rounded,
+                                          color: CommonColors.success,
+                                          size: 18,
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          '완료',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: CommonColors.success,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                 ],
                               ),
