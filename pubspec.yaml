@@ -58,23 +58,25 @@ flutter_launcher_icons:
   image_path: "assets/icon/app_icon.png"
   
   # 안드로이드 adaptive icon (선택사항)
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#F7F4EE"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
 
+# shortcut: iOS 스플래시 캐시를 비우려고 LaunchScreen.storyboard를 LaunchScreenV2.storyboard로 바꿈.
+# 생성기는 항상 LaunchScreen.storyboard에 쓰므로, 다시 생성하면 그 파일을 LaunchScreenV2.storyboard로 덮어쓰고 지울 것.
 flutter_native_splash:
   # 라이트 모드
-  color: "#FAF9F6"  # LightColors.background
+  color: "#F7F4EE"  # LightColors.background
   image: assets/splash/splash_icon.png
   
   # 다크 모드
-  color_dark: "#121212"  # DarkColors.background
+  color_dark: "#161513"  # DarkColors.background
   image_dark: assets/splash/splash_icon.png
   
   # Android 12+ 지원
   android_12:
-    color: "#FAF9F6"
+    color: "#F7F4EE"
     image: assets/splash/splash_icon.png
-    color_dark: "#121212"
+    color_dark: "#161513"
     image_dark: assets/splash/splash_icon.png
     fullscreen: true  # 이거 꼭 추가
   
