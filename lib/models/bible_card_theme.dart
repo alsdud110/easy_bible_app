@@ -27,7 +27,7 @@ class BibleCardTheme {
       name: '가름끈',
       gradientColors: [
         Color(0xFF5E1D1A), // 짙은 버건디
-        Color(0xFF8C2F2B), // 가름끈 버건디
+        Color(0xFF822C28), // 가름끈 버건디
         Color(0xFFB5574F), // 바랜 버건디
       ],
       gradientStops: [0.0, 0.5, 1.0],

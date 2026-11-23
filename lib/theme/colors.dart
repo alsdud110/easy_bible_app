@@ -35,13 +35,13 @@ class LightColors {
   static const deepest = Color(0xFFEDE7DC); // 가장 깊은 면
 
   // 강조 (가름끈)
-  static const primary = Color(0xFF8C2F2B); // 버건디. 흰 글자와 대비 약 8:1
+  static const primary = Color(0xFF822C28); // 버건디. 흰 글자와 대비 약 9:1
   static const primaryContainer = Color(0xFFF2E3DE); // 버건디를 아주 옅게
   static const onPrimaryContainer = Color(0xFF5E1D1A);
 
   // 보조색은 따로 두지 않고 먹색의 보조 톤으로 조용히
   static const secondary = Color(0xFF5E554A);
-  static const accent = Color(0xFF8C2F2B);
+  static const accent = Color(0xFF822C28);
 
   // 선
   static const divider = Color(0xFFE6E0D5); // 헤어라인
@@ -66,7 +66,7 @@ class LightColors {
   static const appBar = Color(0xFFF7F4EE);
   static const cardBorder = Color(0xFFE6E0D5);
   static const cardSurfaceTint = Color(0xFFFDFBF7);
-  static const fabFill = Color(0xFF8C2F2B);
+  static const fabFill = Color(0xFF822C28);
   static const inputFill = Color(0xFFEFE9DF);
 }
 

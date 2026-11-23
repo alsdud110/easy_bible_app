@@ -16,7 +16,7 @@ class BeautifulBibleCard extends StatelessWidget {
       name: '가름끈',
       gradientColors: [
         Color(0xFF5E1D1A),
-        Color(0xFF8C2F2B),
+        Color(0xFF822C28),
         Color(0xFFB5574F),
       ],
       gradientStops: [0.0, 0.5, 1.0],
