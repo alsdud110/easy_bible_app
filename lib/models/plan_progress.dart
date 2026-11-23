@@ -3,17 +3,17 @@ import 'bible_120.dart';
 import 'bible_180.dart';
 import 'bible_365.dart';
 
-/// 성경읽기 플랜 종류.
+/// 성경일독 플랜 종류.
 /// 화면에 보이는 이름/설명은 여기 한 곳에서만 관리한다.
 enum PlanType {
-  day60(60, '60일 성경읽기', '두 달 동안 몰입해서 완독'),
-  day120(120, '120일 성경읽기', '넉 달 동안 꾸준하게 완독'),
-  day180(180, '180일 성경읽기', '반년 동안 여유 있게 완독'),
-  day365(365, '365 성경읽기', '하루 한 걸음, 일 년 동안 완독');
+  day60(60, '60일 성경일독', '두 달 동안 몰입해서 완독'),
+  day120(120, '120일 성경일독', '넉 달 동안 꾸준하게 완독'),
+  day180(180, '180일 성경일독', '반년 동안 여유 있게 완독'),
+  day365(365, '365일 성경일독', '하루 한 걸음, 일 년 동안 완독');
 
   final int totalDays;
 
-  /// 화면 표시용 이름 (예: "60일 성경읽기")
+  /// 화면 표시용 이름 (예: "60일 성경일독")
   final String title;
 
   /// 플랜 선택 화면의 한 줄 설명
@@ -120,13 +120,21 @@ class PlanProgress {
       return DateTime.now();
     }
 
+    final planType = PlanType.values.firstWhere(
+      (type) => type.name == json['planType'],
+      orElse: () => PlanType.day60,
+    );
+    // 예전 기본 이름으로 저장된 플랜은 현재 기본 이름으로 바꿔 보여 준다 (직접 지은 이름은 유지)
+    final storedName = json['planName'] as String;
+    final n = planType.totalDays;
+    final isOldDefault = storedName == '성경 $n일 통독' ||
+        storedName == '$n일 성경읽기' ||
+        storedName == '365 성경읽기';
+
     return PlanProgress(
       id: json['id'] as String,
-      planType: PlanType.values.firstWhere(
-        (type) => type.name == json['planType'],
-        orElse: () => PlanType.day60,
-      ),
-      planName: json['planName'] as String,
+      planType: planType,
+      planName: isOldDefault ? planType.title : storedName,
       startDate: parseDateTime(json['startDate']),
       completedDays: (json['completedDays'] as List<dynamic>?)
               ?.map((d) => d as int)

@@ -1184,7 +1184,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  '$elapsedDays일 만에\n$totalDays일 성경읽기를 완주하셨네요!',
+                  '$elapsedDays일 만에\n$totalDays일 성경일독을 완주하셨네요!',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: cs.onSurface.withValues(alpha: 0.8),

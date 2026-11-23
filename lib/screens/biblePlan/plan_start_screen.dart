@@ -400,7 +400,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                         Positioned(
                           top: 0,
                           right: padding,
-                          child: const RibbonMark(width: 14, height: 36),
+                          child: const RibbonMark(width: 12, height: 22),
                         ),
                       ],
                     );
