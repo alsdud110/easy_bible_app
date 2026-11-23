@@ -86,8 +86,10 @@ class _TodayVerseCardState extends State<TodayVerseCard>
     debugPrint(
         '📖 _loadTodayVerse - lastPickDate: $lastPickDate, verseIdx: $verseIdx');
 
+    // 구절 목록이 바뀌면 저장된 번호가 범위를 넘을 수 있다
     if (lastPickDate == '${today.year}-${today.month}-${today.day}' &&
-        verseIdx != null) {
+        verseIdx != null &&
+        verseIdx < todayVerses.length) {
       setState(() {
         verse = todayVerses[verseIdx].text;
         ref = todayVerses[verseIdx].ref;
