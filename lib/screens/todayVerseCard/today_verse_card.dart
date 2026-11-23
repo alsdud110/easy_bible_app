@@ -1331,7 +1331,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                 borderRadius: BorderRadius.circular(24),
               ),
               elevation: 0,
-              margin: const EdgeInsets.symmetric(vertical: 16),
+              margin: const EdgeInsets.only(top: 12, bottom: 16),
               color: cs.surface,
               child: Stack(
                 children: [

@@ -70,15 +70,6 @@ class ThemedLottie extends StatelessWidget {
       return Color.lerp(start, end ?? start, t) ?? start;
     }
 
-    List<Color> currentList(List<Color>? start, List<Color>? end, double t) {
-      final s = start ?? const <Color>[];
-      final e = end ?? s;
-      if (e.length != s.length) return s;
-      return [
-        for (var i = 0; i < s.length; i++) Color.lerp(s[i], e[i], t) ?? s[i],
-      ];
-    }
-
     return [
       ValueDelegate.color(const ['**'],
           callback: (i) => remap(current(
@@ -86,11 +77,8 @@ class ThemedLottie extends StatelessWidget {
       ValueDelegate.strokeColor(const ['**'],
           callback: (i) => remap(current(
               i.startValue, i.endValue, i.interpolatedKeyframeProgress))),
-      ValueDelegate.gradientColor(const ['**'],
-          callback: (i) => currentList(
-                  i.startValue, i.endValue, i.interpolatedKeyframeProgress)
-              .map(remap)
-              .toList()),
+      // shortcut: 그라디언트는 lottie가 콜백에 원래 색을 넘겨주지 않아(빈 리스트 →
+      // colors/colorStops 길이 불일치 예외) 원래 색 그대로 둔다. 바꾸려면 에셋을 직접 수정.
     ];
   }
 }

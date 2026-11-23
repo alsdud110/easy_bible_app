@@ -36,14 +36,6 @@ class _HomeScreenState extends State<HomeScreen>
   )..forward();
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      precacheImage(const AssetImage('assets/icon/bible_icon.png'), context);
-    });
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -75,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
                     _TodayReadingCard(),
                     SizedBox(height: 24),
                     _SectionLabel('오늘의 말씀'),
-                    // TodayVerseCard 자체에 위아래 16 여백이 있다
+                    // TodayVerseCard 자체에 위 12, 아래 16 여백이 있다
                     TodayVerseCard(),
                     SizedBox(height: 16),
                     _ShortcutList(),
@@ -103,28 +95,15 @@ class _HomeScreenState extends State<HomeScreen>
       surfaceTintColor: Colors.transparent,
       toolbarHeight: 56,
       titleSpacing: 20,
-      title: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              'assets/icon/bible_icon.png',
-              width: 32,
-              height: 32,
-              fit: BoxFit.cover,
-              cacheWidth: 96,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            'All in Bible',
-            style: TextStyle(
-              color: cs.onSurface,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
-          ),
-        ],
+      // 앱 아이콘 대신 본문과 같은 명조체 워드마크
+      title: Text(
+        'All in Bible',
+        style: TextStyle(
+          fontFamily: 'ChosunCentennial',
+          color: cs.onSurface,
+          fontSize: 21,
+          letterSpacing: 0.2,
+        ),
       ),
       actions: [
         Builder(
@@ -151,12 +130,8 @@ class _DateLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    return Text(
+    return _SectionLabel(
       '${now.month}월 ${now.day}일 ${_weekdays[now.weekday - 1]}요일',
-      style: TextStyle(
-        fontSize: 14,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
     );
   }
 }
