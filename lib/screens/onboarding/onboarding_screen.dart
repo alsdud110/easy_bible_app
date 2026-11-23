@@ -2,7 +2,6 @@ import '../../widgets/themed_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../utils/responsive_utils.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -127,11 +126,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     fit: BoxFit.scaleDown,
                     child: Text(
                       'All in Bible',
-                      style: GoogleFonts.dancingScript(
+                      // 홈 앱바와 같은 명조체 워드마크
+                      style: TextStyle(
+                        fontFamily: 'ChosunCentennial',
                         color: theme.colorScheme.onSurface,
-                        fontWeight: FontWeight.w500,
-                        fontSize: ResponsiveUtils.fontSize(context, 26),
-                        letterSpacing: 0,
+                        fontSize: 21,
+                        letterSpacing: 0.2,
                       ),
                     ),
                   ),

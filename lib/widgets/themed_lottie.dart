@@ -6,8 +6,8 @@ import 'package:lottie/lottie.dart';
 /// 앱 팔레트에 맞춰 색을 덮어쓰는 Lottie.
 ///
 /// 에셋 파일은 그대로 두고, 렌더링할 때 파랑~보라 계열 색만
-/// 강조색(가름끈 버건디)의 색상으로 옮긴다. 원래 밝기는 유지해서
-/// 그림의 명암과 입체감은 남는다. 초록·노랑 등 다른 색과 회색은 그대로.
+/// 강조색(가름끈 버건디)으로 옮긴다. 밝기도 강조색 쪽으로 모아 그림마다 톤을 맞추되,
+/// 명암은 조금 남긴다. 초록·노랑 등 다른 색과 회색은 그대로.
 class ThemedLottie extends StatelessWidget {
   final String name;
   final AnimationController? controller;
@@ -102,7 +102,7 @@ class ThemedLottie extends StatelessWidget {
     return LottieComposition.fromBytes(utf8.encode(jsonEncode(json)));
   }
 
-  /// 파랑/보라 계열만 강조색 색상으로 옮긴다. 밝기는 유지.
+  /// 파랑/보라 계열만 강조색으로 옮긴다.
   static Color Function(Color) _remapper(Color accent) {
     final target = HSLColor.fromColor(accent);
     return (Color c) {
@@ -110,11 +110,15 @@ class ThemedLottie extends StatelessWidget {
       final isBluePurple =
           hsl.saturation >= 0.2 && hsl.hue >= 180 && hsl.hue <= 330;
       if (!isBluePurple) return c;
-      return hsl
-          .withHue(target.hue)
-          // 채도는 강조색 수준을 넘지 않게 눌러서 형광 느낌을 없앤다
-          .withSaturation(
-              (hsl.saturation * 0.8).clamp(0.0, target.saturation))
+      // 진한~중간 색은 강조색 밝기 근처로 모으고(명암은 조금 남김),
+      // 0.7 이상 옅은 색은 옅은 강조색 틴트로 이어지게 해서 네 그림의 톤을 맞춘다.
+      final l = hsl.lightness;
+      final anchor = target.lightness;
+      final newL = l <= 0.7
+          ? anchor + (l - 0.5) * 0.4
+          : anchor + 0.08 + (1 - anchor - 0.08) * (l - 0.7) / 0.3;
+      return HSLColor.fromAHSL(
+              hsl.alpha, target.hue, target.saturation, newL.clamp(0.0, 1.0))
           .toColor();
     };
   }
