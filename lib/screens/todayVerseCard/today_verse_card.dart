@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import '../../widgets/themed_lottie.dart';
 import 'dart:io';
 import 'dart:math';
@@ -200,7 +201,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        todayVerses[idx].text,
+                        keepWords(todayVerses[idx].text),
                         textAlign: TextAlign.center,
                         softWrap: true,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -330,9 +331,9 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                 Tween<double>(begin: 0.92, end: 1.0).animate(curvedAnimation),
             child: Dialog(
               backgroundColor: Colors.transparent,
+              shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
               insetPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-              shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
               child: Container(
                 constraints:
                     const BoxConstraints(maxWidth: 420, maxHeight: 600),
@@ -545,7 +546,7 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      item.text,
+                                      keepWords(item.text),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -788,9 +789,9 @@ class _TodayVerseCardState extends State<TodayVerseCard>
               child: StatefulBuilder(builder: (context, setStateSB) {
                 return Dialog(
                   backgroundColor: Colors.transparent,
+                  shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
                   insetPadding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                  shape: const RoundedRectangleBorder(), // 테마 테두리 제거 (투명 다이얼로그)
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 420),
                     decoration: BoxDecoration(
@@ -1511,7 +1512,7 @@ class _TodayVerseShowCard extends StatelessWidget {
             ),
             const SizedBox(height: 13),
             Text(
-              verse ?? "",
+              keepWords(verse ?? ""),
               textAlign: TextAlign.center,
               softWrap: true,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(

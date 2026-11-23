@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import 'package:flutter/material.dart';
 
 /// 우아한 레이아웃 - 세련되고 우아한 스타일
@@ -168,7 +169,7 @@ class ElegantLayout extends StatelessWidget {
                       const SizedBox(height: 10),
 
                       Text(
-                        verse,
+                        keepWords(verse),
                         style: TextStyle(
                           fontSize: _calculateFontSize(verse.length),
                           height: 1.9,

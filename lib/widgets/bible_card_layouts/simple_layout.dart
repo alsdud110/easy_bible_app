@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import 'package:flutter/material.dart';
 
 /// 심플 레이아웃 - 간결한 화이트 카드
@@ -57,7 +58,7 @@ class SimpleLayout extends StatelessWidget {
 
             // 말씀
             Text(
-              verse,
+              keepWords(verse),
               style: TextStyle(
                 fontSize: _calculateFontSize(verse.length),
                 height: 2.0,

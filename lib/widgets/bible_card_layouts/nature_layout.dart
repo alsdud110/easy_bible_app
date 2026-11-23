@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import 'package:flutter/material.dart';
 
 /// 자연 레이아웃 - 부드러운 자연 테마
@@ -105,7 +106,7 @@ class NatureLayout extends StatelessWidget {
 
                 // 성경 구절
                 Text(
-                  '"$verse"',
+                  keepWords('"$verse"'),
                   style: TextStyle(
                     fontSize: _calculateFontSize(verse.length),
                     height: 1.9,

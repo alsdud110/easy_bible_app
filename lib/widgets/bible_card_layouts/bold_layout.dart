@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import 'package:flutter/material.dart';
 
 /// 볼드 레이아웃 - 강렬하고 임팩트 있는 디자인
@@ -162,7 +163,7 @@ class BoldLayout extends StatelessWidget {
 
                       // 말씀
                       Text(
-                        verse,
+                        keepWords(verse),
                         style: TextStyle(
                           fontSize: _calculateFontSize(verse.length),
                           height: 1.8,

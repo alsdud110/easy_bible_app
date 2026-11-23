@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import 'package:flutter/material.dart';
 
 /// 미니멀 레이아웃 - 깔끔하고 단순한 디자인
@@ -87,7 +88,7 @@ class MinimalLayout extends StatelessWidget {
 
             // 말씀
             Text(
-              verse,
+              keepWords(verse),
               style: TextStyle(
                 fontSize: _calculateFontSize(verse.length),
                 height: 1.9,

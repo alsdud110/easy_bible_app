@@ -1,3 +1,4 @@
+import 'package:easy_bible_app/utils/keep_words.dart';
 import 'package:flutter/material.dart';
 
 /// 클래식 레이아웃 - 전통적인 성경 카드 스타일
@@ -100,7 +101,7 @@ class ClassicLayout extends StatelessWidget {
 
                 // 말씀
                 Text(
-                  '"$verse"',
+                  keepWords('"$verse"'),
                   style: TextStyle(
                     fontSize: _calculateFontSize(verse.length),
                     height: 1.9,
