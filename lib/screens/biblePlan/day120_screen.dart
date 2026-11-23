@@ -404,7 +404,7 @@ class _Day120ScreenState extends State<Day120Screen>
       // 기존 알림 취소하고 새로 등록 (요일별)
       await NotificationService().scheduleWeeklyNotification(
         baseId: 1200, // 120 * 10
-        title: '📖 성경일독 Day120 - 읽기 시간!',
+        title: '📖 ${PlanType.day120.title} - 읽기 시간!',
         body: '${plan.planName} - 오늘의 말씀을 읽어보세요 🙏',
         hour: selectedTime.hour,
         minute: selectedTime.minute,
@@ -472,7 +472,7 @@ class _Day120ScreenState extends State<Day120Screen>
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            title: const Text('성경일독 DAY120'),
+            title: Text(PlanType.day120.title),
             backgroundColor: theme.appBarTheme.backgroundColor,
             elevation: theme.appBarTheme.elevation ?? 0,
             scrolledUnderElevation:

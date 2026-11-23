@@ -5,9 +5,7 @@ import 'package:lottie/lottie.dart';
 import '../../models/plan_progress.dart';
 import '../../providers/plan_progress_provider.dart';
 import '../../services/notification_service.dart';
-import 'day60_screen.dart';
-import 'day120_screen.dart';
-import 'day180_screen.dart';
+import 'plan_screens.dart';
 
 class PlanStartScreen extends StatefulWidget {
   final PlanType planType;
@@ -186,7 +184,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
       // 요일별 알림 스케줄링 (baseId는 플랜 타입 * 10으로 설정하여 7개 ID 확보)
       await NotificationService().scheduleWeeklyNotification(
         baseId: widget.planType.totalDays * 10, // 600, 1200, 1800
-        title: '📖 성경일독 Day${widget.planType.totalDays} - 읽기 시간!',
+        title: '📖 ${widget.planType.title} - 읽기 시간!',
         body: '$planName - 오늘의 말씀을 읽어보세요 🙏',
         hour: _selectedTime!.hour,
         minute: _selectedTime!.minute,
@@ -263,7 +261,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                '${widget.planType.totalDays}일 동안\n성경 통독을 응원하겠습니다!',
+                '${widget.planType.totalDays}일 동안\n말씀 읽는 걸음을 응원할게요!',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: cs.onSurface.withValues(alpha: 0.8),
@@ -304,18 +302,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
   }
 
   void _navigateToDayScreen() {
-    Widget screen;
-    switch (widget.planType) {
-      case PlanType.day60:
-        screen = const Day60Screen();
-        break;
-      case PlanType.day120:
-        screen = const Day120Screen();
-        break;
-      case PlanType.day180:
-        screen = const Day180Screen();
-        break;
-    }
+    final screen = buildPlanDayScreen(widget.planType);
 
     // 플랜 시작 화면을 닫고 Day 화면으로 이동
     Navigator.of(context).pushReplacement(
@@ -394,7 +381,7 @@ class _PlanStartScreenState extends State<PlanStartScreen>
                           FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              '${widget.planType.totalDays}일 통독 플랜',
+                              widget.planType.title,
                               style: TextStyle(
                                 fontSize: titleFontSize,
                                 color: cs.onPrimary,

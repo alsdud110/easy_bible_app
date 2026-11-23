@@ -131,9 +131,9 @@ class _PlanExpansionCardState extends State<PlanExpansionCard>
   Widget _buildPlans(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final titles = ["DAY60 플랜", "DAY120 플랜", "DAY180 플랜"];
-    final values = [60, 120, 180];
     final planTypes = [PlanType.day60, PlanType.day120, PlanType.day180];
+    final titles = planTypes.map((t) => t.title).toList();
+    final values = planTypes.map((t) => t.totalDays).toList();
 
     return Consumer<PlanProgressProvider>(
       builder: (context, planProvider, _) {

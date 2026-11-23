@@ -2,9 +2,7 @@ import 'package:easy_bible_app/screens/todayVerseCard/today_verse_card.dart';
 import 'package:easy_bible_app/screens/favorite/favorite_list_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_drawer.dart';
-import 'biblePlan/day60_screen.dart';
-import 'biblePlan/day120_screen.dart';
-import 'biblePlan/day180_screen.dart';
+import 'biblePlan/plan_screens.dart';
 import 'biblePlan/plan_start_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -763,32 +761,41 @@ class _PlanBentoCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            // 플랜 옵션들
-            _PlanOption(
-              provider: provider,
-              planType: PlanType.day60,
-              title: '60일 플랜',
-              description: '두 달로 성경 완독',
-              icon: Icons.flash_on_rounded,
-              color: const Color(0xFF10B981),
-            ),
-            const SizedBox(height: 12),
-            _PlanOption(
-              provider: provider,
-              planType: PlanType.day120,
-              title: '120일 플랜',
-              description: '네 달로 성경 완독',
-              icon: Icons.trending_up_rounded,
-              color: const Color(0xFF3B82F6),
-            ),
-            const SizedBox(height: 12),
-            _PlanOption(
-              provider: provider,
-              planType: PlanType.day180,
-              title: '180일 플랜',
-              description: '여유있게 성경 완독',
-              icon: Icons.nature_people_rounded,
-              color: const Color(0xFF8B5CF6),
+            // 플랜 옵션들 (4개라 작은 화면에서도 넘치지 않도록 스크롤 허용)
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _PlanOption(
+                      provider: provider,
+                      planType: PlanType.day60,
+                      icon: Icons.flash_on_rounded,
+                      color: const Color(0xFF10B981),
+                    ),
+                    const SizedBox(height: 12),
+                    _PlanOption(
+                      provider: provider,
+                      planType: PlanType.day120,
+                      icon: Icons.trending_up_rounded,
+                      color: const Color(0xFF3B82F6),
+                    ),
+                    const SizedBox(height: 12),
+                    _PlanOption(
+                      provider: provider,
+                      planType: PlanType.day180,
+                      icon: Icons.nature_people_rounded,
+                      color: const Color(0xFF8B5CF6),
+                    ),
+                    const SizedBox(height: 12),
+                    _PlanOption(
+                      provider: provider,
+                      planType: PlanType.day365,
+                      icon: Icons.wb_sunny_rounded,
+                      color: const Color(0xFFF59E0B),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 24),
           ],
@@ -802,44 +809,41 @@ class _PlanBentoCard extends StatelessWidget {
 class _PlanOption extends StatelessWidget {
   final PlanProgressProvider provider;
   final PlanType planType;
-  final String title;
-  final String description;
   final IconData icon;
   final Color color;
 
   const _PlanOption({
     required this.provider,
     required this.planType,
-    required this.title,
-    required this.description,
     required this.icon,
     required this.color,
   });
+
+  String get title => planType.title;
+  String get description => planType.description;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final hasPlan = provider.hasPlan(planType);
     final progress = provider.getProgressPercent(planType).toDouble();
+    final isAvailable = planType.isAvailable;
 
-    return Material(
+    return Opacity(
+      opacity: isAvailable ? 1.0 : 0.55,
+      child: Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
+          if (!isAvailable) {
+            showPlanComingSoon(context, planType);
+            return;
+          }
           Navigator.pop(context);
 
-          Widget page;
-          if (hasPlan) {
-            if (planType == PlanType.day60) {
-              page = const Day60Screen();
-            } else if (planType == PlanType.day120) {
-              page = const Day120Screen();
-            } else {
-              page = const Day180Screen();
-            }
-          } else {
-            page = PlanStartScreen(planType: planType);
-          }
+          final Widget page = hasPlan
+              ? buildPlanDayScreen(planType)
+              : PlanStartScreen(planType: planType);
 
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => page),
@@ -884,7 +888,7 @@ class _PlanOption extends StatelessWidget {
                             color: cs.onSurface,
                           ),
                         ),
-                        if (hasPlan) ...[
+                        if (hasPlan || !isAvailable) ...[
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -895,8 +899,8 @@ class _PlanOption extends StatelessWidget {
                               color: color,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Text(
-                              '진행 중',
+                            child: Text(
+                              isAvailable ? '진행 중' : '준비 중',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 11,
@@ -954,6 +958,7 @@ class _PlanOption extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

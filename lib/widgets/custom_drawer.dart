@@ -7,9 +7,8 @@ import '../config/feature_flags.dart';
 // 각 스크린 import 추가
 import '../../screens/bible/bible_home_screen.dart'; // 전체 성경
 import '../../screens/home_screen.dart'; // 어성경 바이블(홈)
-import '../../screens/biblePlan/day60_screen.dart';
-import '../../screens/biblePlan/day120_screen.dart';
-import '../../screens/biblePlan/day180_screen.dart';
+import '../../screens/biblePlan/plan_screens.dart';
+import '../models/plan_progress.dart';
 import '../../screens/favorite/favorite_list_screen.dart';
 import '../../screens/subscription/paywall_screen.dart';
 import '../providers/subscription_provider.dart';
@@ -384,30 +383,34 @@ class _PlanExpansionMenuState extends State<_PlanExpansionMenu>
               padding: const EdgeInsets.only(left: 34, right: 18),
               child: Column(
                 children: [
-                  _buildAnimatedButton(
-                      0,
-                      Icons.flash_on_rounded,
-                      'DAY60 플랜',
-                      const Color(0xFF10B981),
-                      () => widget.navigateToScreen(const Day60Screen())),
-                  _buildAnimatedButton(
-                      1,
-                      Icons.trending_up_rounded,
-                      'DAY120 플랜',
-                      const Color(0xFF3B82F6),
-                      () => widget.navigateToScreen(const Day120Screen())),
-                  _buildAnimatedButton(
-                      2,
-                      Icons.nature_people_rounded,
-                      'DAY180 플랜',
-                      const Color(0xFF8B5CF6),
-                      () => widget.navigateToScreen(const Day180Screen())),
+                  _buildPlanButton(0, PlanType.day60, Icons.flash_on_rounded,
+                      const Color(0xFF10B981)),
+                  _buildPlanButton(1, PlanType.day120,
+                      Icons.trending_up_rounded, const Color(0xFF3B82F6)),
+                  _buildPlanButton(2, PlanType.day180,
+                      Icons.nature_people_rounded, const Color(0xFF8B5CF6)),
+                  _buildPlanButton(3, PlanType.day365, Icons.wb_sunny_rounded,
+                      const Color(0xFFF59E0B)),
                 ],
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPlanButton(
+      int index, PlanType planType, IconData icon, Color color) {
+    final available = planType.isAvailable;
+    return _buildAnimatedButton(
+      index,
+      icon,
+      available ? planType.title : '${planType.title} (준비 중)',
+      available ? color : color.withOpacity(0.5),
+      () => available
+          ? widget.navigateToScreen(buildPlanDayScreen(planType))
+          : showPlanComingSoon(context, planType),
     );
   }
 

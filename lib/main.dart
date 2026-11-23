@@ -9,9 +9,7 @@ import 'dart:async';
 import 'dart:io';
 import 'screens/home_screen.dart';
 import 'screens/bible/bible_home_screen.dart';
-import 'screens/biblePlan/day60_screen.dart';
-import 'screens/biblePlan/day120_screen.dart';
-import 'screens/biblePlan/day180_screen.dart';
+import 'screens/biblePlan/plan_screens.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/quiz/quiz_screen.dart';
 import 'theme/app_theme.dart';
@@ -64,25 +62,13 @@ void _navigateToScreen(String payload) {
 
   print('✅ Navigator 준비 완료');
 
-  Widget targetScreen;
-  String screenName;
-  switch (payload) {
-    case 'day60':
-      targetScreen = const Day60Screen();
-      screenName = '60일 플랜';
-      break;
-    case 'day120':
-      targetScreen = const Day120Screen();
-      screenName = '120일 플랜';
-      break;
-    case 'day180':
-      targetScreen = const Day180Screen();
-      screenName = '180일 플랜';
-      break;
-    default:
-      print('❌ 알 수 없는 payload: $payload');
-      return;
+  final planType = planTypeFromPayload(payload);
+  if (planType == null) {
+    print('❌ 알 수 없는 payload: $payload');
+    return;
   }
+  final Widget targetScreen = buildPlanDayScreen(planType);
+  final String screenName = planType.title;
 
   print('🎯 목표 화면: $screenName ($payload)');
 

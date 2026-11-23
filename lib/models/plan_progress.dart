@@ -1,18 +1,51 @@
+import 'bible_60.dart';
+import 'bible_120.dart';
+import 'bible_180.dart';
+import 'bible_365.dart';
+
+/// 성경읽기 플랜 종류.
+/// 화면에 보이는 이름/설명은 여기 한 곳에서만 관리한다.
 enum PlanType {
-  day60(60, '성경 60일 통독'),
-  day120(120, '성경 120일 통독'),
-  day180(180, '성경 180일 통독');
+  day60(60, '60일 성경읽기', '두 달 동안 몰입해서 완독'),
+  day120(120, '120일 성경읽기', '넉 달 동안 꾸준하게 완독'),
+  day180(180, '180일 성경읽기', '반년 동안 여유 있게 완독'),
+  day365(365, '365 성경읽기', '하루 한 걸음, 일 년 동안 완독');
 
   final int totalDays;
-  final String defaultName;
 
-  const PlanType(this.totalDays, this.defaultName);
+  /// 화면 표시용 이름 (예: "60일 성경읽기")
+  final String title;
+
+  /// 플랜 선택 화면의 한 줄 설명
+  final String description;
+
+  const PlanType(this.totalDays, this.title, this.description);
+
+  /// 새 플랜 시작 시 기본 플랜명
+  String get defaultName => title;
+
+  /// 일자별 읽기 범위 데이터
+  List<List<String>> get readings {
+    switch (this) {
+      case PlanType.day60:
+        return bible60;
+      case PlanType.day120:
+        return bible120;
+      case PlanType.day180:
+        return bible180;
+      case PlanType.day365:
+        return bible365;
+    }
+  }
+
+  /// 읽기 데이터가 준비되었는지 (365 플랜은 데이터 추가 전까지 '준비 중')
+  bool get isAvailable => readings.isNotEmpty;
 }
 
 class PlanProgress {
   final String id; // 고유 ID
-  final PlanType planType; // 60일, 120일, 180일
-  final String planName; // 사용자 지정 플랜명 (기본: "성경 60일 통독")
+  final PlanType planType; // 60일, 120일, 180일, 365일
+  final String planName; // 사용자 지정 플랜명 (기본: PlanType.title)
   final DateTime startDate; // 시작일
   final Set<int> completedDays; // 완료한 Day 목록 (1, 2, 3...)
   final DateTime? notificationTime; // 알림 시간 (선택사항)

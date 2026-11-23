@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     ),
     OnboardingPage(
       title: '성경 읽기 플랜',
-      description: '60일, 120일, 180일 플랜으로\n매일 꾸준히 체계적인 성경 읽기를 실천하세요',
+      description: '60일부터 365일까지, 나에게 맞는 속도로\n매일 꾸준히 성경을 읽어 보세요',
       lottieAsset: 'assets/lottie/calender.json',
       icon: Icons.calendar_month_rounded,
       color: const Color(0xFF8B5CF6),
