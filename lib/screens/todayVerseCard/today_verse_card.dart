@@ -39,7 +39,6 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   late AnimationController _fadeCtrl;
   late Animation<double> _fadeAnim;
   late AnimationController _sizeCtrl;
-  late AnimationController _shineCtrl;
 
   final ScreenshotController _screenshotController = ScreenshotController();
   final InterstitialAdManager _interstitialAdManager = InterstitialAdManager();
@@ -57,11 +56,6 @@ class _TodayVerseCardState extends State<TodayVerseCard>
       duration: const Duration(milliseconds: 320),
       value: 1.0,
     );
-    _shineCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
-
     _loadTodayVerse();
     // 프리미엄(구독) 사용자에게는 전면 광고를 아예 로드하지 않음
     if (!context.read<SubscriptionProvider>().isPremium) {
@@ -1315,7 +1309,6 @@ class _TodayVerseCardState extends State<TodayVerseCard>
   void dispose() {
     _fadeCtrl.dispose();
     _sizeCtrl.dispose();
-    _shineCtrl.dispose();
     _interstitialAdManager.dispose();
     super.dispose();
   }
@@ -1389,28 +1382,6 @@ class _TodayVerseCardState extends State<TodayVerseCard>
                 ],
               ),
             ),
-            if (verse != null)
-              Positioned.fill(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: IgnorePointer(
-                      child: AnimatedBuilder(
-                        animation: _shineCtrl,
-                        builder: (context, child) {
-                          return CustomPaint(
-                            painter: _SimpleGlowPainter(
-                              progress: _shineCtrl.value,
-                              primaryColor: cs.primary,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
@@ -1516,8 +1487,8 @@ class _TodayVerseShowCard extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        // 구절 출처 → 본문 → 안내 문구 순으로 한 번만 천천히 떠오른다
+        child: _StaggerReveal(
           children: [
             Container(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 11),
@@ -1565,49 +1536,70 @@ class _TodayVerseShowCard extends StatelessWidget {
   }
 }
 
-// 은은한 빛 효과 Painter
-class _SimpleGlowPainter extends CustomPainter {
-  final double progress;
-  final Color primaryColor;
-
-  _SimpleGlowPainter({
-    required this.progress,
-    required this.primaryColor,
-  });
+/// 자식들을 위에서부터 차례로, 한 번만 은은하게 드러낸다.
+/// 투명도 0→1과 6px 아래에서 제자리로 오는 움직임뿐이며 반복하지 않는다.
+/// 시스템에서 애니메이션 줄이기를 켜 두면 바로 완성된 상태로 보여 준다.
+class _StaggerReveal extends StatefulWidget {
+  final List<Widget> children;
+  const _StaggerReveal({required this.children});
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final offset = size.width * 1.5 * progress - size.width * 0.4;
+  State<_StaggerReveal> createState() => _StaggerRevealState();
+}
 
-    final gradient = LinearGradient(
-      colors: [
-        Colors.transparent,
-        primaryColor.withValues(alpha: 0.03),
-        primaryColor.withValues(alpha: 0.06),
-        primaryColor.withValues(alpha: 0.12),
-        primaryColor.withValues(alpha: 0.13),
-        primaryColor.withValues(alpha: 0.12),
-        primaryColor.withValues(alpha: 0.06),
-        primaryColor.withValues(alpha: 0.03),
-        Colors.transparent,
-      ],
-      stops: const [0.0, 0.1, 0.2, 0.35, 0.4, 0.5, 0.65, 0.8, 1.0],
-    );
+class _StaggerRevealState extends State<_StaggerReveal>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1100),
+  );
 
-    final paint = Paint()
-      ..shader = gradient.createShader(
-        Rect.fromLTWH(offset - 100, 0, 200, size.height),
-      )
-      ..blendMode = BlendMode.srcOver;
-
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, size.width, size.height),
-      paint,
-    );
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_ctrl.status == AnimationStatus.dismissed) {
+      if (MediaQuery.of(context).disableAnimations) {
+        _ctrl.value = 1;
+      } else {
+        _ctrl.forward();
+      }
+    }
   }
 
   @override
-  bool shouldRepaint(covariant _SimpleGlowPainter oldDelegate) =>
-      oldDelegate.progress != progress ||
-      oldDelegate.primaryColor != primaryColor;
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 간격용 SizedBox는 순서에서 빼고, 내용 위젯에만 차례를 매긴다
+    var order = 0;
+    final items = widget.children.map((child) {
+      if (child is SizedBox) return child;
+      final start = (order++ * 0.2).clamp(0.0, 0.45);
+      final curve =
+          Interval(start, start + 0.55, curve: Curves.easeOutCubic);
+      return AnimatedBuilder(
+        animation: _ctrl,
+        builder: (context, child) {
+          final t = curve.transform(_ctrl.value);
+          return Opacity(
+            opacity: t,
+            child: Transform.translate(
+              offset: Offset(0, 6 * (1 - t)),
+              child: child,
+            ),
+          );
+        },
+        child: child,
+      );
+    }).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: items,
+    );
+  }
 }
