@@ -32,7 +32,6 @@ dependencies:
   path_provider: ^2.1.6
   share_plus: ^13.0.0
   permission_handler: ^13.0.2
-  device_info_plus: ^13.2.0
   gal: ^2.3.3
   app_tracking_transparency: ^2.0.7
   carousel_slider: ^5.1.2
