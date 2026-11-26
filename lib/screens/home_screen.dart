@@ -84,14 +84,14 @@ class _HomeScreenState extends State<HomeScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _DateLine(key: ValueKey(_today)),
+                    _DateLine(key: ValueKey('date-$_today')),
                     const SizedBox(height: 12),
                     const _TodayReadingCard(),
                     const SizedBox(height: 24),
                     const _SectionLabel('오늘의 말씀'),
                     // TodayVerseCard 자체에 위 12, 아래 16 여백이 있다
-                    // 날짜가 바뀌면 키가 바뀌어 새 상태로 다시 불러옴
-                    TodayVerseCard(key: ValueKey(_today)),
+                    // 날짜가 바뀌면 키가 바뀌어 새 상태로 다시 불러옴 (형제 위젯끼리 키가 겹치면 안 됨)
+                    TodayVerseCard(key: ValueKey('verse-$_today')),
                     const SizedBox(height: 16),
                     const _ShortcutList(),
                   ],
