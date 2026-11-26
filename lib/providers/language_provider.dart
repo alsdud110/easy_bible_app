@@ -8,6 +8,8 @@ class LanguageProvider extends ChangeNotifier {
   static const String _languageKey = 'bible_language';
 
   BibleLanguage _currentLanguage = BibleLanguage.korean;
+  // 영어에서 한글로 돌아올 때 쓰던 한글 번역본으로 복귀
+  BibleLanguage _lastKoreanLanguage = BibleLanguage.korean;
 
   BibleLanguage get currentLanguage => _currentLanguage;
 
@@ -29,6 +31,7 @@ class LanguageProvider extends ChangeNotifier {
           (e) => e.toString() == languageString,
           orElse: () => BibleLanguage.korean,
         );
+        if (isKorean) _lastKoreanLanguage = _currentLanguage;
         notifyListeners();
       }
     } catch (e) {
@@ -41,6 +44,7 @@ class LanguageProvider extends ChangeNotifier {
     if (_currentLanguage == language) return;
 
     _currentLanguage = language;
+    if (isKorean) _lastKoreanLanguage = language;
     notifyListeners();
 
     try {
@@ -51,35 +55,13 @@ class LanguageProvider extends ChangeNotifier {
     }
   }
 
-  /// 언어 토글 (한글 → 표준새번역 → 영어 → 한글)
-  Future<void> toggleLanguage() async {
-    final BibleLanguage newLanguage;
-    switch (_currentLanguage) {
-      case BibleLanguage.korean:
-        newLanguage = BibleLanguage.snb;
-        break;
-      case BibleLanguage.snb:
-        newLanguage = BibleLanguage.english;
-        break;
-      case BibleLanguage.english:
-        newLanguage = BibleLanguage.korean;
-        break;
-    }
-    await setLanguage(newLanguage);
-  }
+  /// 언어 토글: 'Eng/한' 버튼이라 한글 번역본 ↔ 영어만 오감
+  Future<void> toggleLanguage() => setLanguage(nextLanguage);
 
   /// toggleLanguage() 호출 시 전환될 언어를 미리 확인 (부수효과 없음).
   /// 프리미엄 잠금 체크 등 전환 전에 확인이 필요한 UI에서 사용합니다.
-  BibleLanguage get nextLanguage {
-    switch (_currentLanguage) {
-      case BibleLanguage.korean:
-        return BibleLanguage.snb;
-      case BibleLanguage.snb:
-        return BibleLanguage.english;
-      case BibleLanguage.english:
-        return BibleLanguage.korean;
-    }
-  }
+  BibleLanguage get nextLanguage =>
+      isKorean ? BibleLanguage.english : _lastKoreanLanguage;
 }
 
 /// 지원하는 성경 버전

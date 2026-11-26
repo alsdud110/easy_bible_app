@@ -75,6 +75,10 @@ class _BibleCardPreviewScreenState extends State<BibleCardPreviewScreen> {
         _currentIndex = 0;
       }
     });
+    // 캐러셀은 initialPage를 처음 한 번만 읽으므로 저장된 레이아웃으로 직접 이동
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _carouselController.jumpToPage(_currentIndex);
+    });
   }
 
   Future<void> _saveToGallery() async {
@@ -224,53 +228,57 @@ $appLink''';
   }
 
   void _showSuccessDialog(String message) {
+    BuildContext? dialogContext;
     showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (context) => Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
+      builder: (context) {
+        dialogContext = context;
+        return Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.check_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 32,
+                  ),
                 ),
-                child: Icon(
-                  Icons.check_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 32,
+                const SizedBox(height: 16),
+                Text(
+                  message,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                message,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
 
+    // 사용자가 먼저 닫았으면 dialogContext가 unmounted → 미리보기 화면을 닫지 않음
     Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted && Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-      }
+      final ctx = dialogContext;
+      if (ctx != null && ctx.mounted) Navigator.of(ctx).pop();
     });
   }
 

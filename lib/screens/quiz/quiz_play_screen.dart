@@ -97,6 +97,8 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     });
   }
 
+  bool _finishing = false;
+
   Future<void> _handleNext(BuildContext context) async {
     final provider = context.read<QuizProvider>();
 
@@ -113,6 +115,10 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
       _questionAnimController.reset();
       _questionAnimController.forward();
     } else {
+      // 빠르게 두 번 누르면 결과 화면이 두 번 열려 기록이 중복 저장됨
+      if (_finishing) return;
+      _finishing = true;
+
       // 결과 화면으로 이동하기 전, 프리미엄이 아니면 전면 광고 노출
       final isPremium = context.read<SubscriptionProvider>().isPremium;
       if (!isPremium) {

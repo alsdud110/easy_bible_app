@@ -246,6 +246,7 @@ class _Day60ScreenState extends State<Day60Screen>
 
     // 알림 취소 (Day60 플랜의 알림 ID는 60)
     await NotificationService().cancelNotification(60);
+    await NotificationService().cancelWeeklyNotification(600);
 
     // 플랜 삭제
     await planProvider.deletePlan(PlanType.day60);

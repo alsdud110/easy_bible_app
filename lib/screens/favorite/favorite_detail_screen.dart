@@ -211,7 +211,7 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
               favoriteKey: widget.favorite.key,
               memoController: _memoController,
               focusNode: _focusNode,
-              editingMemoId: _editingMemoId,
+              editingMemoId: () => _editingMemoId,
               onSave: _saveMemo,
               onEdit: _startEditMemo,
               onDelete: _deleteMemo,
@@ -438,7 +438,9 @@ class _MemoBottomSheet extends StatefulWidget {
   final String favoriteKey;
   final TextEditingController memoController;
   final FocusNode focusNode;
-  final String? editingMemoId;
+  // 시트는 부모 setState로 다시 그려지지 않음. 편집 시작/취소/저장은 입력란 텍스트를
+  // 바꾸고 시트가 그 변경으로 다시 그려지므로, 그때 최신 값을 읽도록 함수로 받음
+  final String? Function() editingMemoId;
   final VoidCallback onSave;
   final Function(Memo) onEdit;
   final Function(String) onDelete;
@@ -538,7 +540,7 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                       ),
                     ),
                     const Spacer(),
-                    if (widget.editingMemoId != null)
+                    if (widget.editingMemoId() != null)
                       TextButton.icon(
                         onPressed: widget.onCancelEdit,
                         icon: const Icon(Icons.close, size: 18),
@@ -565,7 +567,7 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                         textInputAction: TextInputAction.send,
                         onSubmitted: (_) => widget.onSave(),
                         decoration: InputDecoration(
-                          hintText: widget.editingMemoId != null
+                          hintText: widget.editingMemoId() != null
                               ? '메모 수정 중...'
                               : '메모를 입력하세요...',
                           border: OutlineInputBorder(
@@ -588,7 +590,7 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                       onPressed: widget.memoController.text.trim().isEmpty
                           ? null
                           : widget.onSave,
-                      icon: Icon(widget.editingMemoId != null
+                      icon: Icon(widget.editingMemoId() != null
                           ? Icons.check
                           : Icons.send),
                       style: IconButton.styleFrom(

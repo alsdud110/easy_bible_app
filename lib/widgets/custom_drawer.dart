@@ -171,7 +171,11 @@ class CustomDrawer extends StatelessWidget {
                     icon: Icons.quiz_rounded,
                     label: '성경퀴즈',
                     color: cs.onSurfaceVariant,
-                    onTap: () => Navigator.of(context).pushNamed('/quiz'),
+                    onTap: () {
+                      final navigator = Navigator.of(context);
+                      navigator.pop(); // Drawer 먼저 닫기
+                      navigator.pushNamed('/quiz');
+                    },
                   ),
 
                   _DrawerButton(

@@ -239,6 +239,7 @@ class _Day365ScreenState extends State<Day365Screen>
 
     // 알림 취소 (Day365 플랜의 알림 ID는 365)
     await NotificationService().cancelNotification(365);
+    await NotificationService().cancelWeeklyNotification(3650);
 
     // 플랜 삭제
     await planProvider.deletePlan(PlanType.day365);

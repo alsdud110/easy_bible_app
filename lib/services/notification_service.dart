@@ -80,11 +80,13 @@ class NotificationService {
     // iOS에서도 백업용으로 SharedPreferences에 저장
     if (response.payload != null) {
       print('📱 알림 탭 감지: ${response.payload}');
-      _saveLaunchPayload(response.payload!);
 
-      // 콜백 실행 (UI가 준비되어 있음)
+      // 콜백 실행 (UI가 준비되어 있음). 바로 처리했으니 백업을 남기면
+      // 다음 일반 실행 때 플랜 화면으로 다시 이동하게 됨
       if (onNotificationTap != null) {
         onNotificationTap!(response.payload);
+      } else {
+        _saveLaunchPayload(response.payload!);
       }
     }
   }
@@ -108,6 +110,12 @@ class NotificationService {
     // 먼저 메모리에서 확인 (getNotificationAppLaunchDetails로 가져온 값)
     if (_launchPayload != null) {
       _launchPayloadProcessed = true;
+      // initialize()에서 남긴 백업은 여기서 처리했으므로 지움
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('notification_launch_flag');
+        await prefs.remove('notification_launch_payload');
+      } catch (_) {}
       print('✅ Launch payload 반환: $_launchPayload');
       return _launchPayload;
     }
@@ -337,6 +345,13 @@ class NotificationService {
   /// 특정 알림 취소
   Future<void> cancelNotification(int id) async {
     await _notifications.cancel(id: id);
+  }
+
+  /// scheduleWeeklyNotification으로 예약한 요일별 알림(baseId ~ baseId+6) 취소
+  Future<void> cancelWeeklyNotification(int baseId) async {
+    for (int i = 0; i < 7; i++) {
+      await _notifications.cancel(id: baseId + i);
+    }
   }
 
   /// 모든 알림 취소

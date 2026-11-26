@@ -1014,7 +1014,7 @@
             "question": "가인이 아벨을 죽인 후 하나님은 가인을 즉시 죽이셨다.",
             "answer": false,
             "reference": "창세기 4:15",
-            "reference": "하나님은 가인에게 표를 주어 보호하셨습니다."
+            "explanation": "하나님은 가인에게 표를 주어 보호하셨습니다."
         },
         {
             "id": "ox_medium_128",

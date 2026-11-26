@@ -972,7 +972,10 @@ class _VerseListViewState extends State<VerseListView>
                 ),
               ],
               versionLabel: languageProvider.currentLanguage.displayName,
-              onVersionTap: () => _showVersionBottomSheet(context, languageProvider),
+              // 단어 검색 결과는 본문을 고정으로 받아 번역 전환을 반영할 수 없음
+              onVersionTap: widget.hideLanguageToggle
+                  ? null
+                  : () => _showVersionBottomSheet(context, languageProvider),
             ),
           Expanded(
             child: Stack(

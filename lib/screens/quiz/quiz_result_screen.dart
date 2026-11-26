@@ -23,6 +23,8 @@ class _QuizResultScreenState extends State<QuizResultScreen>
   late AnimationController _animController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  // 다시 하기/홈으로 누르면 provider가 바로 비워져, 화면 전환 중 0점이 보이지 않도록 고정
+  late final QuizResult _result = context.read<QuizProvider>().getResult();
 
   @override
   void initState() {
@@ -70,7 +72,7 @@ class _QuizResultScreenState extends State<QuizResultScreen>
 
     return Consumer<QuizProvider>(
       builder: (context, provider, child) {
-        final result = provider.getResult();
+        final result = _result;
 
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,

@@ -535,6 +535,12 @@ List<MapEntry<String, String>> _extractSingleRangeEntries(
       continue;
     }
 
+    // 절이 섞인 구간(22:20~30, 46~49:33, 21:11~22:19)은 단일 범위 규칙으로 처리
+    if (part.contains(':') && part.contains('~')) {
+      result.addAll(_extractSingleRangeEntries(bibleData, '$book$part'));
+      continue;
+    }
+
     // 장~장
     if (part.contains('~')) {
       final bounds = part.split('~');

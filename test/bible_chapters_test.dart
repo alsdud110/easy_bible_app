@@ -36,6 +36,19 @@ void main() {
     expect(missing, isEmpty);
   });
 
+  test('소제목 데이터의 책 이름이 앱 책 이름과 일치', () {
+    final names = bibleBooks.map((b) => b.fullName).toSet();
+    for (final path in [
+      'assets/bible_subtitles.json',
+      'assets/bible_subtitles_snb.json',
+    ]) {
+      final list = json.decode(File(path).readAsStringSync()) as List;
+      final unknown =
+          list.map((e) => e['book'] as String).toSet().difference(names);
+      expect(unknown, isEmpty, reason: path);
+    }
+  });
+
   test('번역본 사이 장별 절 수 차이', () {
     final diffs = <String>[];
     for (final book in bibleBooks) {
