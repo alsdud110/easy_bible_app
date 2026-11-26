@@ -39,6 +39,7 @@ dependencies:
 
   # 정기구독(인앱결제) - 프리미엄 기능 잠금 해제용
   in_app_purchase: ^3.3.0
+  flutter_timezone: ^5.1.1
 
 dev_dependencies:
   flutter_test:

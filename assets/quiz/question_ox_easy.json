@@ -577,14 +577,6 @@
       "explanation": "하나님이 모세를 통해 홍해를 가르셨습니다."
     },
     {
-      "id": "ox_easy_073",
-      "difficulty": "easy",
-      "question": "예수님의 직업은 목수였다.",
-      "answer": true,
-      "reference": "마가복음 6:3",
-      "explanation": "사람들이 예수님을 목수라고 불렀습니다."
-    },
-    {
       "id": "ox_easy_074",
       "difficulty": "easy",
       "question": "성경은 모두 66권이다.",
@@ -695,14 +687,6 @@
       "answer": true,
       "reference": "성경 전체 구조",
       "explanation": "구약의 첫 책은 창세기입니다."
-    },
-    {
-      "id": "ox_easy_088",
-      "difficulty": "easy",
-      "question": "요한복음은 신약성경의 첫 번째 책이다.",
-      "answer": false,
-      "reference": "신약성경 순서",
-      "explanation": "신약 첫 책은 마태복음입니다."
     },
     {
       "id": "ox_easy_089",

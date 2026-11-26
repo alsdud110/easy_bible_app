@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   firebase_remote_config
+  flutter_timezone
   gal
   permission_handler_windows
   share_plus

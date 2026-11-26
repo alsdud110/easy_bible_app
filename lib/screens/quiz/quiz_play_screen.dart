@@ -149,84 +149,92 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
           );
         }
 
-        return Scaffold(
-          backgroundColor: theme.scaffoldBackgroundColor,
-          appBar: AppBar(
-            title: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                '${provider.currentQuestionIndex + 1} / ${provider.totalQuestions}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: ResponsiveUtils.appBarTitleFontSize(context),
-                ),
-              ),
-            ),
-            centerTitle: true,
-            elevation: 0,
-            backgroundColor: cs.surface,
-            leading: IconButton(
-              icon: const Icon(Icons.close_rounded),
-              onPressed: () => _showQuitDialog(context),
-            ),
-          ),
-          body: Column(
-            children: [
-              // 진행 바
-              _buildProgressBar(provider.progress, cs),
-
-              // 문제 영역
-              Expanded(
-                child: FadeTransition(
-                  opacity: _questionFadeAnimation,
-                  child: SlideTransition(
-                    position: _questionSlideAnimation,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: SingleChildScrollView(
-                            controller: _scrollController,
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                // 난이도 뱃지
-                                _buildDifficultyBadge(question.difficulty, cs),
-                                const SizedBox(height: 12),
-
-                                // 문제 카드
-                                _buildQuestionCard(question, cs),
-                                const SizedBox(height: 16),
-
-                                // 선택지
-                                if (question.isOX)
-                                  _buildOXOptions(context, question, cs)
-                                else
-                                  _buildMultipleChoiceOptions(
-                                      context, question, cs),
-
-                                // 피드백
-                                if (_showFeedback) ...[
-                                  const SizedBox(height: 14),
-                                  _buildFeedback(context, question, cs),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                        // 배너 광고 - 항상 표시
-                        const BannerAdWidget(),
-                        // 다음 버튼
-                        if (_showFeedback)
-                          _buildNextButton(context, provider, cs),
-                      ],
-                    ),
+        // 시스템 뒤로가기/스와이프도 X 버튼처럼 종료 확인을 거침
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, _) {
+            if (!didPop) _showQuitDialog(context);
+          },
+          child: Scaffold(
+            backgroundColor: theme.scaffoldBackgroundColor,
+            appBar: AppBar(
+              title: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '${provider.currentQuestionIndex + 1} / ${provider.totalQuestions}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: ResponsiveUtils.appBarTitleFontSize(context),
                   ),
                 ),
               ),
-            ],
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: cs.surface,
+              leading: IconButton(
+                icon: const Icon(Icons.close_rounded),
+                onPressed: () => _showQuitDialog(context),
+              ),
+            ),
+            body: Column(
+              children: [
+                // 진행 바
+                _buildProgressBar(provider.progress, cs),
+
+                // 문제 영역
+                Expanded(
+                  child: FadeTransition(
+                    opacity: _questionFadeAnimation,
+                    child: SlideTransition(
+                      position: _questionSlideAnimation,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              controller: _scrollController,
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  // 난이도 뱃지
+                                  _buildDifficultyBadge(
+                                      question.difficulty, cs),
+                                  const SizedBox(height: 12),
+
+                                  // 문제 카드
+                                  _buildQuestionCard(question, cs),
+                                  const SizedBox(height: 16),
+
+                                  // 선택지
+                                  if (question.isOX)
+                                    _buildOXOptions(context, question, cs)
+                                  else
+                                    _buildMultipleChoiceOptions(
+                                        context, question, cs),
+
+                                  // 피드백
+                                  if (_showFeedback) ...[
+                                    const SizedBox(height: 14),
+                                    _buildFeedback(context, question, cs),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                          // 배너 광고 - 항상 표시
+                          const BannerAdWidget(),
+                          // 다음 버튼
+                          if (_showFeedback)
+                            _buildNextButton(context, provider, cs),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

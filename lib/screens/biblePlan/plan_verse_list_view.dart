@@ -872,7 +872,11 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
         children: [
           ListView.builder(
             controller: _scrollController,
-            padding: const EdgeInsets.only(bottom: 76),
+            // 하단에 떠 있는 '일독 완료' 버튼(16 + 높이 약 52)과 제스처 바 높이만큼 비워 마지막 절이 가리지 않게
+            padding: EdgeInsets.only(
+              bottom: (widget.dayNumber != null ? 88 : 24) +
+                  MediaQuery.of(context).viewPadding.bottom,
+            ),
             itemCount: verseKeys.length,
             itemBuilder: (context, idx) {
               final key = verseKeys[idx];

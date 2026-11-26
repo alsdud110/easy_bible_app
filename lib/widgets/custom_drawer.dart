@@ -12,7 +12,6 @@ import '../models/plan_progress.dart';
 import '../../screens/favorite/favorite_list_screen.dart';
 import '../../screens/subscription/paywall_screen.dart';
 import '../providers/subscription_provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback? onThemeToggle;
@@ -110,10 +109,12 @@ class CustomDrawer extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'All in Bible',
-                      style: GoogleFonts.dancingScript(
+                      // 홈 앱바 워드마크와 같은 글꼴
+                      style: TextStyle(
+                        fontFamily: 'ChosunCentennial',
                         color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.w500,
                         fontSize: 24,
+                        letterSpacing: 0.2,
                       ),
                     ),
                   ],

@@ -38,6 +38,17 @@ void main() {
         read.addAll(entries.map((e) => e.key));
       }
       expect(emptyDays, isEmpty);
+      if (type == PlanType.day60) {
+        // 60일은 장 단위로만 나뉘므로 같은 절이 이틀에 나오면 장 겹침
+        final seen = <String>{};
+        final dup = <String>[];
+        for (var i = 0; i < days.length; i++) {
+          for (final e in extractVersesForDay(bible, days[i])) {
+            if (!seen.add(e.key)) dup.add('${i + 1}일차 ${e.key}');
+          }
+        }
+        expect(dup, isEmpty, reason: dup.take(5).join(', '));
+      }
       final missing = bible.keys.where((k) => !read.contains(k)).toList();
       expect(missing, isEmpty, reason: '빠진 절 ${missing.length}개: ${missing.take(10)}');
     });

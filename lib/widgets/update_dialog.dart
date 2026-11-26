@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/app_version_service.dart';
+import '../utils/keep_words.dart';
+import '../utils/responsive_utils.dart';
 
 /// 업데이트 다이얼로그
 class UpdateDialog extends StatelessWidget {
@@ -40,63 +42,66 @@ class UpdateDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isRequired = updateType == UpdateType.required;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
+    // 오늘의 구절 팝업과 같은 카드 톤(크림 면, 24 모서리, 부드러운 그림자, 버건디 포인트)
     return PopScope(
       canPop: !isRequired, // 강제 업데이트면 뒤로가기 불가
-      child: Dialog(
-        // 모양/배경은 테마(dialogTheme)를 따른다
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 340, // 최대 너비 고정
-            minWidth: 300, // 최소 너비 고정
-          ),
-          child: Builder(builder: (context) {
-            final cs = Theme.of(context).colorScheme;
-            return Padding(
-            padding: const EdgeInsets.all(24),
+      child: Material(
+        color: Colors.transparent,
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 340),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.fromLTRB(22, 30, 22, 20),
+            decoration: BoxDecoration(
+              color: cs.surface,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.13),
+                  blurRadius: 36,
+                  offset: const Offset(0, 18),
+                ),
+              ],
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // 아이콘: 조용한 면 위의 선 아이콘
                 Container(
                   width: 64,
                   height: 64,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: cs.surfaceContainerHighest,
+                    color: cs.primary.withValues(alpha: 0.09),
                   ),
                   child: Icon(
-                    isRequired ? Icons.system_update : Icons.update,
-                    size: 28,
-                    color: cs.onSurfaceVariant,
+                    Icons.system_update_rounded,
+                    size: 30,
+                    color: cs.primary,
                   ),
                 ),
-                const SizedBox(height: 20),
-
-                // 제목
+                const SizedBox(height: 14),
                 Text(
                   isRequired ? '업데이트 필수' : '업데이트 필요',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: cs.onSurface,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: ResponsiveUtils.titleFontSize(context),
+                    color: cs.onSurface.withValues(alpha: 0.93),
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                // 메시지
                 Text(
-                  message,
+                  keepWords(message),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15,
-                    height: 1.5,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    fontSize: ResponsiveUtils.bodyFontSize(context),
+                    height: 1.6,
                     color: cs.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // 버튼들 (주 버튼 = 버건디, 보조 = 헤어라인)
+                const SizedBox(height: 22),
                 if (isRequired)
                   SizedBox(
                     width: double.infinity,
@@ -135,8 +140,7 @@ class UpdateDialog extends StatelessWidget {
                   ),
               ],
             ),
-          );
-          }),
+          ),
         ),
       ),
     );
@@ -155,6 +159,7 @@ class UpdateDialog extends StatelessWidget {
     await showDialog(
       context: context,
       barrierDismissible: updateType != UpdateType.required,
+      barrierColor: Colors.black.withValues(alpha: 0.22),
       builder: (context) => UpdateDialog(
         updateType: updateType,
         message: message,

@@ -129,16 +129,16 @@
     {
       "id": "mc_easy_010",
       "difficulty": "easy",
-      "question": "예수님이 선택한 첫 번째 제자로 알려진 사람은?",
+      "question": "요한복음 1장에서 세례 요한의 말을 듣고 예수님을 따른 두 사람 중 이름이 나오는 사람은?",
       "options": [
         "요한",
         "야고보",
         "안드레",
         "베드로"
       ],
-      "correctIndex": 3,
-      "reference": "마태복음 4:18",
-      "explanation": "예수님은 먼저 베드로와 그의 형제 안드레를 부르셨습니다."
+      "correctIndex": 2,
+      "reference": "요한복음 1:40",
+      "explanation": "예수님을 따른 두 사람 중 하나는 시몬 베드로의 형제 안드레였고, 안드레가 베드로를 예수님께 데려왔습니다."
     },
     {
       "id": "mc_easy_011",
@@ -159,14 +159,14 @@
       "difficulty": "easy",
       "question": "예수님이 5병 2어 기적을 행하신 장소는?",
       "options": [
-        "광야",
-        "산 위",
+        "빈 들",
+        "회당",
         "성전",
-        "갈릴리 바닷가"
+        "가버나움 마을"
       ],
-      "correctIndex": 1,
-      "reference": "마태복음 14:19",
-      "explanation": "예수님은 사람들을 '잔디 위에' 앉게 하셨습니다."
+      "correctIndex": 0,
+      "reference": "마태복음 14:15",
+      "explanation": "제자들이 '이 곳은 빈 들'이라고 말한 곳에서 오병이어 기적이 일어났습니다."
     },
     {
       "id": "mc_easy_013",
@@ -377,20 +377,6 @@
       "correctIndex": 3,
       "reference": "마태복음 4:2",
       "explanation": "예수께서 40일 동안 금식하며 시험을 받으셨습니다."
-    },
-    {
-      "id": "mc_easy_028",
-      "difficulty": "easy",
-      "question": "아담과 하와가 살았던 동산의 이름은?",
-      "options": [
-        "에덴동산",
-        "갈멜산",
-        "시온산",
-        "아라랏산"
-      ],
-      "correctIndex": 0,
-      "reference": "창세기 2:8",
-      "explanation": "하나님은 에덴동산에 사람을 두셨습니다."
     },
     {
       "id": "mc_easy_029",
@@ -1121,20 +1107,6 @@
       "explanation": "베들레헴은 다윗의 고향입니다."
     },
     {
-      "id": "mc_easy_081",
-      "difficulty": "easy",
-      "question": "바울의 원래 이름은?",
-      "options": [
-        "요한",
-        "베드로",
-        "사울",
-        "빌립"
-      ],
-      "correctIndex": 2,
-      "reference": "사도행전 13:9",
-      "explanation": "사울이 바울이라고도 불렸습니다."
-    },
-    {
       "id": "mc_easy_082",
       "difficulty": "easy",
       "question": "아담의 아내 이름은?",
@@ -1483,34 +1455,6 @@
       "correctIndex": 1,
       "reference": "창세기 8:7",
       "explanation": "노아가 까마귀를 먼저 내보냈습니다."
-    },
-    {
-      "id": "mc_easy_107",
-      "difficulty": "easy",
-      "question": "예수님이 태어난 도시는?",
-      "options": [
-        "예루살렘",
-        "나사렛",
-        "베들레헴",
-        "여리고"
-      ],
-      "correctIndex": 2,
-      "reference": "누가복음 2:4-7",
-      "explanation": "예수님은 베들레헴에서 태어나셨습니다."
-    },
-    {
-      "id": "mc_easy_108",
-      "difficulty": "easy",
-      "question": "성경의 첫 번째 책은?",
-      "options": [
-        "출애굽기",
-        "창세기",
-        "레위기",
-        "민수기"
-      ],
-      "correctIndex": 1,
-      "reference": "창세기",
-      "explanation": "창세기는 성경의 첫 번째 책입니다."
     },
     {
       "id": "mc_easy_109",
@@ -1877,20 +1821,6 @@
       "explanation": "요한계시록이 성경의 마지막 책입니다."
     },
     {
-      "id": "mc_easy_135",
-      "difficulty": "easy",
-      "question": "바울의 원래 이름은?",
-      "options": [
-        "사울",
-        "시몬",
-        "요셉",
-        "베드로"
-      ],
-      "correctIndex": 0,
-      "reference": "사도행전 13:9",
-      "explanation": "바울은 원래 사울이라고 불렸습니다."
-    },
-    {
       "id": "mc_easy_136",
       "difficulty": "easy",
       "question": "예수님이 자라난 고향은?",
@@ -1959,20 +1889,6 @@
       "correctIndex": 1,
       "reference": "출애굽기 31:18",
       "explanation": "하나님께서 두 돌판에 십계명을 기록하셨습니다."
-    },
-    {
-      "id": "mc_easy_141",
-      "difficulty": "easy",
-      "question": "예수님의 어머니는?",
-      "options": [
-        "마르다",
-        "마리아",
-        "엘리사벳",
-        "한나"
-      ],
-      "correctIndex": 1,
-      "reference": "누가복음 1:26-27",
-      "explanation": "마리아는 예수님의 어머니입니다."
     },
     {
       "id": "mc_easy_142",

@@ -38,6 +38,10 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
   Map<int, String>? _currentChapterVerses;
 
   bool isLoading = true;
+  // _fullBibleData가 어느 번역본 데이터인지. 로드 중엔 provider 언어와 다를 수 있어 키 조회는 이 값 기준
+  BibleLanguage _dataLanguage = BibleLanguage.korean;
+  // 번역본을 연달아 바꿨을 때 늦게 끝난 이전 로드가 결과를 덮어쓰지 않도록
+  int _languageLoadId = 0;
 
   // 배너 광고를 한 번만 로드하고 재사용
   Widget? _sharedBannerAd;
@@ -74,37 +78,24 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
 
     print('🔄 언어 변경 감지');
 
-    // 현재 상태 저장
-    final currentStep = step;
-    final currentBook = selectedBook;
-    final currentChapter = selectedChapter;
-    final currentVerse = selectedVerse;
-
-    setState(() {
-      isLoading = true;
-    });
-
-    // JSON 다시 로드
-    _fullBibleData = await _loadBibleJson(context);
-
-    if (!mounted) return;
+    // 화면을 로딩으로 바꾸지 않음: 본문 화면을 그대로 둬야 스크롤 위치와 범위 선택이 유지됨
+    final loadId = ++_languageLoadId;
+    final language = context.read<LanguageProvider>().currentLanguage;
+    final data = await _loadBibleJson(context);
+    if (!mounted || loadId != _languageLoadId) return;
+    _fullBibleData = data;
+    _dataLanguage = language;
 
     // 현재 보고 있는 장이 있으면 재로드
-    if (currentBook != -1 && currentChapter != -1) {
-      final book = bibleBookList[currentBook];
-      final chapterNum = currentChapter + 1;
-      _currentChapterVerses = await _loadChapter(book.name, chapterNum);
+    Map<int, String>? chapterVerses;
+    if (selectedBook != -1 && selectedChapter != -1) {
+      chapterVerses = await _loadChapter(
+          bibleBookList[selectedBook].name, selectedChapter + 1);
     }
+    if (!mounted || loadId != _languageLoadId) return;
 
-    if (!mounted) return;
-
-    // ⭐ 현재 단계로 다시 설정하여 화면 재구성
     setState(() {
-      step = currentStep;
-      selectedBook = currentBook;
-      selectedChapter = currentChapter;
-      selectedVerse = currentVerse;
-      isLoading = false;
+      if (chapterVerses != null) _currentChapterVerses = chapterVerses;
     });
 
     print('✅ 언어 변경 완료');
@@ -112,7 +103,9 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
 
   Future<void> _initBible() async {
     bibleBookList = bibleBooks;
+    final language = context.read<LanguageProvider>().currentLanguage;
     _fullBibleData = await _loadBibleJson(context);
+    _dataLanguage = language;
 
     if (!mounted) return; // ⭐ mounted 체크
 
@@ -153,8 +146,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
   Future<Map<int, String>> _loadChapter(String bookName, int chapter) async {
     if (_fullBibleData == null) return {};
 
-    final languageProvider = context.read<LanguageProvider>();
-    final currentLanguage = languageProvider.currentLanguage;
+    final currentLanguage = _dataLanguage;
 
     final Map<int, String> verses = {};
 
@@ -196,8 +188,7 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
   int _getVerseCount(String bookName, int chapter) {
     if (_fullBibleData == null) return 0;
 
-    final languageProvider = context.read<LanguageProvider>();
-    final currentLanguage = languageProvider.currentLanguage;
+    final currentLanguage = _dataLanguage;
 
     int count = 0;
     String searchPrefix;

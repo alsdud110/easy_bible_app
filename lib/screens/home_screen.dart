@@ -29,14 +29,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 300),
     vsync: this,
   )..forward();
 
+  // 앱을 켜 둔 채 날짜가 바뀌면 날짜 줄과 오늘의 말씀을 새로 그리기 위한 키
+  String _today = _dateKey();
+
+  static String _dateKey() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month}-${now.day}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _dateKey() != _today) {
+      setState(() => _today = _dateKey());
+    }
+  }
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     super.dispose();
   }
@@ -59,18 +81,19 @@ class _HomeScreenState extends State<HomeScreen>
                   parent: _controller,
                   curve: Curves.easeOut,
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _DateLine(),
-                    SizedBox(height: 12),
-                    _TodayReadingCard(),
-                    SizedBox(height: 24),
-                    _SectionLabel('오늘의 말씀'),
+                    _DateLine(key: ValueKey(_today)),
+                    const SizedBox(height: 12),
+                    const _TodayReadingCard(),
+                    const SizedBox(height: 24),
+                    const _SectionLabel('오늘의 말씀'),
                     // TodayVerseCard 자체에 위 12, 아래 16 여백이 있다
-                    TodayVerseCard(),
-                    SizedBox(height: 16),
-                    _ShortcutList(),
+                    // 날짜가 바뀌면 키가 바뀌어 새 상태로 다시 불러옴
+                    TodayVerseCard(key: ValueKey(_today)),
+                    const SizedBox(height: 16),
+                    const _ShortcutList(),
                   ],
                 ),
               ),
@@ -123,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen>
 // 날짜 한 줄
 // ─────────────────────────────────────────────
 class _DateLine extends StatelessWidget {
-  const _DateLine();
+  const _DateLine({super.key});
 
   static const _weekdays = ['월', '화', '수', '목', '금', '토', '일'];
 
