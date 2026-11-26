@@ -63,7 +63,7 @@ const Map<String, String> koreanToEnglishBookMap = {
   '딛': 'Tit',
   '몬': 'Phm',
   '히': 'Heb',
-  '약': 'Jam',
+  '약': 'Jas',
   '벧전': '1Pe',
   '벧후': '2Pe',
   '요일': '1Jn',

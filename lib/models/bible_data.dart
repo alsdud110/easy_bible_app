@@ -85,7 +85,7 @@ class BibleData {
       'Titus': 'Tit',
       'Philemon': 'Phm',
       'Hebrews': 'Heb',
-      'James': 'Jam',
+      'James': 'Jas',
       '1 Peter': '1Pe',
       '2 Peter': '2Pe',
       '1 John': '1Jn',

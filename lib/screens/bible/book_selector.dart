@@ -1287,12 +1287,15 @@ class _BookSelectorState extends State<BookSelector>
   Future<void> _navigateToVerseFromSearch(BibleSearchResult result) async {
     final languageProvider = context.read<LanguageProvider>();
     final currentLanguage = languageProvider.currentLanguage;
-    final isKorean = currentLanguage == BibleLanguage.korean;
+    // 표준새번역도 한글 책 이름 키를 씀
+    final isKorean = currentLanguage != BibleLanguage.english;
 
     // JSON 로드
-    final String assetPath = isKorean
-        ? 'assets/bible.json'
-        : 'assets/bible_kjv.json';
+    final String assetPath = switch (currentLanguage) {
+      BibleLanguage.korean => 'assets/bible.json',
+      BibleLanguage.snb => 'assets/bible_snb.json',
+      BibleLanguage.english => 'assets/bible_kjv.json',
+    };
 
     final String data = await rootBundle.loadString(assetPath);
     final Map<String, dynamic> fullBibleData = json.decode(data);

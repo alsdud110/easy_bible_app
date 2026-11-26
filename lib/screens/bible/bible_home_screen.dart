@@ -202,11 +202,11 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
     int count = 0;
     String searchPrefix;
 
-    if (currentLanguage == BibleLanguage.korean) {
-      searchPrefix = '$bookName$chapter:';
-    } else {
+    if (currentLanguage == BibleLanguage.english) {
       final englishBookName = BookNameConverter.koreanToEnglish(bookName);
       searchPrefix = '$englishBookName$chapter:';
+    } else {
+      searchPrefix = '$bookName$chapter:';
     }
 
     for (var key in _fullBibleData!.keys) {
