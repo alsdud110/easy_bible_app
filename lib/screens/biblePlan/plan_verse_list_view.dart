@@ -50,6 +50,8 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
   final _scrollController = ScrollController();
   late String _selectedVerseKey;
   bool _showFAB = false;
+  // 본문을 끝까지 내려 봐야 '일독 완료'를 누를 수 있다. 한 번 닿으면 다시 잠그지 않음
+  bool _reachedBottom = false;
 
   String? _rangeStart;
   String? _rangeEnd;
@@ -81,7 +83,10 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
           _showFAB = false;
         });
       }
+      _checkReachedBottom();
     });
+    // 본문이 짧아 스크롤할 게 없으면 바로 열어 준다
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkReachedBottom());
 
     // ⭐ 플로팅 액션 바 애니메이션
     _floatingActionBarController = AnimationController(
@@ -123,8 +128,20 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
       final keys = widget.verses.keys.toList();
       setState(() {
         _selectedVerseKey = keys.isNotEmpty ? keys.first : "";
+        _reachedBottom = false;
         _exitSelectionMode();
       });
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _checkReachedBottom());
+    }
+  }
+
+  void _checkReachedBottom() {
+    if (_reachedBottom || !mounted || !_scrollController.hasClients) return;
+    final position = _scrollController.position;
+    // 마지막 절이 거의 다 보이면 끝까지 읽은 것으로 본다
+    if (position.pixels >= position.maxScrollExtent - 48) {
+      setState(() => _reachedBottom = true);
     }
   }
 
@@ -968,12 +985,14 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                           ? planProvider.isDayCompleted(
                               widget.planType!, widget.dayNumber!)
                           : false;
+                  // 아직 끝까지 안 내렸으면 잠금 (이미 완료한 날은 그대로 완료 표시)
+                  final isLocked = !isCompleted && !_reachedBottom;
 
                   return AnimatedOpacity(
                     opacity: isCompleted ? 0.6 : 1.0,
                     duration: const Duration(milliseconds: 300),
                     child: ElevatedButton.icon(
-                      onPressed: isCompleted
+                      onPressed: isCompleted || isLocked
                           ? null
                           : () async {
                               if (widget.planType != null &&
@@ -993,13 +1012,17 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                               }
                             },
                       icon: Icon(
-                        isCompleted ? Icons.check_circle : Icons.check,
+                        isCompleted
+                            ? Icons.check_circle
+                            : (isLocked
+                                ? Icons.keyboard_double_arrow_down_rounded
+                                : Icons.check),
                         size: 20,
                       ),
                       label: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          isCompleted ? '일독 완료' : '일독 완료',
+                          isLocked ? '끝까지 읽으면 완료할 수 있어요' : '일독 완료',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: ResponsiveUtils.bodyFontSize(context),
@@ -1009,6 +1032,13 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                       style: ElevatedButton.styleFrom(
                         foregroundColor: isCompleted ? cs.onSurface : cs.onPrimary,
                         backgroundColor: isCompleted ? cs.surface : cs.primary,
+                        // 비활성 상태 색: 완료는 테두리 버튼, 잠금은 옅은 강조색
+                        disabledForegroundColor: isCompleted
+                            ? cs.onSurface
+                            : cs.onPrimary.withOpacity(0.9),
+                        disabledBackgroundColor: isCompleted
+                            ? cs.surface
+                            : cs.primary.withOpacity(0.35),
                         elevation: 0,
                         shadowColor: Colors.transparent,
                         side: isCompleted
@@ -1241,6 +1271,17 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
     );
   }
 
+  /// 완료 팝업 문구: '🔥 5일 연속 · 전체 12%'. 연속 기록이 없으면 진행률만
+  String _dayCompletionSummary() {
+    final plan = widget.planType == null
+        ? null
+        : context.read<PlanProgressProvider>().plans[widget.planType];
+    if (plan == null) return '축하합니다! 🎉';
+    final streak = plan.currentStreak;
+    final percent = '전체 ${plan.progressPercent}%';
+    return streak >= 1 ? '🔥 $streak일 연속 · $percent' : percent;
+  }
+
   // Day 완료 작은 팝업
   void _showDayCompletionDialog() {
     final theme = Theme.of(context);
@@ -1321,7 +1362,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '축하합니다! 🎉',
+                      _dayCompletionSummary(),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: cs.primary,
@@ -1380,7 +1421,7 @@ class _PlanVerseListViewState extends State<PlanVerseListView>
                               label: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  '다음일차',
+                                  '다음',
                                   style: TextStyle(
                                     fontSize: ResponsiveUtils.bodyFontSize(context),
                                     fontWeight: FontWeight.w600,

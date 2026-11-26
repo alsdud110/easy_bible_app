@@ -50,6 +50,8 @@ class PlanProgress {
   final Set<int> completedDays; // 완료한 Day 목록 (1, 2, 3...)
   final DateTime? notificationTime; // 알림 시간 (선택사항)
   final DateTime? completedDate; // 완주일 (모든 Day 완료 시)
+  // Day별 완료한 날짜(yyyy-MM-dd). 연속 일수 계산용. 이 필드 추가 전 기록은 날짜가 없다
+  final Map<int, String> completedDayDates;
 
   PlanProgress({
     required this.id,
@@ -59,7 +61,9 @@ class PlanProgress {
     Set<int>? completedDays,
     this.notificationTime,
     this.completedDate,
-  }) : completedDays = completedDays ?? {};
+    Map<int, String>? completedDayDates,
+  })  : completedDays = completedDays ?? {},
+        completedDayDates = completedDayDates ?? {};
 
   // 진행률 계산 (0.0 ~ 1.0)
   double get progressPercentage {
@@ -93,6 +97,27 @@ class PlanProgress {
     return planType.totalDays; // 모두 완료한 경우 마지막 Day 반환
   }
 
+  /// 오늘(또는 어제)까지 하루도 빠지지 않고 일독한 연속 일수.
+  /// 오늘 아직 안 읽었어도 어제까지 이어져 있으면 연속으로 본다.
+  int get currentStreak {
+    final dates = completedDayDates.values.toSet();
+    if (dates.isEmpty) return 0;
+    var cursor = DateTime.now();
+    if (!dates.contains(_dateKey(cursor))) {
+      cursor = cursor.subtract(const Duration(days: 1));
+      if (!dates.contains(_dateKey(cursor))) return 0;
+    }
+    var streak = 0;
+    while (dates.contains(_dateKey(cursor))) {
+      streak++;
+      cursor = cursor.subtract(const Duration(days: 1));
+    }
+    return streak;
+  }
+
+  static String _dateKey(DateTime d) =>
+      "${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
+
   // 경과 일수
   int get elapsedDays {
     final now = DateTime.now();
@@ -108,6 +133,8 @@ class PlanProgress {
         'completedDays': completedDays.toList(),
         'notificationTime': notificationTime?.millisecondsSinceEpoch,
         'completedDate': completedDate?.millisecondsSinceEpoch,
+        'completedDayDates':
+            completedDayDates.map((k, v) => MapEntry(k.toString(), v)),
       };
 
   factory PlanProgress.fromJson(Map<String, dynamic> json) {
@@ -146,6 +173,11 @@ class PlanProgress {
       completedDate: json['completedDate'] != null
           ? parseDateTime(json['completedDate'])
           : null,
+      completedDayDates:
+          (json['completedDayDates'] as Map<String, dynamic>?)?.map(
+                (k, v) => MapEntry(int.parse(k), v as String),
+              ) ??
+              {},
     );
   }
 
@@ -158,6 +190,7 @@ class PlanProgress {
     Set<int>? completedDays,
     DateTime? notificationTime,
     DateTime? completedDate,
+    Map<int, String>? completedDayDates,
   }) {
     return PlanProgress(
       id: id ?? this.id,
@@ -167,6 +200,7 @@ class PlanProgress {
       completedDays: completedDays ?? this.completedDays,
       notificationTime: notificationTime ?? this.notificationTime,
       completedDate: completedDate ?? this.completedDate,
+      completedDayDates: completedDayDates ?? this.completedDayDates,
     );
   }
 
@@ -175,8 +209,12 @@ class PlanProgress {
     final newCompletedDays = Set<int>.from(completedDays)..add(day);
     final isNowCompleted = newCompletedDays.length >= planType.totalDays;
 
+    final newDates = Map<int, String>.from(completedDayDates)
+      ..[day] = _dateKey(DateTime.now());
+
     return copyWith(
       completedDays: newCompletedDays,
+      completedDayDates: newDates,
       completedDate: isNowCompleted && completedDate == null
           ? DateTime.now()
           : completedDate,
@@ -186,9 +224,11 @@ class PlanProgress {
   // Day 완료 취소
   PlanProgress unmarkDayAsCompleted(int day) {
     final newCompletedDays = Set<int>.from(completedDays)..remove(day);
+    final newDates = Map<int, String>.from(completedDayDates)..remove(day);
 
     return copyWith(
       completedDays: newCompletedDays,
+      completedDayDates: newDates,
       completedDate: null, // 완료 취소 시 완주일도 초기화
     );
   }

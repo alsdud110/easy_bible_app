@@ -16,7 +16,7 @@ import '../../widgets/breadcrumb_bar.dart';
 import '../../providers/subscription_provider.dart';
 import '../../utils/premium_gate.dart';
 import '../bible_card_preview_screen.dart';
-import '../favorite/favorite_detail_screen.dart';
+import '../../widgets/memo_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerseListView extends StatefulWidget {
@@ -269,11 +269,9 @@ class _VerseListViewState extends State<VerseListView>
     );
   }
 
+  // 북마크 화면으로 이동하지 않고 본문 위에 메모 시트만 띄운다
   void _openMemo(FavoriteVerse favorite) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) =>
-          FavoriteDetailScreen(favorite: favorite, openMemoOnStart: true),
-    ));
+    showMemoBottomSheet(context, favorite.key);
   }
 
   @override
@@ -1187,15 +1185,19 @@ class _VerseListViewState extends State<VerseListView>
                           Color? backgroundColor;
                           Color? borderColor;
                           Color? textColor;
+                          // 하이라이트는 줄 전체가 아니라 본문 글자 뒤에만 형광펜처럼 칠한다
+                          Color? textHighlightColor;
 
                           if (isInRange) {
                             backgroundColor = cs.primary.withOpacity(0.1);
                             borderColor = cs.primary;
                             textColor = cs.onSurface.withOpacity(1.0);
                           } else if (isHighlighted) {
-                            backgroundColor = highlight.color.color;
-                            borderColor = highlight.color.darkColor;
-                            textColor = cs.onSurface;
+                            textHighlightColor = highlight.color.color;
+                            // 형광펜 색이 밝아서 다크 모드에서도 글자는 어둡게
+                            textColor = theme.brightness == Brightness.dark
+                                ? const Color(0xFF2B2622)
+                                : cs.onSurface;
                           } else if (isSelected) {
                             backgroundColor = cs.primary.withOpacity(0.1);
                             textColor = cs.onSurface.withOpacity(0.7);
@@ -1248,23 +1250,15 @@ class _VerseListViewState extends State<VerseListView>
                                   curve: Curves.easeOutCubic,
                                   decoration: BoxDecoration(
                                     color: backgroundColor,
-                                    border: isHighlighted
+                                    border: isInRange
                                         ? Border(
                                             left: BorderSide(
                                               color: borderColor ??
                                                   Colors.transparent,
-                                              width: 4,
+                                              width: 3,
                                             ),
                                           )
-                                        : (isInRange
-                                            ? Border(
-                                                left: BorderSide(
-                                                  color: borderColor ??
-                                                      Colors.transparent,
-                                                  width: 3,
-                                                ),
-                                              )
-                                            : null),
+                                        : null,
                                   ),
                                   child: ListTile(
                                     onTap: () => _handleVerseTap(verseNum),
@@ -1285,7 +1279,10 @@ class _VerseListViewState extends State<VerseListView>
                                                 ? fontSize
                                                     .verseNumberSelectedSize
                                                 : fontSize.verseNumberSize,
-                                            color: textColor,
+                                            // 절 번호는 형광펜 밖이라 배경 기준 색
+                                            color: textHighlightColor != null
+                                                ? cs.onSurface
+                                                : textColor,
                                           ),
                                           child: Text('$verseNum'),
                                         ),
@@ -1313,6 +1310,7 @@ class _VerseListViewState extends State<VerseListView>
                                             ? fontSize.verseTextSelectedSize
                                             : fontSize.verseTextSize,
                                         color: textColor,
+                                        backgroundColor: textHighlightColor,
                                       ),
                                       child: Text(text),
                                     ),
