@@ -16,6 +16,8 @@ import '../../widgets/breadcrumb_bar.dart';
 import '../../providers/subscription_provider.dart';
 import '../../utils/premium_gate.dart';
 import '../bible_card_preview_screen.dart';
+import '../favorite/favorite_detail_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VerseListView extends StatefulWidget {
   final BibleData book;
@@ -72,6 +74,14 @@ class _VerseListViewState extends State<VerseListView>
   late AnimationController _floatingActionBarController;
   late Animation<double> _floatingActionBarScale;
   late Animation<double> _floatingActionBarOpacity;
+
+  // 좌우 스와이프 장 넘김 첫 사용 안내
+  static const _swipeHintKey = 'swipe_chapter_hint_shown';
+  bool _showSwipeHint = false;
+  late final AnimationController _swipeHintController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  );
 
   @override
   void initState() {
@@ -144,6 +154,126 @@ class _VerseListViewState extends State<VerseListView>
       _measureItemHeight();
       _scrollToSelectedOnce();
     });
+    _loadSwipeHint();
+  }
+
+  /// 단어 검색 결과처럼 본문을 고정으로 받은 화면에서는 장을 넘기지 않음
+  bool get _canSwipeChapters =>
+      !widget.hideLanguageToggle && widget.onChapterChanged != null;
+
+  bool get _hasPrevChapter =>
+      widget.chapter > 1 || widget.book.name != bibleBooks.first.name;
+
+  bool get _hasNextChapter =>
+      widget.chapter < widget.book.chapters ||
+      widget.book.name != bibleBooks.last.name;
+
+  /// delta만큼 장 이동. 책 경계를 넘는 처리는 부모(onChapterChanged)가 함
+  void _goChapter(int delta) {
+    if (delta < 0 ? !_hasPrevChapter : !_hasNextChapter) return;
+    HapticFeedback.selectionClick();
+    widget.onChapterChanged?.call(widget.chapter + delta);
+  }
+
+  void _handleHorizontalSwipe(DragEndDetails details) {
+    if (!_canSwipeChapters || _isSelectionMode) return;
+    final velocity = details.primaryVelocity ?? 0;
+    if (velocity.abs() < 300) return; // 살짝 흔들린 건 무시
+    _goChapter(velocity < 0 ? 1 : -1);
+  }
+
+  Future<void> _loadSwipeHint() async {
+    if (!_canSwipeChapters) return;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool(_swipeHintKey) ?? false) return;
+    } catch (_) {
+      return;
+    }
+    if (!mounted) return;
+    setState(() => _showSwipeHint = true);
+    _swipeHintController.repeat(reverse: true);
+  }
+
+  Future<void> _dismissSwipeHint() async {
+    _swipeHintController.stop();
+    setState(() => _showSwipeHint = false);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_swipeHintKey, true);
+    } catch (_) {}
+  }
+
+  Widget _buildSwipeHint(ColorScheme cs) {
+    return Positioned.fill(
+      child: GestureDetector(
+        onTap: _dismissSwipeHint,
+        child: Container(
+          color: Colors.black.withValues(alpha: 0.78),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedBuilder(
+                animation: _swipeHintController,
+                builder: (context, child) => Transform.translate(
+                  offset: Offset(
+                      (Curves.easeInOut.transform(_swipeHintController.value) *
+                                  2 -
+                              1) *
+                          48,
+                      0),
+                  child: child,
+                ),
+                child: const Icon(Icons.swipe_rounded,
+                    size: 64, color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.arrow_back_ios_new_rounded,
+                      size: 16, color: Colors.white70),
+                  SizedBox(width: 8),
+                  Text('이전 장',
+                      style: TextStyle(color: Colors.white70, fontSize: 14)),
+                  SizedBox(width: 40),
+                  Text('다음 장',
+                      style: TextStyle(color: Colors.white70, fontSize: 14)),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward_ios_rounded,
+                      size: 16, color: Colors.white70),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                '본문을 좌우로 밀면\n이전 장, 다음 장으로 넘어가요',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  height: 1.5,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _dismissSwipeHint,
+                child: const Text('확인'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openMemo(FavoriteVerse favorite) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) =>
+          FavoriteDetailScreen(favorite: favorite, openMemoOnStart: true),
+    ));
   }
 
   @override
@@ -153,6 +283,7 @@ class _VerseListViewState extends State<VerseListView>
     _highlightAppliedController.dispose();
     _languageChangeController.dispose();
     _floatingActionBarController.dispose();
+    _swipeHintController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -325,27 +456,43 @@ class _VerseListViewState extends State<VerseListView>
     _exitSelectionMode();
   }
 
-  void _addToFavorites() async {
-    final favoriteProvider = context.read<FavoriteProvider>();
+  FavoriteVerse? _favoriteForSelection() {
     final selectedVerses = _getSelectedVerseRange();
-    if (selectedVerses.isEmpty) return;
-
-    final now = DateTime.now().toLocal();
-
-    final favorite = FavoriteVerse(
+    if (selectedVerses.isEmpty) return null;
+    return FavoriteVerse(
       bookName: widget.book.fullName,
       chapter: widget.chapter,
       startVerse: selectedVerses.first,
       endVerse: selectedVerses.last,
       reference: _getVerseReference(),
       text: _getSelectedVersesText(),
-      createdAt: now,
+      createdAt: DateTime.now().toLocal(),
     );
+  }
 
-    await favoriteProvider.addFavorite(favorite);
+  void _addToFavorites() async {
+    final favorite = _favoriteForSelection();
+    if (favorite == null) return;
+
+    await context.read<FavoriteProvider>().addFavorite(favorite);
     if (!mounted) return;
 
     _exitSelectionMode();
+  }
+
+  /// 메모는 북마크에 붙으므로, 선택 범위가 북마크가 아니면 먼저 북마크한 뒤 메모 화면을 연다
+  void _addMemo() async {
+    final selection = _favoriteForSelection();
+    if (selection == null) return;
+    final provider = context.read<FavoriteProvider>();
+    var favorite = provider.getFavoriteByKey(selection.key);
+    if (favorite == null) {
+      await provider.addFavorite(selection);
+      favorite = selection;
+    }
+    if (!mounted) return;
+    _exitSelectionMode();
+    _openMemo(favorite);
   }
 
   void _showHighlightColorPicker() {
@@ -526,7 +673,9 @@ class _VerseListViewState extends State<VerseListView>
                             ),
                             child: Icon(
                               Icons.format_color_reset,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                               size: 28,
                             ),
                           ),
@@ -617,7 +766,8 @@ class _VerseListViewState extends State<VerseListView>
     });
   }
 
-  void _showVersionBottomSheet(BuildContext context, LanguageProvider languageProvider) {
+  void _showVersionBottomSheet(
+      BuildContext context, LanguageProvider languageProvider) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final isPremium = context.read<SubscriptionProvider>().isPremium;
@@ -657,12 +807,14 @@ class _VerseListViewState extends State<VerseListView>
                   return InkWell(
                     onTap: () async {
                       Navigator.pop(ctx);
-                      final allowed = await ensureBibleLanguageUnlocked(context, lang);
+                      final allowed =
+                          await ensureBibleLanguageUnlocked(context, lang);
                       if (!allowed) return;
                       await languageProvider.setLanguage(lang);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 14),
                       child: Row(
                         children: [
                           AnimatedContainer(
@@ -671,14 +823,18 @@ class _VerseListViewState extends State<VerseListView>
                             height: 22,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: isSelected ? cs.primary : Colors.transparent,
+                              color:
+                                  isSelected ? cs.primary : Colors.transparent,
                               border: Border.all(
-                                color: isSelected ? cs.primary : cs.onSurface.withValues(alpha: 0.3),
+                                color: isSelected
+                                    ? cs.primary
+                                    : cs.onSurface.withValues(alpha: 0.3),
                                 width: 2,
                               ),
                             ),
                             child: isSelected
-                                ? Icon(Icons.check, size: 14, color: cs.onPrimary)
+                                ? Icon(Icons.check,
+                                    size: 14, color: cs.onPrimary)
                                 : null,
                           ),
                           const SizedBox(width: 16),
@@ -689,7 +845,9 @@ class _VerseListViewState extends State<VerseListView>
                                 name,
                                 style: TextStyle(
                                   fontSize: 15,
-                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
                                   color: isSelected ? cs.primary : cs.onSurface,
                                 ),
                               ),
@@ -808,6 +966,16 @@ class _VerseListViewState extends State<VerseListView>
                   ),
                 ),
                 const SizedBox(width: 4),
+                // 메모 버튼
+                Expanded(
+                  child: _buildActionButton(
+                    icon: Icons.edit_note_rounded,
+                    label: '메모',
+                    onPressed: _addMemo,
+                    color: cs.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(width: 4),
                 // 성경 공유 버튼 (맨 오른쪽)
                 Expanded(
                   child: _buildActionButton(
@@ -876,6 +1044,11 @@ class _VerseListViewState extends State<VerseListView>
     final verseNums = widget.verses.keys.toList()..sort();
     final favoriteProvider = context.watch<FavoriteProvider>();
     final highlightProvider = context.watch<HighlightProvider>();
+    // 메모가 있는 북마크는 범위의 마지막 절 끝에 '>'를 보여 메모로 바로 이동
+    final memoFavorites = favoriteProvider
+        .getFavoritesForChapter(widget.book.fullName, widget.chapter)
+        .where((f) => f.memos.isNotEmpty)
+        .toList();
     final languageProvider = context.watch<LanguageProvider>();
     final fontSizeProvider = context.watch<BibleFontSizeProvider>();
     final fontSize = fontSizeProvider.currentSize;
@@ -884,9 +1057,6 @@ class _VerseListViewState extends State<VerseListView>
             .getSnbSubtitlesForChapter(widget.book.fullName, widget.chapter)
         : BibleSubtitleService()
             .getSubtitlesForChapter(widget.book.fullName, widget.chapter);
-
-    const minChapter = 1;
-    final maxChapter = widget.book.chapters;
 
     return Scaffold(
       appBar: AppBar(
@@ -980,172 +1150,195 @@ class _VerseListViewState extends State<VerseListView>
           Expanded(
             child: Stack(
               children: [
-                FadeTransition(
-                  opacity: _languageFadeAnimation,
-                  child: SlideTransition(
-                    position: _languageSlideAnimation,
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: verseNums.length,
-                      physics: const ClampingScrollPhysics(),
-                      padding: const EdgeInsets.only(bottom: 80),
-                      itemBuilder: (context, idx) {
-                        final verseNum = verseNums[idx];
-                        final text = widget.verses[verseNum] ?? '';
-                        final isSelected =
-                            !_isSelectionMode && verseNum == _selectedVerse;
-                        final isInRange = _isVerseInRange(verseNum);
-                        final isFavorited = favoriteProvider.isVerseFavorited(
-                          widget.book.fullName,
-                          widget.chapter,
-                          verseNum,
-                        );
-                        final subtitle = subtitles[verseNum];
+                GestureDetector(
+                  onHorizontalDragEnd: _handleHorizontalSwipe,
+                  child: FadeTransition(
+                    opacity: _languageFadeAnimation,
+                    child: SlideTransition(
+                      position: _languageSlideAnimation,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        itemCount: verseNums.length,
+                        physics: const ClampingScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: 80),
+                        itemBuilder: (context, idx) {
+                          final verseNum = verseNums[idx];
+                          final text = widget.verses[verseNum] ?? '';
+                          final isSelected =
+                              !_isSelectionMode && verseNum == _selectedVerse;
+                          final isInRange = _isVerseInRange(verseNum);
+                          final isFavorited = favoriteProvider.isVerseFavorited(
+                            widget.book.fullName,
+                            widget.chapter,
+                            verseNum,
+                          );
+                          final subtitle = subtitles[verseNum];
+                          final memoFavorite = memoFavorites
+                              .where((f) => f.endVerse == verseNum)
+                              .firstOrNull;
 
-                        final highlight = highlightProvider.getVerseHighlight(
-                          widget.book.fullName,
-                          widget.chapter,
-                          verseNum,
-                        );
-                        final isHighlighted = highlight != null;
+                          final highlight = highlightProvider.getVerseHighlight(
+                            widget.book.fullName,
+                            widget.chapter,
+                            verseNum,
+                          );
+                          final isHighlighted = highlight != null;
 
-                        Color? backgroundColor;
-                        Color? borderColor;
-                        Color? textColor;
+                          Color? backgroundColor;
+                          Color? borderColor;
+                          Color? textColor;
 
-                        if (isInRange) {
-                          backgroundColor = cs.primary.withOpacity(0.1);
-                          borderColor = cs.primary;
-                          textColor = cs.onSurface.withOpacity(1.0);
-                        } else if (isHighlighted) {
-                          backgroundColor = highlight.color.color;
-                          borderColor = highlight.color.darkColor;
-                          textColor = cs.onSurface;
-                        } else if (isSelected) {
-                          backgroundColor = cs.primary.withOpacity(0.1);
-                          textColor = cs.onSurface.withOpacity(0.7);
-                        } else {
-                          textColor = cs.onSurface;
-                        }
+                          if (isInRange) {
+                            backgroundColor = cs.primary.withOpacity(0.1);
+                            borderColor = cs.primary;
+                            textColor = cs.onSurface.withOpacity(1.0);
+                          } else if (isHighlighted) {
+                            backgroundColor = highlight.color.color;
+                            borderColor = highlight.color.darkColor;
+                            textColor = cs.onSurface;
+                          } else if (isSelected) {
+                            backgroundColor = cs.primary.withOpacity(0.1);
+                            textColor = cs.onSurface.withOpacity(0.7);
+                          } else {
+                            textColor = cs.onSurface;
+                          }
 
-                        return Column(
-                          key: idx == 0 ? _itemKey : null,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 소제목이 있으면 표시 (한글/SNB 모드일 때)
-                            if (subtitle != null && !languageProvider.isEnglish)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 20, 16, 12),
-                                child: Text(
-                                  subtitle,
-                                  style: TextStyle(
-                                    fontFamily: 'ChosunCentennial',
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w600,
-                                    color: cs.onSurface,
-                                  ),
-                                ),
-                              ),
-                            // 본문 절
-                            AnimatedBuilder(
-                              animation: _highlightAppliedController,
-                              builder: (context, child) {
-                                final isJustHighlighted = isInRange &&
-                                    _highlightAppliedController.isAnimating;
-                                final pulseValue =
-                                    _highlightAppliedController.value;
-                                final scale = isJustHighlighted
-                                    ? 1.0 +
-                                        (0.03 * _sin(pulseValue * 3.14159 * 2))
-                                    : 1.0;
-
-                                return Transform.scale(
-                                  scale: scale,
-                                  alignment: Alignment.centerLeft,
-                                  child: child,
-                                );
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeOutCubic,
-                                decoration: BoxDecoration(
-                                  color: backgroundColor,
-                                  border: isHighlighted
-                                      ? Border(
-                                          left: BorderSide(
-                                            color: borderColor ??
-                                                Colors.transparent,
-                                            width: 4,
-                                          ),
-                                        )
-                                      : (isInRange
-                                          ? Border(
-                                              left: BorderSide(
-                                                color: borderColor ??
-                                                    Colors.transparent,
-                                                width: 3,
-                                              ),
-                                            )
-                                          : null),
-                                ),
-                                child: ListTile(
-                                  onTap: () => _handleVerseTap(verseNum),
-                                  onLongPress: () =>
-                                      _handleVerseLongPress(verseNum),
-                                  leading: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      AnimatedDefaultTextStyle(
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                        style: TextStyle(
-                                          fontFamily: 'ChosunCentennial',
-                                          fontWeight: isInRange || isSelected
-                                              ? FontWeight.w600
-                                              : FontWeight.w600,
-                                          fontSize: isInRange || isSelected
-                                              ? fontSize.verseNumberSelectedSize
-                                              : fontSize.verseNumberSize,
-                                          color: textColor,
-                                        ),
-                                        child: Text('$verseNum'),
-                                      ),
-                                      if (isFavorited)
-                                        Positioned(
-                                          top: -4,
-                                          right: -10,
-                                          child: Icon(
-                                            Icons.star,
-                                            size: 12,
-                                            color: QuizColors.star,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                  title: AnimatedDefaultTextStyle(
-                                    duration: const Duration(milliseconds: 200),
+                          return Column(
+                            key: idx == 0 ? _itemKey : null,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // 소제목이 있으면 표시 (한글/SNB 모드일 때)
+                              if (subtitle != null &&
+                                  !languageProvider.isEnglish)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 20, 16, 12),
+                                  child: Text(
+                                    subtitle,
                                     style: TextStyle(
                                       fontFamily: 'ChosunCentennial',
-                                      fontWeight: isInRange || isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.normal,
-                                      fontSize: isInRange || isSelected
-                                          ? fontSize.verseTextSelectedSize
-                                          : fontSize.verseTextSize,
-                                      color: textColor,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600,
+                                      color: cs.onSurface,
                                     ),
-                                    child: Text(text),
                                   ),
-                                  dense: true,
-                                  selected: isInRange || isSelected,
-                                  selectedTileColor: Colors.transparent,
+                                ),
+                              // 본문 절
+                              AnimatedBuilder(
+                                animation: _highlightAppliedController,
+                                builder: (context, child) {
+                                  final isJustHighlighted = isInRange &&
+                                      _highlightAppliedController.isAnimating;
+                                  final pulseValue =
+                                      _highlightAppliedController.value;
+                                  final scale = isJustHighlighted
+                                      ? 1.0 +
+                                          (0.03 *
+                                              _sin(pulseValue * 3.14159 * 2))
+                                      : 1.0;
+
+                                  return Transform.scale(
+                                    scale: scale,
+                                    alignment: Alignment.centerLeft,
+                                    child: child,
+                                  );
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeOutCubic,
+                                  decoration: BoxDecoration(
+                                    color: backgroundColor,
+                                    border: isHighlighted
+                                        ? Border(
+                                            left: BorderSide(
+                                              color: borderColor ??
+                                                  Colors.transparent,
+                                              width: 4,
+                                            ),
+                                          )
+                                        : (isInRange
+                                            ? Border(
+                                                left: BorderSide(
+                                                  color: borderColor ??
+                                                      Colors.transparent,
+                                                  width: 3,
+                                                ),
+                                              )
+                                            : null),
+                                  ),
+                                  child: ListTile(
+                                    onTap: () => _handleVerseTap(verseNum),
+                                    onLongPress: () =>
+                                        _handleVerseLongPress(verseNum),
+                                    leading: Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        AnimatedDefaultTextStyle(
+                                          duration:
+                                              const Duration(milliseconds: 200),
+                                          style: TextStyle(
+                                            fontFamily: 'ChosunCentennial',
+                                            fontWeight: isInRange || isSelected
+                                                ? FontWeight.w600
+                                                : FontWeight.w600,
+                                            fontSize: isInRange || isSelected
+                                                ? fontSize
+                                                    .verseNumberSelectedSize
+                                                : fontSize.verseNumberSize,
+                                            color: textColor,
+                                          ),
+                                          child: Text('$verseNum'),
+                                        ),
+                                        if (isFavorited)
+                                          Positioned(
+                                            top: -4,
+                                            right: -10,
+                                            child: Icon(
+                                              Icons.star,
+                                              size: 12,
+                                              color: QuizColors.star,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    title: AnimatedDefaultTextStyle(
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                      style: TextStyle(
+                                        fontFamily: 'ChosunCentennial',
+                                        fontWeight: isInRange || isSelected
+                                            ? FontWeight.w600
+                                            : FontWeight.normal,
+                                        fontSize: isInRange || isSelected
+                                            ? fontSize.verseTextSelectedSize
+                                            : fontSize.verseTextSize,
+                                        color: textColor,
+                                      ),
+                                      child: Text(text),
+                                    ),
+                                    trailing: memoFavorite == null
+                                        ? null
+                                        : IconButton(
+                                            icon: Icon(
+                                              Icons.chevron_right_rounded,
+                                              color: cs.primary,
+                                            ),
+                                            tooltip: '메모 보기',
+                                            visualDensity:
+                                                VisualDensity.compact,
+                                            onPressed: () =>
+                                                _openMemo(memoFavorite),
+                                          ),
+                                    dense: true,
+                                    selected: isInRange || isSelected,
+                                    selectedTileColor: Colors.transparent,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -1179,14 +1372,8 @@ class _VerseListViewState extends State<VerseListView>
                         children: [
                           Expanded(
                             child: ElevatedButton.icon(
-                              onPressed: widget.chapter > minChapter
-                                  ? () {
-                                      if (widget.onChapterChanged != null) {
-                                        widget.onChapterChanged!(
-                                            widget.chapter - 1);
-                                      }
-                                    }
-                                  : null,
+                              onPressed:
+                                  _hasPrevChapter ? () => _goChapter(-1) : null,
                               icon: const Icon(Icons.arrow_back_ios_new,
                                   size: 18),
                               label: Text(
@@ -1211,14 +1398,8 @@ class _VerseListViewState extends State<VerseListView>
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton.icon(
-                              onPressed: widget.chapter < maxChapter
-                                  ? () {
-                                      if (widget.onChapterChanged != null) {
-                                        widget.onChapterChanged!(
-                                            widget.chapter + 1);
-                                      }
-                                    }
-                                  : null,
+                              onPressed:
+                                  _hasNextChapter ? () => _goChapter(1) : null,
                               icon:
                                   const Icon(Icons.arrow_forward_ios, size: 18),
                               label: Text(
@@ -1242,13 +1423,16 @@ class _VerseListViewState extends State<VerseListView>
                       ),
                     ),
                   ),
+                if (_showSwipeHint) _buildSwipeHint(cs),
               ],
             ),
           ),
         ],
       ),
       // 단어 검색으로 들어온 경우 플로팅 액션 버튼 숨김
-      floatingActionButton: !_isSelectionMode && !widget.hideLanguageToggle
+      floatingActionButton: !_isSelectionMode &&
+              !widget.hideLanguageToggle &&
+              !_showSwipeHint
           ? TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 600),
               tween: Tween(begin: 0.0, end: 1.0),

@@ -10,10 +10,13 @@ import '../../utils/responsive_utils.dart';
 
 class FavoriteDetailScreen extends StatefulWidget {
   final FavoriteVerse favorite;
+  // 본문에서 메모 버튼/화살표로 들어오면 메모 시트를 바로 연다
+  final bool openMemoOnStart;
 
   const FavoriteDetailScreen({
     super.key,
     required this.favorite,
+    this.openMemoOnStart = false,
   });
 
   @override
@@ -34,6 +37,11 @@ class _FavoriteDetailScreenState extends State<FavoriteDetailScreen> {
     _memoController.addListener(() {
       if (mounted) setState(() {});
     });
+    if (widget.openMemoOnStart) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _toggleMemoSheet();
+      });
+    }
   }
 
   @override

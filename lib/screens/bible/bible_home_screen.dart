@@ -393,16 +393,31 @@ class _BibleHomeScreenState extends State<BibleHomeScreen> {
         onChapterChanged: (newChapter) async {
           if (!mounted) return; // ⭐ mounted 체크
 
+          // 장 범위를 벗어나면 이전 책 마지막 장 / 다음 책 1장으로 넘어감
+          var bookIdx = selectedBook;
+          var chapter = newChapter;
+          if (chapter < 1 && bookIdx > 0) {
+            bookIdx--;
+            chapter = bibleBookList[bookIdx].chapters;
+          } else if (chapter > book.chapters &&
+              bookIdx < bibleBookList.length - 1) {
+            bookIdx++;
+            chapter = 1;
+          }
+          if (chapter < 1 || chapter > bibleBookList[bookIdx].chapters) return;
+
           setState(() {
             isLoading = true;
           });
 
-          final verses = await _loadChapter(book.name, newChapter);
+          final verses =
+              await _loadChapter(bibleBookList[bookIdx].name, chapter);
 
           if (!mounted) return; // ⭐ 비동기 작업 후 mounted 체크
 
           setState(() {
-            selectedChapter = newChapter - 1;
+            selectedBook = bookIdx;
+            selectedChapter = chapter - 1;
             selectedVerse = 0;
             _currentChapterVerses = verses;
             step = 3;
