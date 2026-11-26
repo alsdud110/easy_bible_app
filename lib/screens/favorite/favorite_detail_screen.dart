@@ -662,19 +662,16 @@ class _MemoBottomSheetState extends State<_MemoBottomSheet> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      // 긴 메모도 글자를 줄이지 않고 여러 줄로 보여 줌
                                       Expanded(
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            memo.content,
-                                            style: TextStyle(
-                                              fontSize:
-                                                  ResponsiveUtils.bodyFontSize(
-                                                      context),
-                                              color: cs.onSurface,
-                                              height: 1.5,
-                                            ),
+                                        child: Text(
+                                          memo.content,
+                                          style: TextStyle(
+                                            fontSize:
+                                                ResponsiveUtils.bodyFontSize(
+                                                    context),
+                                            color: cs.onSurface,
+                                            height: 1.5,
                                           ),
                                         ),
                                       ),
